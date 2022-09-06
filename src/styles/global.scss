@@ -8,7 +8,9 @@ body {
 
     min-height: 100vh;
     height: 100%;
-    background: linear-gradient(to top right, #56ccf2, #2f80ed);
+    //  #2f80ed
+    background: linear-gradient(to right, #9cecfb, #65c7f7);
+    /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
 
 code {
@@ -21,6 +23,11 @@ code {
 // #FCF951FF, #422057FF
 
 // style button
+.btn-active {
+    background-color: rgba(255, 230, 240);
+    box-shadow: rgba(255, 230, 240, 0.5) 4px 4px, rgba(255, 230, 240, 0.4) 8px 8px;
+    color: black;
+}
 
 .btn-style1 {
     background-color: black;
