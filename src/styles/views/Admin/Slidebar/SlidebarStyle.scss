@@ -1,0 +1,12 @@
+.admin-slidebar {
+    position: fixed;
+    height: 100vh;
+    width: 15rem;
+
+    border-top-right-radius: 2rem;
+    border-bottom-right-radius: 2rem;
+
+    .admin-logo {
+        width: 4rem;
+    }
+}

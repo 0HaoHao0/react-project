@@ -21,7 +21,7 @@ class Header extends Component {
                         </a>
                         {/* Link */}
                         <ul className="nav col-12 col-lg-auto me-lg-auto  justify-content-center ">
-                            <li><NavLink to="/" className={({ isActive }) =>
+                            <li><NavLink to="/main" className={({ isActive }) =>
                                 isActive ? "btn btn-active px-2 mx-2 my-1" : "btn btn-style1 px-2 mx-2 my-1"
                             } >Home 🏠</NavLink></li>
                             <li><a href="." className="btn btn-style1 px-2 mx-2 my-1">Services 💉</a></li>
@@ -31,7 +31,7 @@ class Header extends Component {
                         </ul>
                         {/* Search */}
                         <div className="col-12 col-lg-auto mb-4 mb-lg-0  me-lg-3">
-                            <input type="search" className="form-control form-control-dark" aria-label="Search"
+                            <input type="text" placeholder='Search...' className="form-control form-control-dark" aria-label="Search"
                                 // Page search
                                 onKeyDown={(e) => {
                                     if (e.key === "Enter") {
