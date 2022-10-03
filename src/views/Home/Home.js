@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { Route, Routes } from 'react-router-dom';
+import Contact from '../Contact/Contact';
 import Footer from '../Footer/Footer';
 import Header from '../Header/Header';
 // 
@@ -22,6 +23,7 @@ class Home extends Component {
                     <Route path="main" element={<Main />} />
                     <Route path="login" element={<Login />} />
                     <Route path="register" element={<Register />} />
+                    <Route path="contact" element={<Contact />} />
                 </Routes>
                 <Footer />
             </>

@@ -1,16 +1,29 @@
 import React, { Component } from 'react'
 import "../../styles/views/Login/LoginStyle.scss"
 
-import { toast } from 'react-toastify'
+// Import Api
+import { loginApi } from '../../services/ApiConnection/LoginApi'
+
+// Toastify
+// import { toast } from 'react-toastify'
 // Phone inut
 import 'react-phone-number-input/style.css'
 import PhoneInput from 'react-phone-number-input'
+import { toast } from 'react-toastify'
+
+// 
+import { connect } from 'react-redux'
+import { setUserToken } from '../../features/user/userSlice'
 class Login extends Component {
     constructor(props) {
         super(props);
         this.state = {
             logic: true
         }
+    }
+    loginAccount = {
+        username: null,
+        password: null
     }
     // Logic
     changeLoginStyle = (e) => {
@@ -22,8 +35,19 @@ class Login extends Component {
     }
     // Account
 
-    submitAccount = (e) => {
-        toast("");
+    submitAccount = async (e) => {
+        console.log(this.props);
+        let data = await loginApi(this.loginAccount);
+        if (data.status === 200) {
+            toast(data.data.token);
+            this.props.dispatch(setUserToken(data.data.token));
+        }
+        else if (data.status === 401) {
+            toast.error(data.data);
+        }
+        else {
+            toast.error("Contact to admin");
+        }
     }
     // Phone 
     handlePhoneNumber = (e) => {
@@ -62,17 +86,20 @@ class Login extends Component {
                                     </div>
                                     <div className='col-12 px-4 mb-2'>
                                         <div className="mb-1">
-                                            <label htmlFor="inputAccount" className="form-label">Account:</label>
-                                            <input type="text" className="form-control" id="inputAccount" aria-describedby="accout" />
+                                            <label htmlFor="inputUsername" className="form-label">Username:</label>
+                                            <input type="text" className="form-control" id="inputUsername" aria-describedby="accout"
+                                                onChange={(e) => { this.loginAccount.username = e.target.value }} />
                                         </div>
                                         <div className="mb-1">
                                             <label htmlFor="inputPassword" className="form-label">Password:</label>
-                                            <input type="password" className="form-control" id="inputPassword" />
+                                            <input type="password" className="form-control" id="inputPassword"
+                                                onChange={(e) => { this.loginAccount.password = e.target.value }} />
                                         </div>
                                         <button onClick={(e) => this.submitAccount(e)} className="btn btn-primary text-center">Submit</button>
                                     </div>
                                 </>
                                 :
+
                                 <>
                                     {/* Login Phone */}
 
@@ -119,5 +146,9 @@ class Login extends Component {
         );
     }
 }
+const mapStateToProps = (state) => ({
+    user: state.user
+});
 
-export default Login;
+
+export default connect(mapStateToProps)(Login);

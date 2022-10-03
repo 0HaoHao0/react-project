@@ -3,12 +3,14 @@ import { NavLink } from 'react-router-dom';
 import "../../styles/views/Header/HeaderStyle.scss"
 
 import Logo from "../../assets/images/Logo.png"
+
 class Header extends Component {
     constructor(props) {
         super(props);
         this.state = {}
 
     }
+
     render() {
 
         return (
@@ -25,13 +27,15 @@ class Header extends Component {
                                 isActive ? "btn btn-active px-2 mx-2 my-1" : "btn btn-style1 px-2 mx-2 my-1"
                             } >Home 🏠</NavLink></li>
                             <li><a href="." className="btn btn-style1 px-2 mx-2 my-1">Services 💉</a></li>
-                            <li><a href="." className="btn btn-style1 px-2 mx-2 my-1">Contact 📱</a></li>
-                            <li><a href="." className="btn btn-style1 px-2 mx-2 my-1">About Us 🧑‍🤝‍🧑</a></li>
+                            <li><NavLink to="/contact" className={({ isActive }) =>
+                                isActive ? "btn btn-active px-2 mx-2 my-1" : "btn btn-style1 px-2 mx-2 my-1"
+                            } >Contact 📱</NavLink></li>
+                            <li><a href="." className="btn btn-style1 px-2 mx-2 my-1" >About Us 🧑‍🤝‍🧑</a></li>
                             <li><a href="." className="btn btn-style1 px-2 mx-2 my-1">FAQs ❓</a></li>
                         </ul>
                         {/* Search */}
                         <div className="col-12 col-lg-auto mb-4 mb-lg-0  me-lg-3">
-                            <input type="text" placeholder='Search...' className="form-control form-control-dark" aria-label="Search"
+                            <input type="text" placeholder="Search..." className="form-control form-control-dark" aria-label="Search"
                                 // Page search
                                 onKeyDown={(e) => {
                                     if (e.key === "Enter") {
@@ -54,4 +58,6 @@ class Header extends Component {
     }
 }
 
-export default Header;
+
+
+export default (Header);
