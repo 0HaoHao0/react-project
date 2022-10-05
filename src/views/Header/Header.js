@@ -3,12 +3,19 @@ import { NavLink } from 'react-router-dom';
 import "../../styles/views/Header/HeaderStyle.scss"
 
 import Logo from "../../assets/images/Logo.png"
+import { connect } from 'react-redux';
+import { clearUserData } from '../../features/user/userSlice';
+import withRouter from '../../components/HOC/withRouter';
 
 class Header extends Component {
     constructor(props) {
         super(props);
         this.state = {}
+    }
 
+    logOut = async (e) => {
+        await this.props.dispatch(clearUserData());
+        this.props.navigate('/login');
     }
 
     render() {
@@ -46,11 +53,25 @@ class Header extends Component {
                                     }
                                 }} />
                         </div>
-                        {/* Login, Sign Up */}
-                        <div className="text-end">
-                            <NavLink to="/login" type="button" className={({ isActive }) => isActive ? "btn btn-active me-2" : "btn btn-style1-outline me-2"}>Login 🗝️</NavLink>
-                            <NavLink to='/register' type="button" className={({ isActive }) => isActive ? "btn btn-active me-2" : "btn btn-style1"}>Sign-up 🚪</NavLink>
-                        </div>
+
+                        {this.props.user.id == null
+                            ?
+                            <>
+                                <div className="text-end">
+                                    <NavLink to="/login" className={({ isActive }) => isActive ? "btn btn-active me-2" : "btn btn-style1-outline me-2"}>Login 🗝️</NavLink>
+                                    <NavLink to='/register' className={({ isActive }) => isActive ? "btn btn-active me-2" : "btn btn-style1"}>Sign-up 🚪</NavLink>
+                                </div>
+                            </>
+                            :
+                            <>
+                                <div className='text-end'>
+                                    <NavLink to="/profile" className={({ isActive }) => isActive ? "btn btn-active me-2" : "btn btn-style1-outline me-2"}>Welcome, {this.props.user.fullName}</NavLink>
+                                    <button onClick={(e) => this.logOut(e)} className="btn btn-style1" >Log-Out 🚪</button>
+                                </div>
+                            </>
+
+                        }
+
                     </div>
                 </div>
             </header>
@@ -58,6 +79,9 @@ class Header extends Component {
     }
 }
 
+const mapStateToProps = (state) => ({
+    user: state.user
+});
 
 
-export default (Header);
+export default connect(mapStateToProps)(withRouter(Header));

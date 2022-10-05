@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import "../../styles/views/Login/LoginStyle.scss"
 
 // Import Api
-import { loginApi } from '../../services/ApiConnection/LoginApi'
+import { loginApi, loginAuthorize } from '../../services/ApiConnection/loginApi'
 
 // Toastify
 // import { toast } from 'react-toastify'
@@ -13,7 +13,8 @@ import { toast } from 'react-toastify'
 
 // 
 import { connect } from 'react-redux'
-import { setUserToken } from '../../features/user/userSlice'
+import { setUserData } from '../../features/user/userSlice'
+import withRouter from '../../components/HOC/withRouter'
 class Login extends Component {
     constructor(props) {
         super(props);
@@ -33,17 +34,23 @@ class Login extends Component {
             }
         )
     }
+
     // Account
 
     submitAccount = async (e) => {
-        console.log(this.props);
-        let data = await loginApi(this.loginAccount);
-        if (data.status === 200) {
-            toast(data.data.token);
-            this.props.dispatch(setUserToken(data.data.token));
+        let res = await loginApi(this.loginAccount);
+        console.log(res);
+        if (res.status === 200) {
+            // Authorize
+            let userAuthorize = await loginAuthorize(res.data.token);
+            // Dispatch user information
+            await this.props.dispatch(setUserData(userAuthorize.data))
+            // Navigate
+            this.props.navigate('/main');
+
         }
-        else if (data.status === 401) {
-            toast.error(data.data);
+        else if (res.status === 401) {
+            toast.error(res.data);
         }
         else {
             toast.error("Contact to admin");
@@ -151,4 +158,4 @@ const mapStateToProps = (state) => ({
 });
 
 
-export default connect(mapStateToProps)(Login);
+export default connect(mapStateToProps)(withRouter(Login));

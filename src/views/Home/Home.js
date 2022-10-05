@@ -20,10 +20,19 @@ class Home extends Component {
             <>
                 <Header />
                 <Routes>
-                    <Route path="main" element={<Main />} />
-                    <Route path="login" element={<Login />} />
-                    <Route path="register" element={<Register />} />
+
+                    <Route path="*" element={<Main />} />
+                    {this.props.user.id == null
+                        ?
+                        <>
+                            <Route path="login" element={<Login />} />
+                            <Route path="register" element={<Register />} />
+                        </>
+                        :
+                        null
+                    }
                     <Route path="contact" element={<Contact />} />
+
                 </Routes>
                 <Footer />
             </>
@@ -31,5 +40,7 @@ class Home extends Component {
         );
     }
 }
+
+
 
 export default Home;

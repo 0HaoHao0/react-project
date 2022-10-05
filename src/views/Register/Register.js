@@ -1,10 +1,9 @@
 import React, { Component } from 'react'
 import '../../styles/views/Register/RegisterStyle.scss'
-import { toast } from 'react-toastify'
 // Phone input
 import 'react-phone-number-input/style.css'
 import PhoneInput from 'react-phone-number-input'
-import { registerApi } from '../../services/ApiConnection/RegisterApi'
+import { registerApi } from '../../services/ApiConnection/registerApi'
 
 class Register extends Component {
     constructor(props) {
