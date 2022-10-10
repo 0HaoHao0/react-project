@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { NavLink } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import "../../styles/views/Header/HeaderStyle.scss"
 
 import Logo from "../../assets/images/Logo.png"
@@ -65,7 +65,7 @@ class Header extends Component {
                             :
                             <>
                                 <div className='text-end'>
-                                    <NavLink to="/profile" className={({ isActive }) => isActive ? "btn btn-active me-2" : "btn btn-style1-outline me-2"}>Welcome, {this.props.user.fullName}</NavLink>
+                                    <Link to="/profile" className="btn btn-style1-outline me-2">Welcome, {this.props.user.fullName}</Link>
                                     <button onClick={(e) => this.logOut(e)} className="btn btn-style1" >Log-Out 🚪</button>
                                 </div>
                             </>

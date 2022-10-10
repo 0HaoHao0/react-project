@@ -1,23 +1,38 @@
 import axios from "axios"
+import Swal from "sweetalert2";
 
 export const updateAvatar = async (userId, image) => {
     let data;
-    await axios({
-        method: 'post',
-        url: 'https://localhost:44355/api/User/UpdateAvatar',
-        headers: { "Content-type": "multipart/form-data" },
-        params: {
-            userId: userId
-        }
-        ,
-        data: image
 
+
+    await Swal.fire({
+        title: 'Waiting...',
+        icon: 'warning',
+        html: 'This pop-up will close when server response.',
+        didOpen: () => {
+
+            Swal.showLoading()
+            axios({
+                method: 'post',
+                url: 'https://localhost:44355/api/User/UpdateAvatar',
+                headers: { "Content-type": "multipart/form-data" },
+                params: {
+                    userId: userId
+                }
+                ,
+                data: image
+
+            })
+                .then((res) => {
+                    data = res;
+                    Swal.close();
+                })
+                .catch((error) => {
+                    data = error.response;
+                    Swal.close();
+                })
+        }
     })
-        .then((res) => {
-            data = res;
-        })
-        .catch((error) => {
-            data = error.response;
-        })
+
     return data;
 }   

@@ -50,8 +50,7 @@ class Register extends Component {
     registerAccount = async (e) => {
         if (this.ValidateConfirmPassword()) {
             console.log(this.registerData);
-            let data = await registerApi(this.registerData);
-            console.log(data);
+            await registerApi(this.registerData);
         }
     }
 
