@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
+import { NavLink } from 'react-router-dom';
 import "../../../styles/views/Admin/Slidebar/SlidebarStyle.scss"
 
-import Logo from '../../../assets/images/Logo.png'
 class Slidebar extends Component {
     constructor(props) {
         super(props);
@@ -10,40 +10,50 @@ class Slidebar extends Component {
     render() {
         return (
             <>
-                <div class="admin-slidebar d-flex flex-column p-3 bg-light" >
-                    <a href="/" class="text-center link-dark text-decoration-none">
-                        <img className='admin-logo' src={Logo} alt="admin-logo" />
-                        <h5>Admin Management</h5>
+                <div className="admin-slidebar bg-light p-3 " >
+                    <a href="/" className="text-center link-dark text-decoration-none row">
+                        <span> <i className="fa-solid fa-screwdriver-wrench"></i> </span>   <h5>Admin Page</h5>
                     </a>
                     <hr />
-                    <ul class="nav nav-pills flex-column mb-auto">
-                        <li class="nav-item">
-                            <a href="." class="nav-link active" aria-current="page">
-                                <span> <i class="fa-solid fa-house"></i> </span>
-                                Home
-                            </a>
-                        </li>
-                        <li>
-                            <a href="." class="nav-link link-dark">
-                                <svg class="bi pe-none me-2" width="16" height="16"></svg>
-                                Dashboard
-                            </a>
-                        </li>
+                    <div className='admin-scroll d-flex'>
+                        <ul className="nav nav-pills" >
+                            <li className='col-12 text-center'>
+                                <NavLink
+                                    className={({ isActive }) => isActive ? "nav-link link-dark active" : "nav-link link-dark "}
+                                    to="/admin/">
+                                    <i className="fa-solid fa-house"></i>
+                                    <span className='mx-2'>
+                                        Home
+                                    </span>
+                                </NavLink>
+                            </li>
+                            <li className='col-12 text-center'>
+                                <NavLink
+                                    className={({ isActive }) => isActive ? "nav-link link-dark active" : "nav-link link-dark "}
+                                    to="/admin/contact">
+                                    <i className="fa-solid fa-address-book"></i>
+                                    <span className='mx-2'>
+                                        Contact
+                                    </span>
+                                </NavLink>
+                            </li>
 
-                    </ul>
-                    <hr />
-                    <div class="btn-group dropend">
-                        <button type="button" class="btn btn-light">
-                            <span>Welcome TranVanHao</span>
-                        </button>
-                        <button type="button" class="btn btn-danger rounded-pill" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="fa-solid fa-power-off"></i>
-                        </button>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href=".">Action</a></li>
-                            <li><a class="dropdown-item" href=".">Another action</a></li>
-                            <li><a class="dropdown-item" href=".">Something else here</a></li>
+
+
                         </ul>
+                    </div>
+                    <hr />
+                    <div className="row text-center">
+                        <div className='dropend col-12'>
+                            <button type="button" className="btn btn-danger button-dropend rounded-pill" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i className="fa-solid fa-power-off"></i>
+                            </button>
+                            <ul className="dropdown-menu">
+                                <li><a className="dropdown-item" href=".">Action</a></li>
+                                <li><a className="dropdown-item" href=".">Another action</a></li>
+                                <li><a className="dropdown-item" href=".">Something else here</a></li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </>

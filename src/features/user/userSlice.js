@@ -23,12 +23,15 @@ export const userSlice = createSlice({
             state.role = null
             state.imageURL = null
         },
+        updateImageURL: (state, actions) => {
+            state.imageURL = actions.payload
+        }
     }
 })
 
 const { actions, reducer } = userSlice;
 
 
-export const { setUserData, clearUserData } = actions;
+export const { setUserData, clearUserData, updateImageURL } = actions;
 
 export default reducer;

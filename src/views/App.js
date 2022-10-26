@@ -2,7 +2,7 @@ import './App.scss';
 
 // 
 import Home from './Home/Home';
-import Admin from './Admin/Main/Admin';
+import Admin from './Admin/Admin';
 
 
 import {

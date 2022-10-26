@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import Swal from 'sweetalert2';
 import withRouter from '../../../components/HOC/withRouter';
-import { clearUserData, setUserData } from '../../../features/user/userSlice';
+import { setUserData, updateImageURL } from '../../../features/user/userSlice';
 import { updateAvatar } from '../../../services/UserApiConnection/userApi';
 
 import '../../../styles/views/User/Profile/Profile.scss'
@@ -61,25 +60,7 @@ class Profile extends Component {
 
         let res = await updateAvatar(this.props.user.id, updateImage)
 
-        if (res.status === 401) {
-            Swal.fire({
-                title: 'Token Error',
-                icon: 'error',
-                html: 'Your login session may have expired, please login again.',
-                confirmButtonText: 'Log-out',
-                footer: '<a href="">Why do I have this issue?</a>'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    this.props.dispatch(clearUserData());
-                    this.props.navigate('/login');
-                }
-            })
-
-        }
-        else {
-            await this.props.dispatch(setUserData(res.data.user))
-        }
-
+        this.props.dispatch(updateImageURL(res.data.newImage));
 
     }
     render() {

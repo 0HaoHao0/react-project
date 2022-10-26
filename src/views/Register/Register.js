@@ -23,6 +23,7 @@ class Register extends Component {
         birthDate: new Date(),
         gender: '',
     }
+
     // Check Gender
     checkGender = (check, unCheckOne, unCheckTwo, e) => {
         document.getElementById(check).checked ? this.registerData.gender = e.target.value : this.registerData.gender = null;
