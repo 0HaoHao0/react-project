@@ -42,6 +42,80 @@ code {
     color: black;
 }
 
+.admin-slidebar{
+    background: #0f0c29;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to top, #24243e, #302b63, #0f0c29);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to top, #24243e, #302b63, #0f0c29); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+
+.bg-right {
+    background: #333399;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to top, #333399, #333399);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to top, #333399, #333399); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    
+}
+
+
+.navlink-active{
+    background-color: #fff;
+    border-radius: 15px;
+    width: 140px;
+   
+
+}
+
+
+.text-color-admin{
+    color: white;
+    font-weight: 700;
+    font-size: 25px;
+   
+}
+
+
+
+.text-color {
+    color: rgb(0, 0, 0);
+    font-weight: 700;
+    font-size: 18px;
+}
+
+.navlink-unactive {
+    span{
+        color: white;
+    }
+
+    i{
+        color: white;
+    }
+}
+
+.fa-color-logout {
+    color: white;
+
+}
+
+.text-color-logout{
+    color: white;
+    font-weight: 700;
+    font-size: 18px;
+}
+
+
+
+.fa-color{
+    color: black;
+    font-size: 17px;
+}
+
+.fa-color-admin{
+    color: white;
+    font-size: 17px;
+}
+
+hr {
+    color: white;
+}
 
 // User
 
