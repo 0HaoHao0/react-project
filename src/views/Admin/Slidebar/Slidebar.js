@@ -29,7 +29,7 @@ class Slidebar extends Component {
                             </li>
                             <li className='col-12 text-center my-2'>
                                 <NavLink
-                                    className={({ isActive }) => isActive ? "btn btn-primary" : "btn btn-outline-primary"}
+                                    className={({ isActive }) => isActive ? "btn btn-primary" : "btn"}
                                     to="/admin/contact">
                                     <i className="fa-solid fa-address-book"></i>
                                     <span className='mx-2'>
