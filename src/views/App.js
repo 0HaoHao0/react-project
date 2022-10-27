@@ -12,24 +12,30 @@ import {
 
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Profile from './User/Profile/Profile';
 
 import Cookies from "universal-cookie";
 import axios from 'axios';
+import { clearUserData } from '../features/user/userSlice';
 
 
 function App() {
 
   const user = useSelector((state) => state.user);
 
+  const dispatch = useDispatch();
+
   const cookies = new Cookies()
 
-  if (cookies.get('JWT') !== null && axios.defaults.headers.common['Authorization'] === undefined) {
-
-    axios.defaults.headers.common['Authorization'] = cookies.get('JWT');
-
+  if (cookies.get('JWT') === undefined) {
+    dispatch(clearUserData());
   }
+
+  if (cookies.get('JWT') !== null && axios.defaults.headers.common['Authorization'] === undefined) {
+    axios.defaults.headers.common['Authorization'] = cookies.get('JWT');
+  }
+
   return (
     < div >
       <ToastContainer />

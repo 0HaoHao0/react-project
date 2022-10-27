@@ -1,8 +1,7 @@
-import moment from "moment/moment";
 import { useEffect } from "react";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
-import { ContactGetId } from "../../../services/AdminApiConnection/AdminContactApi";
+import { ContactGetId } from "../../../services/AdminApiConnection/adminContactApi";
 
 function AdminContactDetail() {
     const param = useParams();
@@ -16,7 +15,6 @@ function AdminContactDetail() {
             setContactDetail(response.data)
         }
         getContactId();
-        console.log(contactDetail);
     }, [param.id]);
 
 

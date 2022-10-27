@@ -109,30 +109,36 @@ export const ContactChangeState = async (id, stateIndex) => {
 }
 
 export const ContactDelete = async (id) => {
-    let data;
 
     await Swal.fire({
         title: 'Waiting...',
         icon: 'warning',
         html: 'This pop-up will close when server response.',
         didOpen: () => {
-
-            Swal.showLoading()
+            Swal.showLoading();
 
             axios({
-                method: 'post',
+                method: 'Post',
                 url: `https://localhost:44355/api/Contact/Delete/${id}`,
             })
                 .then((res) => {
-                    data = res;
+                    response = res;
                     Swal.close();
+
                 })
                 .catch((error) => {
-                    data = error.response;
+                    response = error.response;
                     Swal.close();
-                })
+                });
+
+        },
+
+    }).then((result) => {
+        /* Read more about handling dismissals below */
+        if (result.isDismissed) {
+            console.log('I was closed by server response')
         }
     })
 
-    return data;
+    return response;
 }

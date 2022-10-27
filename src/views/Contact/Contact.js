@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import '../../styles/views/Contact/Contact.scss'
 import PhoneInput from 'react-phone-number-input';
+import { ContactCreate } from '../../services/ApiConnection/contactApi';
+import withRouter from '../../components/HOC/withRouter';
 
 class Contact extends Component {
     constructor(props) {
@@ -10,11 +12,20 @@ class Contact extends Component {
         }
     }
     contactData = {
-        contactTopic: null,
+        contactName: null,
         contactEmail: null,
         contactPhone: null,
         contactContent: null,
     }
+
+    handleSubmit = async () => {
+        let res = await ContactCreate(this.contactData);
+
+        if (res.status === 200) {
+            this.props.navigate('/main');
+        }
+    }
+
     render() {
         return (
             <>
@@ -23,12 +34,14 @@ class Contact extends Component {
                         <div className='col-lg-5 col-xs-12 p-5 bg-light contact-card'>
                             <h1 className='text-center '>Contact Us</h1>
                             <div className="mb-3">
-                                <label htmlFor="contactTopic" className="form-label">Topic:</label>
-                                <input type="email" className="form-control" id="contactTopic" />
+                                <label htmlFor="contactName" className="form-label">Name:</label>
+                                <input type="email" className="form-control" id="contactName"
+                                    onChange={(e) => { this.contactData.contactName = e.target.value }} />
                             </div>
                             <div className="mb-3">
                                 <label htmlFor="contactEmail" className="form-label">Email Address:</label>
-                                <input type="email" className="form-control" id="contactEmail" placeholder="name@example.com" />
+                                <input type="email" className="form-control" id="contactEmail" placeholder="name@example.com"
+                                    onChange={(e) => { this.contactData.contactEmail = e.target.value }} />
                             </div>
                             <div className="mb-3">
                                 <label htmlFor="registerPhoneNumber" className="form-label">Phone Number:</label>
@@ -36,15 +49,17 @@ class Contact extends Component {
                                     placeholder="Enter phone number"
                                     id="registerPhoneNumber"
                                     defaultCountry="VN"
-                                    onChange={(e) => { this.contactData.contactPhone = e.target.value; }}
+                                    onChange={(e) => { this.contactData.contactPhone = e }}
                                 />
                             </div>
                             <div className="mb-3">
                                 <label htmlFor="contactContent" className="form-label">Content:</label>
-                                <textarea className="form-control" id="contactContent" rows="5"></textarea>
+                                <textarea className="form-control" id="contactContent" rows="5"
+                                    onChange={(e) => { this.contactData.contactContent = e.target.value }}></textarea>
                             </div>
                             <div className='text-left'>
-                                <button className='btn btn-primary'>Submit</button>
+                                <button className='btn btn-primary'
+                                    onClick={(e) => { this.handleSubmit(e) }}>Submit</button>
                             </div>
                         </div>
                         <div className='col-lg-7 col-xs-12'>
@@ -57,4 +72,4 @@ class Contact extends Component {
     }
 }
 
-export default Contact;
+export default withRouter(Contact);

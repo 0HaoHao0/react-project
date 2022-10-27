@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { ContactGetAll } from "../../../services/AdminApiConnection/AdminContactApi";
+import { ContactDelete, ContactGetAll } from "../../../services/AdminApiConnection/adminContactApi";
 
 function AdminContact() {
     const [contactData, setContactData] = useState([]);
@@ -17,8 +17,10 @@ function AdminContact() {
 
     }, []);
 
-    const handleDelete = (id) => {
-        console.log(id);
+    const handleDelete = async (id) => {
+        let res = await ContactDelete(id);
+
+        console.log(res);
     }
 
     return (<>
@@ -40,16 +42,17 @@ function AdminContact() {
                             </tr>
                         </thead>
                         <tbody>
-                            {contactData.map((item, index) =>
-                                <tr key={index}>
-                                    <td>{item.name}</td>
-                                    <td>{item.phoneNumber}</td>
-                                    <td>{item.email}</td>
-                                    <td className="fw-bold">{item.state}</td>
-                                    <td><Link to={`${item.id}`} className="btn btn-success">Detail</Link></td>
-                                    <td><button className="btn btn-danger" onClick={() => handleDelete(item.id)}>Delete</button></td>
-                                </tr>
-                            )
+                            {
+                                contactData.map((item, index) =>
+                                    <tr key={index}>
+                                        <td>{item.name}</td>
+                                        <td>{item.phoneNumber}</td>
+                                        <td>{item.email}</td>
+                                        <td className="fw-bold">{item.state}</td>
+                                        <td><Link to={`${item.id}`} className="btn btn-success">Detail</Link></td>
+                                        <td><button className="btn btn-danger" onClick={() => handleDelete(item.id)}>Delete</button></td>
+                                    </tr>
+                                )
                             }
                         </tbody>
                     </table>

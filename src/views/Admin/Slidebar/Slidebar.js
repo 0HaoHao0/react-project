@@ -16,10 +16,10 @@ class Slidebar extends Component {
                     </a>
                     <hr />
                     <div className='admin-scroll d-flex'>
-                        <ul className="nav nav-pills" >
-                            <li className='col-12 text-center'>
+                        <ul className="nav " >
+                            <li className='col-12 text-center my-2'>
                                 <NavLink
-                                    className={({ isActive }) => isActive ? "nav-link link-dark active" : "nav-link link-dark "}
+                                    className={({ isActive }) => isActive ? "btn btn-primary" : "btn btn-outline-primary"}
                                     to="/admin/">
                                     <i className="fa-solid fa-house"></i>
                                     <span className='mx-2'>
@@ -27,9 +27,9 @@ class Slidebar extends Component {
                                     </span>
                                 </NavLink>
                             </li>
-                            <li className='col-12 text-center'>
+                            <li className='col-12 text-center my-2'>
                                 <NavLink
-                                    className={({ isActive }) => isActive ? "nav-link link-dark active" : "nav-link link-dark "}
+                                    className={({ isActive }) => isActive ? "btn btn-primary" : "btn btn-outline-primary"}
                                     to="/admin/contact">
                                     <i className="fa-solid fa-address-book"></i>
                                     <span className='mx-2'>
@@ -37,6 +37,7 @@ class Slidebar extends Component {
                                     </span>
                                 </NavLink>
                             </li>
+
 
 
 
