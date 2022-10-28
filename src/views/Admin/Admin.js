@@ -10,6 +10,7 @@ import AdminHome from './Home/AdminHome';
 import '../../styles/views/Admin/AdminStyle.scss'
 import AdminContact from './Contact/AdminContact';
 import AdminContactDetail from './Contact/AdminContactDetail';
+import AdminRoom from './Room/AdminRoom';
 class Admin extends Component {
     constructor(props) {
         super(props);
@@ -26,8 +27,11 @@ class Admin extends Component {
                     <div className='col-10'>
                         <Routes>
                             <Route path='/' index element={<AdminHome />} />
+                            {/* Contact */}
                             <Route path="contact" element={<AdminContact />} />
                             <Route path="contact/:id" element={<AdminContactDetail />} />
+                            {/* Room */}
+                            <Route path="room" element={<AdminRoom />} />
                         </Routes>
                     </div>
                 </div>

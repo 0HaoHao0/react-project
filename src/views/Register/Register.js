@@ -3,7 +3,6 @@ import '../../styles/views/Register/RegisterStyle.scss'
 // Phone input
 import 'react-phone-number-input/style.css'
 import PhoneInput from 'react-phone-number-input'
-import { registerApi } from '../../services/ApiConnection/registerApi'
 
 class Register extends Component {
     constructor(props) {
@@ -35,24 +34,13 @@ class Register extends Component {
             : document.getElementById(unCheckTwo).disabled = true;
     }
 
-    ValidateConfirmPassword = () => {
-        let password = document.getElementById("registerPassword")
-        let confirm_password = document.getElementById("registerConfirmPassword");
-        if (password.value !== confirm_password.value) {
-            confirm_password.setCustomValidity("Password and Confirm Password must be match");
-        }
-        else {
-            confirm_password.setCustomValidity("");
-            return true;
-        }
-    }
 
     // Account
-    registerAccount = async (e) => {
-        if (this.ValidateConfirmPassword()) {
-            console.log(this.registerData);
-            await registerApi(this.registerData);
-        }
+    handleSubmit = (e) => {
+        e.preventDefault();
+
+
+        console.log(this.registerData);
     }
 
 
@@ -75,7 +63,7 @@ class Register extends Component {
                             <div className='col-12 px-4'>
                                 <div className='col-12'><strong> Register Form: </strong></div>
                             </div>
-                            <form className='col-12 px-4 mb-2 ' onSubmit={(e) => (e.preventDefault())} >
+                            <form className='col-12 px-4 mb-2 ' onSubmit={(e) => { this.handleSubmit(e) }}  >
                                 <div className="mb-1">
                                     <label htmlFor="registerUserName" className="form-label">User Name:</label>
                                     <input type="text" className="form-control" id="registerUserName"
@@ -89,18 +77,18 @@ class Register extends Component {
                                 </div>
                                 <div className="mb-1">
                                     <label htmlFor="registerPassword" className="form-label">Password:</label>
-                                    <input type="password" className="form-control" id="registerPassword"
-                                        onChange={(e) => { this.registerData.password = e.target.value; }} required />
+                                    <input type="password" className="form-control" id="registerPassword" required
+                                        onChange={(e) => { this.registerData.password = e.target.value; }} />
                                 </div>
                                 <div className="mb-1">
                                     <label htmlFor="registerConfirmPassword" className="form-label">Confirm Password:</label>
-                                    <input type="password" className="form-control" id="registerConfirmPassword"
-                                        onChange={(e) => { this.registerData.confirmPassword = e.target.value; }} required />
+                                    <input type="password" className="form-control" id="registerConfirmPassword" required
+                                        onChange={(e) => { this.registerData.confirmPassword = e.target.value; }} />
                                 </div>
                                 <div className="mb-1">
                                     <label htmlFor="registerEmail" className="form-label">Email:</label>
-                                    <input type="email" className="form-control" id="registerEmail"
-                                        onChange={(e) => { this.registerData.email = e.target.value; }} required />
+                                    <input type="email" className="form-control" id="registerEmail" required
+                                        onChange={(e) => { this.registerData.email = e.target.value; }} />
                                     <div id="emailHelp" className="form-text">We'll never share your email with anyone else.</div>
                                 </div>
                                 <label htmlFor="registerPhoneNumber" className="form-label">Phone Number:</label>
@@ -135,7 +123,7 @@ class Register extends Component {
                                         <label className="form-check-label" htmlFor="checkOther">Other</label>
                                     </div>
                                 </div>
-                                <button type='submit' onClick={(e) => this.registerAccount(e)} className="btn btn-primary text-center">Submit</button>
+                                <button className="btn btn-primary text-center">Submit</button>
                             </form>
                         </>
 

@@ -15,22 +15,43 @@ import { toast } from 'react-toastify'
 import { connect } from 'react-redux'
 import { setUserData } from '../../features/user/userSlice'
 import withRouter from '../../components/HOC/withRouter'
+
+import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props'
+
+
 class Login extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            logic: true
+            logic: 1
         }
     }
+
     loginAccount = {
         username: null,
         password: null
     }
+
+    loginPhone = null
     // Logic
-    changeLoginStyle = (e) => {
+    changeLogin = (e) => {
         this.setState(
             {
-                logic: this.state.logic ? false : true
+                logic: 1
+            }
+        )
+    }
+    changePhoneLogin = (e) => {
+        this.setState(
+            {
+                logic: 2
+            }
+        )
+    }
+    changeFacebookLogin = (e) => {
+        this.setState(
+            {
+                logic: 3
             }
         )
     }
@@ -39,8 +60,9 @@ class Login extends Component {
 
     submitAccount = async (e) => {
         let res = await loginApi(this.loginAccount);
-        console.log(res);
+
         if (res.status === 200) {
+
             // Authorize
             let userAuthorize = await loginAuthorize(res.data.token);
             // Dispatch user information
@@ -53,14 +75,20 @@ class Login extends Component {
             toast.error(res.data);
         }
         else {
-            toast.error("Contact to admin");
+            toast.error("Username or Password Can Not Blank");
         }
+
+
     }
-    // Phone 
-    handlePhoneNumber = (e) => {
-        console.log(e);
-    }
+
+
     submitPhone = (e) => {
+
+    }
+
+    // Face login
+
+    responseFacebook = () => {
 
     }
     render() {
@@ -73,18 +101,19 @@ class Login extends Component {
                         {/* Logo */}
                         <div className='col-12 text-center'>
                             {
-                                checkLoginstyle
+                                checkLoginstyle === 1
                                     ?
                                     <i className="fa fa-6x fa-user"></i>
-                                    :
-                                    <i className="fa fa-6x fa-phone"></i>
-
+                                    : checkLoginstyle === 2
+                                        ?
+                                        <i className="fa fa-6x fa-phone"></i>
+                                        :
+                                        <i className="fab fa-6x fa-facebook"></i>
                             }
-                            <h2>Welcome To Back Again</h2>
                         </div>
                         <hr />
                         {
-                            checkLoginstyle
+                            checkLoginstyle === 1
                                 ?
                                 <>
                                     {/* Login Account */}
@@ -107,29 +136,52 @@ class Login extends Component {
                                     </div>
                                 </>
                                 :
+                                checkLoginstyle === 2
+                                    ?
+                                    <>
+                                        {/* Login Phone */}
 
-                                <>
-                                    {/* Login Phone */}
-
-                                    <div className='col-12 px-4'>
-                                        <div className='col-12'><strong> Sign in by Phone Number: </strong></div>
-                                    </div>
-                                    <div className='col-12 px-4  mb-2'>
-                                        <div className="mb-1">
-                                            <label htmlFor="InputPhone" className="form-label">Phone Number:</label>
-
-                                            <PhoneInput
-                                                placeholder="Enter phone number"
-                                                defaultCountry="VN"
-                                                onChange={(e) => this.handlePhoneNumber(e)}
-                                            />
-
-                                            <div id="emailHelp" className="form-text">We'll never share your phone with anyone else.</div>
+                                        <div className='col-12 px-4'>
+                                            <div className='col-12'><strong> Sign in by Phone Number: </strong></div>
                                         </div>
+                                        <div className='col-12 px-4  mb-2'>
+                                            <div className="mb-1">
+                                                <label htmlFor="InputPhone" className="form-label">Phone Number:</label>
 
-                                        <button onClick={(e) => this.submitPhone()} className="btn btn-primary text-center">Submit</button>
-                                    </div>
-                                </>
+                                                <PhoneInput
+                                                    placeholder="Enter phone number"
+                                                    defaultCountry="VN"
+                                                    onChange={(e) => { this.loginPhone = e }}
+                                                />
+
+                                                <div id="emailHelp" className="form-text">We'll never share your phone with anyone else.</div>
+                                            </div>
+
+                                            <button onClick={(e) => this.submitPhone()} className="btn btn-primary text-center">Submit</button>
+                                        </div>
+                                    </>
+                                    :
+                                    <>
+                                        {/* Login Facebook */}
+
+                                        <div className='col-12 px-4'>
+                                            <div className='col-12'><strong> Sign in by Facebook: </strong></div>
+                                        </div>
+                                        <div className='col-12 px-4  mb-2'>
+                                            <div className="mb-1 text-center ">
+                                                <FacebookLogin
+                                                    className="rounded-pill"
+                                                    appId="505300141422455"
+                                                    autoLoad={true}
+                                                    fields="name,email,picture"
+                                                    callback={() => this.responseFacebook()}
+                                                    render={renderProps => (
+                                                        <button onClick={renderProps.onClick} className='btn btn-primary'><i className="fab fa-facebook"></i> Facebook Login</button>
+                                                    )}
+                                                />
+                                            </div>
+                                        </div>
+                                    </>
                         }
 
 
@@ -139,13 +191,24 @@ class Login extends Component {
                             <div className='col-12 text-muted'> or sign up using </div>
                             <div className='row'>
                                 {
-                                    checkLoginstyle
+                                    checkLoginstyle === 1
                                         ?
-                                        <div className='col-6' onClick={() => this.changeLoginStyle()}><i className="fa fa-2x fa-phone "></i></div>
-                                        :
-                                        <div className='col-6' onClick={() => this.changeLoginStyle()}><i className="fa fa-2x fa-user "></i></div>
+                                        <>
+                                            <div className='col-6' onClick={() => this.changePhoneLogin()}><i className="fa fa-2x fa-phone "></i></div>
+                                            <div className='col-6' onClick={() => this.changeFacebookLogin()}><i className="fa-brands fa-2x fa-facebook "></i></div>
+                                        </>
+                                        : checkLoginstyle === 2
+                                            ?
+                                            <>
+                                                <div className='col-6' onClick={() => this.changeLogin()}><i className="fa fa-2x fa-user "></i></div>
+                                                <div className='col-6' onClick={() => this.changeFacebookLogin()}><i className="fa-brands fa-2x fa-facebook "></i></div>
+                                            </>
+                                            :
+                                            <>
+                                                <div className='col-6' onClick={() => this.changePhoneLogin()}><i className="fa fa-2x fa-phone "></i></div>
+                                                <div className='col-6' onClick={() => this.changeLogin()}><i className="fa fa-2x fa-user "></i></div>
+                                            </>
                                 }
-                                <div className='col-6'><i className="fa-brands fa-2x fa-facebook "></i></div>
                             </div>
                         </div>
                     </div>

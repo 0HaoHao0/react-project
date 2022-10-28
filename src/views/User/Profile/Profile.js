@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import withRouter from '../../../components/HOC/withRouter';
-import { setUserData, updateImageURL } from '../../../features/user/userSlice';
+import { updateImageURL } from '../../../features/user/userSlice';
 import { updateAvatar } from '../../../services/UserApiConnection/userApi';
 
 import '../../../styles/views/User/Profile/Profile.scss'

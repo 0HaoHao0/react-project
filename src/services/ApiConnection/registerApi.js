@@ -1,8 +1,9 @@
 import axios from "axios"
 import Swal from "sweetalert2";
 
+let data;
+
 export const registerApi = async (registerData) => {
-    let data;
 
     await Swal.fire({
         title: 'Waiting...',

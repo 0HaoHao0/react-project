@@ -1,26 +1,29 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
 import { ContactDelete, ContactGetAll } from "../../../services/AdminApiConnection/adminContactApi";
 
 function AdminContact() {
     const [contactData, setContactData] = useState([]);
 
+    const fetchContact = async () => {
+        let response = await ContactGetAll();
+        setContactData(response.data);
+    }
+
     useEffect(() => {
-        const fetchData = async () => {
-            // You can await here
-            let response = await ContactGetAll();
-
-            setContactData(response.data);
-            // ...
-        }
-        fetchData();
-
+        fetchContact();
     }, []);
 
     const handleDelete = async (id) => {
         let res = await ContactDelete(id);
-
-        console.log(res);
+        if (res.status === 200) {
+            toast.success(res.data);
+            fetchContact();
+        }
+        else {
+            toast.error("Please try again or contact with admin !")
+        }
     }
 
     return (<>
@@ -66,6 +69,8 @@ function AdminContact() {
                             <li className="page-item"><a className="page-link" href="/">1</a></li>
                             <li className="page-item"><a className="page-link" href="/">2</a></li>
                             <li className="page-item"><a className="page-link" href="/">3</a></li>
+                            <li className="page-item"><a className="page-link" href="/">...</a></li>
+                            <li className="page-item"><a className="page-link" href="/">4</a></li>
                             <li className="page-item">
                                 <a className="page-link" href="/">Next</a>
                             </li>

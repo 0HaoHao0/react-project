@@ -1,4 +1,6 @@
 import { useLocation, useNavigate, useParams } from "react-router-dom";
+import React from 'react';
+
 
 const withRouter = WrappedComponent => props => {
     const location = useLocation();

@@ -12,7 +12,7 @@ class Footer extends Component {
                 <footer className="footer-09">
                     <div className="container">
                         <div className="row">
-                            <div className="col-md-6 col-lg-3 mb-md-0 mb-4">
+                            <div className="col-md-12 col-lg-3 mb-md-0 my-2">
                                 <h2 className="footer-heading d-flex">
                                     <span className="icon d-flex align-items-center justify-content-center"><i className="fa-solid fa-house-user"></i></span>
                                     Home
@@ -24,7 +24,7 @@ class Footer extends Component {
                                         <li><a href="." style={{ textDecoration: 'none' }}><i className="icon fa-sharp fa-sharps fa-solid fa-paper-plane"></i><span className="text">tuandat@gmail.com</span></a></li>
                                     </ul>
                                 </div>
-                                <form action="#" className="subscribe-form">
+                                <form action="#" className="subscribe-form row">
                                     <h2 className=''>Subcrises</h2>
                                     <div className="form-group d-flex">
 
@@ -33,46 +33,36 @@ class Footer extends Component {
                                     </div>
                                 </form>
                             </div>
-                            <div className="col-md-6 col-lg-3 mb-md-0 mb-4">
+                            <div className="col-md-12 col-lg-3 mb-md-0 my-2">
                                 <h2 className="footer-heading d-flex align-items-center"><span className="icon d-flex align-items-center justify-content-center"><i className="fa-solid fa-syringe"></i></span>Our Service</h2>
                                 <div className="block-21 mb-4 d-flex">
                                     <a href='.'>
-                                        <img src="https://images.pexels.com/photos/3779705/pexels-photo-3779705.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" className='img-footer m-2 rounded' alt="." />
+                                        <img src="https://images.pexels.com/photos/3779705/pexels-photo-3779705.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" className='img-footer  rounded' alt="." />
                                     </a>
-                                    <div className="text">
+                                    <div className="text px-2">
                                         <h3 className="heading"><a href="." style={{ textDecoration: 'none' }}>Even the all-powerful Pointing has no control about</a></h3>
-                                        <div className="meta">
-                                            <div><a href="."><span className="icon-calendar"></span> Oct. 16, 2022</a></div>
-                                            <div><a href="."><span className="icon-person"></span> Achay</a></div>
-                                            <div><a href="."><span className="icon-chat"></span> 19</a></div>
-                                        </div>
                                     </div>
                                 </div>
                                 <div className="block-21 mb-4 d-flex">
                                     <a href='.'>
-                                        <img src="https://images.pexels.com/photos/3779705/pexels-photo-3779705.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" className='img-footer m-2 rounded' alt="." />
+                                        <img src="https://images.pexels.com/photos/3779705/pexels-photo-3779705.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" className='img-footer rounded' alt="." />
                                     </a>
-                                    <div className="text">
+                                    <div className="text px-2">
                                         <h3 className="heading"><a href="." style={{ textDecoration: 'none' }}>Even the all-powerful Pointing has no control about</a></h3>
-                                        <div className="meta">
-                                            <div><a href="."><span className="icon-calendar"></span> Oct. 19, 2022</a></div>
-                                            <div><a href="."><span className="icon-person"></span> Achay</a></div>
-                                            <div><a href="."><span className="icon-chat"></span> 19</a></div>
-                                        </div>
                                     </div>
                                 </div>
                             </div>
-                            <div className="col-md-6 col-lg-3 mb-md-0 mb-4">
+                            <div className="col-md-6 col-lg-3 mb-md-0 my-2">
                                 <h2 className="footer-heading d-flex align-items-center"><span className="icon d-flex align-items-center justify-content-center"><i className="fa-solid fa-regular fa-handshake"></i></span>About Us</h2>
                                 <ul className="list-unstyled">
                                     <li><a href="." className="py-2 d-block h5 aloalo123" style={{ textDecoration: 'none' }}>Home 🏠</a></li>
                                     <li><a href="." className="py-2 d-block h5" style={{ textDecoration: 'none' }}>Services 💉</a></li>
-                                    <li><a href="." className="py-2 d-block h5" style={{ textDecoration: 'none' }}>Blog 🧑‍🤝‍🧑</a></li>
                                     <li><a href="." className="py-2 d-block h5" style={{ textDecoration: 'none' }}>Contact 📱</a></li>
+                                    <li><a href="." className="py-2 d-block h5" style={{ textDecoration: 'none' }}>About Us 🧑‍🤝‍🧑</a></li>
                                     <li><a href="." className="py-2 d-block h5" style={{ textDecoration: 'none' }}>Help &amp; Support ❓</a></li>
                                 </ul>
                             </div>
-                            <div className="col-md-6 col-lg-3 mb-md-0 mb-4">
+                            <div className="col-md-6 col-lg-3 mb-md-0 my-2">
                                 <h2 className="footer-heading d-flex align-items-center"><span className="icon d-flex align-items-center justify-content-center"><i className="fa-solid fa-question"></i></span>FAQs</h2>
                                 <div className="block-24">
                                     <div className="row no-gutters">

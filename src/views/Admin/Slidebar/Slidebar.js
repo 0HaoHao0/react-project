@@ -19,7 +19,7 @@ class Slidebar extends Component {
                         <ul className="nav " >
                             <li className='col-12 text-center my-2'>
                                 <NavLink
-                                    className={({ isActive }) => isActive ? "btn btn-primary" : "btn btn-outline-primary"}
+                                    className={({ isActive }) => isActive ? "btn btn-primary" : "btn "}
                                     to="/admin/">
                                     <i className="fa-solid fa-house"></i>
                                     <span className='mx-2'>
@@ -34,6 +34,36 @@ class Slidebar extends Component {
                                     <i className="fa-solid fa-address-book"></i>
                                     <span className='mx-2'>
                                         Contact
+                                    </span>
+                                </NavLink>
+                            </li>
+                            <li className='col-12 text-center my-2'>
+                                <NavLink
+                                    className={({ isActive }) => isActive ? "btn btn-primary" : "btn"}
+                                    to="/admin/service">
+                                    <i className="fa fa-wine-glass-alt"></i>
+                                    <span className='mx-2'>
+                                        Service
+                                    </span>
+                                </NavLink>
+                            </li>
+                            <li className='col-12 text-center my-2'>
+                                <NavLink
+                                    className={({ isActive }) => isActive ? "btn btn-primary" : "btn"}
+                                    to="/admin/device">
+                                    <i className="fa fa-wrench"></i>
+                                    <span className='mx-2'>
+                                        Device
+                                    </span>
+                                </NavLink>
+                            </li>
+                            <li className='col-12 text-center my-2'>
+                                <NavLink
+                                    className={({ isActive }) => isActive ? "btn btn-primary" : "btn"}
+                                    to="/admin/room">
+                                    <i className="fa fa-hospital"></i>
+                                    <span className='mx-2'>
+                                        Room
                                     </span>
                                 </NavLink>
                             </li>

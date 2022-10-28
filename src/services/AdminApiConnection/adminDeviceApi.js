@@ -3,7 +3,7 @@ import Swal from "sweetalert2";
 
 let response;
 
-export const ContactGetAll = async () => {
+export const DeviceGetAll = async () => {
 
     await Swal.fire({
         title: 'Waiting...',
@@ -14,7 +14,7 @@ export const ContactGetAll = async () => {
 
             axios({
                 method: 'Get',
-                url: `https://localhost:44355/api/Contact/GetAll`
+                url: `https://localhost:44355/api/Device/GetAll`
             }).then((res) => {
                 response = res;
                 Swal.close();
@@ -37,7 +37,7 @@ export const ContactGetAll = async () => {
 
 }
 
-export const ContactGetId = async (id) => {
+export const DeviceGetId = async (id) => {
 
     await Swal.fire({
         title: 'Waiting...',
@@ -48,7 +48,7 @@ export const ContactGetId = async (id) => {
 
             axios({
                 method: 'Get',
-                url: `https://localhost:44355/api/Contact/Get/${id}`,
+                url: `https://localhost:44355/api/Device/Get/${id}`,
             })
                 .then((res) => {
                     response = res;
@@ -74,7 +74,7 @@ export const ContactGetId = async (id) => {
 }
 
 
-export const ContactChangeState = async (id, stateIndex) => {
+export const DeviceUpdate = async (data) => {
     let data;
 
     await Swal.fire({
@@ -87,7 +87,7 @@ export const ContactChangeState = async (id, stateIndex) => {
 
             axios({
                 method: 'post',
-                url: `https://localhost:44355/api/Contact/ChangeState`,
+                url: `https://localhost:44355/api/Device/Update`,
                 data: {
                     id: id,
                     stateIndex: stateIndex
@@ -108,7 +108,7 @@ export const ContactChangeState = async (id, stateIndex) => {
     return data;
 }
 
-export const ContactDelete = async (id) => {
+export const DeviceDelete = async (id) => {
 
     await Swal.fire({
         title: 'Waiting...',
@@ -118,8 +118,8 @@ export const ContactDelete = async (id) => {
             Swal.showLoading();
 
             axios({
-                method: 'Delete',
-                url: `https://localhost:44355/api/Contact/Delete/${id}`,
+                method: 'Post',
+                url: `https://localhost:44355/api/Device/Delete/${id}`,
             })
                 .then((res) => {
                     response = res;

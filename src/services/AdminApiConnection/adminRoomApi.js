@@ -3,7 +3,7 @@ import Swal from "sweetalert2";
 
 let response;
 
-export const ContactGetAll = async () => {
+export const RoomGetAll = async (page) => {
 
     await Swal.fire({
         title: 'Waiting...',
@@ -14,7 +14,7 @@ export const ContactGetAll = async () => {
 
             axios({
                 method: 'Get',
-                url: `https://localhost:44355/api/Contact/GetAll`
+                url: `https://localhost:44355/api/Room/GetAll`
             }).then((res) => {
                 response = res;
                 Swal.close();
@@ -37,7 +37,7 @@ export const ContactGetAll = async () => {
 
 }
 
-export const ContactGetId = async (id) => {
+export const RoomGetId = async (id) => {
 
     await Swal.fire({
         title: 'Waiting...',
@@ -48,7 +48,7 @@ export const ContactGetId = async (id) => {
 
             axios({
                 method: 'Get',
-                url: `https://localhost:44355/api/Contact/Get/${id}`,
+                url: `https://localhost:44355/api/Room/Get/${id}`,
             })
                 .then((res) => {
                     response = res;
@@ -74,8 +74,7 @@ export const ContactGetId = async (id) => {
 }
 
 
-export const ContactChangeState = async (id, stateIndex) => {
-    let data;
+export const RoomUpdate = async (data) => {
 
     await Swal.fire({
         title: 'Waiting...',
@@ -87,11 +86,8 @@ export const ContactChangeState = async (id, stateIndex) => {
 
             axios({
                 method: 'post',
-                url: `https://localhost:44355/api/Contact/ChangeState`,
-                data: {
-                    id: id,
-                    stateIndex: stateIndex
-                }
+                url: `https://localhost:44355/api/Room/Update`,
+
 
             })
                 .then((res) => {
@@ -108,7 +104,7 @@ export const ContactChangeState = async (id, stateIndex) => {
     return data;
 }
 
-export const ContactDelete = async (id) => {
+export const RoomDelete = async (id) => {
 
     await Swal.fire({
         title: 'Waiting...',
@@ -118,8 +114,8 @@ export const ContactDelete = async (id) => {
             Swal.showLoading();
 
             axios({
-                method: 'Delete',
-                url: `https://localhost:44355/api/Contact/Delete/${id}`,
+                method: 'Post',
+                url: `https://localhost:44355/api/Room/Delete/${id}`,
             })
                 .then((res) => {
                     response = res;
