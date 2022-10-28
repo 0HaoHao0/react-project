@@ -24,7 +24,7 @@ class Admin extends Component {
                         <Slidebar />
                     </div>
 
-                    <div className='col-10'>
+                    <div className='col-10 bg-right'>
                         <Routes>
                             <Route path='/' index element={<AdminHome />} />
                             {/* Contact */}

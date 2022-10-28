@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
+import "../../../styles/views/Admin/Slidebar/SlidebarStyle.scss"
 import { ContactDelete, ContactGetAll } from "../../../services/AdminApiConnection/adminContactApi";
 
 function AdminContact() {
@@ -29,7 +30,7 @@ function AdminContact() {
     return (<>
         <div className="admin-contact">
             <div className="card-admin card m-4 ">
-                <h5 className="m-5 p-2 fw-bold border border-dark bg-light">
+                <h5 className="m-5 p-2 fw-bold border border-dark bg-light text-center">
                     Contact Management
                 </h5>
                 <div className="p-4">
