@@ -1,5 +1,17 @@
 .home-main {
+
+
+    .welcome-background {
+        background-color: rgb(255, 255, 255, 0.7);
+    }
+
     .first-block {
+        background-image: url(https://thewholeu.uw.edu/wp-content/uploads/AdobeStock_428089463-1-scaled.jpeg);
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-position: top;
+        background-size: cover;
+
         color: white;
         height: 90vh;
     }
@@ -14,6 +26,10 @@
         }
 
 
+    }
+
+    .four-block {
+        background-color: white;
     }
 
 

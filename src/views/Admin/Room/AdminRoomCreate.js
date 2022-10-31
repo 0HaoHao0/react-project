@@ -1,15 +1,29 @@
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { RoomCreate } from "../../../services/AdminApiConnection/adminRoomApi";
+import { RoomCreate, RoomGetType } from "../../../services/AdminApiConnection/adminRoomApi";
 
 function AdminRoomCreate() {
     const navigate = useNavigate();
 
+    const [roomTypes, setRoomTypes] = useState([])
+
     let roomData = {
         roomCode: null,
-        description: null
+        description: null,
+        roomType: null,
     }
 
+    // Get room Type
+    const getRoomTypes = async () => {
+        let res = await RoomGetType();
+        console.log(res);
+        setRoomTypes(res.data)
+    }
+
+    useEffect(() => {
+        getRoomTypes();
+    }, [])
 
     //Create
     const handleCreate = async () => {
@@ -44,24 +58,29 @@ function AdminRoomCreate() {
                                         onChange={(e) => { roomData.roomCode = e.target.value }}
                                     />
                                 </div>
+                                <div className="form-group my-2">
+                                    <label className="form-label fw-bold">Room Type :</label>
+                                    <select className="form-select" aria-label="Default select example"
+                                        onChange={(e) => { roomData.roomType = parseInt(e.target.value) }}>
+                                        <option defaultValue={null}>Select device status</option>
+                                        {
+                                            roomTypes.map((item, index) =>
+                                                <option key={index} value={item.id}>{item.name}</option>
+                                            )
+                                        }
+                                    </select>
+                                </div>
                             </div>
                             <div className="col-12 col-md-6">
-                                <div className="form-group  my-2">
-                                    <label className="form-label fw-bold">Room Description :</label>
-                                    <textarea type="text" rows={10} className="form-control "
+                                <div className="form-group my-2">
+                                    <label className="form-label fw-bold">Room description :</label>
+                                    <textarea rows={5} type="text" className="form-control "
                                         onChange={(e) => { roomData.description = e.target.value }}
                                     />
                                 </div>
                             </div>
                         </div>
-                        <div className="row">
-                            <div className="col-12">
-                                <div className="form-group my-2">
-                                    <label className="form-label fw-bold">Room Device :</label>
-                                    <input type="text" className="form-control" disabled />
-                                </div>
-                            </div>
-                        </div>
+
                         <div className="row my-4">
                             <div className="col-6">
                                 <button className="btn btn-success" onClick={() => handleCreate()}>Create</button>

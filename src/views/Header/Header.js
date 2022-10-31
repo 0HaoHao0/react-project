@@ -33,13 +33,13 @@ class Header extends Component {
                             <li><NavLink to="/main"
                                 className={({ isActive }) => isActive ? "btn btn-active px-2 mx-2 my-1" : "btn btn-style1 px-2 mx-2 my-1"}
                             >Home 🏠</NavLink></li>
-                            <li><NavLink to="service"
+                            <li><NavLink to={this.props.user.id === null ? '/login' : '/service'}
                                 className={({ isActive }) => isActive ? "btn btn-active px-2 mx-2 my-1" : "btn btn-style1 px-2 mx-2 my-1"}
                             >Services 💉</NavLink></li>
                             <li><NavLink to="/contact"
                                 className={({ isActive }) => isActive ? "btn btn-active px-2 mx-2 my-1" : "btn btn-style1 px-2 mx-2 my-1"}
                             >Contact 📱</NavLink></li>
-                                                       <li><NavLink to="/aboutus" className={({ isActive }) =>
+                            <li><NavLink to="/aboutus" className={({ isActive }) =>
                                 isActive ? "btn btn-active px-2 mx-2 my-1" : "btn btn-style1 px-2 mx-2 my-1"
                             } >About Us 🧑‍🤝‍🧑</NavLink></li>
                             <li><NavLink to="/faq" className={({ isActive }) =>

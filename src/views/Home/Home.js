@@ -15,7 +15,6 @@ class Home extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            logic: true,
         }
     }
 
@@ -25,8 +24,8 @@ class Home extends Component {
                 <Header />
                 <Routes>
 
-                    <Route path="*" element={<Main />} />
-                    {this.props.user.id == null
+                    <Route path="*" element={<Main user={this.props.user} />} />
+                    {this.props.user.id === null
                         ?
                         <>
                             <Route path="login" element={<Login />} />

@@ -67,6 +67,40 @@ export const RoomGetId = async (id) => {
 
 }
 
+export const RoomGetType = async () => {
+
+    await Swal.fire({
+        title: 'Waiting...',
+        icon: 'warning',
+        html: 'This pop-up will close when server response.',
+        didOpen: () => {
+            Swal.showLoading();
+
+            axios({
+                method: 'Get',
+                url: `https://localhost:44355/api/Room/GetRoomTypes`,
+            })
+                .then((res) => {
+                    response = res;
+                    Swal.close();
+
+                })
+                .catch((error) => {
+                    response = error.response;
+                    Swal.close();
+                });
+
+        },
+
+    }).then((result) => {
+
+    })
+
+    return response;
+
+}
+
+
 export const RoomCreate = async (data) => {
 
     await Swal.fire({
