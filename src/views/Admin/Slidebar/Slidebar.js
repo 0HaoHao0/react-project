@@ -11,55 +11,32 @@ class Slidebar extends Component {
         return (
             <>
                 <div className="admin-slidebar  p-3 " >
-                    <a href="/" className="text-center link-dark text-decoration-none row">
-                        <span> <i className="fa-solid fa-screwdriver-wrench fa-color-admin"></i> </span>   <h5 className='text-color-admin'>Admin Page</h5>
+                    <a href="/" className="text-center text-white text-decoration-none row">
+                        <span> <i className="fa fa-screwdriver-wrench "></i> </span>   <h5>Admin Page</h5>
                     </a>
-                    <hr />
+                    <hr className='bg-light' />
                     <div className='admin-scroll d-flex'>
                         <ul className="nav " >
-                            <li className='col-12 text-center my-1 '>
+                            <li className='col-12 text-center my-2 '>
                                 <NavLink
                                     className={({ isActive }) => isActive ? "btn navlink-active" : "btn navlink-unactive"}
                                     to="/admin/">
-                                    <div className='d-inline-flex mx-1 my-1 text-color '>
-                                        <i className="mx-2 my-1 fa-solid fa-house fa-color"></i>
-                                        <span>Home</span>
-                                    </div>
-                                </NavLink>
-                            </li>
-                            <li className='col-12 text-center my-1'>
-                                <NavLink
-                                    className={({ isActive }) => isActive ? "btn navlink-active" : "btn navlink-unactive"}
-                                    to="/admin/contact">
-                                    <div className='d-inline-flex mx-1 my-1 text-color '>
-                                        <i className="mx-2 my-1 fa-solid fa-house fa-color"></i>
-                                        <span>Contact</span>
-                                    </div>
-                                </NavLink>
-                            </li>
-                            <li className='col-12 text-center my-1'>
-                                <NavLink
-                                    className={({ isActive }) => isActive ? "btn navlink-active" : "btn navlink-unactive"}
-                                    to="/admin/contact">
-                                    <div className='d-inline-flex mx-1 my-1 text-color '>
-                                        <i className="mx-2 my-1 fa-solid fa-house fa-color"></i>
-                                        <span>Contact</span>
-                                    </div>
-                                </NavLink>
-                            </li>
-                            <li className='col-12 text-center my-1'>
-                                <NavLink
-                                    className={({ isActive }) => isActive ? "btn navlink-active" : "btn navlink-unactive"}
-                                    to="/admin/contact">
-                                    <div className='d-inline-flex mx-1 my-1 text-color '>
-                                        <i className="mx-2 my-1 fa-solid fa-house fa-color"></i>
-                                        <span>Contact</span>
-                                    </div>
+                                    <i className="mx-2  fa-solid fa-house "></i>
+                                    <span>Home</span>
                                 </NavLink>
                             </li>
                             <li className='col-12 text-center my-2'>
                                 <NavLink
-                                    className={({ isActive }) => isActive ? "btn btn-primary" : "btn"}
+                                    className={({ isActive }) => isActive ? "btn navlink-active" : "btn navlink-unactive"}
+                                    to="/admin/contact">
+                                    <i className="mx-2 fa-solid fa-id-card"></i>
+                                    <span>Contact</span>
+                                </NavLink>
+                            </li>
+
+                            <li className='col-12 text-center my-2'>
+                                <NavLink
+                                    className={({ isActive }) => isActive ? "btn navlink-active" : "btn navlink-unactive"}
                                     to="/admin/service">
                                     <i className="fa fa-wine-glass-alt"></i>
                                     <span className='mx-2'>
@@ -69,7 +46,7 @@ class Slidebar extends Component {
                             </li>
                             <li className='col-12 text-center my-2'>
                                 <NavLink
-                                    className={({ isActive }) => isActive ? "btn btn-primary" : "btn"}
+                                    className={({ isActive }) => isActive ? "btn navlink-active" : "btn navlink-unactive"}
                                     to="/admin/device">
                                     <i className="fa fa-wrench"></i>
                                     <span className='mx-2'>
@@ -79,7 +56,7 @@ class Slidebar extends Component {
                             </li>
                             <li className='col-12 text-center my-2'>
                                 <NavLink
-                                    className={({ isActive }) => isActive ? "btn btn-primary" : "btn"}
+                                    className={({ isActive }) => isActive ? "btn navlink-active" : "btn navlink-unactive"}
                                     to="/admin/room">
                                     <i className="fa fa-hospital"></i>
                                     <span className='mx-2'>
@@ -93,11 +70,11 @@ class Slidebar extends Component {
 
                         </ul>
                     </div>
-                    <hr />
+                    <hr className='bg-light' />
                     <div className="row text-center">
                         <div className='dropend col-12'>
                             <button type="button" className="btn btn-danger button-dropend rounded-pill" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i className="fa-solid fa-right-from-bracket fa-color-logout"></i>
+                                <i className="fa fa-right-from-bracket "></i>
                                 <span className='mx-2 text-color-logout'>
                                     Logout
                                 </span>

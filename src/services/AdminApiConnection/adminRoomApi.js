@@ -27,10 +27,7 @@ export const RoomGetAll = async (page) => {
         },
 
     }).then((result) => {
-        /* Read more about handling dismissals below */
-        if (result.isDismissed) {
-            console.log('I was closed by server response')
-        }
+
     })
 
     return response;
@@ -63,16 +60,45 @@ export const RoomGetId = async (id) => {
         },
 
     }).then((result) => {
-        /* Read more about handling dismissals below */
-        if (result.isDismissed) {
-            console.log('I was closed by server response')
-        }
+
     })
 
     return response;
 
 }
 
+export const RoomCreate = async (data) => {
+
+    await Swal.fire({
+        title: 'Waiting...',
+        icon: 'warning',
+        html: 'This pop-up will close when server response.',
+        didOpen: () => {
+
+            Swal.showLoading()
+
+            axios({
+                method: 'post',
+                url: `https://localhost:44355/api/Room/Create`,
+                data: {
+                    roomCode: data.roomCode,
+                    description: data.description
+                }
+
+            })
+                .then((res) => {
+                    response = res;
+                    Swal.close();
+                })
+                .catch((error) => {
+                    response = error.response;
+                    Swal.close();
+                })
+        }
+    })
+
+    return response;
+}
 
 export const RoomUpdate = async (data) => {
 
@@ -85,23 +111,27 @@ export const RoomUpdate = async (data) => {
             Swal.showLoading()
 
             axios({
-                method: 'post',
+                method: 'put',
                 url: `https://localhost:44355/api/Room/Update`,
-
+                data: {
+                    id: data.id,
+                    roomCode: data.roomCode,
+                    description: data.description
+                }
 
             })
                 .then((res) => {
-                    data = res;
+                    response = res;
                     Swal.close();
                 })
                 .catch((error) => {
-                    data = error.response;
+                    response = error.response;
                     Swal.close();
                 })
         }
     })
 
-    return data;
+    return response;
 }
 
 export const RoomDelete = async (id) => {
@@ -114,7 +144,7 @@ export const RoomDelete = async (id) => {
             Swal.showLoading();
 
             axios({
-                method: 'Post',
+                method: 'Delete',
                 url: `https://localhost:44355/api/Room/Delete/${id}`,
             })
                 .then((res) => {
@@ -130,10 +160,7 @@ export const RoomDelete = async (id) => {
         },
 
     }).then((result) => {
-        /* Read more about handling dismissals below */
-        if (result.isDismissed) {
-            console.log('I was closed by server response')
-        }
+
     })
 
     return response;

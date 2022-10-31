@@ -3,7 +3,7 @@ import Swal from "sweetalert2";
 
 let response;
 
-export const DeviceGetAll = async () => {
+export const DeviceGetAll = async (page) => {
 
     await Swal.fire({
         title: 'Waiting...',
@@ -28,9 +28,7 @@ export const DeviceGetAll = async () => {
 
     }).then((result) => {
         /* Read more about handling dismissals below */
-        if (result.isDismissed) {
-            console.log('I was closed by server response')
-        }
+
     })
 
     return response;
@@ -64,19 +62,13 @@ export const DeviceGetId = async (id) => {
 
     }).then((result) => {
         /* Read more about handling dismissals below */
-        if (result.isDismissed) {
-            console.log('I was closed by server response')
-        }
+
     })
 
     return response;
-
 }
 
-
-export const DeviceUpdate = async (data) => {
-    let data;
-
+export const DeviceCreate = async (data) => {
     await Swal.fire({
         title: 'Waiting...',
         icon: 'warning',
@@ -87,25 +79,72 @@ export const DeviceUpdate = async (data) => {
 
             axios({
                 method: 'post',
-                url: `https://localhost:44355/api/Device/Update`,
+                url: `https://localhost:44355/api/Device/Create`,
                 data: {
-                    id: id,
-                    stateIndex: stateIndex
+                    deviceValue: data.deviceValue,
+                    deviceName: data.deviceName,
+                    description: data.description,
+                    date: new Date(),
+                    status: data.status,
+                    roomId: data.roomId,
                 }
 
             })
                 .then((res) => {
-                    data = res;
+                    response = res;
                     Swal.close();
                 })
                 .catch((error) => {
-                    data = error.response;
+                    response = error.response;
                     Swal.close();
                 })
         }
     })
 
-    return data;
+    return response;
+}
+
+let resDeviceUpdate;
+
+export const DeviceUpdate = async (data) => {
+
+    await Swal.fire({
+        title: 'Waiting...',
+        icon: 'warning',
+        html: 'This pop-up will close when server response.',
+        didOpen: () => {
+
+            Swal.showLoading()
+
+            axios({
+                method: 'put',
+                url: `https://localhost:44355/api/Device/Update`,
+                data: {
+                    id: data.id,
+                    deviceValue: data.deviceValue,
+                    deviceName: data.deviceName,
+                    description: data.description,
+                    status: data.status,
+                    roomId: data.roomId,
+                    serviceDeviceId: 0,
+                }
+
+            })
+                .then((res) => {
+                    resDeviceUpdate = res;
+                    Swal.close();
+                })
+                .catch((error) => {
+                    resDeviceUpdate = error.response;
+                    Swal.close();
+                })
+        }
+    }).then((result) => {
+        /* Read more about handling dismissals below */
+
+    })
+
+    return resDeviceUpdate;
 }
 
 export const DeviceDelete = async (id) => {
@@ -118,7 +157,7 @@ export const DeviceDelete = async (id) => {
             Swal.showLoading();
 
             axios({
-                method: 'Post',
+                method: 'Delete',
                 url: `https://localhost:44355/api/Device/Delete/${id}`,
             })
                 .then((res) => {
@@ -135,9 +174,7 @@ export const DeviceDelete = async (id) => {
 
     }).then((result) => {
         /* Read more about handling dismissals below */
-        if (result.isDismissed) {
-            console.log('I was closed by server response')
-        }
+
     })
 
     return response;

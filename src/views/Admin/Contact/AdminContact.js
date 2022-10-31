@@ -9,7 +9,7 @@ function AdminContact() {
 
     const fetchContact = async () => {
         let response = await ContactGetAll();
-        setContactData(response.data);
+        setContactData(response.data.data);
     }
 
     useEffect(() => {

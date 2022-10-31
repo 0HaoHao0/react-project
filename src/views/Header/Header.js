@@ -30,13 +30,15 @@ class Header extends Component {
                         </a>
                         {/* Link */}
                         <ul className="nav col-12 col-lg-auto me-lg-auto  justify-content-center ">
-                            <li><NavLink to="/main" className={({ isActive }) =>
-                                isActive ? "btn btn-active px-2 mx-2 my-1" : "btn btn-style1 px-2 mx-2 my-1"
-                            } >Home 🏠</NavLink></li>
-                            <li><a href="." className="btn btn-style1 px-2 mx-2 my-1">Services 💉</a></li>
-                            <li><NavLink to="/contact" className={({ isActive }) =>
-                                isActive ? "btn btn-active px-2 mx-2 my-1" : "btn btn-style1 px-2 mx-2 my-1"
-                            } >Contact 📱</NavLink></li>
+                            <li><NavLink to="/main"
+                                className={({ isActive }) => isActive ? "btn btn-active px-2 mx-2 my-1" : "btn btn-style1 px-2 mx-2 my-1"}
+                            >Home 🏠</NavLink></li>
+                            <li><NavLink to="service"
+                                className={({ isActive }) => isActive ? "btn btn-active px-2 mx-2 my-1" : "btn btn-style1 px-2 mx-2 my-1"}
+                            >Services 💉</NavLink></li>
+                            <li><NavLink to="/contact"
+                                className={({ isActive }) => isActive ? "btn btn-active px-2 mx-2 my-1" : "btn btn-style1 px-2 mx-2 my-1"}
+                            >Contact 📱</NavLink></li>
                             <li><a href="." className="btn btn-style1 px-2 mx-2 my-1" >About Us 🧑‍🤝‍🧑</a></li>
                             <li><a href="." className="btn btn-style1 px-2 mx-2 my-1">FAQs ❓</a></li>
                         </ul>

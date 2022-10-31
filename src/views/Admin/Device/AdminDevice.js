@@ -2,37 +2,34 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
-import { RoomDelete, RoomGetAll } from "../../../services/AdminApiConnection/adminRoomApi";
+import { DeviceDelete, DeviceGetAll } from "../../../services/AdminApiConnection/adminDeviceApi";
 
 
 
+function AdminDevice() {
+    const [deviceData, setDeviceData] = useState([])
 
-
-function AdminRoom() {
-    const [roomData, setRoomData] = useState([])
-
-    const [roomArray, setRoomArray] = useState([])
+    const [deviceArray, setDeviceArray] = useState([])
 
     // Get all devices
-    const featchRoom = async (page) => {
-        let res = await RoomGetAll(page);
+    const featchDevices = async (page) => {
+        let res = await DeviceGetAll(page);
 
-        setRoomArray(res.data.data)
-        setRoomData(res.data);
+        setDeviceArray(res.data.data)
+        setDeviceData(res.data);
     }
 
 
     useEffect(() => {
-        featchRoom();
+        featchDevices();
     }, [])
 
     // Delete Devices
-
     const handleDelete = async (id) => {
-        const res = await RoomDelete(id);
+        const res = await DeviceDelete(id);
         if (res.status === 200) {
             toast.success(res.data);
-            featchRoom();
+            featchDevices();
         }
         else {
             toast.error("Please try again or contact with admin !")
@@ -40,7 +37,6 @@ function AdminRoom() {
     }
 
     // Pagination
-
     const loadPagination = (totalPage) => {
         let render = [];
         for (let i = 1; i <= totalPage; i++) {
@@ -49,34 +45,37 @@ function AdminRoom() {
         return render;
     }
     return (
-
         <>
-            <div className="admin-room">
+            <div className="admin-device">
                 <div className="card-admin card m-4 ">
                     <h5 className="m-5 p-2 fw-bold border border-dark bg-light">
-                        Room Management
+                        Device Management
                     </h5>
 
                     <div className="p-4">
                         <Link to={'create'} className="btn btn-success">Create</Link>
                         <hr />
-                        <table className="table bg-light  table-striped" id="table-room">
+                        <table className="table bg-light  table-striped" id="table-device">
                             <thead className="table-dark">
                                 <tr>
                                     <th>Id</th>
-                                    <th>Room Code</th>
+                                    <th>Device Name</th>
                                     <th>Description</th>
+                                    <th>Room Id</th>
+                                    <th>Status</th>
                                     <th>Detail</th>
                                     <th>Delete</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {
-                                    roomArray.map((item, index) =>
+                                    deviceArray.map((item, index) =>
                                         <tr key={item.id}>
                                             <td><Link to={`update/${item.id}`} className="rounded-circle"><i className="fa fa-pen"></i></Link> {item.id}</td>
-                                            <td>{item.roomCode}</td>
+                                            <td>{item.deviceName}</td>
                                             <td>{item.description}</td>
+                                            <td>{item.roomId}</td>
+                                            <td>{item.status === true ? 'True' : 'False'}</td>
                                             <td><Link to={`${item.id}`} className="btn btn-success">Detail</Link></td>
                                             <td><button className="btn btn-danger" onClick={() => handleDelete(item.id)}>Delete</button></td>
                                         </tr>
@@ -91,7 +90,7 @@ function AdminRoom() {
                                 <li className="page-item disabled">
                                     <a className="page-link" href="/" tabIndex="-1" aria-disabled="true">Previous</a>
                                 </li>
-                                {loadPagination(roomData.total_pages)}
+                                {loadPagination(deviceData.total_pages)}
                                 <li className="page-item">
                                     <a className="page-link" href="/">Next</a>
                                 </li>
@@ -104,4 +103,4 @@ function AdminRoom() {
     );
 }
 
-export default AdminRoom;
+export default AdminDevice;

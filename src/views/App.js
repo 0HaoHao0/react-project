@@ -13,7 +13,6 @@ import {
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useDispatch, useSelector } from 'react-redux';
-import Profile from './User/Profile/Profile';
 
 import Cookies from "universal-cookie";
 import axios from 'axios';
@@ -43,15 +42,6 @@ function App() {
       <Routes  >
 
         <Route path="/*" element={<Home user={user} />}></Route>
-
-        {
-          user.id !== null
-            ?
-            <Route path="profile" element={<Profile user={user} />} />
-            :
-            null
-        }
-
         {
           user.role === "Administrator"
             ?

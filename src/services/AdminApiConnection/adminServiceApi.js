@@ -3,7 +3,7 @@ import Swal from "sweetalert2";
 
 let response;
 
-export const ServiceGetAll = async () => {
+export const ServiceGetAll = async (page) => {
 
     await Swal.fire({
         title: 'Waiting...',
@@ -14,7 +14,10 @@ export const ServiceGetAll = async () => {
 
             axios({
                 method: 'Get',
-                url: `https://localhost:44355/api/Service/GetAll`
+                url: `https://localhost:44355/api/Service/GetAll`,
+                data: {
+                    page: page
+                }
             }).then((res) => {
                 response = res;
                 Swal.close();
@@ -28,9 +31,7 @@ export const ServiceGetAll = async () => {
 
     }).then((result) => {
         /* Read more about handling dismissals below */
-        if (result.isDismissed) {
-            console.log('I was closed by server response')
-        }
+
     })
 
     return response;
@@ -64,19 +65,13 @@ export const ServiceGetId = async (id) => {
 
     }).then((result) => {
         /* Read more about handling dismissals below */
-        if (result.isDismissed) {
-            console.log('I was closed by server response')
-        }
+
     })
 
     return response;
-
 }
 
-
-export const ServiceUpdate = async (data) => {
-    let data;
-
+export const ServiceCreate = async (data) => {
     await Swal.fire({
         title: 'Waiting...',
         icon: 'warning',
@@ -87,25 +82,65 @@ export const ServiceUpdate = async (data) => {
 
             axios({
                 method: 'post',
-                url: `https://localhost:44355/api/Service/Update`,
+                url: `https://localhost:44355/api/Service/Create`,
                 data: {
-                    id: id,
-                    stateIndex: stateIndex
+                    serviceCode: data.serviceCode,
+                    description: data.description,
+                    price: data.price
                 }
 
             })
                 .then((res) => {
-                    data = res;
+                    response = res;
                     Swal.close();
                 })
                 .catch((error) => {
-                    data = error.response;
+                    response = error.response;
                     Swal.close();
                 })
         }
     })
 
-    return data;
+    return response;
+}
+
+
+export const ServiceUpdate = async (data) => {
+
+    await Swal.fire({
+        title: 'Waiting...',
+        icon: 'warning',
+        html: 'This pop-up will close when server response.',
+        didOpen: () => {
+
+            Swal.showLoading()
+
+            axios({
+                method: 'put',
+                url: `https://localhost:44355/api/Service/Update`,
+                data: {
+                    id: data.id,
+                    serviceCode: data.serviceCode,
+                    description: data.description,
+                    price: data.price,
+                }
+
+            })
+                .then((res) => {
+                    response = res;
+                    Swal.close();
+                })
+                .catch((error) => {
+                    response = error.response;
+                    Swal.close();
+                })
+        }
+    }).then((result) => {
+        /* Read more about handling dismissals below */
+
+    })
+
+    return response;
 }
 
 export const ServiceDelete = async (id) => {
@@ -118,7 +153,7 @@ export const ServiceDelete = async (id) => {
             Swal.showLoading();
 
             axios({
-                method: 'Post',
+                method: 'Delete',
                 url: `https://localhost:44355/api/Service/Delete/${id}`,
             })
                 .then((res) => {
@@ -135,9 +170,7 @@ export const ServiceDelete = async (id) => {
 
     }).then((result) => {
         /* Read more about handling dismissals below */
-        if (result.isDismissed) {
-            console.log('I was closed by server response')
-        }
+
     })
 
     return response;

@@ -1,20 +1,24 @@
 import { useEffect } from "react";
 import { useState } from "react";
-import { useParams } from "react-router-dom";
-import { ContactGetId } from "../../../services/AdminApiConnection/adminContactApi";
+import { useNavigate, useParams } from "react-router-dom";
+import { ContactChangeState, ContactGetId } from "../../../services/AdminApiConnection/adminContactApi";
 
 function AdminContactDetail() {
     const param = useParams();
+    const navigate = useNavigate();
 
     const [contactDetail, setContactDetail] = useState([]);
 
-    useEffect(() => {
-        const getContactId = async () => {
-            let response = await ContactGetId(param.id);
+    let stateIndex = 0;
 
-            setContactDetail(response.data)
-        }
-        getContactId();
+    const fetchContactId = async (id) => {
+        let response = await ContactGetId(id);
+
+        setContactDetail(response.data);
+    }
+
+    useEffect(() => {
+        fetchContactId(param.id)
     }, [param.id]);
 
 
@@ -27,6 +31,25 @@ function AdminContactDetail() {
 
             return date;
         }
+    }
+    //Change State
+    const selectState = (value) => {
+        stateIndex = value;
+    }
+
+
+    const handleChangeState = async () => {
+        let res = await ContactChangeState(param.id, parseInt(stateIndex));
+        if (res.status === 200) {
+            fetchContactId(param.id)
+        }
+    }
+
+
+
+    //Back
+    const handleBack = () => {
+        navigate('/admin/contact');
     }
     return (<>
         <div className="admin-contact-detail">
@@ -80,10 +103,22 @@ function AdminContactDetail() {
 
                     <div className="row my-4">
                         <div className="col-6">
-                            <button className="btn btn-danger">Back</button>
+                            <button className="btn btn-danger" onClick={() => handleBack()}>Back</button>
                         </div>
                         <div className="col-6">
-                            <button className="btn btn-warning">Change State</button>
+                            <div className="row">
+                                <div className="col-6">
+                                    <button className="btn btn-warning" onClick={() => handleChangeState()}>Change State</button>
+
+                                </div>
+                                <div className="col-6">
+                                    <select className="form-select" aria-label="Default select example" onChange={(e) => selectState(e.target.value)} defaultValue={0}>
+                                        <option value={0}>Pending</option>
+                                        <option value={1}>Done</option>
+                                        <option value={2}>Ignore</option>
+                                    </select>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

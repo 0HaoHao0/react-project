@@ -36,7 +36,7 @@
 
 
 //FORM CONTROL
-.form-control {
+.form-control-subcrises {
     height: 52px;
     background: white;
     color: black;
@@ -67,47 +67,6 @@ textarea.form-control {
 
 
 
-
-//block-21
-.block-21 {
-    .img-footer {
-        display: block;
-        height: 80px;
-        width: 80px;
-    }
-
-    .text {
-        width: calc(100% - 100px);
-
-        .heading {
-            font-size: 16px;
-            font-weight: 400;
-            line-height: 1.4;
-
-            a {
-                color: black;
-
-                &:hover,
-                &:active,
-                &:focus {
-                    text-decoration: none;
-                }
-            }
-        }
-
-        .meta {
-            div {
-                display: inline-block;
-                font-size: 12px;
-                margin-right: 5px;
-
-                a {
-                    color: lighten(black, 50%);
-                }
-            }
-        }
-    }
-}
 
 
 .block-23 {
@@ -156,29 +115,22 @@ textarea.form-control {
     }
 }
 
-footer {
-    padding: 7em 0;
-}
+
 
 //FOOTER 09
 @mixin gradient-background() {
-    background: linear-gradient(to right, #f8f3f3, #7dcaf1);
+    background: white;
 }
 
-.footer-09 {
+.footer {
     @include gradient-background();
 
-    .border-top {
-        border-color: rgba(255, 255, 255, .1) !important;
-    }
+    border-top: 2px solid black;
 
     a {
         color: black;
         font-weight: 700;
 
-        &:hover {
-            color: rgb(255, 255, 255);
-        }
     }
 
     p {
@@ -207,9 +159,6 @@ footer {
                 color: rgba(6, 6, 6, 0.914);
                 font-weight: 700;
 
-                &:hover {
-                    color: rgb(255, 255, 255);
-                }
             }
         }
     }

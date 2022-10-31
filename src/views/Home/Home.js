@@ -6,6 +6,8 @@ import Header from '../Header/Header';
 // 
 import Login from '../Login/Login';
 import Register from '../Register/Register';
+import Profile from '../User/Profile/Profile';
+import Service from '../User/Service/Service';
 import Main from './Main';
 class Home extends Component {
     constructor(props) {
@@ -29,7 +31,11 @@ class Home extends Component {
                             <Route path="register" element={<Register />} />
                         </>
                         :
-                        null
+                        <>
+                            <Route path="profile" element={<Profile user={this.props.user} />} />
+                            <Route path="service" element={<Service />} />
+                        </>
+
                     }
                     <Route path="contact" element={<Contact />} />
 

@@ -75,7 +75,6 @@ export const ContactGetId = async (id) => {
 
 
 export const ContactChangeState = async (id, stateIndex) => {
-    let data;
 
     await Swal.fire({
         title: 'Waiting...',
@@ -86,7 +85,7 @@ export const ContactChangeState = async (id, stateIndex) => {
             Swal.showLoading()
 
             axios({
-                method: 'post',
+                method: 'put',
                 url: `https://localhost:44355/api/Contact/ChangeState`,
                 data: {
                     id: id,
@@ -95,17 +94,17 @@ export const ContactChangeState = async (id, stateIndex) => {
 
             })
                 .then((res) => {
-                    data = res;
+                    response = res;
                     Swal.close();
                 })
                 .catch((error) => {
-                    data = error.response;
+                    response = error.response;
                     Swal.close();
                 })
         }
     })
 
-    return data;
+    return response;
 }
 
 export const ContactDelete = async (id) => {
