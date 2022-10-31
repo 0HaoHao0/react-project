@@ -3,6 +3,8 @@ import { Route, Routes } from 'react-router-dom';
 import Contact from '../Contact/Contact';
 import Footer from '../Footer/Footer';
 import Header from '../Header/Header';
+import Aboutus from '../Aboutus/Aboutus';
+import Faq from '../FAQ/Faq';
 // 
 import Login from '../Login/Login';
 import Register from '../Register/Register';
@@ -38,7 +40,8 @@ class Home extends Component {
 
                     }
                     <Route path="contact" element={<Contact />} />
-
+                    <Route path="aboutus" element={<Aboutus />} />
+                    <Route path="faq" element={<Faq />} />
                 </Routes>
                 <Footer />
             </>
