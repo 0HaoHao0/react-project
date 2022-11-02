@@ -13,9 +13,9 @@ class Aboutus extends Component {
   <div className="container py-5">
     <div className="row h-100 align-items-center py-5">
       <div className="col-lg-6">
-        <h1 className="display-4">Always Smile</h1>
-        <p className="lead text-muted mb-0">Experience Implant that is strong as your own teeth</p>
-        <p className="lead text-muted">In any case, we give you the amazing the results 
+        <h1 className="display-4">Introduce About Project</h1>
+        <p className="lead text-muted mb-0">The project that we do is Shinny Teeth managing the dental clinic.</p>
+        <p className="lead text-muted">Using high technology and quality service 
         </p>
       </div>
       <div className="col-lg-6 d-none d-lg-block">
@@ -56,16 +56,16 @@ class Aboutus extends Component {
   <div className="container py-5">
     <div className="row align-items-center mb-5">
       <div className="col-lg-6 order-2 order-lg-1"><i className="fa fa-bar-chart fa-2x mb-3 text-primary"></i>
-        <h3 className="font-weight-light">We Provide Best Dental Care Solution For You</h3>
-        <p className="font-italic text-muted mb-4">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p><a href="#" className="btn btn-light px-5 rounded-pill shadow-sm">Learn More</a>
+        <h3 className="font-weight-light">The Technologies That Use</h3>
+        <p className="font-italic text-muted mb-4">The projects that we include the technologies we use are: Reactjs, ASP.Net Core Api, MicroServices Automatpter.</p><a href="#" className="btn btn-light px-5 rounded-pill shadow-sm">Learn More</a>
       </div>
-      <div className="col-lg-5 px-5 mx-auto order-1 order-lg-2"><img src="https://www.dentistrytoday.com/wp-content/uploads/2020/04/194df8014cc7359d17897937cd25ec68.jpg" alt="" className="img-fluid mb-4 mb-lg-0 img-middle"/></div>
+      <div className="col-lg-5 px-5 mx-auto order-1 order-lg-2"><img src="https://1.bp.blogspot.com/-k68ROu0k5Zg/Xkn3uYkZwFI/AAAAAAAAWZY/ctqLficKkGwWjVBwLhHbWxRlqoC5RcCjACLcBGAsYHQ/w1200-h630-p-k-no-nu/abc.jpg" alt="" className="img-fluid mb-4 mb-lg-0 img-middle"/></div>
     </div>
     <div className="row align-items-center">
       <div className="col-lg-5 px-5 mx-auto"><img src="https://jacksonfamilydentalonline.com/wp-content/uploads/2020/05/jackson-team-jackson-family-dental.jpg" alt="" className="img-fluid mb-4 mb-lg-0 img-middle"/></div>
       <div className="col-lg-6"><i className="fa fa-leaf fa-2x mb-3 text-primary"></i>
-        <h2 className="font-weight-light">Schedule your first visit</h2>
-        <p className="font-italic text-muted mb-4">As a fee-for-service practice, we offer easy payment plans and financing options to fit your family’s budget. We’re also happy to submit insurance claims on your behalf.</p><a href="#" className="btn btn-light px-5 rounded-pill shadow-sm">Learn More</a>
+        <h2 className="font-weight-light">The Services</h2>
+        <p className="font-italic text-muted mb-4">Including services such as: Procedures to remove tartar. Scrape tartar. Teeth polishing. Deep tooth treatment. Deep tooth filling. Dental pulp treatment. Treatment of wisdom teeth. Wisdom tooth pain. Wisdom teeth are misaligned. Brace. Sparse braces. Teeth braces. Braces.</p><a href="#" className="btn btn-light px-5 rounded-pill shadow-sm">Learn More</a>
       </div>
     </div>
   </div>
