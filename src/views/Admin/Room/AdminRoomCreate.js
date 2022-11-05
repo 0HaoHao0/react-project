@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { RoomCreate, RoomGetType } from "../../../services/AdminApiConnection/adminRoomApi";
+import { RoomCreate, RoomGetSelect } from "../../../services/AdminApiConnection/adminRoomApi";
 
 function AdminRoomCreate() {
     const navigate = useNavigate();
@@ -16,9 +16,8 @@ function AdminRoomCreate() {
 
     // Get room Type
     const getRoomTypes = async () => {
-        let res = await RoomGetType();
-        console.log(res);
-        setRoomTypes(res.data)
+        await RoomGetSelect((response) => setRoomTypes(response.data));
+
     }
 
     useEffect(() => {

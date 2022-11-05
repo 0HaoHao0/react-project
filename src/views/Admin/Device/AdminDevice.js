@@ -60,8 +60,7 @@ function AdminDevice() {
                                 <tr>
                                     <th>Id</th>
                                     <th>Device Name</th>
-                                    <th>Description</th>
-                                    <th>Room Id</th>
+                                    <th>Device value</th>
                                     <th>Status</th>
                                     <th>Detail</th>
                                     <th>Delete</th>
@@ -70,11 +69,10 @@ function AdminDevice() {
                             <tbody>
                                 {
                                     deviceArray.map((item, index) =>
-                                        <tr key={item.id}>
-                                            <td><Link to={`update/${item.id}`} className="rounded-circle"><i className="fa fa-pen"></i></Link> {item.id}</td>
+                                        <tr key={index}>
+                                            <td><Link to={`/admin/device/update/${item.id}`} className="rounded-circle"><i className="fa fa-pen"></i></Link> {item.id}</td>
                                             <td>{item.deviceName}</td>
-                                            <td>{item.description}</td>
-                                            <td>{item.roomId}</td>
+                                            <td>{item.deviceValue}</td>
                                             <td>{item.status === true ? 'True' : 'False'}</td>
                                             <td><Link to={`${item.id}`} className="btn btn-success">Detail</Link></td>
                                             <td><button className="btn btn-danger" onClick={() => handleDelete(item.id)}>Delete</button></td>

@@ -10,9 +10,12 @@ function AdminServiceDetail() {
 
     const [serviceDetail, setServiceDetail] = useState([]);
 
+    const [serviceDevices, setServiceDevices] = useState([]);
+
     const fetchServiceId = async (id) => {
         let response = await ServiceGetId(id);
         setServiceDetail(response.data);
+        setServiceDevices(response.data.devices);
     }
 
     useEffect(() => {
@@ -38,10 +41,13 @@ function AdminServiceDetail() {
 
                             <div className="col-12 col-md-6">
                                 <div className="form-group my-2">
-                                    <label className="fw-bold">Service Code :</label> {serviceDetail.serviceCode}
+                                    <label className="fw-bold"> Code :</label> {serviceDetail.serviceCode}
                                 </div>
                                 <div className="form-group my-2">
-                                    <label className="fw-bold">Service Price :</label> {serviceDetail.price}
+                                    <label className="fw-bold"> Name :</label> {serviceDetail.serviceName}
+                                </div>
+                                <div className="form-group my-2">
+                                    <label className="fw-bold"> Price :</label> {serviceDetail.price}
                                 </div>
 
                             </div>
@@ -51,8 +57,32 @@ function AdminServiceDetail() {
                                     <textarea type="text" rows={5} className="form-control bg-light" placeholder={serviceDetail.description} disabled />
                                 </div>
                             </div>
+                            <div className="col-12">
+                                <label className="fw-bold"> Image: </label>
+                                <div className="row">
+                                    <div className="col-12 p5">
+                                        <div className="border d-flex justify-content-center">
+                                            <img src={serviceDetail.imageURL} width='50%' alt="" />
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
                         </div>
                         <hr />
+                        <div className="row">
+                            <h3>Device Infomation :</h3>
+                            {serviceDevices.map((item, index) =>
+                                <div className="col-12 col-sm-6 col-md-4 p-2" key={index}>
+                                    <div className="card">
+                                        <div className="card-header"> <span className="fw-bold">Id: </span>  {item.id}</div>
+                                        <div className="card-body text-primary">
+                                            <span className="text-dark fw-bold"> Name:  </span> {item.name}
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
                         <div className="row my-4">
                             <div className="col-6">
                                 <button className="btn btn-danger" onClick={() => handleBack()}>Back</button>

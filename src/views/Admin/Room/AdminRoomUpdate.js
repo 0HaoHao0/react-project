@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
-import { RoomGetId, RoomUpdate } from "../../../services/AdminApiConnection/adminRoomApi";
+import { RoomGetId, RoomGetSelect, RoomUpdate } from "../../../services/AdminApiConnection/adminRoomApi";
 
 function AdminRoomUpdate() {
     const param = useParams()
@@ -11,27 +11,33 @@ function AdminRoomUpdate() {
 
     const [roomDetail, setRoomDetail] = useState([]);
 
+    const [roomTypes, setRoomTypes] = useState([]);
 
     let roomData = {
         id: param.id,
         roomCode: null,
-        description: null
+        description: null,
+        roomType: null
     }
 
 
-    const fetchRoomId = async (id) => {
-        let response = await RoomGetId(id);
-        setRoomDetail(response.data);
+    const getData = async (id) => {
+        let roomData = await RoomGetId(id);
+
+        await RoomGetSelect((response) => setRoomTypes(response.data));
+
+        setRoomDetail(roomData.data);
     }
 
     useEffect(() => {
-        fetchRoomId(param.id)
+        getData(param.id)
     }, [param.id]);
 
 
     useEffect(() => {
         roomData.roomCode = roomDetail.roomCode
         roomData.description = roomDetail.description
+        roomData.roomType = roomDetail.roomType
     },);
 
 
@@ -67,24 +73,29 @@ function AdminRoomUpdate() {
                                         onChange={(e) => { roomData.roomCode = e.target.value }}
                                     />
                                 </div>
+                                <div className="form-group my-2">
+                                    <label className="form-label fw-bold">Room Type :</label>
+                                    <select className="form-select" aria-label="Default select example"
+                                        onChange={(e) => { roomData.roomType = parseInt(e.target.value) }}>
+                                        <option defaultValue='' hidden>{roomDetail.roomType}</option>
+                                        {
+                                            roomTypes.map((item, index) =>
+                                                <option key={index} value={item.id}>{item.name}</option>
+                                            )
+                                        }
+                                    </select>
+                                </div>
                             </div>
                             <div className="col-12 col-md-6">
                                 <div className="form-group  my-2">
                                     <label className="form-label fw-bold">Room Description :</label>
-                                    <textarea type="text" rows={10} className="form-control " placeholder={roomDetail.description}
+                                    <textarea type="text" rows={5} className="form-control " placeholder={roomDetail.description}
                                         onChange={(e) => { roomData.description = e.target.value }}
                                     />
                                 </div>
                             </div>
                         </div>
-                        <div className="row">
-                            <div className="col-12">
-                                <div className="form-group my-2">
-                                    <label className="form-label fw-bold">Room Device :</label>
-                                    <input type="text" className="form-control" disabled />
-                                </div>
-                            </div>
-                        </div>
+
                         <div className="row my-4">
                             <div className="col-6">
                                 <button className="btn btn-success" onClick={() => handleUpdate()}>Update</button>

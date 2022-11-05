@@ -3,7 +3,7 @@ import Swal from "sweetalert2";
 
 let response;
 
-export const ServiceGetAll = async (page) => {
+export const ServiceGetAll = async (currentPage) => {
 
     await Swal.fire({
         title: 'Waiting...',
@@ -15,8 +15,8 @@ export const ServiceGetAll = async (page) => {
             axios({
                 method: 'Get',
                 url: `https://localhost:44355/api/Service/GetAll`,
-                data: {
-                    page: page
+                params: {
+                    page: currentPage
                 }
             }).then((res) => {
                 response = res;
@@ -37,6 +37,37 @@ export const ServiceGetAll = async (page) => {
     return response;
 
 }
+
+export const ServiceGetSelect = async (callback) => {
+    await Swal.fire({
+        title: 'Waiting...',
+        icon: 'warning',
+        html: 'This pop-up will close when server response.',
+        didOpen: () => {
+
+            Swal.showLoading()
+
+            axios({
+                method: 'get',
+                url: `https://localhost:44355/api/SelectBoxItems/GetServices`,
+
+            })
+                .then((res) => {
+                    response = res;
+                    callback(response);
+                    Swal.close();
+
+                })
+                .catch((error) => {
+                    response = error.response;
+                    callback(response);
+                    Swal.close();
+
+                })
+        }
+    })
+}
+
 
 export const ServiceGetId = async (id) => {
 
@@ -83,12 +114,8 @@ export const ServiceCreate = async (data) => {
             axios({
                 method: 'post',
                 url: `https://localhost:44355/api/Service/Create`,
-                data: {
-                    serviceCode: data.serviceCode,
-                    description: data.description,
-                    price: data.price
-                }
-
+                data: data,
+                headers: { "Content-Type": "multipart/form-data" },
             })
                 .then((res) => {
                     response = res;
@@ -118,12 +145,8 @@ export const ServiceUpdate = async (data) => {
             axios({
                 method: 'put',
                 url: `https://localhost:44355/api/Service/Update`,
-                data: {
-                    id: data.id,
-                    serviceCode: data.serviceCode,
-                    description: data.description,
-                    price: data.price,
-                }
+                data: data,
+                headers: { "Content-Type": "multipart/form-data" },
 
             })
                 .then((res) => {

@@ -35,6 +35,37 @@ export const DeviceGetAll = async (page) => {
 
 }
 
+export const DeviceGetSelect = async (callback) => {
+
+    await Swal.fire({
+        title: 'Waiting...',
+        icon: 'warning',
+        html: 'This pop-up will close when server response.',
+        didOpen: () => {
+            Swal.showLoading();
+
+            axios({
+                method: 'Get',
+                url: `https://localhost:44355/api/SelectBoxItems/GetDevices`
+            }).then((res) => {
+                response = res;
+                callback(response)
+                Swal.close();
+            }).catch((error) => {
+                response = error.response;
+                callback(response)
+                Swal.close();
+
+            })
+
+        },
+
+    }).then((result) => {
+        /* Read more about handling dismissals below */
+
+    })
+}
+
 export const DeviceGetId = async (id) => {
 
     await Swal.fire({
@@ -69,6 +100,7 @@ export const DeviceGetId = async (id) => {
 }
 
 export const DeviceCreate = async (data) => {
+    console.log(data);
     await Swal.fire({
         title: 'Waiting...',
         icon: 'warning',
@@ -80,14 +112,9 @@ export const DeviceCreate = async (data) => {
             axios({
                 method: 'post',
                 url: `https://localhost:44355/api/Device/Create`,
-                data: {
-                    deviceValue: data.deviceValue,
-                    deviceName: data.deviceName,
-                    description: data.description,
-                    date: new Date(),
-                    status: data.status,
-                    roomId: data.roomId,
-                }
+                data: data,
+                headers: { "Content-Type": "multipart/form-data" },
+
 
             })
                 .then((res) => {
@@ -107,7 +134,6 @@ export const DeviceCreate = async (data) => {
 let resDeviceUpdate;
 
 export const DeviceUpdate = async (data) => {
-
     await Swal.fire({
         title: 'Waiting...',
         icon: 'warning',
@@ -119,15 +145,11 @@ export const DeviceUpdate = async (data) => {
             axios({
                 method: 'put',
                 url: `https://localhost:44355/api/Device/Update`,
-                data: {
-                    id: data.id,
-                    deviceValue: data.deviceValue,
-                    deviceName: data.deviceName,
-                    description: data.description,
-                    status: data.status,
-                    roomId: data.roomId,
-                    serviceDeviceId: 0,
-                }
+                data: data,
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'multipart/form-data',
+                },
 
             })
                 .then((res) => {

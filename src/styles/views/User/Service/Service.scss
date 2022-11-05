@@ -27,6 +27,16 @@
 
     .service-odd {
         background-color: white;
+
+        p {
+            color: black;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 4;
+            /* number of lines to show */
+            -webkit-box-orient: vertical;
+        }
     }
 
 
@@ -42,7 +52,7 @@
             overflow: hidden;
             text-overflow: ellipsis;
             display: -webkit-box;
-            -webkit-line-clamp: 1;
+            -webkit-line-clamp: 4;
             /* number of lines to show */
             -webkit-box-orient: vertical;
         }

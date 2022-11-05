@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import withRouter from '../../../components/HOC/withRouter';
 import { updateImageURL } from '../../../features/user/userSlice';
-import { updateAvatar } from '../../../services/UserApiConnection/userApi';
+import { updateAvatar, updatePassword } from '../../../services/UserApiConnection/userApi';
 
 import '../../../styles/views/User/Profile/Profile.scss'
 
@@ -16,7 +17,12 @@ class Profile extends Component {
     }
     innitState = {
         updateImage: null,
+        oldPassword: null,
+        newPassword: null,
+        newPasswordConfirm: null
     }
+
+
 
     hanldeLogic = (e) => {
         if (e === "about") {
@@ -58,9 +64,38 @@ class Profile extends Component {
         let updateImage = new FormData();
         updateImage.append('image', this.innitState.updateImage);
 
+
         let res = await updateAvatar(this.props.user.id, updateImage)
 
         this.props.dispatch(updateImageURL(res.data.newImage));
+
+    }
+
+    hanldeUpdatePassword = async (e) => {
+        e.preventDefault();
+
+        let newPassword = document.getElementById('newPassword');
+        let confirmNewPassword = document.getElementById('confirmNewPassword');
+
+        if (newPassword.value !== confirmNewPassword.value) {
+            confirmNewPassword.setCustomValidity("Passwords Don't Match");
+        }
+        else {
+            let data = {
+                userId: this.props.user.id,
+                oldPassword: this.innitState.oldPassword,
+                newPassword: this.innitState.newPassword
+            }
+            let response;
+            await updatePassword(data, (res) => { response = res })
+            if (response.status === 200) {
+                toast.success(response.data);
+            }
+            else if (response.status === 400) {
+                toast.error(response.data[0].description)
+            }
+        }
+
 
     }
     render() {
@@ -131,19 +166,26 @@ class Profile extends Component {
                                                         <p className='text-center text-muted fst-italic'>Change Password</p>
                                                     </div>
                                                     <div>
-                                                        <div className="mb-3">
-                                                            <label htmlFor="currentPassword" className="form-label">Current Password: </label>
-                                                            <input type="password" className="form-control" id="currentPassword" />
-                                                        </div>
-                                                        <div className="mb-3">
-                                                            <label htmlFor="newPassword" className="form-label">New Password: </label>
-                                                            <input type="password" className="form-control" id="newPassword" />
-                                                        </div>
-                                                        <div className="mb-3">
-                                                            <label htmlFor="confirmNewPassword" className="form-label">Confirm New Password: </label>
-                                                            <input type="password" className="form-control" id="confirmNewPassword" />
-                                                        </div>
-                                                        <button className="btn btn-primary">Submit</button>
+                                                        <form onSubmit={(e) => this.hanldeUpdatePassword(e)}>
+                                                            <div className="mb-3">
+                                                                <label htmlFor="currentPassword" className="form-label">Current Password: </label>
+                                                                <input type="password" className="form-control" id="currentPassword"
+                                                                    onChange={(e) => this.innitState.oldPassword = e.target.value} required />
+                                                            </div>
+                                                            <div className="mb-3">
+                                                                <label htmlFor="newPassword" className="form-label">New Password: </label>
+                                                                <input type="password" className="form-control" id="newPassword"
+                                                                    onInput={(e) => e.target.setCustomValidity('')}
+                                                                    onChange={(e) => this.innitState.newPassword = e.target.value} required />
+                                                            </div>
+                                                            <div className="mb-3">
+                                                                <label htmlFor="confirmNewPassword" className="form-label">Confirm New Password: </label>
+                                                                <input type="password" className="form-control" id="confirmNewPassword"
+                                                                    onInput={(e) => e.target.setCustomValidity('')}
+                                                                    onChange={(e) => this.innitState.newPasswordConfirm = e.target.value} required />
+                                                            </div>
+                                                            <button className="btn btn-primary" type='submit' value='submit' >Submit</button>
+                                                        </form>
                                                     </div>
 
                                                 </div>
@@ -178,5 +220,6 @@ class Profile extends Component {
         );
     }
 }
+
 
 export default connect(null)(withRouter(Profile));

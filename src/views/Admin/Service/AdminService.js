@@ -11,17 +11,19 @@ function AdminService() {
 
     const [serviceArray, setServiceArray] = useState([])
 
+    const [currentPage, setCurrentPage] = useState(1)
+
     // Get all services
-    const getServices = async (page) => {
-        let res = await ServiceGetAll(page);
+    const getServices = async (currentPage) => {
+        let res = await ServiceGetAll(currentPage);
 
         setServiceArray(res.data.data)
         setServiceData(res.data);
     }
 
     useEffect(() => {
-        getServices();
-    }, [])
+        getServices(currentPage);
+    }, [currentPage])
 
 
 
@@ -41,9 +43,14 @@ function AdminService() {
     const loadPagination = (totalPage) => {
         let render = [];
         for (let i = 1; i <= totalPage; i++) {
-            render.push(<li key={i} className="page-item"><a className="page-link" href="/">{i}</a></li>)
+            render.push(<li key={i} className="page-item"><span className="page-link" onClick={() => loadPage(i)}>{i}</span></li>)
         }
         return render;
+    }
+
+    // Load Page
+    const loadPage = (pageNumber) => {
+        setCurrentPage(pageNumber);
     }
     return (
         <>
@@ -61,7 +68,7 @@ function AdminService() {
                                 <tr>
                                     <th>Id</th>
                                     <th>Service Code</th>
-                                    <th>Description</th>
+                                    <th>Name</th>
                                     <th>Price</th>
                                     <th>Detail</th>
                                     <th>Delete</th>
@@ -73,7 +80,7 @@ function AdminService() {
                                         <tr key={item.id}>
                                             <td><Link to={`update/${item.id}`} className="rounded-circle"><i className="fa fa-pen"></i></Link> {item.id}</td>
                                             <td>{item.serviceCode}</td>
-                                            <td>{item.description}</td>
+                                            <td>{item.serviceName}</td>
                                             <td>{item.price}</td>
                                             <td><Link to={`${item.id}`} className="btn btn-success">Detail</Link></td>
                                             <td><button className="btn btn-danger" onClick={() => handleDelete(item.id)}>Delete</button></td>
@@ -85,13 +92,13 @@ function AdminService() {
                     </div>
                     <div >
                         <nav aria-label="Page navigation example">
-                            <ul className="pagination justify-content-end p-2">
+                            <ul className="pagination justify-content-end px-4">
                                 <li className="page-item disabled">
-                                    <a className="page-link" href="/" tabIndex="-1" aria-disabled="true">Previous</a>
+                                    <span className="page-link" tabIndex="-1" aria-disabled="true">Previous</span>
                                 </li>
                                 {loadPagination(serviceData.total_pages)}
                                 <li className="page-item">
-                                    <a className="page-link" href="/">Next</a>
+                                    <span className="page-link" >Next</span>
                                 </li>
                             </ul>
                         </nav>

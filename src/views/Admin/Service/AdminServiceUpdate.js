@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
+import { DeviceGetSelect } from "../../../services/AdminApiConnection/adminDeviceApi";
 import { ServiceGetId, ServiceUpdate } from "../../../services/AdminApiConnection/adminServiceApi";
 
 function AdminServiceUpdate() {
@@ -11,12 +12,19 @@ function AdminServiceUpdate() {
 
     const [serviceDetail, setServiceDetail] = useState([]);
 
+    const [serviceDevices, setServiceDevices] = useState([]);
+
+
+    const [deviceSelect, setDeviceSelect] = useState([])
 
     let serviceData = {
         id: param.id,
         serviceCode: null,
+        serviceName: null,
         description: null,
         price: null,
+        imageFile: null,
+        deviceIdList: [],
     }
 
 
@@ -25,6 +33,10 @@ function AdminServiceUpdate() {
     const getData = async (id, page) => {
         let service = await ServiceGetId(id);
         setServiceDetail(service.data);
+
+        setServiceDevices(service.data.devices)
+
+        await DeviceGetSelect((response) => setDeviceSelect(response.data));
     }
 
     useEffect(() => {
@@ -34,14 +46,41 @@ function AdminServiceUpdate() {
 
     useEffect(() => {
         serviceData.serviceCode = serviceDetail.serviceCode
+        serviceData.serviceName = serviceDetail.serviceName
         serviceData.description = serviceDetail.description
         serviceData.price = serviceDetail.price
+
+        serviceDevices.map(item => serviceData.deviceIdList.push(item.id))
     },);
+
+    // Handle Devices 
+    const handleDevices = (e) => {
+        if (e.target.checked) {
+            serviceData.deviceIdList.push(parseInt(e.target.value))
+        }
+        else {
+            serviceData.deviceIdList = serviceData.deviceIdList.filter(item => item !== parseInt(e.target.value))
+        }
+    }
 
 
     //Update
     const handleUpdate = async () => {
-        let res = await ServiceUpdate(serviceData);
+        console.log(serviceData);
+        let data = new FormData()
+        data.append('id', serviceData.id);
+        data.append('serviceCode', serviceData.serviceCode);
+        data.append('serviceName', serviceData.serviceName);
+        data.append('description', serviceData.description);
+        data.append('price', serviceData.price);
+
+        serviceData.deviceIdList.map(item =>
+            data.append('deviceIdList', item)
+        );
+
+        data.append('imageFile', serviceData.imageFile);
+
+        let res = await ServiceUpdate(data);
         if (res.status === 200) {
             toast.success("Update Success");
             navigate('/admin/service');
@@ -68,14 +107,21 @@ function AdminServiceUpdate() {
 
                             <div className="col-12 col-md-6">
                                 <div className="form-group my-2">
-                                    <label className="fw-bold">Service Code :</label>
+                                    <label className="fw-bold"> Code :</label>
                                     <input type="text" className="form-control" placeholder={serviceDetail.serviceCode}
                                         onChange={(e) => { serviceData.serviceCode = e.target.value }}
                                     />
 
                                 </div>
                                 <div className="form-group my-2">
-                                    <label className="fw-bold">Service Price :</label>
+                                    <label className="fw-bold"> Name :</label>
+                                    <input type="text" className="form-control" placeholder={serviceDetail.serviceName}
+                                        onChange={(e) => { serviceData.serviceName = e.target.value }}
+                                    />
+
+                                </div>
+                                <div className="form-group my-2">
+                                    <label className="fw-bold"> Price :</label>
                                     <input type="text" className="form-control" placeholder={serviceDetail.price}
                                         onChange={(e) => { serviceData.price = e.target.value }}
                                     />
@@ -89,9 +135,36 @@ function AdminServiceUpdate() {
                                         onChange={(e) => { serviceData.description = e.target.value }} />
                                 </div>
                             </div>
+                            <div className="col-12">
+                                <label className="fw-bold"> Image: </label>
+                                <div className="row">
+                                    <div className="col-12 my-2">
+                                        <div className="d-flex justify-content-center">
+                                            <img src={serviceDetail.imageURL} width='25%' alt="" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <input className="form-control" type="file" id="formFile"
+                                    onChange={(e) => serviceData.imageFile = e.target.files[0]} />
+                            </div>
                         </div>
-                        <hr />
-
+                        <br />
+                        <div className="row">
+                            <h3>Device Infomation</h3>
+                            <div className="row my-2">
+                                <h6>Update Devices:</h6>
+                                {deviceSelect.map((item, index) =>
+                                    <div className="col-6 col-sm-4 col-md-3" key={index}>
+                                        <div className="form-check ">
+                                            <input className="form-check-input" type="checkbox" id={index} value={item.id} defaultChecked={(serviceDevices.map(dItem => dItem.id).indexOf(item.id) !== -1)} onClick={(e) => { handleDevices(e) }} />
+                                            <label className="form-check-label" htmlFor={index}>
+                                                {item.id}, {item.name}
+                                            </label>
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
                         <div className="row">
                             <div className="col-6">
                                 <button className="btn btn-success" onClick={() => handleUpdate()}>Update</button>

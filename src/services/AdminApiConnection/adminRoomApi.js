@@ -4,15 +4,14 @@ import Swal from "sweetalert2";
 let response;
 
 export const RoomGetAll = async (page) => {
-
     await Swal.fire({
         title: 'Waiting...',
         icon: 'warning',
         html: 'This pop-up will close when server response.',
-        didOpen: () => {
+        didOpen: async () => {
             Swal.showLoading();
 
-            axios({
+            await axios({
                 method: 'Get',
                 url: `https://localhost:44355/api/Room/GetAll`
             }).then((res) => {
@@ -29,9 +28,37 @@ export const RoomGetAll = async (page) => {
     }).then((result) => {
 
     })
-
     return response;
 
+}
+
+export const RoomGetSelect = async (callback) => {
+    await Swal.fire({
+        title: 'Waiting...',
+        icon: 'warning',
+        html: 'This pop-up will close when server response.',
+        didOpen: async () => {
+            Swal.showLoading();
+
+            await axios({
+                method: 'Get',
+                url: `https://localhost:44355/api/SelectBoxItems/GetRooms`
+            }).then((res) => {
+                response = res;
+                callback(response)
+                Swal.close();
+            }).catch((error) => {
+                response = error.response;
+                callback(response)
+                Swal.close();
+
+            })
+
+        },
+
+    }).then((result) => {
+
+    })
 }
 
 export const RoomGetId = async (id) => {
@@ -67,38 +94,6 @@ export const RoomGetId = async (id) => {
 
 }
 
-export const RoomGetType = async () => {
-
-    await Swal.fire({
-        title: 'Waiting...',
-        icon: 'warning',
-        html: 'This pop-up will close when server response.',
-        didOpen: () => {
-            Swal.showLoading();
-
-            axios({
-                method: 'Get',
-                url: `https://localhost:44355/api/Room/GetRoomTypes`,
-            })
-                .then((res) => {
-                    response = res;
-                    Swal.close();
-
-                })
-                .catch((error) => {
-                    response = error.response;
-                    Swal.close();
-                });
-
-        },
-
-    }).then((result) => {
-
-    })
-
-    return response;
-
-}
 
 
 export const RoomCreate = async (data) => {
@@ -150,7 +145,8 @@ export const RoomUpdate = async (data) => {
                 data: {
                     id: data.id,
                     roomCode: data.roomCode,
-                    description: data.description
+                    description: data.description,
+                    roomType: data.roomType
                 }
 
             })
