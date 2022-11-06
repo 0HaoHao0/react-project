@@ -13,7 +13,10 @@ export const RoomGetAll = async (page) => {
 
             await axios({
                 method: 'Get',
-                url: `https://localhost:44355/api/Room/GetAll`
+                url: `https://localhost:44355/api/Room/GetAll`,
+                params: {
+                    page: page
+                }
             }).then((res) => {
                 response = res;
                 Swal.close();

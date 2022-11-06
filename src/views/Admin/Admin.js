@@ -22,6 +22,13 @@ import AdminService from './Service/AdminService';
 import AdminServiceCreate from './Service/AdminServiceCreate';
 import AdminServiceDetail from './Service/AdminServiceDetail';
 import AdminServiceUpdate from './Service/AdminServiceUpdate';
+import AdminDocter from './Docter/AdminDocter';
+import AdminDocterRequest from './Docter/AdminDocterRequest';
+import AdminUser from './User/AdminUser';
+import AdminUserUpdate from './User/AdminUserUpdate';
+import AdminUserDetail from './User/AdminUserDetail';
+import AdminDocterUpdate from './Docter/AdminDocterUpdate';
+import AdminDocterDetail from './Docter/AdminDocterDetail';
 class Admin extends Component {
     constructor(props) {
         super(props);
@@ -56,6 +63,15 @@ class Admin extends Component {
                             <Route path="service/create" element={<AdminServiceCreate />} />
                             <Route path="service/:id" element={<AdminServiceDetail />} />
                             <Route path="service/update/:id" element={<AdminServiceUpdate />} />
+                            {/* Docter */}
+                            <Route path="docter" element={<AdminDocter />} />
+                            <Route path="docter/request" element={<AdminDocterRequest />} />
+                            <Route path="docter/:id" element={<AdminDocterDetail />} />
+                            <Route path="docter/update/:id" element={<AdminDocterUpdate />} />
+                            {/* User */}
+                            <Route path="user" element={<AdminUser />} />
+                            <Route path="user/:id" element={<AdminUserDetail />} />
+                            <Route path="user/update/:id" element={<AdminUserUpdate />} />
                         </Routes>
                     </div>
                 </div>

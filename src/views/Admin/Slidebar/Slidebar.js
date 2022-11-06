@@ -17,24 +17,38 @@ class Slidebar extends Component {
                     <hr className='bg-light' />
                     <div className='admin-scroll d-flex'>
                         <ul className="nav " >
-                            <li className='col-12 text-center my-2 '>
+                            <li className='col-12 text-left my-2 '>
                                 <NavLink
                                     className={({ isActive }) => isActive ? "btn navlink-active" : "btn navlink-unactive"}
                                     to="/admin/">
-                                    <i className="mx-2  fa-solid fa-house "></i>
-                                    <span>Home</span>
-                                </NavLink>
-                            </li>
-                            <li className='col-12 text-center my-2'>
-                                <NavLink
-                                    className={({ isActive }) => isActive ? "btn navlink-active" : "btn navlink-unactive"}
-                                    to="/admin/contact">
-                                    <i className="mx-2 fa-solid fa-id-card"></i>
-                                    <span>Contact</span>
+                                    <i className="fa-solid fa-house "></i>
+                                    <span className='mx-2'>Home</span>
                                 </NavLink>
                             </li>
 
-                            <li className='col-12 text-center my-2'>
+                            <li className='col-12 text-left my-2'>
+                                <NavLink
+                                    className={({ isActive }) => isActive ? "btn navlink-active" : "btn navlink-unactive"}
+                                    to="/admin/user">
+                                    <i className="fa fa-user"></i>
+                                    <span className='mx-2'>
+                                        User
+                                    </span>
+                                </NavLink>
+                            </li>
+
+                            <li className='col-12 text-left my-2'>
+                                <NavLink
+                                    className={({ isActive }) => isActive ? "btn navlink-active" : "btn navlink-unactive"}
+                                    to="/admin/docter">
+                                    <i className="fa fa-user-md"></i>
+                                    <span className='mx-2'>
+                                        Doctor
+                                    </span>
+                                </NavLink>
+                            </li>
+
+                            <li className='col-12 text-left my-2'>
                                 <NavLink
                                     className={({ isActive }) => isActive ? "btn navlink-active" : "btn navlink-unactive"}
                                     to="/admin/service">
@@ -44,7 +58,7 @@ class Slidebar extends Component {
                                     </span>
                                 </NavLink>
                             </li>
-                            <li className='col-12 text-center my-2'>
+                            <li className='col-12 text-left my-2'>
                                 <NavLink
                                     className={({ isActive }) => isActive ? "btn navlink-active" : "btn navlink-unactive"}
                                     to="/admin/device">
@@ -54,13 +68,23 @@ class Slidebar extends Component {
                                     </span>
                                 </NavLink>
                             </li>
-                            <li className='col-12 text-center my-2'>
+                            <li className='col-12 text-left my-2'>
                                 <NavLink
                                     className={({ isActive }) => isActive ? "btn navlink-active" : "btn navlink-unactive"}
                                     to="/admin/room">
                                     <i className="fa fa-hospital"></i>
                                     <span className='mx-2'>
                                         Room
+                                    </span>
+                                </NavLink>
+                            </li>
+                            <li className='col-12 text-left my-2'>
+                                <NavLink
+                                    className={({ isActive }) => isActive ? "btn navlink-active" : "btn navlink-unactive"}
+                                    to="/admin/contact">
+                                    <i className="fa-solid fa-id-card"></i>
+                                    <span className='mx-2'>
+                                        Contact
                                     </span>
                                 </NavLink>
                             </li>

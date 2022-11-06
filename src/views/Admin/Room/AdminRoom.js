@@ -13,9 +13,11 @@ function AdminRoom() {
 
     const [roomArray, setRoomArray] = useState([])
 
+    const [currentPage, setCurrentPage] = useState(1)
+
     // Get all devices
-    const featchRoom = async (page) => {
-        let res = await RoomGetAll(page);
+    const featchRoom = async (currentPage) => {
+        let res = await RoomGetAll(currentPage);
 
         setRoomArray(res.data.data)
         setRoomData(res.data);
@@ -23,8 +25,8 @@ function AdminRoom() {
 
 
     useEffect(() => {
-        featchRoom();
-    }, [])
+        featchRoom(currentPage);
+    }, [currentPage])
 
     // Delete Devices
 
@@ -44,9 +46,15 @@ function AdminRoom() {
     const loadPagination = (totalPage) => {
         let render = [];
         for (let i = 1; i <= totalPage; i++) {
-            render.push(<li key={i} className="page-item"><a className="page-link" href="/">{i}</a></li>)
+            render.push(<li key={i} className="page-item"><a className="page-link" href="/" onClick={() => loadPage(i)}>{i}</a></li>)
         }
         return render;
+    }
+
+
+    // Load Page
+    const loadPage = (pageNumber) => {
+        setCurrentPage(pageNumber);
     }
     return (
 
@@ -77,7 +85,7 @@ function AdminRoom() {
                                             <td><Link to={`update/${item.id}`} className="rounded-circle"><i className="fa fa-pen"></i></Link> {item.id}</td>
                                             <td>{item.roomCode}</td>
                                             <td>{item.description}</td>
-                                            <td><Link to={`${item.id}`} className="btn btn-success">Detail</Link></td>
+                                            <td><Link to={`${item.id}`} className="btn btn-primary text-white">Detail</Link></td>
                                             <td><button className="btn btn-danger" onClick={() => handleDelete(item.id)}>Delete</button></td>
                                         </tr>
                                     )

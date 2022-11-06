@@ -3,7 +3,7 @@ import Swal from "sweetalert2";
 
 let response;
 
-export const ContactGetAll = async () => {
+export const ContactGetAll = async (page) => {
 
     await Swal.fire({
         title: 'Waiting...',
@@ -14,7 +14,10 @@ export const ContactGetAll = async () => {
 
             axios({
                 method: 'Get',
-                url: `https://localhost:44355/api/Contact/GetAll`
+                url: `https://localhost:44355/api/Contact/GetAll`,
+                params: {
+                    page: page
+                }
             }).then((res) => {
                 response = res;
                 Swal.close();

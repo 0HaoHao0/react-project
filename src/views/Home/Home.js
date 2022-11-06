@@ -4,13 +4,14 @@ import Contact from '../Contact/Contact';
 import Footer from '../Footer/Footer';
 import Header from '../Header/Header';
 import Aboutus from '../Aboutus/Aboutus';
-import Faq from '../FAQ/Faq';
+// import Faq from '../FAQ/Faq';
 // 
 import Login from '../Login/Login';
 import Register from '../Register/Register';
-import Profile from '../User/Profile/Profile';
 import Service from '../User/Service/Service';
 import Main from './Main';
+import SetAppointment from '../User/Appointment/SetAppointment';
+import ManageAppointment from '../Appointment/ManageAppointment';
 class Home extends Component {
     constructor(props) {
         super(props);
@@ -33,14 +34,15 @@ class Home extends Component {
                         </>
                         :
                         <>
-                            <Route path="profile" element={<Profile user={this.props.user} />} />
-                            <Route path="service" element={<Service />} />
                         </>
 
                     }
+                    <Route path="appointment/create" element={<SetAppointment />} />
+                    <Route path="appointment" element={<ManageAppointment user={this.props.user} />} />
+                    <Route path="service" element={<Service user={this.props.user} />} />
                     <Route path="contact" element={<Contact />} />
                     <Route path="aboutus" element={<Aboutus />} />
-                    <Route path="faq" element={<Faq />} />
+                    {/* <Route path="faq" element={<Faq />} /> */}
                 </Routes>
                 <Footer />
             </>

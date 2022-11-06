@@ -17,6 +17,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Cookies from "universal-cookie";
 import axios from 'axios';
 import { clearUserData } from '../features/user/userSlice';
+import Profile from './User/Profile/Profile';
 
 
 function App() {
@@ -48,6 +49,14 @@ function App() {
             <Route path="admin/*" element={<Admin />} />
             :
             null
+        }
+        {
+          user !== null
+            ?
+            <Route path="profile" element={<Profile user={user} />} />
+            :
+            null
+
         }
 
       </Routes>

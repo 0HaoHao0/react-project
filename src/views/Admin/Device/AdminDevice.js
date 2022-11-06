@@ -11,9 +11,11 @@ function AdminDevice() {
 
     const [deviceArray, setDeviceArray] = useState([])
 
+    const [currentPage, setCurrentPage] = useState(1)
+
     // Get all devices
-    const featchDevices = async (page) => {
-        let res = await DeviceGetAll(page);
+    const featchDevices = async (currentPage) => {
+        let res = await DeviceGetAll(currentPage);
 
         setDeviceArray(res.data.data)
         setDeviceData(res.data);
@@ -21,8 +23,8 @@ function AdminDevice() {
 
 
     useEffect(() => {
-        featchDevices();
-    }, [])
+        featchDevices(currentPage);
+    }, [currentPage])
 
     // Delete Devices
     const handleDelete = async (id) => {
@@ -40,9 +42,15 @@ function AdminDevice() {
     const loadPagination = (totalPage) => {
         let render = [];
         for (let i = 1; i <= totalPage; i++) {
-            render.push(<li key={i} className="page-item"><a className="page-link" href="/">{i}</a></li>)
+            render.push(<li key={i} className="page-item"><a className="page-link" href="/" onClick={() => loadPage(i)}>{i}</a></li>)
         }
         return render;
+    }
+
+
+    // Load Page
+    const loadPage = (pageNumber) => {
+        setCurrentPage(pageNumber);
     }
     return (
         <>
@@ -74,7 +82,7 @@ function AdminDevice() {
                                             <td>{item.deviceName}</td>
                                             <td>{item.deviceValue}</td>
                                             <td>{item.status === true ? 'True' : 'False'}</td>
-                                            <td><Link to={`${item.id}`} className="btn btn-success">Detail</Link></td>
+                                            <td><Link to={`${item.id}`} className="btn btn-primary text-white">Detail</Link></td>
                                             <td><button className="btn btn-danger" onClick={() => handleDelete(item.id)}>Delete</button></td>
                                         </tr>
                                     )

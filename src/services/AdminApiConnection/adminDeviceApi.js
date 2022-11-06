@@ -14,7 +14,10 @@ export const DeviceGetAll = async (page) => {
 
             axios({
                 method: 'Get',
-                url: `https://localhost:44355/api/Device/GetAll`
+                url: `https://localhost:44355/api/Device/GetAll`,
+                params: {
+                    page: page
+                }
             }).then((res) => {
                 response = res;
                 Swal.close();

@@ -3,6 +3,9 @@ import '../../styles/views/Register/RegisterStyle.scss'
 // Phone input
 import 'react-phone-number-input/style.css'
 import PhoneInput from 'react-phone-number-input'
+import { registerApi } from '../../services/ApiConnection/registerApi';
+import { toast } from 'react-toastify';
+import withRouter from '../../components/HOC/withRouter';
 
 class Register extends Component {
     constructor(props) {
@@ -36,11 +39,29 @@ class Register extends Component {
 
 
     // Account
-    handleSubmit = (e) => {
+    handleSubmit = async (e) => {
         e.preventDefault();
 
+        let registerPassword = document.getElementById('registerPassword');
+        let registerConfirmPassword = document.getElementById('registerConfirmPassword');
 
-        console.log(this.registerData);
+
+        if (registerPassword.value !== registerConfirmPassword.value) {
+            registerConfirmPassword.setCustomValidity("Passwords Don't Match");
+        }
+        else {
+            registerConfirmPassword.setCustomValidity("");
+            let response;
+            await registerApi(this.registerData, (res) => { response = res })
+            if (response.status === 200) {
+                toast.success("Create Successful");
+                this.props.navigate('/main');
+
+            }
+            else if (response.status === 400) {
+                toast.error("Please try again")
+            }
+        }
     }
 
 
@@ -78,11 +99,13 @@ class Register extends Component {
                                 <div className="mb-1">
                                     <label htmlFor="registerPassword" className="form-label">Password:</label>
                                     <input type="password" className="form-control" id="registerPassword" required
+                                        onInput={(e) => e.target.setCustomValidity('')}
                                         onChange={(e) => { this.registerData.password = e.target.value; }} />
                                 </div>
                                 <div className="mb-1">
                                     <label htmlFor="registerConfirmPassword" className="form-label">Confirm Password:</label>
                                     <input type="password" className="form-control" id="registerConfirmPassword" required
+                                        onInput={(e) => e.target.setCustomValidity('')}
                                         onChange={(e) => { this.registerData.confirmPassword = e.target.value; }} />
                                 </div>
                                 <div className="mb-1">
@@ -143,4 +166,4 @@ class Register extends Component {
     }
 }
 
-export default Register;
+export default withRouter(Register);

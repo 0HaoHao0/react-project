@@ -1,9 +1,8 @@
 import axios from "axios"
 import Swal from "sweetalert2";
 
-let data;
 
-export const registerApi = async (registerData) => {
+export const registerApi = async (registerData, callback) => {
 
     await Swal.fire({
         title: 'Waiting...',
@@ -27,15 +26,15 @@ export const registerApi = async (registerData) => {
                 }
             })
                 .then((res) => {
-                    data = res;
+                    callback(res)
                     Swal.close();
                 })
                 .catch((error) => {
-                    data = error.response;
+                    let res = error.response;
+                    callback(res)
                     Swal.close();
                 })
         }
     })
 
-    return data
 }   

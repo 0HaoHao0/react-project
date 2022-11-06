@@ -2,41 +2,43 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
-import { ServiceDelete, ServiceGetAll } from "../../../services/AdminApiConnection/adminServiceApi";
+import { DocterGetAll } from "../../../services/AdminApiConnection/adminDoctorApi";
 
 
 
-function AdminService() {
-    const [serviceData, setServiceData] = useState([])
+function AdminDocter() {
+    const [data, setData] = useState([])
 
-    const [serviceArray, setServiceArray] = useState([])
+    const [docterData, setDocterData] = useState([])
+
 
     const [currentPage, setCurrentPage] = useState(1)
 
-    // Get all services
-    const getServices = async (currentPage) => {
-        let res = await ServiceGetAll(currentPage);
-
-        setServiceArray(res.data.data)
-        setServiceData(res.data);
+    // Get all docters
+    const getDocters = async (currentPage) => {
+        await DocterGetAll(currentPage, (res) => {
+            setData(res.data);
+            setDocterData(res.data.data)
+        });
     }
 
     useEffect(() => {
-        getServices(currentPage);
+        getDocters(currentPage);
     }, [currentPage])
 
 
 
-    // Delete Services
+
+    // Delete Docters
     const handleDelete = async (id) => {
-        const res = await ServiceDelete(id);
-        if (res.status === 200) {
-            toast.success(res.data);
-            getServices();
-        }
-        else {
-            toast.error("Please try again or contact with admin !")
-        }
+        // const res = await DocterDelete(id);
+        // if (res.status === 200) {
+        //     toast.success(res.data);
+        //     getDocters();
+        // }
+        // else {
+        //     toast.error("Please try again or contact with admin !")
+        // }
     }
 
     // Pagination
@@ -54,35 +56,35 @@ function AdminService() {
     }
     return (
         <>
-            <div className="admin-service">
+            <div className="admin-docter">
                 <div className="card-admin card m-4 ">
                     <h5 className="m-5 p-2 fw-bold border border-dark bg-light">
-                        Service Management
+                        Docter Management
                     </h5>
 
                     <div className="p-4">
-                        <Link to={'create'} className="btn btn-success">Create</Link>
+                        <Link to={'request'} state={{ id: 0 }} className="btn btn-success">Request</Link>
                         <hr />
-                        <table className="table bg-light  table-striped" id="table-service">
+                        <table className="table bg-light  table-striped" id="table-docter">
                             <thead className="table-dark">
                                 <tr>
-                                    <th>Id</th>
-                                    <th>Service Code</th>
-                                    <th>Name</th>
-                                    <th>Price</th>
+                                    <th>Doctor User Name</th>
+                                    <th>Full Name</th>
+                                    <th>Major</th>
+                                    <th>Verified</th>
                                     <th>Detail</th>
                                     <th>Delete</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {
-                                    serviceArray.map((item, index) =>
-                                        <tr key={item.id}>
-                                            <td><Link to={`update/${item.id}`} className="rounded-circle"><i className="fa fa-pen"></i></Link> {item.id}</td>
-                                            <td>{item.serviceCode}</td>
-                                            <td>{item.serviceName}</td>
-                                            <td>{item.price}</td>
-                                            <td><Link to={`${item.id}`} className="btn btn-primary text-white">Detail</Link></td>
+                                    docterData.map((item, index) =>
+                                        <tr key={index}>
+                                            <td><Link to={`update/${item.id}`} className="rounded-circle"><i className="fa fa-pen"></i></Link> {item.baseUser.userName}</td>
+                                            <td>{item.baseUser.fullName}</td>
+                                            <td>{item.major.name}</td>
+                                            <td>{item.verified === true ? 'True' : 'False'}</td>
+                                            <td><Link to={`${item.id}`} className="btn btn-primary">Detail</Link></td>
                                             <td><button className="btn btn-danger" onClick={() => handleDelete(item.id)}>Delete</button></td>
                                         </tr>
                                     )
@@ -96,7 +98,7 @@ function AdminService() {
                                 <li className="page-item disabled">
                                     <span className="page-link" tabIndex="-1" aria-disabled="true">Previous</span>
                                 </li>
-                                {loadPagination(serviceData.total_pages)}
+                                {loadPagination(data.total_pages)}
                                 <li className="page-item">
                                     <span className="page-link" >Next</span>
                                 </li>
@@ -109,4 +111,4 @@ function AdminService() {
     );
 }
 
-export default AdminService;
+export default AdminDocter;

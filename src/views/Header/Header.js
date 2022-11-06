@@ -21,19 +21,19 @@ class Header extends Component {
     render() {
 
         return (
-            <header className="p-3">
+            <header className="p-2">
                 <div className="container">
-                    <div className="d-flex flex-wrap align-items-center justify-content-center ">
+                    <div className="row">
                         {/* Logo */}
-                        <a href="/" className="d-flex align-items-center text-white text-decoration-none">
-                            <img className='header-logo' src={Logo} alt="Logo" />
-                        </a>
                         {/* Link */}
-                        <ul className="nav col-12 col-lg-auto me-lg-auto  justify-content-center ">
+                        <ul className="nav col-12 col-xxl-7  justify-content-center align-items-center  mb-2">
+                            <a href="/" className="d-flex align-items-center text-white text-decoration-none">
+                                <img className='header-logo' src={Logo} alt="Logo" />
+                            </a>
                             <li><NavLink to="/main"
                                 className={({ isActive }) => isActive ? "btn btn-active px-2 mx-2 my-1" : "btn btn-style1 px-2 mx-2 my-1"}
                             >Home 🏠</NavLink></li>
-                            <li><NavLink to={this.props.user.id === null ? '/login' : '/service'}
+                            <li><NavLink to='/service'
                                 className={({ isActive }) => isActive ? "btn btn-active px-2 mx-2 my-1" : "btn btn-style1 px-2 mx-2 my-1"}
                             >Services 💉</NavLink></li>
                             <li><NavLink to="/contact"
@@ -42,43 +42,61 @@ class Header extends Component {
                             <li><NavLink to="/aboutus" className={({ isActive }) =>
                                 isActive ? "btn btn-active px-2 mx-2 my-1" : "btn btn-style1 px-2 mx-2 my-1"
                             } >About Us 🧑‍🤝‍🧑</NavLink></li>
-                            <li><NavLink to="/faq" className={({ isActive }) =>
+                            {
+                                this.props.user.id !== null
+                                    ?
+                                    <li><NavLink to="/Appointment" className={({ isActive }) =>
+                                        isActive ? "btn btn-active px-2 mx-2 my-1" : "btn btn-style1 px-2 mx-2 my-1"
+                                    } >Appointment 📅</NavLink></li>
+                                    : null
+                            }
+
+                            {/* <li><NavLink to="/faq" className={({ isActive }) =>
                                 isActive ? "btn btn-active px-2 mx-2 my-1" : "btn btn-style1 px-2 mx-2 my-1"
-                            } >FAQs ❓</NavLink></li>
+                            } >FAQs ❓</NavLink></li> */}
                         </ul>
                         {/* Search */}
-                        <div className="col-12 col-lg-auto mb-4 mb-lg-0  me-lg-3">
-                            <input type="text" placeholder="Search..." className="form-control form-control-dark" aria-label="Search"
-                                // Page search
-                                onKeyDown={(e) => {
-                                    if (e.key === "Enter") {
-                                        let text = e.target.value;
-                                        if (window.find(text)) {
-                                            console.log(window.find(text));
+
+                        {/* <div className="col-6">
+                                <input type="text" placeholder="Search..." className="form-control form-control-dark " aria-label="Search"
+                                    // Page search
+                                    onKeyDown={(e) => {
+                                        if (e.key === "Enter") {
+                                            let text = e.target.value;
+                                            if (window.find(text)) {
+                                                console.log(window.find(text));
+                                            }
                                         }
-                                    }
-                                }} />
-                        </div>
+                                    }} />
+                            </div> */}
+
 
                         {this.props.user.id == null
                             ?
                             <>
-                                <div className="text-end">
+                                <div className="col-12 col-xxl-5 d-flex justify-content-center align-items-center mb-2 ">
+
                                     <NavLink to="/login" className={({ isActive }) => isActive ? "btn btn-active me-2" : "btn btn-style1-outline me-2"}>Login 🗝️</NavLink>
                                     <NavLink to='/register' className={({ isActive }) => isActive ? "btn btn-active me-2" : "btn btn-style1"}>Sign-up 🚪</NavLink>
                                 </div>
                             </>
                             :
                             <>
-                                <div className='text-end'>
+                                <div className='col-12 col-xxl-5  d-flex justify-content-center align-items-center mb-2'>
+
                                     <Link to="/profile" className="btn btn-style1-outline me-2">Welcome, {this.props.user.fullName}</Link>
+                                    {this.props.user.role === 'Administrator'
+                                        ?
+                                        <Link to='/admin/' className="btn btn-style1 me-2" >Admin</Link>
+                                        : null
+                                    }
                                     <button onClick={(e) => this.logOut(e)} className="btn btn-style1" >Log-Out 🚪</button>
                                 </div>
                             </>
 
                         }
-
                     </div>
+
                 </div>
             </header>
         );

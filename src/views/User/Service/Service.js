@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { getServices } from '../../../services/UserApiConnection/userServiceApi';
 import '../../../styles/views/User/Service/Service.scss'
 
-function Service() {
+function Service(props) {
 
     const [services, setServices] = useState([]);
 
@@ -17,7 +18,6 @@ function Service() {
     return (
         <>
             <div className="service">
-                <button className='btn  btn-take-appointment'><i className="fa fa-calendar-check"></i> Take Appointment</button>
                 <div className="m-5">
                     <div id="carouselExampleDark" className="carousel carousel-dark slide" data-bs-ride="carousel">
                         <div className="carousel-indicators">
@@ -72,17 +72,19 @@ function Service() {
                             {services.map((items, index) =>
                                 index === 1
                                     ?
-                                    <div className="col-12 col-lg-4">
+                                    <div className="col-12 col-lg-4" key={index}>
                                         <div className='text-center'>
                                             <img className="bd-placeholder-img rounded-circle" src={items.imageURL} width="140" height="140" aria-label="Placeholder: 140x140" />
                                         </div>
 
                                         <h5>{items.serviceName}</h5>
                                         <p>{items.description}</p>
-                                        <p><a className="btn btn-secondary" href=".">View details »</a></p>
+                                        <Link to={'/appointment/create'} state={{ serviceName: items.serviceName, serviceId: items.id, userId: props.user.id }} className='btn btn-dark'><i className="fa fa-calendar-check"></i> Take Appointment</Link>
+
+                                        {/* <p><a className="btn btn-secondary" href=".">View details »</a></p> */}
                                     </div>
                                     : index === 4 ?
-                                        <div className="col-12  col-lg-4">
+                                        <div className="col-12  col-lg-4" key={index}>
                                             <div className='text-center'>
 
                                                 <img className="bd-placeholder-img rounded-circle" src={items.imageURL} width="140" height="140" aria-label="Placeholder: 140x140" />
@@ -90,10 +92,12 @@ function Service() {
 
                                             <h5>{items.serviceName}</h5>
                                             <p>{items.description}</p>
-                                            <p><a className="btn btn-secondary" href=".">View details »</a></p>
+                                            <Link to={'/appointment/create'} state={{ serviceName: items.serviceName, serviceId: items.id, userId: props.user.id }} className='btn btn-dark'><i className="fa fa-calendar-check"></i> Take Appointment</Link>
+
+                                            {/* <p><a className="btn btn-secondary" href=".">View details »</a></p> */}
                                         </div>
                                         : index === 5 ?
-                                            <div className="col-12  col-lg-4">
+                                            <div className="col-12  col-lg-4" key={index}>
                                                 <div className='text-center'>
 
                                                     <img className="bd-placeholder-img rounded-circle" src={items.imageURL} width="140" height="140" aria-label="Placeholder: 140x140" />
@@ -101,7 +105,9 @@ function Service() {
 
                                                 <h5>{items.serviceName}</h5>
                                                 <p>{items.description}</p>
-                                                <p><a className="btn btn-secondary" href=".">View details »</a></p>
+                                                <Link to={'/appointment/create'} state={{ serviceName: items.serviceName, serviceId: items.id, userId: props.user.id }} className='btn btn-dark'><i className="fa fa-calendar-check"></i> Take Appointment</Link>
+
+                                                {/* <p><a className="btn btn-secondary" href=".">View details »</a></p> */}
                                             </div>
                                             : null
                             )
@@ -123,10 +129,10 @@ function Service() {
                                         <div className="col-md-7">
                                             <h2 className="featurette-heading">{item.serviceName}</h2>
                                             <p >{item.description}</p>
+                                            <Link to={'/appointment/create'} state={{ serviceName: item.serviceName, serviceId: item.id, userId: props.user.id }} className='btn btn-dark'><i className="fa fa-calendar-check"></i> Take Appointment</Link>
                                         </div>
                                         <div className="col-md-5">
                                             <img className="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto" src={item.imageURL} width="400" height="400" aria-label="Placeholder: 500x500" ></img>
-
                                         </div>
                                     </div>
                                     <hr />
@@ -137,6 +143,7 @@ function Service() {
                                         <div className="col-md-7 order-md-2">
                                             <h2 className="featurette-heading">{item.serviceName}</h2>
                                             <p >{item.description}</p>
+                                            <Link to={'/appointment/create'} state={{ serviceName: item.serviceName, serviceId: item.id, userId: props.user.id }} className='btn btn-light'><i className="fa fa-calendar-check"></i> Take Appointment</Link>
                                         </div>
                                         <div className="col-md-5 order-md-1">
                                             <img className="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto" src={item.imageURL} width="400" height="400" aria-label="Placeholder: 500x500" ></img>

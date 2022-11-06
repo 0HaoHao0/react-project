@@ -5,16 +5,19 @@ import "../../../styles/views/Admin/Slidebar/SlidebarStyle.scss"
 import { ContactDelete, ContactGetAll } from "../../../services/AdminApiConnection/adminContactApi";
 
 function AdminContact() {
+    const [data, setData] = useState([]);
     const [contactData, setContactData] = useState([]);
+    const [currentPage, setCurrentPage] = useState(1)
 
-    const fetchContact = async () => {
-        let response = await ContactGetAll();
+    const fetchContact = async (currentPage) => {
+        let response = await ContactGetAll(currentPage);
+        setData(response.data)
         setContactData(response.data.data);
     }
 
     useEffect(() => {
-        fetchContact();
-    }, []);
+        fetchContact(currentPage);
+    }, [currentPage]);
 
     const handleDelete = async (id) => {
         let res = await ContactDelete(id);
@@ -27,6 +30,19 @@ function AdminContact() {
         }
     }
 
+    // Pagination
+    const loadPagination = (totalPage) => {
+        let render = [];
+        for (let i = 1; i <= totalPage; i++) {
+            render.push(<li key={i} className="page-item"><span className="page-link" onClick={() => loadPage(i)}>{i}</span></li>)
+        }
+        return render;
+    }
+
+    // Load Page
+    const loadPage = (pageNumber) => {
+        setCurrentPage(pageNumber);
+    }
     return (<>
         <div className="admin-contact">
             <div className="card-admin card m-4 ">
@@ -53,7 +69,7 @@ function AdminContact() {
                                         <td>{item.phoneNumber}</td>
                                         <td>{item.email}</td>
                                         <td className="fw-bold">{item.state}</td>
-                                        <td><Link to={`${item.id}`} className="btn btn-success">Detail</Link></td>
+                                        <td><Link to={`${item.id}`} className="btn btn-primary text-white">Detail</Link></td>
                                         <td><button className="btn btn-danger" onClick={() => handleDelete(item.id)}>Delete</button></td>
                                     </tr>
                                 )
@@ -67,11 +83,7 @@ function AdminContact() {
                             <li className="page-item disabled">
                                 <a className="page-link" href="/" tabIndex="-1" aria-disabled="true">Previous</a>
                             </li>
-                            <li className="page-item"><a className="page-link" href="/">1</a></li>
-                            <li className="page-item"><a className="page-link" href="/">2</a></li>
-                            <li className="page-item"><a className="page-link" href="/">3</a></li>
-                            <li className="page-item"><a className="page-link" href="/">...</a></li>
-                            <li className="page-item"><a className="page-link" href="/">4</a></li>
+                            {loadPagination(data.total_pages)}
                             <li className="page-item">
                                 <a className="page-link" href="/">Next</a>
                             </li>
