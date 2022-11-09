@@ -73,12 +73,12 @@ function AdminUser() {
         <>
             <div className="admin-user">
                 <div className="card-admin card m-4 ">
-                    <h5 className="m-5 p-2 fw-bold border border-dark bg-light">
+                    <h5 className="m-5 p-2 fw-bold border border-dark bg-light" style={{ fontFamily: 'monospace' }}>
                         User Management
                     </h5>
 
                     <div className="p-4">
-                        <Link to={'create'} className="btn btn-success">Create</Link>
+                        <Link to={'/register'} className="btn btn-success">Create</Link>
                         <hr />
                         <table className="table bg-light  table-striped" id="table-user">
                             <thead className="table-dark">

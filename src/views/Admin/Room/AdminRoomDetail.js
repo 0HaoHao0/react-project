@@ -12,6 +12,7 @@ function AdminRoomDetail() {
 
     const [roomDetail, setRoomDetail] = useState([]);
 
+    const [roomType, setRoomType] = useState([]);
 
     const [roomDevices, setRoomDevices] = useState([]);
 
@@ -19,6 +20,8 @@ function AdminRoomDetail() {
         let response = await RoomGetId(id);
 
         setRoomDetail(response.data);
+
+        setRoomType(response.data.roomType)
 
         setRoomDevices(response.data.devices)
     }
@@ -40,7 +43,7 @@ function AdminRoomDetail() {
         <>
             <div className="admin-room-detail">
                 <div className="card-admin card m-4 ">
-                    <h5 className="m-5 p-2 fw-bold border border-dark bg-light">
+                    <h5 className="m-5 p-2 fw-bold border border-dark bg-light" style={{ fontFamily: 'monospace' }}>
                         Room Detail {param.id}
                     </h5>
                     <div className="px-5">
@@ -51,7 +54,7 @@ function AdminRoomDetail() {
                                     <label className="fw-bold">Code :</label> {roomDetail.roomCode}
                                 </div>
                                 <div className="form-group my-2">
-                                    <label className="fw-bold">Type :</label> {roomDetail.roomType}
+                                    <label className="fw-bold">Type :</label> {roomType.name}
                                 </div>
                             </div>
                             <div className="col-12 col-md-6">
@@ -77,13 +80,9 @@ function AdminRoomDetail() {
                             )}
 
                         </div>
-                        <div className="row my-4">
-                            <div className="col-6">
-                                <button className="btn btn-danger" onClick={() => handleBack()}>Back</button>
-                            </div>
-                            <div className="col-6">
-                                <Link to={`/admin/room/update/${param.id}`} className="btn btn-primary" >Update</Link>
-                            </div>
+                        <div className=" my-4">
+                            <Link to={`/admin/room/update/${param.id}`} className="btn btn-primary me-2" >Update</Link>
+                            <button className="btn btn-danger" onClick={() => handleBack()}>Back</button>
                         </div>
                     </div>
                 </div>

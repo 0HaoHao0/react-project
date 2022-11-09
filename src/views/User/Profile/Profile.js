@@ -4,7 +4,10 @@ import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import withRouter from '../../../components/HOC/withRouter';
 import { updateImageURL } from '../../../features/user/userSlice';
-import { updateAvatar, updatePassword } from '../../../services/UserApiConnection/userApi';
+import { updateAvatar, updateMedicalRecord, updatePassword } from '../../../services/UserApiConnection/userApi';
+
+import defaultFile from '../../../assets/file/MedicalRecord.pdf';
+
 
 import '../../../styles/views/User/Profile/Profile.scss'
 
@@ -17,6 +20,7 @@ class Profile extends Component {
     }
     innitState = {
         updateImage: null,
+        file: null,
         oldPassword: null,
         newPassword: null,
         newPasswordConfirm: null
@@ -29,6 +33,7 @@ class Profile extends Component {
             document.getElementById('btn-about').className = 'btn btn-secondary me-2'
             document.getElementById('btn-change-password').className = 'btn me-2'
             document.getElementById('update-avatar').className = 'btn me-2'
+            document.getElementById('update-medical-record').className = 'btn me-2'
             this.setState(
                 {
                     renderComponent: 'about'
@@ -39,6 +44,7 @@ class Profile extends Component {
             document.getElementById('btn-about').className = 'btn me-2'
             document.getElementById('btn-change-password').className = 'btn btn-secondary me-2'
             document.getElementById('update-avatar').className = 'btn me-2'
+            document.getElementById('update-medical-record').className = 'btn me-2'
 
             this.setState(
                 {
@@ -50,10 +56,23 @@ class Profile extends Component {
             document.getElementById('btn-about').className = 'btn me-2'
             document.getElementById('btn-change-password').className = 'btn me-2'
             document.getElementById('update-avatar').className = 'btn btn-secondary me-2'
+            document.getElementById('update-medical-record').className = 'btn me-2'
 
             this.setState(
                 {
                     renderComponent: 'updateAvatar'
+                }
+            )
+        }
+        else if (e === 'updateMedicalRecord') {
+            document.getElementById('btn-about').className = 'btn me-2'
+            document.getElementById('btn-change-password').className = 'btn me-2'
+            document.getElementById('update-avatar').className = 'btn me-2'
+            document.getElementById('update-medical-record').className = 'btn btn-secondary me-2'
+
+            this.setState(
+                {
+                    renderComponent: 'updateMedicalRecord'
                 }
             )
         }
@@ -95,8 +114,14 @@ class Profile extends Component {
                 toast.error(response.data[0].description)
             }
         }
-
-
+    }
+    hanldeUpdateMedicalRecord = (e) => {
+        let data = new FormData()
+        data.append('id', this.props.user.id);
+        data.append('file', this.innitState.file);
+        updateMedicalRecord(data, (response) => {
+            toast.success("Update Medical Record Successful")
+        })
     }
     render() {
         return (
@@ -107,7 +132,7 @@ class Profile extends Component {
                             <img src={this.props.user.imageURL} className='w-25 rounded-circle' alt="..." />
                         </div>
                         <div className="card-body">
-                            <strong className='text-center'> <h5>Hi, {this.props.user.id}</h5> </strong>
+                            <strong className='text-center'> <h5>Hi</h5> </strong>
                             <div>
                                 <hr />
                                 <div>
@@ -119,6 +144,9 @@ class Profile extends Component {
                                     </button>
                                     <button id='update-avatar' className='btn me-2' onClick={() => this.hanldeLogic('updateAvatar')}>
                                         <i className="fa-solid fa-lock"></i> <span><strong>Update Avatar</strong></span>
+                                    </button>
+                                    <button id='update-medical-record' className='btn me-2' onClick={() => this.hanldeLogic('updateMedicalRecord')}>
+                                        <i className="fa-solid fa-file"></i> <span><strong>Update Medical Record</strong></span>
                                     </button>
                                 </div>
                                 <hr />
@@ -190,8 +218,9 @@ class Profile extends Component {
 
                                                 </div>
                                             </>
-                                            :
-                                            <>
+                                            : this.state.renderComponent === 'updateAvatar'
+                                                ?
+                                                // Update Avatar
                                                 <div className='row'>
                                                     <div >
                                                         <p className='text-center text-muted fst-italic'>Update Avatar</p>
@@ -205,9 +234,25 @@ class Profile extends Component {
                                                         <button className="btn btn-primary" onClick={() => { this.hanldeUpdateAvatar() }}>Submit</button>
                                                     </div>
                                                 </div>
+                                                :
+                                                <>
+                                                    {/* Update Medical Record */}
+                                                    <div className='row'>
+                                                        <div >
+                                                            <p className='text-center text-muted fst-italic'>Update Medical Record</p>
+                                                        </div>
+                                                        <div>
+                                                            <div className="mb-3">
+                                                                <label htmlFor="updateAvatar" className="form-label">Input Medical Record: </label> <a href={defaultFile} className='btn btn-success' download={true}> <i className="fa fa-download"></i> </a>
+                                                                <input className="form-control my-2" type="file" accept=".pdf" id="updateAvatar"
+                                                                    onChange={(e) => this.innitState.file = e.target.files[0]} />
+                                                            </div>
+                                                            <button className="btn btn-primary" onClick={(e) => { this.hanldeUpdateMedicalRecord(e) }}>Submit</button>
+                                                        </div>
+                                                    </div>
 
 
-                                            </>
+                                                </>
 
                                 }
                                 <hr />

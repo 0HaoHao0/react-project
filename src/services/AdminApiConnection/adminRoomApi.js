@@ -63,6 +63,34 @@ export const RoomGetSelect = async (callback) => {
 
     })
 }
+export const RoomGetSelectRoomTypes = async (callback) => {
+    await Swal.fire({
+        title: 'Waiting...',
+        icon: 'warning',
+        html: 'This pop-up will close when server response.',
+        didOpen: async () => {
+            Swal.showLoading();
+
+            await axios({
+                method: 'Get',
+                url: `https://localhost:44355/api/SelectBoxItems/GetRoomTypes`
+            }).then((res) => {
+                response = res;
+                callback(response)
+                Swal.close();
+            }).catch((error) => {
+                response = error.response;
+                callback(response)
+                Swal.close();
+
+            })
+
+        },
+
+    }).then((result) => {
+
+    })
+}
 
 export const RoomGetId = async (id) => {
 

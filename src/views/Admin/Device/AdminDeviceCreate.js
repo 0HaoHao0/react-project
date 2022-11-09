@@ -84,7 +84,7 @@ function AdminDeviceCreate() {
         <>
             <div className="admin-device-create">
                 <div className="card-admin card m-4 ">
-                    <h5 className="m-5 p-2 fw-bold border border-dark bg-light">
+                    <h5 className="m-5 p-2 fw-bold border border-dark bg-light" style={{ fontFamily: 'monospace' }}>
                         Device Create
                     </h5>
                     <div className="px-5">
@@ -152,11 +152,11 @@ function AdminDeviceCreate() {
                         <div className="row">
                             <h3>Service Infomation</h3>
                             {services.map((item, index) =>
-                                <div className="col-6 col-sm-4 col-md-3 " key={index}>
+                                <div className="col-6 col-sm-4 col-md-3 my-2" key={index}>
                                     <div className="form-check ">
                                         <input className="form-check-input" type="checkbox" id={index} value={item.id} onClick={(e) => { handleServices(e) }} />
                                         <label className="form-check-label" htmlFor={index}>
-                                            {item.code}
+                                            {item.name}
                                         </label>
                                     </div>
                                 </div>
@@ -166,13 +166,9 @@ function AdminDeviceCreate() {
 
                         </div>
 
-                        <div className="row my-4">
-                            <div className="col-6">
-                                <button className="btn btn-success" onClick={() => handleCreate()}>Create</button>
-                            </div>
-                            <div className="col-6">
-                                <button className="btn btn-danger" onClick={() => handleBack()}>Back</button>
-                            </div>
+                        <div className=" my-4">
+                            <button className="btn btn-success me-2" onClick={() => handleCreate()}>Create</button>
+                            <button className="btn btn-danger" onClick={() => handleBack()}>Back</button>
                         </div>
                     </div>
                 </div>

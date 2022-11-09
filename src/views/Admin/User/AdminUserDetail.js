@@ -42,12 +42,12 @@ function AdminUserDetail() {
         <>
             <div className="admin-user-detail">
                 <div className="card-admin card m-4 ">
-                    <h5 className="m-5 p-2 fw-bold border border-dark bg-light">
-                        User Detail {param.id}
+                    <h5 className="m-5 p-2 fw-bold border border-dark bg-light" style={{ fontFamily: 'monospace' }}>
+                        User Detail
                     </h5>
                     <div className="px-5">
                         <div className="row">
-                            <h3>User Infomation :</h3>
+                            <h3 >User Infomation :</h3 >
 
                             <div className="col-12 col-md-6">
                                 <div className="form-group my-2">
@@ -100,13 +100,9 @@ function AdminUserDetail() {
                         </div>
                         <hr />
 
-                        <div className="row my-4">
-                            <div className="col-6">
-                                <button className="btn btn-danger" onClick={() => handleBack()}>Back</button>
-                            </div>
-                            <div className="col-6">
-                                <Link to={`/admin/user/update/${param.id}`} className="btn btn-primary" >Update</Link>
-                            </div>
+                        <div className="my-4">
+                            <Link to={`/admin/user/update/${param.id}`} className="btn btn-primary me-2" >Update</Link>
+                            <button className="btn btn-danger" onClick={() => handleBack()}>Back</button>
                         </div>
                     </div>
                 </div>

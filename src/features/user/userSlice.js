@@ -14,6 +14,7 @@ export const userSlice = createSlice({
             state.email = actions.payload.email
             state.role = actions.payload.role
             state.imageURL = actions.payload.imageURL
+            state.pusherChannel = actions.payload.pusherChannel
         },
         clearUserData: (state) => {
             state.id = null
@@ -22,6 +23,7 @@ export const userSlice = createSlice({
             state.email = null
             state.role = null
             state.imageURL = null
+            state.pusherChannel = null
         },
         updateImageURL: (state, actions) => {
             state.imageURL = actions.payload

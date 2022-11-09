@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { NavLink } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import "../../../styles/views/Admin/Slidebar/SlidebarStyle.scss"
 
 class Slidebar extends Component {
@@ -104,9 +104,8 @@ class Slidebar extends Component {
                                 </span>
                             </button>
                             <ul className="dropdown-menu">
-                                <li><a className="dropdown-item" href=".">Action</a></li>
-                                <li><a className="dropdown-item" href=".">Another action</a></li>
-                                <li><a className="dropdown-item" href=".">Something else here</a></li>
+                                <li><Link to={'/profile'} className="dropdown-item" href=".">Profile</Link></li>
+                                <li><Link to={'/main'} className="dropdown-item" href=".">Return Home</Link></li>
                             </ul>
                         </div>
                     </div>

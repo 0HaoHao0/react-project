@@ -54,7 +54,7 @@ function AdminContactDetail() {
     return (<>
         <div className="admin-contact-detail">
             <div className="card-admin card m-4 ">
-                <h5 className="m-5 p-2 fw-bold border border-dark bg-light">
+                <h5 className="m-5 p-2 fw-bold border border-dark bg-light" style={{ fontFamily: 'monospace' }}>
                     Contact Detail {param.id}
                 </h5>
                 <div className="px-5">

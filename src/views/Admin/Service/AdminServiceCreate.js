@@ -73,7 +73,7 @@ function AdminServiceCreate() {
         <>
             <div className="admin-service-create">
                 <div className="card-admin card m-4 ">
-                    <h5 className="m-5 p-2 fw-bold border border-dark bg-light">
+                    <h5 className="m-5 p-2 fw-bold border border-dark bg-light" style={{ fontFamily: 'monospace' }}>
                         Service Create
                     </h5>
                     <div className="px-5">
@@ -138,13 +138,9 @@ function AdminServiceCreate() {
                             )}
                         </div>
 
-                        <div className="row my-4">
-                            <div className="col-6">
-                                <button className="btn btn-success" onClick={() => handleCreate()}>Create</button>
-                            </div>
-                            <div className="col-6">
-                                <button className="btn btn-danger" onClick={() => handleBack()}>Back</button>
-                            </div>
+                        <div className=" my-4">
+                            <button className="btn btn-success me-2" onClick={() => handleCreate()}>Create</button>
+                            <button className="btn btn-danger" onClick={() => handleBack()}>Back</button>
                         </div>
                     </div>
                 </div>

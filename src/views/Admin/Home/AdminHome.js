@@ -6,9 +6,9 @@ function AdminHome() {
     return (
         <>
             <div className="admin-home">
-                <div className="card-admin card m-4 ">
-                    <h5 className="m-5 p-2 fw-bold border border-dark">
-                        Welcome to Admin Page
+                <div className="card-admin card m-4 d-flex align-items-center justify-content-center ">
+                    <h5 className="fs-1 ">
+                        Welcome to Dashboard
                     </h5>
 
                 </div>

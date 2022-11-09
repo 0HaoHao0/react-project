@@ -45,7 +45,7 @@ function AdminDeviceDetail() {
         <>
             <div className="admin-device-detail">
                 <div className="card-admin card m-4 ">
-                    <h5 className="m-5 p-2 fw-bold border border-dark bg-light">
+                    <h5 className="m-5 p-2 fw-bold border border-dark bg-light" style={{ fontFamily: 'monospace' }}>
                         Device Detail {param.id}
                     </h5>
                     <div className="px-5">
@@ -116,13 +116,9 @@ function AdminDeviceDetail() {
 
                         </div>
 
-                        <div className="row my-4">
-                            <div className="col-6">
-                                <button className="btn btn-danger" onClick={() => handleBack()}>Back</button>
-                            </div>
-                            <div className="col-6">
-                                <Link to={`/admin/device/update/${param.id}`} className="btn btn-primary" >Update</Link>
-                            </div>
+                        <div className=" my-4">
+                            <Link to={`/admin/device/update/${param.id}`} className="btn btn-primary me-2" >Update</Link>
+                            <button className="btn btn-danger" onClick={() => handleBack()}>Back</button>
                         </div>
                     </div>
                 </div>

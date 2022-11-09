@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import "../../../styles/views/Admin/Slidebar/SlidebarStyle.scss"
 import { ContactDelete, ContactGetAll } from "../../../services/AdminApiConnection/adminContactApi";
+import Swal from "sweetalert2";
 
 function AdminContact() {
     const [data, setData] = useState([]);
@@ -20,14 +21,30 @@ function AdminContact() {
     }, [currentPage]);
 
     const handleDelete = async (id) => {
-        let res = await ContactDelete(id);
-        if (res.status === 200) {
-            toast.success(res.data);
-            fetchContact();
-        }
-        else {
-            toast.error("Please try again or contact with admin !")
-        }
+
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                let res = await ContactDelete(id);
+                if (res.status === 200) {
+                    toast.success(res.data);
+                    fetchContact();
+                }
+                else {
+                    toast.error("Please try again or contact with admin !")
+                }
+            }
+        })
+
+
+
     }
 
     // Pagination
@@ -46,7 +63,7 @@ function AdminContact() {
     return (<>
         <div className="admin-contact">
             <div className="card-admin card m-4 ">
-                <h5 className="m-5 p-2 fw-bold border border-dark bg-light text-center">
+                <h5 className="m-5 p-2 fw-bold border border-dark bg-light" style={{ fontFamily: 'monospace' }}>
                     Contact Management
                 </h5>
                 <div className="p-4">

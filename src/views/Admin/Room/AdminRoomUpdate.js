@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
-import { RoomGetId, RoomGetSelect, RoomUpdate } from "../../../services/AdminApiConnection/adminRoomApi";
+import { RoomGetId, RoomGetSelectRoomTypes, RoomUpdate } from "../../../services/AdminApiConnection/adminRoomApi";
 
 function AdminRoomUpdate() {
     const param = useParams()
@@ -10,6 +10,8 @@ function AdminRoomUpdate() {
     const navigate = useNavigate();
 
     const [roomDetail, setRoomDetail] = useState([]);
+
+    const [roomType, setRoomType] = useState([]);
 
     const [roomTypes, setRoomTypes] = useState([]);
 
@@ -24,9 +26,10 @@ function AdminRoomUpdate() {
     const getData = async (id) => {
         let roomData = await RoomGetId(id);
 
-        await RoomGetSelect((response) => setRoomTypes(response.data));
+        await RoomGetSelectRoomTypes((response) => setRoomTypes(response.data));
 
         setRoomDetail(roomData.data);
+        setRoomType(roomData.data.roomType)
     }
 
     useEffect(() => {
@@ -37,7 +40,7 @@ function AdminRoomUpdate() {
     useEffect(() => {
         roomData.roomCode = roomDetail.roomCode
         roomData.description = roomDetail.description
-        roomData.roomType = roomDetail.roomType
+        roomData.roomType = roomType.id
     },);
 
 
@@ -61,7 +64,7 @@ function AdminRoomUpdate() {
         <>
             <div className="admin-room-update">
                 <div className="card-admin card m-4 ">
-                    <h5 className="m-5 p-2 fw-bold border border-dark bg-light">
+                    <h5 className="m-5 p-2 fw-bold border border-dark bg-light" style={{ fontFamily: 'monospace' }}>
                         Room Update {param.id}
                     </h5>
                     <div className="px-5">
@@ -77,7 +80,7 @@ function AdminRoomUpdate() {
                                     <label className="form-label fw-bold">Room Type :</label>
                                     <select className="form-select" aria-label="Default select example"
                                         onChange={(e) => { roomData.roomType = parseInt(e.target.value) }}>
-                                        <option defaultValue='' hidden>{roomDetail.roomType}</option>
+                                        <option defaultValue='' hidden>{roomType.name}</option>
                                         {
                                             roomTypes.map((item, index) =>
                                                 <option key={index} value={item.id}>{item.name}</option>
@@ -96,13 +99,9 @@ function AdminRoomUpdate() {
                             </div>
                         </div>
 
-                        <div className="row my-4">
-                            <div className="col-6">
-                                <button className="btn btn-success" onClick={() => handleUpdate()}>Update</button>
-                            </div>
-                            <div className="col-6">
-                                <button className="btn btn-danger" onClick={() => handleBack()}>Back</button>
-                            </div>
+                        <div className="my-4">
+                            <button className="btn btn-success me-2" onClick={() => handleUpdate()}>Update</button>
+                            <button className="btn btn-danger" onClick={() => handleBack()}>Back</button>
                         </div>
                     </div>
                 </div>

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { AppointmentCreate, getSlots } from "../../../services/UserApiConnection/userAppointment";
-import defaultFile from '../../../assets/file/Medical_Form.docx';
+import defaultFile from '../../../assets/file/AppointmentForm.docx';
 import { toast } from "react-toastify";
 
 function SetAppointment() {
@@ -61,7 +61,7 @@ function SetAppointment() {
 
                                 <label ><h3>Service Name: </h3></label>
                             </div>
-                            <div className="col-2">
+                            <div className="col-9">
                                 <h3>
                                     {location.state.serviceName}
                                 </h3>
@@ -116,7 +116,7 @@ function SetAppointment() {
                         <div className="row">
                             <div className="col-3 ">
 
-                                <label ><h3>Medical Record: </h3></label>
+                                <label ><h3>Appointment Record: </h3></label>
 
                             </div>
                             <div className="col-4">

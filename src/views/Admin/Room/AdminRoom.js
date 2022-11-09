@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
+import Swal from "sweetalert2";
 import { RoomDelete, RoomGetAll } from "../../../services/AdminApiConnection/adminRoomApi";
 
 
@@ -31,14 +32,27 @@ function AdminRoom() {
     // Delete Devices
 
     const handleDelete = async (id) => {
-        const res = await RoomDelete(id);
-        if (res.status === 200) {
-            toast.success(res.data);
-            featchRoom();
-        }
-        else {
-            toast.error("Please try again or contact with admin !")
-        }
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                const res = await RoomDelete(id);
+                if (res.status === 200) {
+                    toast.success(res.data);
+                    featchRoom();
+                }
+                else {
+                    toast.error("Please try again or contact with admin !")
+                }
+            }
+        })
+
     }
 
     // Pagination
@@ -46,7 +60,7 @@ function AdminRoom() {
     const loadPagination = (totalPage) => {
         let render = [];
         for (let i = 1; i <= totalPage; i++) {
-            render.push(<li key={i} className="page-item"><a className="page-link" href="/" onClick={() => loadPage(i)}>{i}</a></li>)
+            render.push(<li key={i} className="page-item"><span className="page-link" onClick={() => loadPage(i)}>{i}</span></li>)
         }
         return render;
     }
@@ -61,7 +75,7 @@ function AdminRoom() {
         <>
             <div className="admin-room">
                 <div className="card-admin card m-4 ">
-                    <h5 className="m-5 p-2 fw-bold border border-dark bg-light">
+                    <h5 className="m-5 p-2 fw-bold border border-dark bg-light" style={{ fontFamily: 'monospace' }}>
                         Room Management
                     </h5>
 
@@ -97,11 +111,11 @@ function AdminRoom() {
                         <nav aria-label="Page navigation example">
                             <ul className="pagination justify-content-end p-2">
                                 <li className="page-item disabled">
-                                    <a className="page-link" href="/" tabIndex="-1" aria-disabled="true">Previous</a>
+                                    <span className="page-link" tabIndex="-1" aria-disabled="true">Previous</span>
                                 </li>
                                 {loadPagination(roomData.total_pages)}
                                 <li className="page-item">
-                                    <a className="page-link" href="/">Next</a>
+                                    <span className="page-link" >Next</span>
                                 </li>
                             </ul>
                         </nav>

@@ -21,12 +21,12 @@ class Header extends Component {
     render() {
 
         return (
-            <header className="p-2">
+            <header className="p-1">
                 <div className="container">
                     <div className="row">
                         {/* Logo */}
                         {/* Link */}
-                        <ul className="nav col-12 col-xxl-7  justify-content-center align-items-center  mb-2">
+                        <ul className="nav col-12 justify-content-center align-items-center  mb-1">
                             <a href="/" className="d-flex align-items-center text-white text-decoration-none">
                                 <img className='header-logo' src={Logo} alt="Logo" />
                             </a>
@@ -50,10 +50,14 @@ class Header extends Component {
                                     } >Appointment 📅</NavLink></li>
                                     : null
                             }
+                            {
+                                this.props.user.role === "Receptionist" || this.props.user.role === "Patient" ?
+                                    <li><NavLink to="/faq" className={({ isActive }) =>
+                                        isActive ? "btn btn-active px-2 mx-2 my-1" : "btn btn-style1 px-2 mx-2 my-1"
+                                    } >FAQs ❓</NavLink></li>
+                                    : null
+                            }
 
-                            {/* <li><NavLink to="/faq" className={({ isActive }) =>
-                                isActive ? "btn btn-active px-2 mx-2 my-1" : "btn btn-style1 px-2 mx-2 my-1"
-                            } >FAQs ❓</NavLink></li> */}
                         </ul>
                         {/* Search */}
 
@@ -74,7 +78,7 @@ class Header extends Component {
                         {this.props.user.id == null
                             ?
                             <>
-                                <div className="col-12 col-xxl-5 d-flex justify-content-center align-items-center mb-2 ">
+                                <div className="col-12  d-flex justify-content-center align-items-center mb-2 ">
 
                                     <NavLink to="/login" className={({ isActive }) => isActive ? "btn btn-active me-2" : "btn btn-style1-outline me-2"}>Login 🗝️</NavLink>
                                     <NavLink to='/register' className={({ isActive }) => isActive ? "btn btn-active me-2" : "btn btn-style1"}>Sign-up 🚪</NavLink>
@@ -82,7 +86,7 @@ class Header extends Component {
                             </>
                             :
                             <>
-                                <div className='col-12 col-xxl-5  d-flex justify-content-center align-items-center mb-2'>
+                                <div className='col-12  d-flex justify-content-center align-items-center mb-2'>
 
                                     <Link to="/profile" className="btn btn-style1-outline me-2">Welcome, {this.props.user.fullName}</Link>
                                     {this.props.user.role === 'Administrator'

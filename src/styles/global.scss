@@ -98,20 +98,8 @@ code {
     overflow-y: scroll;
 }
 
-.appointment-detail {
 
-    //scroll
-    -ms-overflow-style: none;
-    /* for Internet Explorer, Edge */
-    scrollbar-width: none;
-    /* for Firefox */
-    overflow-y: scroll;
-}
 
-.appointment-detail::-webkit-scrollbar {
-    display: none;
-    /* for Chrome, Safari, and Opera */
-}
 
 // style button
 .btn-active {

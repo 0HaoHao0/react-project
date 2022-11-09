@@ -27,20 +27,6 @@ function AdminDocter() {
     }, [currentPage])
 
 
-
-
-    // Delete Docters
-    const handleDelete = async (id) => {
-        // const res = await DocterDelete(id);
-        // if (res.status === 200) {
-        //     toast.success(res.data);
-        //     getDocters();
-        // }
-        // else {
-        //     toast.error("Please try again or contact with admin !")
-        // }
-    }
-
     // Pagination
     const loadPagination = (totalPage) => {
         let render = [];
@@ -58,8 +44,8 @@ function AdminDocter() {
         <>
             <div className="admin-docter">
                 <div className="card-admin card m-4 ">
-                    <h5 className="m-5 p-2 fw-bold border border-dark bg-light">
-                        Docter Management
+                    <h5 className="m-5 p-2 fw-bold border border-dark bg-light" style={{ fontFamily: 'monospace' }}>
+                        Doctor Management
                     </h5>
 
                     <div className="p-4">
@@ -73,7 +59,6 @@ function AdminDocter() {
                                     <th>Major</th>
                                     <th>Verified</th>
                                     <th>Detail</th>
-                                    <th>Delete</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -85,7 +70,6 @@ function AdminDocter() {
                                             <td>{item.major.name}</td>
                                             <td>{item.verified === true ? 'True' : 'False'}</td>
                                             <td><Link to={`${item.id}`} className="btn btn-primary">Detail</Link></td>
-                                            <td><button className="btn btn-danger" onClick={() => handleDelete(item.id)}>Delete</button></td>
                                         </tr>
                                     )
                                 }

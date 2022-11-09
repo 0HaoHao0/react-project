@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
+import Swal from "sweetalert2";
 import { DeviceDelete, DeviceGetAll } from "../../../services/AdminApiConnection/adminDeviceApi";
 
 
@@ -28,14 +29,28 @@ function AdminDevice() {
 
     // Delete Devices
     const handleDelete = async (id) => {
-        const res = await DeviceDelete(id);
-        if (res.status === 200) {
-            toast.success(res.data);
-            featchDevices();
-        }
-        else {
-            toast.error("Please try again or contact with admin !")
-        }
+
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                const res = await DeviceDelete(id);
+                if (res.status === 200) {
+                    toast.success(res.data);
+                    featchDevices();
+                }
+                else {
+                    toast.error("Please try again or contact with admin !")
+                }
+            }
+        })
+
     }
 
     // Pagination
@@ -56,7 +71,7 @@ function AdminDevice() {
         <>
             <div className="admin-device">
                 <div className="card-admin card m-4 ">
-                    <h5 className="m-5 p-2 fw-bold border border-dark bg-light">
+                    <h5 className="m-5 p-2 fw-bold border border-dark bg-light" style={{ fontFamily: 'monospace' }}>
                         Device Management
                     </h5>
 

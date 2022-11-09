@@ -74,8 +74,8 @@ function AdminDocterUpdate() {
         <>
             <div className="admin-docter-update">
                 <div className="card-admin card m-4 ">
-                    <h5 className="m-5 p-2 fw-bold border border-dark bg-light">
-                        Docter Update {param.id}
+                    <h5 className="m-5 p-2 fw-bold border border-dark bg-light" style={{ fontFamily: 'monospace' }}>
+                        Docter Update
                     </h5>
                     <div className="px-5">
                         <div className="row">
@@ -118,13 +118,9 @@ function AdminDocterUpdate() {
                                 </div>
                             </div>
                         </div>
-                        <div className="row">
-                            <div className="col-6">
-                                <button className="btn btn-success" onClick={() => handleUpdate()}>Update</button>
-                            </div>
-                            <div className="col-6">
-                                <button className="btn btn-danger" onClick={() => handleBack()}>Back</button>
-                            </div>
+                        <div className="">
+                            <button className="btn btn-success me-2" onClick={() => handleUpdate()}>Update</button>
+                            <button className="btn btn-danger" onClick={() => handleBack()}>Back</button>
                         </div>
                     </div>
                 </div>
