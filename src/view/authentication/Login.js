@@ -1,6 +1,8 @@
+import './Login.scss'
+
 function Login() {
     return (
-        <div>
+        <div className="login">
             login
         </div>
     );
