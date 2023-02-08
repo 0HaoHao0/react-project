@@ -1,3 +1,4 @@
+import { NavLink } from 'react-router-dom';
 import logo from '../../assets/images/logo/Logo-nbg.png'
 import './Header.scss'
 function Header() {
@@ -12,16 +13,19 @@ function Header() {
                     <div className="collapse navbar-collapse" id="navbarResponsive">
                         <ul className="navbar-nav ms-auto">
                             <li className="nav-item">
-                                <a className="nav-link" href="/">Home</a>
+                                <NavLink to='/' className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}>Home</NavLink>
                             </li>
                             <li className="nav-item">
-                                <a className="nav-link" href="/">About</a>
+                                <NavLink to='/about' className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}>About</NavLink>
+
                             </li>
                             <li className="nav-item">
-                                <a className="nav-link" href="/">Services</a>
+                                <NavLink to='/services' className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}>Services</NavLink>
+
                             </li>
                             <li className="nav-item">
-                                <a className="nav-link" href="/">Contact</a>
+                                <NavLink to='/contact' className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}>Contact</NavLink>
+
                             </li>
                         </ul>
                     </div>
