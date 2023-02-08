@@ -1,19 +1,20 @@
 import { Route, Routes } from 'react-router-dom';
 import './App.css';
-import AdminRouter from './router/AdminRouter';
-import { ErrorPage } from './Error';
-import UserRouter from './router/UserRouter';
+
+import AdminRouter from '../router/AdminRouter';
+import UserRouter from '../router/UserRouter';
 
 import Login from './authentication/Login'
 import Register from './authentication/Register';
 
-import Home from './Home';
+import PublicRouter from '../router/PublicRouter';
+
 
 function App() {
   return (
     <Routes>
       {/* Home Router */}
-      <Route path='/home' element={<Home />}></Route>
+      <Route path='*' element={<PublicRouter />}></Route>
       {/* Authencation Router */}
       <Route path='/login' element={<Login />}></Route>
       <Route path='/register' element={<Register />}></Route>
@@ -21,8 +22,6 @@ function App() {
       <Route path='/user' element={<UserRouter />}></Route>
       {/* Admin Router */}
       <Route path='/admin' element={<AdminRouter />}></Route>
-      {/* Not Found */}
-      <Route path='*' element={<ErrorPage />}></Route>
     </Routes>
   );
 }
