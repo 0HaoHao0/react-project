@@ -87,7 +87,7 @@ function Home() {
                     <button type="button" className="btn btn-outline-secondary btn-lg px-4">Default</button>
                 </div>
             </div>
-            <div className="col-lg-4 offset-lg-1 p-0 overflow-hidden shadow-lg">
+            <div className="col-lg-4 offset-lg-1 p-0 overflow-hidden shadow">
                 <img className="rounded-lg-3 w-100" src="https://cdn.create.vista.com/api/media/small/477699788/stock-photo-side-view-arabian-doctor-looking" alt="" width="720" />
             </div>
         </div>

@@ -4,7 +4,7 @@ import './Header.scss'
 function Header() {
     return (<>
         <div className="header">
-            <nav className="navbar navbar-expand-lg navbar-light bg-light">
+            <nav className="navbar navbar-expand-lg navbar-light bg-light border-bottom">
                 <div className="container">
                     <img src={logo} alt="logo" /> Shiny Teeth
                     <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
@@ -24,7 +24,7 @@ function Header() {
 
                             </li>
                             <li className="nav-item">
-                                <NavLink to='/contact' className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}>Contact</NavLink>
+                                <NavLink to='/contact' className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}>Contact Us</NavLink>
 
                             </li>
                         </ul>
