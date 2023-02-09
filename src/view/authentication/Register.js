@@ -2,6 +2,7 @@ import "./Register.scss";
 //Phone input
 import "react-phone-number-input/style.css";
 import PhoneInput from "react-phone-number-input";
+import { Link } from "react-router-dom";
 function Register() {
   return (
     <div className="register">
@@ -72,7 +73,7 @@ function Register() {
                   <label htmlFor="email">Email</label>
                 </div>
                 {/* Phone number */}
-                <div className="mb-3 mx-2">
+                <div className=" mx-2">
                   <label htmlFor="email">Phone Number</label>
                   <PhoneInput
                     placeholder="Enter phone number"
@@ -83,22 +84,19 @@ function Register() {
                 </div>
                 {/* Birthday */}
                 <div className="input-field">
-                  <input
-                    type="date"
-                    className="input"
-                    id="birthday"
-                    required
-                    autocomplete="off"
-                    value="2023-01-01"
-                  />
-                  <label htmlFor="birthday">Birthday</label>
+                  <label htmlFor="date">Date</label>
+                  <br />
+                  <input type="date" className="input" id="date" required />
                 </div>
                 {/* Gender */}
-                <div className="mb-1 mx-2 d-flex">
-                  <label htmlFor="registerGender" className="form-label">
-                    Gender:
-                  </label>
-                  <div className="mx-1 col-3 form-check">
+                <div className="d-flex">
+                  <div className="col-3">
+
+                    <label htmlFor="registerGender" className="form-label">
+                      Gender:
+                    </label>
+                  </div>
+                  <div className="col-3 form-check">
                     <input
                       className="form-check-input"
                       type="checkbox"
@@ -107,7 +105,7 @@ function Register() {
                       required
                     />
                     <label className="form-check-label" htmlFor="checkMale">
-                      Male
+                      Female
                     </label>
                   </div>
                   <div className="col-3 form-check">
@@ -118,7 +116,7 @@ function Register() {
                       value="Female"
                     />
                     <label className="form-check-label" htmlFor="checkFemale">
-                      Female
+                      Male
                     </label>
                   </div>
                   <div className="col-3 form-check">
@@ -133,12 +131,12 @@ function Register() {
                     </label>
                   </div>
                 </div>
-                <div className="input-field">
+                <div className="input-field mx-5">
                   <input type="submit" className="submit" value="Sign Up" />
                 </div>
                 <div className="signin">
                   <span>
-                    Already have an account? <a href="#">Log in here</a>
+                    Already have an account? <Link to='/login'>Log in here</Link>
                   </span>
                 </div>
               </div>

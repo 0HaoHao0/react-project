@@ -3,10 +3,11 @@ import "./Login.scss";
 // Phone input
 import "react-phone-number-input/style.css";
 import PhoneInput from "react-phone-number-input";
+import { Link } from "react-router-dom";
 //Facebooklogin
-import FacebookLogin from "react-facebook-login/dist/facebook-login-render-props";
+// None
 function Login() {
-  const [checkLoginstyle, SetcheckLoginstyle] = useState(1);
+  const [checkLoginStyle, setCheckLoginStyle] = useState(1);
 
   return (
     <div className="login">
@@ -19,14 +20,9 @@ function Login() {
                 alt=""
                 className="img-login"
               />
-              <div className="text">
-                <p>
-                  Hello the community of developers <i>- Achay</i>
-                </p>
-              </div>
             </div>
 
-            {checkLoginstyle === 1 ? (
+            {checkLoginStyle === 1 ? (
               <>
                 <div className="col-md-6 right">
                   <div className="input-box">
@@ -37,7 +33,7 @@ function Login() {
                         className="input"
                         id="email"
                         required
-                        autocomplete="off"
+                        autoComplete="off"
                       />
                       <label htmlFor="email">Email</label>
                     </div>
@@ -50,161 +46,83 @@ function Login() {
                       />
                       <label htmlFor="password">Password</label>
                     </div>
-                    <div className="input-field">
+                    <div className="input-field mx-5">
                       <input type="submit" className="submit" value="Sign In" />
                     </div>
                     {/* Change Style Login  */}
                     <div className="px-4 mb-2 text-center">
-                      <div className="text-muted"> or sign up using </div>
+                      <hr />
+                      <div className="text-muted"> or using </div>
                       <div className="">
-                        {checkLoginstyle === 1 ? (
-                          <>
-                            <div className="d-flex align-items-center justify-content-center">
-                              <div className="mx-5">
-                                <i
-                                  className="fa fa-2x fa-phone"
-                                  onClick={() =>
-                                    SetcheckLoginstyle(checkLoginstyle + 1)
-                                  }
-                                ></i>
-                              </div>
-                              <div className="mx-5">
-                                <i
-                                  className="fa-brands fa-2x fa-facebook"
-                                  onClick={() =>
-                                    SetcheckLoginstyle(checkLoginstyle + 2)
-                                  }
-                                ></i>
-                              </div>
-                            </div>
-                          </>
-                        ) : checkLoginstyle === 2 ? (
-                          <>
-                            <div className="d-flex align-items-center justify-content-center">
-                              <div className="mx-5">
-                                <i
-                                  className="fa fa-2x fa-user"
-                                  onClick={() =>
-                                    SetcheckLoginstyle(checkLoginstyle)
-                                  }
-                                ></i>
-                              </div>
-                              <div className="mx-5">
-                                <i className="fa-brands fa-2x fa-facebook "></i>
-                              </div>
-                            </div>
-                          </>
-                        ) : (
-                          <>
-                            <div className="d-flex align-items-center justify-content-center">
-                              <div className="mx-5">
-                                <i className="fa fa-2x fa-phone "></i>
-                              </div>
-                              <div className="mx-5">
-                                <i className="fa fa-2x fa-user "></i>
-                              </div>
-                            </div>
-                          </>
-                        )}
+                        <div className="d-flex align-items-center justify-content-center">
+                          <div className="mx-5" onClick={() => { setCheckLoginStyle(2) }}>
+                            <i
+                              className="fa-solid fa-2x fa-phone"
+                            ></i>
+                          </div>
+
+                          <div className="mx-5" onClick={() => { setCheckLoginStyle(3) }}>
+                            <i
+                              className="fa-brands fa-2x fa-facebook"
+                            ></i>
+                          </div>
+                        </div>
                       </div>
                     </div>
                     <div className="signin">
                       <span>
-                        Not a member? <a href="#">Register in here</a>
+                        Not a member? <Link to='/register'>Register in here</Link>
                       </span>
                     </div>
                   </div>
                 </div>
               </>
-            ) : checkLoginstyle === 2 ? (
+            ) : checkLoginStyle === 2 ? (
               <>
                 {/* Login Phone */}
 
-                <div className="col-6 px-4">
-                  <div className="text-center mt-5">
-                    <div className="form-phone">
-                      <header className="text-center">Sign In</header>
-                    </div>
-                  </div>
-
-                  <div className="px-4 mb-2">
-                    <div className="mt-5">
-                      <label htmlFor="InputPhone" className="form-label mt-5">
+                <div className="col-md-6 right">
+                  <div className="input-box">
+                    <header>Sign In</header>
+                    <div className="px-4">
+                      <label htmlFor="InputPhone" className="form-label">
                         Phone Number:
                       </label>
 
                       <PhoneInput
                         placeholder="Enter phone number"
                         defaultCountry="VN"
+                        onChange={() => { }}
                       />
 
                       <div id="emailHelp" className="form-text">
                         We'll never share your phone with anyone else.
                       </div>
-                    </div>
 
-                    <button className="btn btn-primary text-center mt-4">
-                      Submit
-                    </button>
-                  </div>
-                  {/* ChangeLogin */}
-                  <div className="px-4 mb-2 text-center">
-                    <div className="text-muted"> or sign up using </div>
-                    <div className="">
-                      {checkLoginstyle === 1 ? (
-                        <>
-                          <div className="d-flex align-items-center justify-content-center">
-                            <div className="mx-5">
-                              <i
-                                className="fa fa-2x fa-phone"
-                                onClick={() =>
-                                  SetcheckLoginstyle(checkLoginstyle + 1)
-                                }
-                              ></i>
-                            </div>
-                            <div className="mx-5">
-                              <i
-                                className="fa-brands fa-2x fa-facebook"
-                                onClick={() =>
-                                  SetcheckLoginstyle(checkLoginstyle + 2)
-                                }
-                              ></i>
-                            </div>
+                      <button className="btn btn-primary text-center mt-4">
+                        Submit
+                      </button>
+                    </div>
+                    {/* ChangeLogin */}
+                    <div className="px-4 mb-2 text-center">
+                      <hr />
+                      <div className="text-muted"> or using </div>
+                      <div className="">
+                        <div className="d-flex align-items-center justify-content-center">
+                          <div className="mx-5" onClick={() => { setCheckLoginStyle(1) }}>
+                            <i
+                              className="fa fa-2x fa-user"
+
+                            ></i>
                           </div>
-                        </>
-                      ) : checkLoginstyle === 2 ? (
-                        <>
-                          <div className="d-flex align-items-center justify-content-center">
-                            <div className="mx-5">
-                              <i
-                                className="fa fa-2x fa-user"
-                                onClick={() =>
-                                  SetcheckLoginstyle(checkLoginstyle - 1)
-                                }
-                              ></i>
-                            </div>
-                            <div className="mx-5">
-                              <i
-                                className="fa-brands fa-2x fa-facebook"
-                                onClick={() =>
-                                  SetcheckLoginstyle(checkLoginstyle + 2)
-                                }
-                              ></i>
-                            </div>
+
+                          <div className="mx-5" onClick={() => { setCheckLoginStyle(3) }}>
+                            <i
+                              className="fa-brands fa-2x fa-facebook"
+                            ></i>
                           </div>
-                        </>
-                      ) : (
-                        <>
-                          <div className="d-flex align-items-center justify-content-center">
-                            <div className="mx-5">
-                              <i className="fa fa-2x fa-phone "></i>
-                            </div>
-                            <div className="mx-5">
-                              <i className="fa fa-2x fa-user "></i>
-                            </div>
-                          </div>
-                        </>
-                      )}
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -213,15 +131,14 @@ function Login() {
               <>
                 {/* Login Facebook */}
 
-                <div className="col-6 px-4">
-                  <div className="text-center">
-                    <div className="form-fb">
-                      <header className="text-center header-fb">Sign In</header>
-                    </div>
-                  </div>
-                  <div className="px-4 mt-5">
-                    <div className="mt-5 text-center">
-                      <FacebookLogin
+                <div className="col-md-6 right">
+                  <div className="input-box">
+
+                    <header>Sign In</header>
+                    <div className="input-field">
+                      <div className=" text-center">
+                        FaceBook
+                        {/* <FacebookLogin
                         className="rounded-pill"
                         appId="505300141422455"
                         autoLoad={true}
@@ -231,77 +148,29 @@ function Login() {
                             <i className="fab fa-facebook"></i> Facebook Login
                           </button>
                         )}
-                      />
+                      /> */}
+                      </div>
                     </div>
-                  </div>
-                  {/* ChangeLogin of Facebook */}
-                  <div className="px-4 mb-2 text-center">
-                    <div className="text-muted"> or sign up using </div>
-                    <div className="">
-                      {checkLoginstyle === 1 ? (
-                        <>
-                          <div className="d-flex align-items-center justify-content-center">
-                            <div className="mx-5">
-                              <i
-                                className="fa fa-2x fa-phone"
-                                onClick={() =>
-                                  SetcheckLoginstyle(checkLoginstyle + 1)
-                                }
-                              ></i>
-                            </div>
-                            <div className="mx-5">
-                              <i
-                                className="fa-brands fa-2x fa-facebook"
-                                onClick={() =>
-                                  SetcheckLoginstyle(checkLoginstyle + 2)
-                                }
-                              ></i>
-                            </div>
+                    {/* ChangeLogin of Facebook */}
+                    <div className="px-4 mb-2 text-center">
+                      <hr />
+                      <div className="text-muted"> or using </div>
+                      <div className="">
+
+                        <div className="d-flex align-items-center justify-content-center">
+                          <div className="mx-5" onClick={() => { setCheckLoginStyle(2) }}>
+                            <i
+                              className="fa fa-2x fa-phone "
+                            ></i>
                           </div>
-                        </>
-                      ) : checkLoginstyle === 2 ? (
-                        <>
-                          <div className="d-flex align-items-center justify-content-center">
-                            <div className="mx-5">
-                              <i
-                                className="fa fa-2x fa-user"
-                                onClick={() =>
-                                  SetcheckLoginstyle(checkLoginstyle)
-                                }
-                              ></i>
-                            </div>
-                            <div className="mx-5">
-                              <i
-                                className="fa-brands fa-2x fa-facebook"
-                                onClick={() =>
-                                  SetcheckLoginstyle(checkLoginstyle + 2)
-                                }
-                              ></i>
-                            </div>
+                          <div className="mx-5" onClick={() => { setCheckLoginStyle(1) }}>
+                            <i
+                              className="fa fa-2x fa-user "
+                            ></i>
                           </div>
-                        </>
-                      ) : (
-                        <>
-                          <div className="d-flex align-items-center justify-content-center">
-                            <div className="mx-5">
-                              <i
-                                className="fa fa-2x fa-phone "
-                                onClick={() =>
-                                  SetcheckLoginstyle(checkLoginstyle - 2)
-                                }
-                              ></i>
-                            </div>
-                            <div className="mx-5">
-                              <i
-                                className="fa fa-2x fa-user "
-                                onClick={() =>
-                                  SetcheckLoginstyle(checkLoginstyle - 1)
-                                }
-                              ></i>
-                            </div>
-                          </div>
-                        </>
-                      )}
+                        </div>
+
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -310,7 +179,7 @@ function Login() {
           </div>
         </div>
       </div>
-    </div>
+    </div >
   );
 }
 

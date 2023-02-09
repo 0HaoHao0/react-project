@@ -1,4 +1,4 @@
-import { NavLink } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import logo from '../../assets/images/logo/Logo-nbg.png'
 import './Header.scss'
 function Header() {
@@ -31,8 +31,8 @@ function Header() {
                     </div>
                     <div className="collapse navbar-collapse" id="navbarResponsive">
                         <ul className="navbar-nav ms-auto">
-                            <button className="btn btn-primary mx-lg-2 my-lg-0 my-sm-2">login</button>
-                            <button className="btn btn-success ">Register</button>
+                            <Link to='/login' className="btn btn-primary mx-lg-2 my-lg-0 my-sm-2">login</Link>
+                            <Link to='/register' className="btn btn-success ">Register</Link>
                         </ul>
                     </div>
                 </div>
