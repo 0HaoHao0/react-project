@@ -1,13 +1,51 @@
 import { useState } from "react";
 import "./Login.scss";
+import logo from '../../assets/images/logo/Logo-lg.png'
 // Phone input
 import "react-phone-number-input/style.css";
 import PhoneInput from "react-phone-number-input";
-import { Link } from "react-router-dom";
+//Router
+import { Link, useNavigate } from "react-router-dom";
 //Facebooklogin
 // None
+//API
+import { login, getUserInfo } from "../../services/authorization/apILogin";
+import axios from "axios";
+
+//Redux
+import { createUser } from "../../redux/features/userSlide";
+import { useDispatch } from "react-redux";
 function Login() {
-  const [checkLoginStyle, setCheckLoginStyle] = useState(1);
+  const [loginStyle, setLoginStyle] = useState(1);
+
+  const dispatch = useDispatch();
+
+  const [userName, setUserName] = useState();
+  const [password, setPassWord] = useState();
+
+  const navigate = useNavigate();
+
+
+  const loginNormal = async () => {
+    const res = await login(userName, password)
+    if (res.status === 200) {
+      // Set header token
+      axios.defaults.headers.common['Authorization'] = "Bearer " + res.data.token;
+      // Get user information 
+      const userInfo = await getUserInfo();
+      // Test
+      dispatch(createUser(userInfo.data))
+      // Set Userinfo and sessionStorage
+      // props.setUserInfo(userInfo.data);
+      // sessionStorage.setItem("userInfo", JSON.stringify(userInfo.data));
+      //Navigate
+      if (userInfo.data.role === "Administrator") {
+        navigate('/admin')
+      }
+
+    }
+
+  }
 
   return (
     <div className="login">
@@ -16,13 +54,13 @@ function Login() {
           <div className="row">
             <div className="col-md-6 side-image">
               <img
-                src="https://images.pexels.com/photos/208474/pexels-photo-208474.jpeg"
-                alt=""
+                src={logo}
+                alt="logo"
                 className="img-login"
               />
             </div>
 
-            {checkLoginStyle === 1 ? (
+            {loginStyle === 1 ? (
               <>
                 <div className="col-md-6 right">
                   <div className="input-box">
@@ -33,7 +71,7 @@ function Login() {
                         className="input"
                         id="email"
                         required
-                        autoComplete="off"
+                        onChange={(e) => { setUserName(e.target.value) }}
                       />
                       <label htmlFor="email">Email</label>
                     </div>
@@ -43,11 +81,13 @@ function Login() {
                         className="input"
                         id="password"
                         required
+                        onChange={(e) => { setPassWord(e.target.value) }}
                       />
                       <label htmlFor="password">Password</label>
                     </div>
                     <div className="input-field mx-5">
-                      <input type="submit" className="submit" value="Sign In" />
+                      <input type="submit" className="submit" value="Sign In"
+                        onClick={() => { loginNormal() }} />
                     </div>
                     {/* Change Style Login  */}
                     <div className="px-4 mb-2 text-center">
@@ -55,13 +95,13 @@ function Login() {
                       <div className="text-muted"> or using </div>
                       <div className="">
                         <div className="d-flex align-items-center justify-content-center">
-                          <div className="mx-5" onClick={() => { setCheckLoginStyle(2) }}>
+                          <div key='phone' className="mx-5" onClick={() => { setLoginStyle(2) }}>
                             <i
                               className="fa-solid fa-2x fa-phone"
                             ></i>
                           </div>
 
-                          <div className="mx-5" onClick={() => { setCheckLoginStyle(3) }}>
+                          <div key='facebook' className="mx-5" onClick={() => { setLoginStyle(3) }}>
                             <i
                               className="fa-brands fa-2x fa-facebook"
                             ></i>
@@ -77,7 +117,7 @@ function Login() {
                   </div>
                 </div>
               </>
-            ) : checkLoginStyle === 2 ? (
+            ) : loginStyle === 2 ? (
               <>
                 {/* Login Phone */}
 
@@ -109,14 +149,13 @@ function Login() {
                       <div className="text-muted"> or using </div>
                       <div className="">
                         <div className="d-flex align-items-center justify-content-center">
-                          <div className="mx-5" onClick={() => { setCheckLoginStyle(1) }}>
+                          <div key='user' className="mx-5" onClick={() => { setLoginStyle(1) }}>
                             <i
                               className="fa fa-2x fa-user"
-
                             ></i>
                           </div>
 
-                          <div className="mx-5" onClick={() => { setCheckLoginStyle(3) }}>
+                          <div key='facebook' className="mx-5" onClick={() => { setLoginStyle(3) }}>
                             <i
                               className="fa-brands fa-2x fa-facebook"
                             ></i>
@@ -158,12 +197,12 @@ function Login() {
                       <div className="">
 
                         <div className="d-flex align-items-center justify-content-center">
-                          <div className="mx-5" onClick={() => { setCheckLoginStyle(2) }}>
+                          <div key='phone' className="mx-5" onClick={() => { setLoginStyle(2) }}>
                             <i
                               className="fa fa-2x fa-phone "
                             ></i>
                           </div>
-                          <div className="mx-5" onClick={() => { setCheckLoginStyle(1) }}>
+                          <div key='user' className="mx-5" onClick={() => { setLoginStyle(1) }}>
                             <i
                               className="fa fa-2x fa-user "
                             ></i>

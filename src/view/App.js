@@ -8,20 +8,45 @@ import Login from './authentication/Login'
 import Register from './authentication/Register';
 
 import PublicRouter from '../router/PublicRouter';
+import axios from 'axios';
+import { useState } from 'react';
+import { useSelector } from 'react-redux';
 
 
 function App() {
+
+
+
+  axios.defaults.baseURL = 'https://localhost:44355/';
+
+  const [userInfo, setUserInfo] = useState(useSelector((state) => state.user));
+
+  const { role } = userInfo || {};
+
+
   return (
     <Routes>
       {/* Home Router */}
       <Route path='*' element={<PublicRouter />}></Route>
       {/* Authencation Router */}
-      <Route path='/login' element={<Login />}></Route>
-      <Route path='/register' element={<Register />}></Route>
+      {!role
+        ? <>
+          <Route path='/login' element={<Login setUserInfo={setUserInfo} />}></Route>
+          <Route path='/register' element={<Register />}></Route>
+        </>
+        : null}
       {/* User Router */}
-      <Route path='/user' element={<UserRouter />}></Route>
+      {role === "Patient"
+        ? <>
+          <Route path='/user' element={<UserRouter />}></Route>
+        </>
+        : null}
       {/* Admin Router */}
-      <Route path='/admin' element={<AdminRouter />}></Route>
+      {role === "Administrator"
+        ? <>
+          <Route path='/admin' element={<AdminRouter />}></Route>
+        </>
+        : null}
     </Routes>
   );
 }

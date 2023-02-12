@@ -4,8 +4,8 @@ import AdminSidebar from "../components/admin/AdminSidebar";
 function AdminRouter() {
     return (
         <>
-            <body class="hold-transition sidebar-mini layout-fixed">
-                <div class="wrapper">
+            <body className="hold-transition sidebar-mini layout-fixed">
+                <div className="wrapper">
 
                     <AdminHeader />
 

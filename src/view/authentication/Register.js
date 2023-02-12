@@ -1,7 +1,9 @@
 import "./Register.scss";
+import logo from '../../assets/images/logo/Logo-lg.png'
 //Phone input
 import "react-phone-number-input/style.css";
 import PhoneInput from "react-phone-number-input";
+//Router
 import { Link } from "react-router-dom";
 function Register() {
   return (
@@ -11,19 +13,14 @@ function Register() {
           <div className="row">
             <div className="col-md-6 side-image">
               <img
-                src="https://images.pexels.com/photos/208474/pexels-photo-208474.jpeg"
+                src={logo}
                 alt=""
                 className="img-left"
               />
-              <div className="text">
-                <p>
-                  Hello the community of developers <i>- Achay</i>
-                </p>
-              </div>
             </div>
             <div className="col-md-6 right">
               <div className="input-box">
-                <header>Create account</header>
+                <header>Create Account</header>
                 {/* Username */}
                 <div className="input-field">
                   <input
@@ -31,7 +28,7 @@ function Register() {
                     className="input"
                     id="username"
                     required
-                    autocomplete="off"
+                    autoComplete="off"
                   />
                   <label htmlFor="Username">UserName</label>
                 </div>
@@ -42,7 +39,7 @@ function Register() {
                     className="input"
                     id="fullname"
                     required
-                    autocomplete="off"
+                    autoComplete="off"
                   />
                   <label htmlFor="fullname">Fullname</label>
                 </div>
@@ -53,7 +50,7 @@ function Register() {
                     className="input"
                     id="password"
                     required
-                    autocomplete="off"
+                    autoComplete="off"
                   />
                   <label htmlFor="password">Password</label>
                 </div>
@@ -80,6 +77,7 @@ function Register() {
                     id="registerPhoneNumber"
                     defaultCountry="VN"
                     required
+                    onChange={() => { }}
                   />
                 </div>
                 {/* Birthday */}
