@@ -33,9 +33,8 @@ function Login() {
       axios.defaults.headers.common['Authorization'] = "Bearer " + res.data.token;
       // Get user information 
       const userInfo = await getUserInfo();
-      // Test
+      // Set Userinfo 
       dispatch(createUser(userInfo.data))
-      // Set Userinfo and sessionStorage
       //Navigate
       if (userInfo.data.role === "Administrator") {
         navigate('/admin')

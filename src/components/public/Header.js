@@ -1,7 +1,21 @@
+import { useDispatch, useSelector } from 'react-redux';
 import { Link, NavLink } from 'react-router-dom';
 import logo from '../../assets/images/logo/Logo-nbg.png'
 import './Header.scss'
+
+// Redux
+import { deleteUser } from '../../redux/features/userSlide';
 function Header() {
+    const user = useSelector((state) => state.user) || {}
+
+
+    const dispatch = useDispatch();
+
+
+
+    const logOut = () => {
+        dispatch(deleteUser());
+    }
     return (<>
         <div className="header">
             <nav className="navbar navbar-expand-lg navbar-light bg-light border-bottom">
@@ -30,10 +44,24 @@ function Header() {
                         </ul>
                     </div>
                     <div className="collapse navbar-collapse" id="navbarResponsive">
-                        <ul className="navbar-nav ms-auto">
-                            <Link to='/login' className="btn btn-primary mx-lg-2 my-lg-0 my-sm-2">login</Link>
-                            <Link to='/register' className="btn btn-success ">Register</Link>
-                        </ul>
+                        {!user.userInfo
+                            ?
+                            <>
+                                <ul className="navbar-nav ms-auto">
+                                    <Link to='/login' className="btn btn-primary mx-lg-2 my-lg-0 my-sm-2">login</Link>
+                                    <Link to='/register' className="btn btn-success ">Register</Link>
+                                </ul>
+                            </>
+                            :
+                            <ul className="navbar-nav ms-auto">
+                                <div className='d-flex align-items-center justify-content-center'>
+                                    Hi, {user.userInfo.fullName}
+                                </div>
+                                <Link to='/' className="btn btn-primary mx-lg-2 my-lg-0 my-sm-2">Profile</Link>
+                                <button className="btn btn-success " onClick={() => logOut()}>Log out</button>
+                            </ul>
+                        }
+
                     </div>
                 </div>
             </nav>

@@ -9,7 +9,6 @@ import Register from './authentication/Register';
 
 import PublicRouter from '../router/PublicRouter';
 import axios from 'axios';
-import { useState } from 'react';
 import { useSelector } from 'react-redux';
 
 
@@ -19,9 +18,9 @@ function App() {
 
   axios.defaults.baseURL = 'https://localhost:44355/';
 
-  const [userInfo, setUserInfo] = useState(useSelector((state) => state.user));
+  const user = useSelector((state) => state.user) || {}
 
-  const { role } = userInfo || {};
+  const { role } = user.userInfo || {};
 
 
   return (
@@ -31,7 +30,7 @@ function App() {
       {/* Authencation Router */}
       {!role
         ? <>
-          <Route path='/login' element={<Login setUserInfo={setUserInfo} />}></Route>
+          <Route path='/login' element={<Login />}></Route>
           <Route path='/register' element={<Register />}></Route>
         </>
         : null}

@@ -10,10 +10,10 @@ export const userSlice = createSlice({
     reducers: {
         createUser: (state, data) => {
             console.log(data.payload);
-            state.userInfo = { ...data.payload }
+            state.userInfo = data.payload
         },
         deleteUser: (state) => {
-            state.userInfo = {}
+            state.userInfo = undefined
         }
     },
 })
