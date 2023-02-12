@@ -36,8 +36,6 @@ function Login() {
       // Test
       dispatch(createUser(userInfo.data))
       // Set Userinfo and sessionStorage
-      // props.setUserInfo(userInfo.data);
-      // sessionStorage.setItem("userInfo", JSON.stringify(userInfo.data));
       //Navigate
       if (userInfo.data.role === "Administrator") {
         navigate('/admin')
