@@ -30,8 +30,9 @@ function Login() {
     if (res.status === 200) {
       // Set header token
       localStorage.setItem("app_token", "Bearer " + res.data.token);
-      axios.defaults.headers.common['Authorization'] = "Bearer " + res.data.token;
-      // Get user information 
+      axios.defaults.headers.common["Authorization"] =
+        "Bearer " + res.data.token;
+      // Get user information
       const userInfo = await getUserInfo();
       // Set Userinfo
       dispatch(createUser(userInfo.data));
@@ -142,7 +143,7 @@ function Login() {
                       <PhoneInput
                         placeholder="Enter phone number"
                         defaultCountry="VN"
-                        onChange={() => { }}
+                        onChange={() => {}}
                       />
 
                       <div id="emailHelp" className="form-text">
