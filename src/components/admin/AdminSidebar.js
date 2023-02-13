@@ -1,14 +1,14 @@
-import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+import { deleteUser } from "../../redux/features/userSlide";
 
 function AdminSidebar() {
-    const navigate = useNavigate()
 
-    const userInfo = useSelector((state) => state.user)
+    const userInfo = useSelector((state) => state.user.userInfo)
 
+    const dispatch = useDispatch()
     const logOut = () => {
-        sessionStorage.removeItem('userInfo')
-        navigate('/login');
+        dispatch(deleteUser())
     }
     return (<>
 
@@ -57,10 +57,10 @@ function AdminSidebar() {
                             </div>
                             <ul className="nav nav-treeview">
                                 <li className="nav-item">
-                                    <a href="pages/charts/chartjs.html" className="nav-link">
+                                    <Link to='/admin/patient' className="nav-link">
                                         <i className="far fa-circle nav-icon" />
-                                        <p>ChartJS</p>
-                                    </a>
+                                        <p>Get All</p>
+                                    </Link>
                                 </li>
                                 <li className="nav-item">
                                     <a href="pages/charts/flot.html" className="nav-link">

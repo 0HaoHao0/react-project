@@ -64,9 +64,9 @@ function AdminHeader() {
                         </div>
                     </li>
                     <li className="nav-item">
-                        <a className="nav-link" data-widget="fullscreen" href="/" role="button">
+                        <span className="nav-link" data-widget="fullscreen" role="button">
                             <i className="fas fa-expand-arrows-alt" />
-                        </a>
+                        </span>
                     </li>
 
                 </ul>

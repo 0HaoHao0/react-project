@@ -1,5 +1,7 @@
+import { Route, Routes } from "react-router";
 import AdminHeader from "../components/admin/AdminHeader";
 import AdminSidebar from "../components/admin/AdminSidebar";
+import PatientGetAll from "../view/admin/patient/PatientGetAll";
 
 function AdminRouter() {
     return (
@@ -12,15 +14,10 @@ function AdminRouter() {
                     <AdminSidebar />
 
 
-                    <div className="content-wrapper">
-                        {/* Content Header */}
-                        <div className="content-header">
-                            <h1 className="">Dash Board</h1>
-                        </div>
-                        {/* Main content */}
-                        <section className="content">
-                            <h1>test</h1>
-                        </section>
+                    <div className="content-wrapper p-4">
+                        <Routes>
+                            <Route path="/patient" element={<PatientGetAll />}></Route>
+                        </Routes>
                     </div>
                 </div>
             </body>

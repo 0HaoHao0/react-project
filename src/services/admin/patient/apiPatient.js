@@ -1,8 +1,13 @@
+import axios from "axios";
+
 export const getAllPatient = async () => {
     let data;
     await axios({
         method: 'get',
-        url: '/api/user/getauthorize',
+        url: '/api/Patient/GetAll',
+        data: {
+            page: 1
+        },
     }).then((response) => {
         data = response;
     }).catch((error) => {

@@ -17,6 +17,8 @@ function App() {
 
 
   axios.defaults.baseURL = 'https://localhost:44355/';
+  axios.defaults.headers.common['Authorization'] = localStorage.getItem('app_token');
+
 
   const user = useSelector((state) => state.user) || {}
 
@@ -37,13 +39,13 @@ function App() {
       {/* User Router */}
       {role === "Patient"
         ? <>
-          <Route path='/user' element={<UserRouter />}></Route>
+          <Route path='/user/*' element={<UserRouter />}></Route>
         </>
         : null}
       {/* Admin Router */}
       {role === "Administrator"
         ? <>
-          <Route path='/admin' element={<AdminRouter />}></Route>
+          <Route path='/admin/*' element={<AdminRouter />}></Route>
         </>
         : null}
     </Routes>
