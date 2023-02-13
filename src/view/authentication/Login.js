@@ -1,6 +1,6 @@
 import { useState } from "react";
 import "./Login.scss";
-import logo from '../../assets/images/logo/Logo-lg.png'
+import logo from "../../assets/images/logo/Logo-lg.png";
 // Phone input
 import "react-phone-number-input/style.css";
 import PhoneInput from "react-phone-number-input";
@@ -25,25 +25,22 @@ function Login() {
 
   const navigate = useNavigate();
 
-
   const loginNormal = async () => {
-    const res = await login(userName, password)
+    const res = await login(userName, password);
     if (res.status === 200) {
       // Set header token
       localStorage.setItem("app_token", "Bearer " + res.data.token);
       axios.defaults.headers.common['Authorization'] = "Bearer " + res.data.token;
       // Get user information 
       const userInfo = await getUserInfo();
-      // Set Userinfo 
-      dispatch(createUser(userInfo.data))
+      // Set Userinfo
+      dispatch(createUser(userInfo.data));
       //Navigate
       if (userInfo.data.role === "Administrator") {
-        navigate('/admin')
+        navigate("/admin");
       }
-
     }
-
-  }
+  };
 
   return (
     <div className="login">
@@ -51,11 +48,7 @@ function Login() {
         <div className="container main">
           <div className="row">
             <div className="col-md-6 side-image">
-              <img
-                src={logo}
-                alt="logo"
-                className="img-login"
-              />
+              <img src={logo} alt="logo" className="img-login" />
             </div>
 
             {loginStyle === 1 ? (
@@ -69,7 +62,9 @@ function Login() {
                         className="input"
                         id="email"
                         required
-                        onChange={(e) => { setUserName(e.target.value) }}
+                        onChange={(e) => {
+                          setUserName(e.target.value);
+                        }}
                       />
                       <label htmlFor="email">Email</label>
                     </div>
@@ -79,13 +74,21 @@ function Login() {
                         className="input"
                         id="password"
                         required
-                        onChange={(e) => { setPassWord(e.target.value) }}
+                        onChange={(e) => {
+                          setPassWord(e.target.value);
+                        }}
                       />
                       <label htmlFor="password">Password</label>
                     </div>
                     <div className="input-field mx-5">
-                      <input type="submit" className="submit" value="Sign In"
-                        onClick={() => { loginNormal() }} />
+                      <input
+                        type="submit"
+                        className="submit"
+                        value="Sign In"
+                        onClick={() => {
+                          loginNormal();
+                        }}
+                      />
                     </div>
                     {/* Change Style Login  */}
                     <div className="px-4 mb-2 text-center">
@@ -93,23 +96,32 @@ function Login() {
                       <div className="text-muted"> or using </div>
                       <div className="">
                         <div className="d-flex align-items-center justify-content-center">
-                          <div key='phone' className="mx-5" onClick={() => { setLoginStyle(2) }}>
-                            <i
-                              className="fa-solid fa-2x fa-phone"
-                            ></i>
+                          <div
+                            key="phone"
+                            className="mx-5"
+                            onClick={() => {
+                              setLoginStyle(2);
+                            }}
+                          >
+                            <i className="fa-solid fa-2x fa-phone"></i>
                           </div>
 
-                          <div key='facebook' className="mx-5" onClick={() => { setLoginStyle(3) }}>
-                            <i
-                              className="fa-brands fa-2x fa-facebook"
-                            ></i>
+                          <div
+                            key="facebook"
+                            className="mx-5"
+                            onClick={() => {
+                              setLoginStyle(3);
+                            }}
+                          >
+                            <i className="fa-brands fa-2x fa-facebook"></i>
                           </div>
                         </div>
                       </div>
                     </div>
                     <div className="signin">
                       <span>
-                        Not a member? <Link to='/register'>Register in here</Link>
+                        Not a member?{" "}
+                        <Link to="/register">Register in here</Link>
                       </span>
                     </div>
                   </div>
@@ -147,16 +159,24 @@ function Login() {
                       <div className="text-muted"> or using </div>
                       <div className="">
                         <div className="d-flex align-items-center justify-content-center">
-                          <div key='user' className="mx-5" onClick={() => { setLoginStyle(1) }}>
-                            <i
-                              className="fa fa-2x fa-user"
-                            ></i>
+                          <div
+                            key="user"
+                            className="mx-5"
+                            onClick={() => {
+                              setLoginStyle(1);
+                            }}
+                          >
+                            <i className="fa fa-2x fa-user"></i>
                           </div>
 
-                          <div key='facebook' className="mx-5" onClick={() => { setLoginStyle(3) }}>
-                            <i
-                              className="fa-brands fa-2x fa-facebook"
-                            ></i>
+                          <div
+                            key="facebook"
+                            className="mx-5"
+                            onClick={() => {
+                              setLoginStyle(3);
+                            }}
+                          >
+                            <i className="fa-brands fa-2x fa-facebook"></i>
                           </div>
                         </div>
                       </div>
@@ -170,7 +190,6 @@ function Login() {
 
                 <div className="col-md-6 right">
                   <div className="input-box">
-
                     <header>Sign In</header>
                     <div className="input-field">
                       <div className=" text-center">
@@ -193,20 +212,26 @@ function Login() {
                       <hr />
                       <div className="text-muted"> or using </div>
                       <div className="">
-
                         <div className="d-flex align-items-center justify-content-center">
-                          <div key='phone' className="mx-5" onClick={() => { setLoginStyle(2) }}>
-                            <i
-                              className="fa fa-2x fa-phone "
-                            ></i>
+                          <div
+                            key="phone"
+                            className="mx-5"
+                            onClick={() => {
+                              setLoginStyle(2);
+                            }}
+                          >
+                            <i className="fa fa-2x fa-phone "></i>
                           </div>
-                          <div key='user' className="mx-5" onClick={() => { setLoginStyle(1) }}>
-                            <i
-                              className="fa fa-2x fa-user "
-                            ></i>
+                          <div
+                            key="user"
+                            className="mx-5"
+                            onClick={() => {
+                              setLoginStyle(1);
+                            }}
+                          >
+                            <i className="fa fa-2x fa-user "></i>
                           </div>
                         </div>
-
                       </div>
                     </div>
                   </div>
@@ -216,7 +241,7 @@ function Login() {
           </div>
         </div>
       </div>
-    </div >
+    </div>
   );
 }
 
