@@ -1,7 +1,7 @@
 import { useState } from "react";
 import "./Contact.scss";
 import { useNavigate } from "react-router-dom";
-import { ContactCreate } from "../../services/Apiconnection/ContactApi";
+import { ContactCreate } from "../../services/public/apiContact";
 function Contact() {
   const [contactName, setContactName] = useState();
   const [contactPhone, setContactPhone] = useState();
