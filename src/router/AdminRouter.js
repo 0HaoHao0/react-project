@@ -1,6 +1,8 @@
 import { Route, Routes } from "react-router";
 import AdminHeader from "../components/admin/AdminHeader";
 import AdminSidebar from "../components/admin/AdminSidebar";
+import ContactDetail from "../view/admin/contact/ContactDetail";
+import ContactGetAll from "../view/admin/contact/ContactGetAll";
 import PatientGetAll from "../view/admin/patient/PatientGetAll";
 
 function AdminRouter() {
@@ -17,6 +19,10 @@ function AdminRouter() {
                     <div className="content-wrapper p-4">
                         <Routes>
                             <Route path="/patient" element={<PatientGetAll />}></Route>
+
+                            {/* Contact */}
+                            <Route path="/contact" element={<ContactGetAll />}></Route>
+                            <Route path="/contact/detail" element={<ContactDetail />}></Route>
                         </Routes>
                     </div>
                 </div>

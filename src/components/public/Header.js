@@ -1,17 +1,22 @@
 import { useDispatch, useSelector } from "react-redux";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import logo from "../../assets/images/logo/Logo-nbg.png";
 import "./Header.scss";
 
 // Redux
 import { deleteUser } from "../../redux/features/userSlide";
+import axios from "axios";
 function Header() {
+  const nagivate = useNavigate();
+
   const user = useSelector((state) => state.user) || {};
 
   const dispatch = useDispatch();
 
   const logOut = () => {
-    dispatch(deleteUser());
+    axios.defaults.headers.common['Authorization'] = "";
+    dispatch(deleteUser())
+    nagivate('/login');
   };
   return (
     <>

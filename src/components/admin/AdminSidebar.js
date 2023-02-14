@@ -1,14 +1,18 @@
+import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { deleteUser } from "../../redux/features/userSlide";
 
 function AdminSidebar() {
+  const nagivate = useNavigate()
 
   const userInfo = useSelector((state) => state.user.userInfo)
 
   const dispatch = useDispatch()
   const logOut = () => {
+    axios.defaults.headers.common['Authorization'] = "";
     dispatch(deleteUser())
+    nagivate('/login');
   }
   return (<>
 
@@ -79,6 +83,23 @@ function AdminSidebar() {
                     <i className="far fa-circle nav-icon" />
                     <p>uPlot</p>
                   </a>
+                </li>
+              </ul>
+            </li>
+            <li className="nav-item">
+              <div className="nav-link text-white ">
+                <i className="nav-icon fas fa-chart-pie" />
+                <p>
+                  Contact
+                  <i className="right fas fa-angle-left" />
+                </p>
+              </div>
+              <ul className="nav nav-treeview">
+                <li className="nav-item">
+                  <Link to='/admin/contact' className="nav-link">
+                    <i className="far fa-circle nav-icon" />
+                    <p>Get All</p>
+                  </Link>
                 </li>
               </ul>
             </li>
