@@ -5,6 +5,17 @@ function PatientGetinfo() {
   const [patientStyle, setPatientStyle] = useState(1);
   let { state } = useLocation();
   console.log(state.value);
+
+  //Convert Date
+  const convertDate = (obj) => {
+    if (obj == null) {
+      return null;
+    } else {
+      let date = obj.split("T")[0];
+
+      return date;
+    }
+  };
   return (
     <>
       <div className="patient-getinfo">
@@ -82,7 +93,9 @@ function PatientGetinfo() {
                     <div className="form-group my-3 row">
                       <label className="fw-bold col-4"> Birth Date :</label>{" "}
                       <div className="col-8 text-left">
-                        <span>{state.value.baseUser.birthDate}</span>
+                        <span>
+                          {convertDate(state.value.baseUser.birthDate)}
+                        </span>
                       </div>
                     </div>
                     <div className="form-group my-3 row">
@@ -158,14 +171,20 @@ function PatientGetinfo() {
                       </label>{" "}
                       <div className="col-8 text-left">
                         <span>
-                          {state.value.medicalRecordFile.lastTimeModified}
+                          {convertDate(
+                            state.value.medicalRecordFile.lastTimeModified
+                          )}
                         </span>
                       </div>
                     </div>
                     <div className="form-group my-3 row">
-                      <label className="fw-bold col-4"> Gender :</label>
+                      <label className="fw-bold col-4"> Time Created :</label>
                       <div className="col-8 text-left">
-                        <span>{state.value.medicalRecordFile.timeCreated}</span>
+                        <span>
+                          {convertDate(
+                            state.value.medicalRecordFile.timeCreated
+                          )}
+                        </span>
                       </div>
                     </div>
                   </div>
