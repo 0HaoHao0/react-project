@@ -4,31 +4,34 @@ import AdminSidebar from "../components/admin/AdminSidebar";
 import ContactDetail from "../view/admin/contact/ContactDetail";
 import ContactGetAll from "../view/admin/contact/ContactGetAll";
 import PatientGetAll from "../view/admin/patient/PatientGetAll";
+import PatientGetinfo from "../view/admin/patient/PatientGetinfo";
 
 function AdminRouter() {
-    return (
-        <>
-            <body className="hold-transition sidebar-mini layout-fixed">
-                <div className="wrapper">
+  return (
+    <>
+      <body className="hold-transition sidebar-mini layout-fixed">
+        <div className="wrapper">
+          <AdminHeader />
 
-                    <AdminHeader />
+          <AdminSidebar />
 
-                    <AdminSidebar />
+          <AdminSidebar />
 
 
-                    <div className="content-wrapper p-4">
-                        <Routes>
-                            <Route path="/patient" element={<PatientGetAll />}></Route>
+          <div className="content-wrapper p-4">
+            <Routes>
+              <Route path="/patient" element={<PatientGetAll />}></Route>
+              <Route path="/patient/info" element={<PatientGetinfo />}></Route>
 
-                            {/* Contact */}
-                            <Route path="/contact" element={<ContactGetAll />}></Route>
-                            <Route path="/contact/detail" element={<ContactDetail />}></Route>
-                        </Routes>
-                    </div>
-                </div>
-            </body>
-        </>
-    );
+              {/* Contact */}
+              <Route path="/contact" element={<ContactGetAll />}></Route>
+              <Route path="/contact/detail" element={<ContactDetail />}></Route>
+            </Routes>
+          </div>
+        </div>
+      </body>
+    </>
+  );
 }
 
 export default AdminRouter;
