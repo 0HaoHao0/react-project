@@ -66,24 +66,7 @@ function AdminSidebar() {
                     <p>Get All</p>
                   </Link>
                 </li>
-                <li className="nav-item">
-                  <a href="pages/charts/flot.html" className="nav-link">
-                    <i className="far fa-circle nav-icon" />
-                    <p>Flot</p>
-                  </a>
-                </li>
-                <li className="nav-item">
-                  <a href="pages/charts/inline.html" className="nav-link">
-                    <i className="far fa-circle nav-icon" />
-                    <p>Inline</p>
-                  </a>
-                </li>
-                <li className="nav-item">
-                  <a href="pages/charts/uplot.html" className="nav-link">
-                    <i className="far fa-circle nav-icon" />
-                    <p>uPlot</p>
-                  </a>
-                </li>
+
               </ul>
             </li>
             <li className="nav-item">

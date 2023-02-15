@@ -72,7 +72,7 @@ function PatientGetAll() {
                       <td>
                         <Link
                           to="info"
-                          state={{ value }}
+                          state={value}
                           className="btn btn-success"
                         >
                           <i class="fa-solid fa-circle-info"></i>

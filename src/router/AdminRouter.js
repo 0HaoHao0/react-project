@@ -4,7 +4,7 @@ import AdminSidebar from "../components/admin/AdminSidebar";
 import ContactDetail from "../view/admin/contact/ContactDetail";
 import ContactGetAll from "../view/admin/contact/ContactGetAll";
 import PatientGetAll from "../view/admin/patient/PatientGetAll";
-import PatientGetinfo from "../view/admin/patient/PatientGetinfo";
+import PatientGetInfo from "../view/admin/patient/PatientGetInfo";
 
 function AdminRouter() {
   return (
@@ -21,7 +21,7 @@ function AdminRouter() {
           <div className="content-wrapper p-4">
             <Routes>
               <Route path="/patient" element={<PatientGetAll />}></Route>
-              <Route path="/patient/info" element={<PatientGetinfo />}></Route>
+              <Route path="/patient/info" element={<PatientGetInfo />}></Route>
 
               {/* Contact */}
               <Route path="/contact" element={<ContactGetAll />}></Route>
