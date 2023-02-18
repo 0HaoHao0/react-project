@@ -1,12 +1,12 @@
 import axios from "axios";
 
-export const getAllPatient = async () => {
+export const getAllPatient = async (page) => {
     let data;
     await axios({
         method: 'get',
         url: '/api/Patient/GetAll',
-        data: {
-            page: 1
+        params: {
+            page: page
         },
     }).then((response) => {
         data = response;

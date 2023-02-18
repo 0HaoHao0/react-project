@@ -15,19 +15,18 @@ import { Link } from "react-router-dom";
 function ContactGetAll() {
     const [contactData, setContactData] = useState();
 
-    const [currentPage, setCurrentPage] = useState(1);
-
-    const [totalPage, setTotalPage] = useState();
+    const currentPage = contactData ? contactData.page : null;
+    const totalPage = contactData ? contactData.total_pages : null;
 
     const loadData = async (page) => {
         const res = await getAllContact(page);
 
         setContactData(res.data);
-        setCurrentPage(res.data.page);
-        setTotalPage(res.data.total_pages);
-        $("#table").dataTable().fnDestroy();
+
 
         $('#table').DataTable({
+            destroy: true,
+            retrieve: true,
             paging: false,
             ordering: false,
         });
@@ -35,7 +34,7 @@ function ContactGetAll() {
     }
 
     useEffect(() => {
-        loadData(1);
+        loadData();
     }, [])
 
     // Pagination

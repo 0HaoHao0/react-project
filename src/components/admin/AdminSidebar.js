@@ -53,7 +53,25 @@ function AdminSidebar() {
             <li className="nav-header">API</li>
             <li className="nav-item">
               <div className="nav-link text-white ">
-                <i className="nav-icon fas fa-chart-pie" />
+                <i className="nav-icon fas fa-user" />
+                <p>
+                  User
+                  <i className="right fas fa-angle-left" />
+                </p>
+              </div>
+              <ul className="nav nav-treeview">
+                <li className="nav-item">
+                  <Link to='/admin/user' className="nav-link">
+                    <i className="far fa-circle nav-icon" />
+                    <p>Get All</p>
+                  </Link>
+                </li>
+
+              </ul>
+            </li>
+            <li className="nav-item">
+              <div className="nav-link text-white ">
+                <i className="nav-icon fas fa-hospital-user" />
                 <p>
                   Patient
                   <i className="right fas fa-angle-left" />
@@ -117,77 +135,7 @@ function AdminSidebar() {
                     <p>Top Navigation + Sidebar</p>
                   </a>
                 </li>
-                <li className="nav-item">
-                  <a href="pages/layout/boxed.html" className="nav-link">
-                    <i className="far fa-circle nav-icon" />
-                    <p>Boxed</p>
-                  </a>
-                </li>
-                <li className="nav-item">
-                  <a href="pages/layout/fixed-sidebar.html" className="nav-link">
-                    <i className="far fa-circle nav-icon" />
-                    <p>Fixed Sidebar</p>
-                  </a>
-                </li>
-                <li className="nav-item">
-                  <a href="pages/layout/fixed-sidebar-custom.html" className="nav-link">
-                    <i className="far fa-circle nav-icon" />
-                    <p>Fixed Sidebar <small>+ Custom Area</small></p>
-                  </a>
-                </li>
-                <li className="nav-item">
-                  <a href="pages/layout/fixed-topnav.html" className="nav-link">
-                    <i className="far fa-circle nav-icon" />
-                    <p>Fixed Navbar</p>
-                  </a>
-                </li>
-                <li className="nav-item">
-                  <a href="pages/layout/fixed-footer.html" className="nav-link">
-                    <i className="far fa-circle nav-icon" />
-                    <p>Fixed Footer</p>
-                  </a>
-                </li>
-                <li className="nav-item">
-                  <a href="pages/layout/collapsed-sidebar.html" className="nav-link">
-                    <i className="far fa-circle nav-icon" />
-                    <p>Collapsed Sidebar</p>
-                  </a>
-                </li>
-              </ul>
-            </li>
-            <li className="nav-item">
-              <a href="/" className="nav-link">
-                <i className="nav-icon fas fa-chart-pie" />
-                <p>
-                  Charts
-                  <i className="right fas fa-angle-left" />
-                </p>
-              </a>
-              <ul className="nav nav-treeview">
-                <li className="nav-item">
-                  <a href="pages/charts/chartjs.html" className="nav-link">
-                    <i className="far fa-circle nav-icon" />
-                    <p>ChartJS</p>
-                  </a>
-                </li>
-                <li className="nav-item">
-                  <a href="pages/charts/flot.html" className="nav-link">
-                    <i className="far fa-circle nav-icon" />
-                    <p>Flot</p>
-                  </a>
-                </li>
-                <li className="nav-item">
-                  <a href="pages/charts/inline.html" className="nav-link">
-                    <i className="far fa-circle nav-icon" />
-                    <p>Inline</p>
-                  </a>
-                </li>
-                <li className="nav-item">
-                  <a href="pages/charts/uplot.html" className="nav-link">
-                    <i className="far fa-circle nav-icon" />
-                    <p>uPlot</p>
-                  </a>
-                </li>
+
               </ul>
             </li>
 

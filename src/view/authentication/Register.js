@@ -77,7 +77,7 @@ function Register() {
                     id="registerPhoneNumber"
                     defaultCountry="VN"
                     required
-                    onChange={() => { }}
+                    onChange={(e) => { console.log(e); }}
                   />
                 </div>
                 {/* Birthday */}

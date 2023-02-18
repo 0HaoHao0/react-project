@@ -5,21 +5,25 @@ import ContactDetail from "../view/admin/contact/ContactDetail";
 import ContactGetAll from "../view/admin/contact/ContactGetAll";
 import PatientGetAll from "../view/admin/patient/PatientGetAll";
 import PatientGetInfo from "../view/admin/patient/PatientGetInfo";
+import UserDetail from "../view/admin/user/UserDetail";
+import UserGetAll from "../view/admin/user/UserGetAll";
 
 function AdminRouter() {
   return (
     <>
-      <body className="hold-transition sidebar-mini layout-fixed">
+      <body className="hold-transition sidebar-mini">
         <div className="wrapper">
           <AdminHeader />
 
           <AdminSidebar />
 
-          <AdminSidebar />
-
-
           <div className="content-wrapper p-4">
             <Routes>
+              {/* User */}
+              <Route path="/user" element={<UserGetAll />}></Route>
+              <Route path="/user/detail" element={<UserDetail />}></Route>
+
+              {/* Patient */}
               <Route path="/patient" element={<PatientGetAll />}></Route>
               <Route path="/patient/info" element={<PatientGetInfo />}></Route>
 

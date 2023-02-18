@@ -9,15 +9,22 @@ import "datatables.net-dt/js/dataTables.dataTables.min.mjs";
 import "datatables.net-dt/css/jquery.dataTables.min.css";
 import $ from "jquery";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
 function PatientGetAll() {
   const [patientData, setPatientData] = useState();
 
-  const loadData = async () => {
-    const res = await getAllPatient();
+  const currentPage = patientData ? patientData.page : null;
+  const totalPage = patientData ? patientData.total_pages : null;
+
+
+  const loadData = async (page) => {
+    const res = await getAllPatient(page);
 
     setPatientData(res.data);
 
-    $("#table").DataTable({
+    $('#table').DataTable({
+      destroy: true,
+      retrieve: true,
       paging: false,
       ordering: false,
     });
@@ -25,11 +32,37 @@ function PatientGetAll() {
 
   useEffect(() => {
     loadData();
-    return () => {
-      $("#table").dataTable().fnDestroy();
-    };
   }, []);
 
+
+  // Pagination
+  const peviousPage = () => {
+    loadData(currentPage - 1);
+  }
+  const nextPage = (e) => {
+    loadData(currentPage + 1);
+  }
+  const enterPage = (e) => {
+    if (e.keyCode === 13) {
+      if (e.target.value >= -9999999 && e.target.value <= 9999999) {
+        if (e.target.value < 1) {
+          toast.error("Page must larger than 1!")
+
+        }
+        else if (e.target.value > totalPage) {
+          toast.error("Max Page is " + totalPage)
+        }
+        else {
+          loadData(e.target.value);
+          e.target.value = "";
+          e.target.blur();
+        }
+      }
+      else {
+        toast.error("Input in wrong format!");
+      }
+    }
+  }
   return (
     <>
       <div>
@@ -83,10 +116,12 @@ function PatientGetAll() {
                 </tbody>
               </table>
             </div>
-
             <Pagiation
               page={patientData.page}
               total_pages={patientData.total_pages}
+              previousPage={peviousPage}
+              nextPage={nextPage}
+              enterPage={enterPage}
             />
           </>
         )}

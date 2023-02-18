@@ -9,6 +9,8 @@ function PatientGetInfo() {
   let { state } = useLocation();
 
   const [patientInfo, setPatientInfo] = useState(state);
+  const [isLoading, setIsLoading] = useState(false);
+
 
   //Convert Date
   const convertDate = (obj) => {
@@ -24,7 +26,7 @@ function PatientGetInfo() {
   const handleUpdate = () => {
     Swal.fire({
       title: "Select a file",
-      html: '<input type="file" id="custom-file" class="form-control">',
+      html: '<input type="file" id="custom-file" className="form-control">',
       showCancelButton: true,
       confirmButtonText: "Confirm",
       cancelButtonText: "Cancel",
@@ -44,9 +46,11 @@ function PatientGetInfo() {
         let formData = new FormData();
         formData.append("Id", state.id);
         formData.append("File", file);
-
+        setIsLoading(true);
         const res = await updateMedicalRecord(formData);
         setPatientInfo(res.data);
+        setIsLoading(false);
+
         toast.success("Update Successful !");
       }
     });
@@ -57,6 +61,7 @@ function PatientGetInfo() {
         <div>
           <h1>Patient Profile</h1>
         </div>
+        {isLoading && <div className="alert alert-warning">Please wait while we update your medical record...</div>}
         <hr />
         <div className="row">
           <div className="col-lg-3 col-sm-12 form-left">
