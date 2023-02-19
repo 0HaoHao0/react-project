@@ -224,7 +224,7 @@ function Register() {
   return (
     <div className="register">
       <div className="wrapper">
-        <div className="container main">
+        <div className="container main py-5">
           <div className="row">
             <div className="col-md-6 side-image">
               <img src={logo} alt="" className="img-left" />
@@ -342,7 +342,7 @@ function Register() {
                       <p className="error-2 ml-2">{dataError.phoneNumber}</p>
                     )}
                     {/* Gender */}
-                    <div className="d-flex">
+                    <div className="d-flex my-2">
                       <div className="col-3">
                         <label htmlFor="registerGender" className="form-label">
                           Gender:
