@@ -96,7 +96,7 @@ function PatientGetInfo() {
                   />
                   <label className="fw-bold label-avatar">
                     {" "}
-                    Welcome,{" "}
+                    {" "}
                     <span className="span-avatar">
                       {patientInfo.baseUser.userName}
                     </span>{" "}
@@ -169,7 +169,7 @@ function PatientGetInfo() {
                 <div className="form-group my-3 d-flex">
                   <label className="fw-bold label-avatar-2">
                     {" "}
-                    Welcome,{" "}
+                    {" "}
                     <span className="span-avatar">
                       {patientInfo.baseUser.userName}
                     </span>{" "}

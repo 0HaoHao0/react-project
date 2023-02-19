@@ -10,6 +10,7 @@ import Register from './authentication/Register';
 import PublicRouter from '../router/PublicRouter';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
+import Profile from './authentication/Profile';
 
 
 function App() {
@@ -35,7 +36,11 @@ function App() {
           <Route path='/login' element={<Login />}></Route>
           <Route path='/register' element={<Register />}></Route>
         </>
-        : null}
+        :
+        <>
+          <Route path='/profile' element={<Profile />}></Route>
+        </>
+      }
       {/* User Router */}
       {role === "Patient"
         ? <>
