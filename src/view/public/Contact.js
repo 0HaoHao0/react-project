@@ -3,14 +3,101 @@ import "./Contact.scss";
 import { useNavigate } from "react-router-dom";
 import { ContactCreate } from "../../services/public/apiContact";
 function Contact() {
-  const [contactName, setContactName] = useState();
-  const [contactPhone, setContactPhone] = useState();
-  const [contactEmail, setContactEmail] = useState();
-  const [contactContent, setContactContent] = useState();
+  const [contactName, setContactName] = useState("");
+  const [contactPhone, setContactPhone] = useState("");
+  const [contactEmail, setContactEmail] = useState("");
+  const [contactContent, setContactContent] = useState("");
+
+  const [dataError, setDataError] = useState("");
 
   const navigate = useNavigate();
 
-  const handleSubmit = async () => {
+  //Validate contactName
+  const validateContactName = () => {
+    if (contactName.trim() === "") {
+      setDataError((prevState) => ({
+        ...prevState,
+        contactName: "Name cannot be empty!",
+      }));
+    } else if (contactName.length <= 6) {
+      setDataError((prevState) => ({
+        ...prevState,
+        contactName: "Name cannot must be least 6",
+      }));
+    } else {
+      setDataError((prevState) => ({
+        ...prevState,
+        contactName: "",
+      }));
+    }
+  };
+  //Validate contact
+  const validateContactPhone = () => {
+    if (contactPhone.trim() === "") {
+      setDataError((prevState) => ({
+        ...prevState,
+        contactPhone: "Phone cannot be empty!",
+      }));
+    } else if (isNaN(contactPhone)) {
+      setDataError((prevState) => ({
+        ...prevState,
+        contactPhone: "Phone must be a number",
+      }));
+    } else {
+      setDataError((prevState) => ({
+        ...prevState,
+        contactPhone: "",
+      }));
+    }
+  };
+
+  // Validate ContactEmail
+  const validateContactEmail = () => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (contactEmail.trim() === "") {
+      setDataError((prevState) => ({
+        ...prevState,
+        contactEmail: "Email cannot be empty!",
+      }));
+    } else if (!emailRegex.test(contactEmail)) {
+      setDataError((prevState) => ({
+        ...prevState,
+        contactEmail: "Invalid email format!",
+      }));
+    } else {
+      setDataError((prevState) => ({
+        ...prevState,
+        contactEmail: "",
+      }));
+    }
+  };
+
+  //Validate ContactContent
+  const validateContent = () => {
+    if (contactContent.trim() === "") {
+      setDataError((prevState) => ({
+        ...prevState,
+        contactContent: "Content cannot be empty!",
+      }));
+    } else if (contactName.length <= 6) {
+      setDataError((prevState) => ({
+        ...prevState,
+        contactContent: "Content cannot must be least 6",
+      }));
+    } else {
+      setDataError((prevState) => ({
+        ...prevState,
+        contactContent: "",
+      }));
+    }
+  };
+
+  //Handle Submit
+  const handleSubmit = async (e) => {
+    validateContactName();
+    validateContactPhone();
+    validateContactEmail();
+    validateContent();
     const res = await ContactCreate(
       contactName,
       contactPhone,
@@ -51,11 +138,15 @@ function Contact() {
                       type="email"
                       className="form-control"
                       id="Name"
+                      onBlur={validateContactName}
                       placeholder="Nguyen Van A"
                       onChange={(e) => {
                         setContactName(e.target.value);
                       }}
                     />
+                    {dataError.contactName && (
+                      <span className="error">{dataError.contactName}</span>
+                    )}
                   </div>
                   <div className="mb-3">
                     <label htmlFor="Phone" className="form-label">
@@ -64,13 +155,15 @@ function Contact() {
                     <input
                       type="tel"
                       className="form-control"
+                      onBlur={validateContactPhone}
                       id="Phone"
-                      // pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}"
-                      // required
                       onChange={(e) => {
                         setContactPhone(e.target.value);
                       }}
                     />
+                    {dataError.contactPhone && (
+                      <span className="error">{dataError.contactPhone}</span>
+                    )}
                   </div>
                   <div className="mb-3">
                     <label htmlFor="Email" className="form-label">
@@ -78,6 +171,7 @@ function Contact() {
                     </label>
                     <input
                       type="email"
+                      onBlur={validateContactPhone}
                       className="form-control"
                       id="Email"
                       placeholder="name@example.com"
@@ -85,6 +179,9 @@ function Contact() {
                         setContactEmail(e.target.value);
                       }}
                     />
+                    {dataError.contactEmail && (
+                      <span className="error">{dataError.contactEmail}</span>
+                    )}
                   </div>
                   <div className="mb-3">
                     <label htmlFor="Meassage" className="form-label">
@@ -93,11 +190,15 @@ function Contact() {
                     <textarea
                       className="form-control"
                       id="Meassage"
+                      onBlur={validateContent}
                       rows="3"
                       onChange={(e) => {
                         setContactContent(e.target.value);
                       }}
                     ></textarea>
+                    {dataError.contactContent && (
+                      <span className="error">{dataError.contactContent}</span>
+                    )}
                   </div>
 
                   <div className="text-center py-2">

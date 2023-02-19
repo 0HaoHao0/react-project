@@ -22,7 +22,7 @@
     }
 
     .side-image {
-        background-image: url("https://images.pexels.com/photos/14683130/pexels-photo-14683130.jpeg");
+        background-image: url("https://images.pexels.com/photos/3958092/pexels-photo-3958092.jpeg");
         background-position: center;
         background-size: cover;
         background-repeat: no-repeat;
@@ -189,6 +189,16 @@
             max-width: 420px;
             width: 100%;
         }
+    }
+
+    .error {
+        font-size: 16px;
+        color: red;
+        margin-bottom: 5px;
+    }
+
+    .mouse{
+        cursor: pointer;
     }
 
 }

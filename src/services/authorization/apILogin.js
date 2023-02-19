@@ -1,5 +1,5 @@
 import axios from "axios";
-
+import { toast } from "react-toastify";
 export const login = async (userName, password) => {
   let data;
   await axios({
@@ -32,6 +32,7 @@ export const getUserInfo = async () => {
     })
     .catch((error) => {
       // handle error
+      toast.error("Please try again");
       console.log(error);
     });
 

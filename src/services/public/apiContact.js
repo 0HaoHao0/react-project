@@ -32,7 +32,11 @@ export const ContactCreate = async (
         .catch((error) => {
           // handle error
           console.log(error);
-          Swal.fire("Error!!! You can't Submit", "", "error");
+          Swal.fire({
+            icon: "error",
+            title: "Contaction failed",
+            text: "Error, Please try again",
+          });
         });
     },
   }).then((result) => {

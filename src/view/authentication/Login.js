@@ -4,6 +4,8 @@ import logo from "../../assets/images/logo/Logo-lg.png";
 // Phone input
 import "react-phone-number-input/style.css";
 import PhoneInput from "react-phone-number-input";
+//toast
+import { toast } from "react-toastify";
 //Router
 import { Link, useNavigate } from "react-router-dom";
 //Facebooklogin
@@ -19,15 +21,59 @@ function Login() {
   const [loginStyle, setLoginStyle] = useState(1);
 
   const dispatch = useDispatch();
-
-  const [userName, setUserName] = useState();
-  const [password, setPassWord] = useState();
-
   const navigate = useNavigate();
 
-  const loginNormal = async () => {
+  const [userName, setUserName] = useState("");
+  const [password, setPassWord] = useState("");
+  const [dataError, setDataError] = useState("");
+
+  //Validate UserName
+  const validateUserName = () => {
+    if (userName.trim() === "") {
+      setDataError((prevState) => ({
+        ...prevState,
+        userName: "Name cannot be empty!",
+      }));
+    } else if (userName.length < 5) {
+      setDataError((prevState) => ({
+        ...prevState,
+        userName: "Name cannot must be least 6",
+      }));
+    } else {
+      setDataError((prevState) => ({
+        ...prevState,
+        userName: "",
+      }));
+    }
+  };
+
+  //Validate Password
+  const validatePassWord = () => {
+    if (password.trim() === "") {
+      setDataError((prevState) => ({
+        ...prevState,
+        password: "Password cannot be empty!",
+      }));
+    } else if (password.length < 6) {
+      setDataError((prevState) => ({
+        ...prevState,
+        password: "Password must be at least 6 characters long",
+      }));
+    } else {
+      setDataError((prevState) => ({
+        ...prevState,
+        password: "",
+      }));
+    }
+  };
+
+  const loginNormal = async (event) => {
+    validateUserName();
+    validatePassWord();
+
     const res = await login(userName, password);
     if (res.status === 200) {
+      toast.success("Sign in Successful");
       // Set header token
       localStorage.setItem("app_token", "Bearer " + res.data.token);
       axios.defaults.headers.common["Authorization"] =
@@ -63,11 +109,16 @@ function Login() {
                         className="input"
                         id="email"
                         required
+                        value={userName}
+                        onBlur={validateUserName}
                         onChange={(e) => {
                           setUserName(e.target.value);
                         }}
                       />
-                      <label htmlFor="email">Email</label>
+                      <label htmlFor="email">Username</label>
+                      {dataError.userName && (
+                        <span className="error">{dataError.userName}</span>
+                      )}
                     </div>
                     <div className="input-field">
                       <input
@@ -75,11 +126,16 @@ function Login() {
                         className="input"
                         id="password"
                         required
+                        value={password}
+                        onBlur={validatePassWord}
                         onChange={(e) => {
                           setPassWord(e.target.value);
                         }}
                       />
                       <label htmlFor="password">Password</label>
+                      {dataError.password && (
+                        <span className="error">{dataError.password}</span>
+                      )}
                     </div>
                     <div className="input-field mx-5">
                       <input
@@ -99,7 +155,7 @@ function Login() {
                         <div className="d-flex align-items-center justify-content-center">
                           <div
                             key="phone"
-                            className="mx-5"
+                            className="mx-5 mouse"
                             onClick={() => {
                               setLoginStyle(2);
                             }}
@@ -109,7 +165,7 @@ function Login() {
 
                           <div
                             key="facebook"
-                            className="mx-5"
+                            className="mx-5 mouse"
                             onClick={() => {
                               setLoginStyle(3);
                             }}
@@ -162,7 +218,7 @@ function Login() {
                         <div className="d-flex align-items-center justify-content-center">
                           <div
                             key="user"
-                            className="mx-5"
+                            className="mx-5 mouse"
                             onClick={() => {
                               setLoginStyle(1);
                             }}
@@ -172,7 +228,7 @@ function Login() {
 
                           <div
                             key="facebook"
-                            className="mx-5"
+                            className="mx-5 mouse"
                             onClick={() => {
                               setLoginStyle(3);
                             }}
@@ -216,7 +272,7 @@ function Login() {
                         <div className="d-flex align-items-center justify-content-center">
                           <div
                             key="phone"
-                            className="mx-5"
+                            className="mx-5 mouse"
                             onClick={() => {
                               setLoginStyle(2);
                             }}
@@ -225,7 +281,7 @@ function Login() {
                           </div>
                           <div
                             key="user"
-                            className="mx-5"
+                            className="mx-5 mouse"
                             onClick={() => {
                               setLoginStyle(1);
                             }}

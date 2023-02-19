@@ -1,144 +1,471 @@
 import "./Register.scss";
-import logo from '../../assets/images/logo/Logo-lg.png'
+import logo from "../../assets/images/logo/Logo-lg.png";
 //Phone input
 import "react-phone-number-input/style.css";
 import PhoneInput from "react-phone-number-input";
+//toast
+import { toast } from "react-toastify";
 //Router
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useState, useEffect, useRef } from "react";
+import {
+  register,
+  VerifyUserByCode,
+} from "../../services/authorization/apIRegister";
 function Register() {
+  const [userData, setUserData] = useState({
+    userName: "",
+    fullName: "",
+    password: "",
+    confirmpassword: "",
+    email: "",
+    phoneNumber: "",
+    gender: "",
+  });
+  const [userId, setUserId] = useState();
+  const [code, setCode] = useState();
+  const [changeConfirmRegister, setChangeConfirmRegister] = useState(1);
+
+  const [dataError, setDataError] = useState("");
+  const dataRef = useRef();
+  const navigate = useNavigate();
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setUserData((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
+
+  useEffect(() => {
+    if (dataRef.current) {
+      dataRef.current.focus();
+    }
+  }, []);
+  //Validate Username
+  const validateUserName = () => {
+    if (userData.userName.trim() === "") {
+      setDataError((prevState) => ({
+        ...prevState,
+        userName: "Username cannot be empty!",
+      }));
+    } else if (userData.userName.length <= 6) {
+      setDataError((prevState) => ({
+        ...prevState,
+        userName: "Username cannot must be least 6",
+      }));
+    } else {
+      setDataError((prevState) => ({
+        ...prevState,
+        userName: "",
+      }));
+    }
+  };
+  //Validate Fullname
+  const validateFullName = () => {
+    if (userData.fullName.trim() === "") {
+      setDataError((prevState) => ({
+        ...prevState,
+        fullName: "Fullname cannot be empty!",
+      }));
+    } else if (userData.fullName.length <= 6) {
+      setDataError((prevState) => ({
+        ...prevState,
+        fullName: "Fullname cannot must be least 6",
+      }));
+    } else {
+      setDataError((prevState) => ({
+        ...prevState,
+        fullName: "",
+      }));
+    }
+  };
+  //Validate Password
+  const validatePassWord = () => {
+    if (userData.password.trim() === "") {
+      setDataError((prevState) => ({
+        ...prevState,
+        password: "Password cannot be empty!",
+      }));
+    } else if (userData.password !== userData.confirmpassword) {
+      setDataError((prevState) => ({
+        ...prevState,
+        password: "dont match",
+        confirmpassword: "dont match",
+      }));
+    } else if (userData.password.length < 6) {
+      setDataError((prevState) => ({
+        ...prevState,
+        password: "Password must be at least 6 characters long",
+      }));
+    } else {
+      setDataError((prevState) => ({
+        ...prevState,
+        password: "",
+      }));
+    }
+  };
+  // Validate ConfirmPassword
+  const validateConfirmPassWord = () => {
+    if (userData.confirmpassword.trim() === "") {
+      setDataError((prevState) => ({
+        ...prevState,
+        confirmpassword: "password cannot be empty!",
+      }));
+    } else if (userData.password !== userData.confirmpassword) {
+      setDataError((prevState) => ({
+        ...prevState,
+        password: "dont match",
+        confirmpassword: "dont match",
+      }));
+    } else if (userData.password.length < 6) {
+      setDataError((prevState) => ({
+        ...prevState,
+        confirmpassword: "ConfirmPassword must be at least 6 characters long",
+      }));
+    } else {
+      setDataError((prevState) => ({
+        ...prevState,
+        confirmpassword: "",
+      }));
+    }
+  };
+  //Validate Email
+  const validateEmail = () => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (userData.email.trim() === "") {
+      setDataError((prevState) => ({
+        ...prevState,
+        email: "Email cannot be empty!",
+      }));
+    } else if (!emailRegex.test(userData.email)) {
+      setDataError((prevState) => ({
+        ...prevState,
+        email: "Invalid email format!",
+      }));
+    } else {
+      setDataError((prevState) => ({
+        ...prevState,
+        email: "",
+      }));
+    }
+  };
+
+  //Validate Phone
+  const validatePhone = () => {
+    if (userData.phoneNumber.trim() === "") {
+      setDataError((prevState) => ({
+        ...prevState,
+        phoneNumber: "Phone cannot be empty!",
+      }));
+    } else if (isNaN(userData.phoneNumber)) {
+      setDataError((prevState) => ({
+        ...prevState,
+        contactPhone: "Phone must be a number",
+      }));
+    } else {
+      setDataError((prevState) => ({
+        ...prevState,
+        phoneNumber: "",
+      }));
+    }
+  };
+  //Validate Gender
+  const validateGender = () => {
+    if (userData.gender.trim() === "") {
+      setDataError((prevState) => ({
+        ...prevState,
+        gender: "Gender cannot be empty!",
+      }));
+    } else {
+      setDataError((prevState) => ({
+        ...prevState,
+        gender: "",
+      }));
+    }
+    console.log(userData.gender);
+  };
+
+  const handlePhone = (e) => {
+    setUserData((prevState) => ({
+      ...prevState,
+      phoneNumber: e,
+    }));
+    console.log(e);
+  };
+
+  //Submit
+  const handleSubmit = async (e) => {
+    validateUserName();
+    validateFullName();
+    validatePassWord();
+    validateConfirmPassWord();
+    validateEmail();
+    validatePhone();
+    validateGender();
+    const res = await register(userData);
+    if (res.status === 200) {
+      console.log(res);
+      setUserId(res.data.id);
+      toast.success("Create Successful");
+      setChangeConfirmRegister(2);
+    }
+  };
+
+  const handleConfirmCode = async (e) => {
+    const confirm = await VerifyUserByCode(userId, code);
+    if (confirm.status === 200) {
+      toast.success("Confirm Successful");
+      navigate("/login");
+    }
+  };
+
   return (
     <div className="register">
       <div className="wrapper">
         <div className="container main">
           <div className="row">
             <div className="col-md-6 side-image">
-              <img
-                src={logo}
-                alt=""
-                className="img-left"
-              />
+              <img src={logo} alt="" className="img-left" />
             </div>
-            <div className="col-md-6 right">
-              <div className="input-box">
-                <header>Create Account</header>
-                {/* Username */}
-                <div className="input-field">
-                  <input
-                    type="text"
-                    className="input"
-                    id="username"
-                    required
-                    autoComplete="off"
-                  />
-                  <label htmlFor="Username">UserName</label>
-                </div>
-                {/* FullName */}
-                <div className="input-field">
-                  <input
-                    type="text"
-                    className="input"
-                    id="fullname"
-                    required
-                    autoComplete="off"
-                  />
-                  <label htmlFor="fullname">Fullname</label>
-                </div>
-                {/* Password */}
-                <div className="input-field">
-                  <input
-                    type="password"
-                    className="input"
-                    id="password"
-                    required
-                    autoComplete="off"
-                  />
-                  <label htmlFor="password">Password</label>
-                </div>
-                {/* Confirmpassword */}
-                <div className="input-field">
-                  <input
-                    type="password"
-                    className="input"
-                    id="Confirmpassword"
-                    required
-                  />
-                  <label htmlFor="password">Confirm Password</label>
-                </div>
-                {/* Email */}
-                <div className="input-field">
-                  <input type="email" className="input" id="email" required />
-                  <label htmlFor="email">Email</label>
-                </div>
-                {/* Phone number */}
-                <div className=" mx-2">
-                  <label htmlFor="email">Phone Number</label>
-                  <PhoneInput
-                    placeholder="Enter phone number"
-                    id="registerPhoneNumber"
-                    defaultCountry="VN"
-                    required
-                    onChange={(e) => { console.log(e); }}
-                  />
-                </div>
-                {/* Birthday */}
-                <div className="input-field">
-                  <label htmlFor="date">Date</label>
-                  <br />
-                  <input type="date" className="input" id="date" required />
-                </div>
-                {/* Gender */}
-                <div className="d-flex">
-                  <div className="col-3">
+            {changeConfirmRegister === 1 ? (
+              <>
+                <div className="col-md-6 right">
+                  <div className="input-box">
+                    <h1 className="header-1 py-3">Sign Up</h1>
+                    {/* Username */}
+                    <div className="input-field">
+                      <input
+                        type="text"
+                        className="input"
+                        id="username"
+                        required
+                        autoComplete="off"
+                        name="userName"
+                        onBlur={validateUserName}
+                        ref={dataRef}
+                        onChange={(e) => handleChange(e)}
+                      />
+                      <label htmlFor="Username">UserName</label>
+                      {dataError.userName && (
+                        <span className="error">{dataError.userName}</span>
+                      )}
+                    </div>
+                    {/* FullName */}
+                    <div className="input-field">
+                      <input
+                        type="text"
+                        className="input"
+                        id="fullname"
+                        required
+                        autoComplete="off"
+                        name="fullName"
+                        onBlur={validateFullName}
+                        ref={dataRef}
+                        onChange={(e) => handleChange(e)}
+                      />
+                      <label htmlFor="fullname">Fullname</label>
+                      {dataError.fullName && (
+                        <span className="error">{dataError.fullName}</span>
+                      )}
+                    </div>
+                    {/* Password */}
+                    <div className="input-field">
+                      <input
+                        type="password"
+                        className="input"
+                        id="password"
+                        required
+                        name="password"
+                        ref={dataRef}
+                        onBlur={validatePassWord}
+                        onChange={(e) => handleChange(e)}
+                        autoComplete="off"
+                      />
+                      <label htmlFor="password">Password</label>
+                      {dataError.password && (
+                        <span className="error">{dataError.password}</span>
+                      )}
+                    </div>
+                    {/* Confirmpassword */}
+                    <div className="input-field">
+                      <input
+                        type="password"
+                        className="input"
+                        id="Confirmpassword"
+                        name="confirmpassword"
+                        ref={dataRef}
+                        onBlur={validateConfirmPassWord}
+                        onChange={(e) => handleChange(e)}
+                        required
+                      />
+                      <label htmlFor="password">Confirm Password</label>
+                      {dataError.confirmpassword && (
+                        <span className="error">
+                          {dataError.confirmpassword}
+                        </span>
+                      )}
+                    </div>
+                    {/* Email */}
+                    <div className="input-field">
+                      <input
+                        type="text"
+                        className="input"
+                        id="email"
+                        required
+                        name="email"
+                        onBlur={validateEmail}
+                        ref={dataRef}
+                        onChange={(e) => handleChange(e)}
+                      />
+                      <label htmlFor="email">Email</label>
+                      {dataError.email && (
+                        <span className="error">{dataError.email}</span>
+                      )}
+                    </div>
+                    {/* Phone number */}
+                    <div className=" mx-2">
+                      <label htmlFor="email">Phone Number</label>
+                      <PhoneInput
+                        placeholder="Enter phone number"
+                        id="registerPhoneNumber"
+                        defaultCountry="VN"
+                        name="phoneNumber"
+                        required
+                        ref={dataRef}
+                        onBlur={validatePhone}
+                        onChange={(e) => handlePhone(e)}
+                      />
+                    </div>
+                    {dataError.phoneNumber && (
+                      <p className="error-2 ml-2">{dataError.phoneNumber}</p>
+                    )}
+                    {/* Gender */}
+                    <div className="d-flex">
+                      <div className="col-3">
+                        <label htmlFor="registerGender" className="form-label">
+                          Gender:
+                        </label>
+                      </div>
 
-                    <label htmlFor="registerGender" className="form-label">
-                      Gender:
-                    </label>
-                  </div>
-                  <div className="col-3 form-check">
-                    <input
-                      className="form-check-input"
-                      type="checkbox"
-                      id="checkMale"
-                      value="Male"
-                      required
-                    />
-                    <label className="form-check-label" htmlFor="checkMale">
-                      Female
-                    </label>
-                  </div>
-                  <div className="col-3 form-check">
-                    <input
-                      className="form-check-input"
-                      type="checkbox"
-                      id="checkFemale"
-                      value="Female"
-                    />
-                    <label className="form-check-label" htmlFor="checkFemale">
-                      Male
-                    </label>
-                  </div>
-                  <div className="col-3 form-check">
-                    <input
-                      className="form-check-input"
-                      type="checkbox"
-                      id="checkOther"
-                      value="Other"
-                    />
-                    <label className="form-check-label" htmlFor="checkOther">
-                      Other
-                    </label>
+                      <div className="col-3 form-check">
+                        <input
+                          className="form-check-input"
+                          type="radio"
+                          id="radioMale"
+                          required
+                          name="gender"
+                          value="male"
+                          onBlur={validateGender}
+                          ref={dataRef}
+                          onChange={(e) => handleChange(e)}
+                        />
+                        <label className="form-check-label" htmlFor="radioMale">
+                          Male
+                        </label>
+                      </div>
+                      <div className="col-3 form-check">
+                        <input
+                          className="form-check-input"
+                          type="radio"
+                          id="radioFemale"
+                          name="gender"
+                          value="female"
+                          onBlur={validateGender}
+                          ref={dataRef}
+                          onChange={(e) => handleChange(e)}
+                        />
+                        <label
+                          className="form-check-label"
+                          htmlFor="radioFemale"
+                        >
+                          Female
+                        </label>
+                      </div>
+                      <div className="col-3 form-check">
+                        <input
+                          className="form-check-input"
+                          type="radio"
+                          id="radioOther"
+                          name="gender"
+                          value="other"
+                          onBlur={validateGender}
+                          ref={dataRef}
+                          onChange={(e) => handleChange(e)}
+                        />
+                        <label
+                          className="form-check-label"
+                          htmlFor="radioOther"
+                        >
+                          Other
+                        </label>
+                      </div>
+                    </div>
+                    {dataError.gender && (
+                      <p className="error-2 ml-2                                                        ">
+                        {dataError.gender}
+                      </p>
+                    )}
+                    <div className="input-field mx-5">
+                      <input
+                        type="submit"
+                        className="submit"
+                        value="Sign Up"
+                        onClick={(e) => handleSubmit(e)}
+                      />
+                    </div>
+                    <div className="signin">
+                      <span>
+                        Already have an account?{" "}
+                        <Link to="/login">Log in here</Link>
+                      </span>
+                    </div>
                   </div>
                 </div>
-                <div className="input-field mx-5">
-                  <input type="submit" className="submit" value="Sign Up" />
+              </>
+            ) : (
+              <>
+                <div className="col-md-6 right">
+                  <div className="input-box">
+                    <header className="header-2">
+                      Email account confirmation
+                    </header>
+                    {/* Code */}
+                    <div className="form-group">
+                      <label htmlFor="inputEmail">Code</label>
+                      <div className="input-group">
+                        <input
+                          type="email"
+                          className="form-control text-center"
+                          id="inputEmail"
+                          value={code}
+                          onChange={(e) => setCode(e.target.value)}
+                          required
+                        />
+                        <div className="input-group-append">
+                          <span className="input-group-text">
+                            <i className="fa fa-envelope"></i>
+                          </span>
+                        </div>
+                      </div>
+                      <div className="invalid-feedback">
+                        Please provide a valid email address.
+                      </div>
+                    </div>
+
+                    <div className="input-field mx-5">
+                      <input
+                        type="submit"
+                        className="btn btn-primary"
+                        value="Confirm"
+                        onClick={(e) => handleConfirmCode(e)}
+                      />
+                    </div>
+                  </div>
                 </div>
-                <div className="signin">
-                  <span>
-                    Already have an account? <Link to='/login'>Log in here</Link>
-                  </span>
-                </div>
-              </div>
-            </div>
+              </>
+            )}
           </div>
         </div>
       </div>
