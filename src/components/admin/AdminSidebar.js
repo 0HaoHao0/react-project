@@ -50,7 +50,7 @@ function AdminSidebar() {
                 </li>
               </ul>
             </li>
-            <li className="nav-header">API</li>
+            <li className="nav-header">API User</li>
             <li className="nav-item">
               <div className="nav-link text-white ">
                 <i className="nav-icon fas fa-user" />
@@ -62,6 +62,24 @@ function AdminSidebar() {
               <ul className="nav nav-treeview">
                 <li className="nav-item">
                   <Link to='/admin/user' className="nav-link">
+                    <i className="far fa-circle nav-icon" />
+                    <p>Get All</p>
+                  </Link>
+                </li>
+
+              </ul>
+            </li>
+            <li className="nav-item">
+              <div className="nav-link text-white ">
+                <i className="nav-icon fas fa-user-doctor" />
+                <p>
+                  Dotor
+                  <i className="right fas fa-angle-left" />
+                </p>
+              </div>
+              <ul className="nav nav-treeview">
+                <li className="nav-item">
+                  <Link to='/admin/doctor' className="nav-link">
                     <i className="far fa-circle nav-icon" />
                     <p>Get All</p>
                   </Link>
@@ -87,6 +105,64 @@ function AdminSidebar() {
 
               </ul>
             </li>
+            <li className="nav-header">API</li>
+            <li className="nav-item">
+              <div className="nav-link text-white ">
+                <i className="nav-icon fas fa-syringe" />
+                <p>
+                  Service
+                  <i className="right fas fa-angle-left" />
+                  <span className="right badge badge-danger">New</span>
+                </p>
+              </div>
+              <ul className="nav nav-treeview">
+                <li className="nav-item">
+                  <Link to='/admin/service' className="nav-link">
+                    <i className="far fa-circle nav-icon" />
+                    <p>Get All</p>
+                  </Link>
+                </li>
+
+              </ul>
+            </li>
+            <li className="nav-item">
+              <div className="nav-link text-white ">
+                <i className="nav-icon fas fa-hammer" />
+                <p>
+                  Device
+                  <i className="right fas fa-angle-left" />
+                  <span className="right badge badge-danger">New</span>
+                </p>
+              </div>
+              <ul className="nav nav-treeview">
+                <li className="nav-item">
+                  <Link to='/admin/device' className="nav-link">
+                    <i className="far fa-circle nav-icon" />
+                    <p>Get All</p>
+                  </Link>
+                </li>
+
+              </ul>
+            </li>
+            <li className="nav-item">
+              <div className="nav-link text-white ">
+                <i className="nav-icon fas fa-door-open" />
+                <p>
+                  Room
+                  <i className="right fas fa-angle-left" />
+                  <span className="right badge badge-danger">New</span>
+                </p>
+              </div>
+              <ul className="nav nav-treeview">
+                <li className="nav-item">
+                  <Link to='/admin/room' className="nav-link">
+                    <i className="far fa-circle nav-icon" />
+                    <p>Get All</p>
+                  </Link>
+                </li>
+
+              </ul>
+            </li>
             <li className="nav-item">
               <div className="nav-link text-white ">
                 <i className="nav-icon fas fa-chart-pie" />
@@ -102,40 +178,6 @@ function AdminSidebar() {
                     <p>Get All</p>
                   </Link>
                 </li>
-              </ul>
-            </li>
-            <li className="nav-item">
-              <a href="pages/widgets.html" className="nav-link">
-                <i className="nav-icon fas fa-th" />
-                <p>
-                  Widgets
-                  <span className="right badge badge-danger">New</span>
-                </p>
-              </a>
-            </li>
-            <li className="nav-item">
-              <a href="/" className="nav-link">
-                <i className="nav-icon fas fa-copy" />
-                <p>
-                  Layout Options
-                  <i className="fas fa-angle-left right" />
-                  <span className="badge badge-info right">6</span>
-                </p>
-              </a>
-              <ul className="nav nav-treeview">
-                <li className="nav-item">
-                  <a href="pages/layout/top-nav.html" className="nav-link">
-                    <i className="far fa-circle nav-icon" />
-                    <p>Top Navigation</p>
-                  </a>
-                </li>
-                <li className="nav-item">
-                  <a href="pages/layout/top-nav-sidebar.html" className="nav-link">
-                    <i className="far fa-circle nav-icon" />
-                    <p>Top Navigation + Sidebar</p>
-                  </a>
-                </li>
-
               </ul>
             </li>
 

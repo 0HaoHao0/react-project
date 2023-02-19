@@ -1,4 +1,8 @@
+import { useNavigate } from "react-router-dom";
+
 function AdminHeader() {
+    const navigate = useNavigate();
+
     return (
         <>
             {/* Navbar */}
@@ -9,6 +13,8 @@ function AdminHeader() {
                     <li className="nav-item">
                         <a className="nav-link" data-widget="pushmenu" href="/" role="button"><i className="fas fa-bars" /></a>
                     </li>
+                    <button className="btn btn-danger" onClick={() => { navigate(-1) }}> <i className="fa-solid fa-backward"></i></button>
+
                 </ul>
                 <div className="ml-auto text-center">
                     <h5 className="m-0 p-0">Admin Page</h5>
@@ -20,6 +26,7 @@ function AdminHeader() {
                         <a className="nav-link" data-widget="navbar-search" href="/" role="button">
                             <i className="fas fa-search" />
                         </a>
+
                         <div className="navbar-search-block">
                             <form className="form-inline">
                                 <div className="input-group input-group-sm">

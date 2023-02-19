@@ -70,7 +70,7 @@ function UserGetAll() {
 
     return (
         <>
-            <div>
+            <div className="user-getall">
                 {!userData ? (
                     <>
                         <div>
