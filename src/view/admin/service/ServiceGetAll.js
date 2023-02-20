@@ -81,7 +81,7 @@ function ServiceGetAll() {
 
                         </div>
                         <div className="col-6 d-flex align-items-center justify-content-center">
-                            <button className="btn  btn-success">Create</button>
+                            <Link to='create' className="btn  btn-success">Create</Link>
 
                         </div>
                     </div>
@@ -96,7 +96,7 @@ function ServiceGetAll() {
 
                         </div>
                         <div className="col-6 d-flex align-items-center justify-content-center">
-                            <button className="btn  btn-success">Create</button>
+                            <Link to='create' className="btn  btn-success">Create</Link>
 
                         </div>
                     </div>
@@ -105,22 +105,20 @@ function ServiceGetAll() {
                         <table id="table" className="table table-hover">
                             <thead>
                                 <tr className="bg-dark">
+                                    <th>Id</th>
                                     <th>Service Name</th>
-                                    <th>Full Name</th>
-                                    <th>Email</th>
-                                    <th>Phone Number</th>
-                                    <th>Role</th>
+                                    <th>Service Code</th>
+                                    <th>Price</th>
                                     <th>More</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {serviceData.data.map((value) => (
                                     <tr key={value.id}>
-                                        <td>{value.userName}</td>
-                                        <td>{value.fullName}</td>
-                                        <td>{value.email}</td>
-                                        <td>{value.phoneNumber}</td>
-                                        <td>{value.role}</td>
+                                        <td>{value.id}</td>
+                                        <td>{value.serviceName}</td>
+                                        <td>{value.serviceCode}</td>
+                                        <td>{value.price}</td>
                                         <td>
                                             <Link
                                                 to="detail"

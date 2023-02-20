@@ -33,6 +33,22 @@ export const getRoomTypes = async () => {
     return data;
 }
 
+export const getRoom = async () => {
+    let data;
+    await axios({
+        method: 'get',
+        url: '/api/SelectBoxItems/GetRooms',
+    }).then((response) => {
+        data = response;
+    }).catch((error) => {
+        // handle error
+        console.log(error);
+    })
+
+    return data;
+}
+
+
 export const createRoom = async (Data) => {
     let data;
     await axios({

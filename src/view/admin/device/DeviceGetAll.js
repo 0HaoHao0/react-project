@@ -81,8 +81,7 @@ function DeviceGetAll() {
 
                         </div>
                         <div className="col-6 d-flex align-items-center justify-content-center">
-                            <button className="btn  btn-success">Create</button>
-
+                            <Link to='create' className="btn  btn-success">Create</Link>
                         </div>
                     </div>
                     <hr />
@@ -96,7 +95,7 @@ function DeviceGetAll() {
 
                         </div>
                         <div className="col-6 d-flex align-items-center justify-content-center">
-                            <button className="btn  btn-success">Create</button>
+                            <Link to='create' className="btn  btn-success">Create</Link>
 
                         </div>
                     </div>
@@ -105,22 +104,21 @@ function DeviceGetAll() {
                         <table id="table" className="table table-hover">
                             <thead>
                                 <tr className="bg-dark">
+
+                                    <th>Device Id</th>
                                     <th>Device Name</th>
-                                    <th>Full Name</th>
-                                    <th>Email</th>
-                                    <th>Phone Number</th>
-                                    <th>Role</th>
+                                    <th>Device Value</th>
+                                    <th>Room Code</th>
                                     <th>More</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {deviceData.data.map((value) => (
                                     <tr key={value.id}>
-                                        <td>{value.userName}</td>
-                                        <td>{value.fullName}</td>
-                                        <td>{value.email}</td>
-                                        <td>{value.phoneNumber}</td>
-                                        <td>{value.role}</td>
+                                        <td>{value.id}</td>
+                                        <td>{value.deviceName}</td>
+                                        <td>{value.deviceValue}</td>
+                                        <td>{value.room.roomCode}</td>
                                         <td>
                                             <Link
                                                 to="detail"

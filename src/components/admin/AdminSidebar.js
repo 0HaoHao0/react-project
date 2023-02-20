@@ -150,7 +150,7 @@ function AdminSidebar() {
                 <p>
                   Room
                   <i className="right fas fa-angle-left" />
-                  <span className="right badge badge-danger">New</span>
+                  {/* <span className="right badge badge-danger">New</span> */}
                 </p>
               </div>
               <ul className="nav nav-treeview">

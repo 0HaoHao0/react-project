@@ -43,7 +43,10 @@ function RoomCreate() {
     };
 
     const handleCreateRoom = async () => {
-        if (!dataError.roomCode && !dataError.roomType && !dataError.description) {
+        if (!roomData.roomCode || (roomData.roomType !== 0 && roomData.roomType !== 1) || !roomData.description) {
+            toast.error("Please Fill In All Input !")
+        }
+        else {
             const res = await createRoom(roomData);
             if (res.status === 200) {
                 toast.success("Create Room Success")
@@ -52,9 +55,6 @@ function RoomCreate() {
             else {
                 toast.error("Create Room Fail !")
             }
-        }
-        else {
-            toast.error("Please Fill In All Input !")
         }
     }
 
@@ -90,12 +90,11 @@ function RoomCreate() {
             <div className="row">
                 <div className="col-lg-6 col-sm-12 mb-3">
                     <label htmlFor="roomCode" className="form-label">Room Code: </label>
-
                     <input type="text" className={`form-control  ${isTouched.roomCode && (dataError.roomCode ? "is-invalid" : "is-valid")}`}
                         id="roomCode" name="roomCode" placeholder="R001 - (Room 001)"
                         onBlur={validate} onChange={handleChange} />
                     {dataError.roomCode
-                        ? <div class="invalid-feedback">
+                        ? <div className="invalid-feedback">
                             {dataError.roomCode}
                         </div>
                         : null}
@@ -112,7 +111,7 @@ function RoomCreate() {
                         ))}
                     </select>
                     {dataError.roomType
-                        ? <div class="invalid-feedback">
+                        ? <div className="invalid-feedback">
                             {dataError.roomType}
                         </div>
                         : null}
@@ -124,7 +123,7 @@ function RoomCreate() {
                         id="description" name="description" placeholder="Room for ..."
                         onBlur={validate} onChange={handleChange}></textarea>
                     {dataError.description
-                        ? <div class="invalid-feedback">
+                        ? <div className="invalid-feedback">
                             {dataError.description}
                         </div>
                         : null}

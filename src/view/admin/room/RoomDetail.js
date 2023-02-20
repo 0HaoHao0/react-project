@@ -65,12 +65,22 @@ function RoomDetail() {
                     </div>
                 </div>
 
-                <div className="col-12 border-top">
-                    <div className="mb-3">
-                        <label htmlFor="devices" className="form-label">Devices</label>
-                        <input type="text" className="form-control" id="devices" value={state.devices.join(", ")} readOnly />
+
+
+            </div>
+            <div className="row">
+                <h4 className="alert alert-secondary">Device</h4>
+                {state.devices.map((device) =>
+                    <div className="col-4">
+                        <div class="card" >
+                            <div class="card-body">
+                                <h5 >Id: {device.id}</h5>
+                                <p class="card-text">Device Name: {device.deviceName}</p>
+                            </div>
+                        </div>
                     </div>
-                </div>
+
+                )}
 
             </div>
             <div className="row">
