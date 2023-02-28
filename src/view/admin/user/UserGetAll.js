@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getAllUser } from "../../../services/admin/user/apiUser";
+import { getAllUser, lock, unlock } from "../../../services/admin/user/apiUser";
 
 import DataLoading from "../../../components/admin/DataLoading";
 import Pagiation from "../../../components/admin/Pagination";
@@ -10,8 +10,10 @@ import "datatables.net-dt/css/jquery.dataTables.min.css";
 import $ from "jquery";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
+import Swal from "sweetalert2";
 function UserGetAll() {
     const [userData, setUserData] = useState();
+    const [isReset, setIsReset] = useState(1);
 
     const currentPage = userData ? userData.page : null;
     const totalPage = userData ? userData.total_pages : null;
@@ -38,7 +40,60 @@ function UserGetAll() {
         return () => {
 
         }
-    }, []);
+    }, [isReset]);
+
+    //handle
+
+    const handleAccess = (isLock, id) => {
+        if (isLock === false) {
+            Swal.fire({
+                title: 'Lock Information',
+                html:
+                    '<div>' +
+                    '<div class="mb-3">' +
+                    '<label for="reason" class="form-label">Reason</label>' +
+                    '<input type="text" class="form-control" id="reason">' +
+                    '</div>' +
+                    '<div class="mb-3">' +
+                    '<label for="expired" class="form-label">Expired</label>' +
+                    '<input type="date" class="form-control" id="expired">' +
+                    '</div>' +
+                    '</div>',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Submit'
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+                    const htmlContainer = Swal.getHtmlContainer();
+                    const reason = htmlContainer.querySelector('#reason').value;
+                    const expired = htmlContainer.querySelector('#expired').value;
+
+                    //Call api
+                    const res = await lock(reason, expired, id)
+                    toast.success(res.data)
+                    setIsReset(isReset + 1);
+                }
+            })
+        }
+
+        else if (isLock === true) {
+            Swal.fire({
+                title: 'Are You Sure ?',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ok'
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+                    //Call api
+                    const res = await unlock(id)
+                    toast.success(res.data)
+                    setIsReset(isReset - 1);
+                }
+            })
+        }
+    }
 
     // Pagination
     const peviousPage = () => {
@@ -94,7 +149,9 @@ function UserGetAll() {
                                         <th>Email</th>
                                         <th>Phone Number</th>
                                         <th>Role</th>
+                                        <th>Access</th>
                                         <th>More</th>
+
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -105,6 +162,10 @@ function UserGetAll() {
                                             <td>{value.email}</td>
                                             <td>{value.phoneNumber}</td>
                                             <td>{value.role}</td>
+                                            <td>{value.isLock === true
+                                                ? <button className="btn btn-success" onClick={() => handleAccess(value.isLock, value.id)}>Un-Lock</button>
+                                                : <button className="btn btn-danger" onClick={() => handleAccess(value.isLock, value.id)}>Lock</button>
+                                            }</td>
                                             <td>
                                                 <Link
                                                     to="detail"

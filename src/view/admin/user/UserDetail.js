@@ -2,8 +2,7 @@ import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
-import { deleteUser } from "../../../redux/features/userSlide";
-import { updateRole } from "../../../services/admin/user/apiUser";
+import { deleteUser, updateRole } from "../../../services/admin/user/apiUser";
 
 function UserDetail() {
     const { state } = useLocation();
@@ -76,9 +75,14 @@ function UserDetail() {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 // Xử lý khi người dùng bấm OK
-                await deleteUser(state.id);
-                toast.success("Delete Successful!");
-                navigate("/admin/user");
+                const res = await deleteUser(state.id);
+                if (res.status === 200) {
+                    toast.success("Delete Successful!");
+                    navigate("/admin/user");
+                }
+                else {
+                    toast.error("Something was wrong !!!")
+                }
             } else {
                 // Xử lý khi người dùng bấm Cancel
                 toast.info("Delete cancelled");

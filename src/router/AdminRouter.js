@@ -7,6 +7,8 @@ import DeviceCreate from "../view/admin/device/DeviceCreate";
 import DeviceDetail from "../view/admin/device/DeviceDetail";
 import DeviceGetAll from "../view/admin/device/DeviceGetAll";
 import DeviceUpdate from "../view/admin/device/DeviceUpdate";
+import DoctorCreate from "../view/admin/doctor/DoctorCreate";
+import DoctorDetail from "../view/admin/doctor/DoctorDetail";
 import DoctorGetAll from "../view/admin/doctor/DoctorGetAll";
 import PatientGetAll from "../view/admin/patient/PatientGetAll";
 import PatientGetInfo from "../view/admin/patient/PatientGetInfo";
@@ -43,6 +45,8 @@ function AdminRouter() {
 
               {/* Doctor */}
               <Route path="/doctor" element={<DoctorGetAll />}></Route>
+              <Route path="/doctor/create" element={<DoctorCreate />}></Route>
+              <Route path="/doctor/detail" element={<DoctorDetail />}></Route>
 
               {/* Service */}
               <Route path="/service" element={<ServiceGetAll />}></Route>

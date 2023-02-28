@@ -111,8 +111,8 @@ function ServiceUpdate() {
                     // Xử lý khi người dùng bấm OK
                     const fromData = new FormData();
                     fromData.append("Id", serviceData.id)
-                    fromData.append("ServiceCode", serviceData.serviceName)
-                    fromData.append("ServiceName", serviceData.serviceCode)
+                    fromData.append("ServiceCode", serviceData.serviceCode)
+                    fromData.append("ServiceName", serviceData.serviceName)
                     fromData.append("Description", serviceData.description)
                     fromData.append("ImageFile", serviceData.imageFile)
                     fromData.append("Price", serviceData.price)
@@ -203,14 +203,10 @@ function ServiceUpdate() {
                 </div>
                 <div className="col-lg-6 col-sm-12 mb-3">
                     <label htmlFor="imageFile" className="form-label">Image File: </label>
-                    <input type="file" className={`form-control  ${isTouched.imageFile && (dataError.imageFile ? "is-invalid" : "is-valid")}`}
+                    <input type="file" className={`form-control `}
                         id="imageFile" name="imageFile" accept="image/png, image/jpeg"
                         onBlur={validate} onChange={handleImage} />
-                    {dataError.imageFile
-                        ? <div className="invalid-feedback">
-                            {dataError.imageFile}
-                        </div>
-                        : null}
+
 
 
                     <label htmlFor="description" className="form-label">Description: </label>

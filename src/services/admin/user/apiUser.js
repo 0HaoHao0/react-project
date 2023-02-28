@@ -52,3 +52,42 @@ export const deleteUser = async (id) => {
 
     return data;
 }
+
+export const lock = async (reason, expired, id) => {
+    let data;
+    await axios({
+        method: 'post',
+        url: `/api/UserLock/Lock`,
+        data: {
+            userId: id,
+            reason: reason,
+            expired: expired
+        }
+    }).then((response) => {
+        data = response;
+    }).catch((error) => {
+        // handle error
+        console.log(error);
+    })
+
+    return data;
+}
+
+export const unlock = async (id) => {
+    let data;
+    await axios({
+        method: 'post',
+        url: `/api/UserLock/UnLock`,
+        data: {
+            userId: id
+        }
+    }).then((response) => {
+        data = response;
+    }).catch((error) => {
+        // handle error
+        console.log(error);
+    })
+
+    return data;
+}
+

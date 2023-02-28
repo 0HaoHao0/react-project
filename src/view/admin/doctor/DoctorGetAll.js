@@ -91,22 +91,22 @@ function DoctorGetAll() {
                         <table id="table" className="table table-hover">
                             <thead>
                                 <tr className="bg-dark">
-                                    <th>Doctor Name</th>
+                                    <th>UserName</th>
                                     <th>Full Name</th>
                                     <th>Email</th>
                                     <th>Phone Number</th>
-                                    <th>Role</th>
+                                    <th>Major</th>
                                     <th>More</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {doctorData.data.map((value) => (
                                     <tr key={value.id}>
-                                        <td>{value.userName}</td>
-                                        <td>{value.fullName}</td>
-                                        <td>{value.email}</td>
-                                        <td>{value.phoneNumber}</td>
-                                        <td>{value.role}</td>
+                                        <td>{value.baseUser.userName}</td>
+                                        <td>{value.baseUser.fullName}</td>
+                                        <td>{value.baseUser.email}</td>
+                                        <td>{value.baseUser.phoneNumber}</td>
+                                        <td>{value.major}</td>
                                         <td>
                                             <Link
                                                 to="detail"

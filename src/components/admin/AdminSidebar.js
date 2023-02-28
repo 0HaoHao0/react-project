@@ -84,6 +84,13 @@ function AdminSidebar() {
                     <p>Get All</p>
                   </Link>
                 </li>
+                <li className="nav-item">
+                  <Link to='/admin/doctor/create' className="nav-link">
+                    <i className="far fa-circle nav-icon" />
+                    <p>Create</p>
+                    <span className="right badge badge-danger">New</span>
+                  </Link>
+                </li>
 
               </ul>
             </li>
@@ -112,7 +119,6 @@ function AdminSidebar() {
                 <p>
                   Service
                   <i className="right fas fa-angle-left" />
-                  <span className="right badge badge-danger">New</span>
                 </p>
               </div>
               <ul className="nav nav-treeview">
@@ -122,7 +128,13 @@ function AdminSidebar() {
                     <p>Get All</p>
                   </Link>
                 </li>
-
+                <li className="nav-item">
+                  <Link to='/admin/service/create' className="nav-link">
+                    <i className="far fa-circle nav-icon" />
+                    <p>Create</p>
+                    <span className="right badge badge-danger">New</span>
+                  </Link>
+                </li>
               </ul>
             </li>
             <li className="nav-item">
@@ -131,7 +143,6 @@ function AdminSidebar() {
                 <p>
                   Device
                   <i className="right fas fa-angle-left" />
-                  <span className="right badge badge-danger">New</span>
                 </p>
               </div>
               <ul className="nav nav-treeview">
@@ -139,6 +150,13 @@ function AdminSidebar() {
                   <Link to='/admin/device' className="nav-link">
                     <i className="far fa-circle nav-icon" />
                     <p>Get All</p>
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link to='/admin/device/create' className="nav-link">
+                    <i className="far fa-circle nav-icon" />
+                    <p>Create</p>
+                    <span className="right badge badge-danger">New</span>
                   </Link>
                 </li>
 
@@ -150,7 +168,7 @@ function AdminSidebar() {
                 <p>
                   Room
                   <i className="right fas fa-angle-left" />
-                  {/* <span className="right badge badge-danger">New</span> */}
+
                 </p>
               </div>
               <ul className="nav nav-treeview">
@@ -158,6 +176,13 @@ function AdminSidebar() {
                   <Link to='/admin/room' className="nav-link">
                     <i className="far fa-circle nav-icon" />
                     <p>Get All</p>
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link to='/admin/room/create' className="nav-link">
+                    <i className="far fa-circle nav-icon" />
+                    <p>Create</p>
+                    <span className="right badge badge-danger">New</span>
                   </Link>
                 </li>
 

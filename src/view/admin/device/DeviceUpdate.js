@@ -241,14 +241,10 @@ function DeviceUpdate() {
                 </div>
                 <div className="col-lg-6 col-sm-12 mb-3">
                     <label htmlFor="imageFile" className="form-label">Image File: </label>
-                    <input type="file" className={`form-control  ${isTouched.imageFile && (dataError.imageFile ? "is-invalid" : "is-valid")}`}
+                    <input type="file" className={`form-control`}
                         id="imageFile" name="imageFile" accept="image/png, image/jpeg"
                         onBlur={validate} onChange={handleImage} />
-                    {dataError.imageFile
-                        ? <div className="invalid-feedback">
-                            {dataError.imageFile}
-                        </div>
-                        : null}
+
 
 
                     <label htmlFor="description" className="form-label">Description: </label>

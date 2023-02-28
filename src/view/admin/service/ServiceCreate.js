@@ -66,10 +66,8 @@ function ServiceCreate() {
     };
 
     const handleCreateService = async () => {
-        if (!serviceData.DeviceIdList) {
-            toast.error("Please select device !")
-        }
-        else if (!serviceData.ServiceName || !serviceData.ServiceCode || !serviceData.Description || !serviceData.ImageFile || !serviceData.Price) {
+
+        if (!serviceData.ServiceName || !serviceData.ServiceCode || !serviceData.Description || !serviceData.ImageFile || !serviceData.Price) {
             toast.error("Please fill in all Input !")
         }
         else {
@@ -84,7 +82,7 @@ function ServiceCreate() {
             const res = await createService(fromData);
             if (res.status === 200) {
                 toast.success("Create Service Success")
-                navigate('/admin/device')
+                navigate('/admin/service')
             }
             else {
                 toast.error("Create Service Fail !")

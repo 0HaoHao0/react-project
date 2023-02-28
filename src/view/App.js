@@ -11,6 +11,7 @@ import PublicRouter from '../router/PublicRouter';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
 import Profile from './authentication/Profile';
+import Service from './user/Service';
 
 
 function App() {
@@ -39,6 +40,7 @@ function App() {
         :
         <>
           <Route path='/profile' element={<Profile />}></Route>
+          <Route path='/service' element={<Service />}></Route>
         </>
       }
       {/* User Router */}
