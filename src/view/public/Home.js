@@ -1,95 +1,131 @@
+import './Home.scss'
 function Home() {
     return (<>
-        {/* Slide show */}
-        <div id="myCarousel" className="carousel slide" data-bs-ride="carousel">
-            <div className="carousel-indicators">
-                <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="0" className="active" aria-label="Slide 1"></button>
-                <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="1" aria-label="Slide 2" className="" aria-current="true"></button>
-                <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="2" aria-label="Slide 3" className=""></button>
-            </div>
-            <div className="carousel-inner">
-                <div className="carousel-item ">
-                    <svg className="bd-placeholder-img" width="100%" height="100vh" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false"><rect width="100%" height="100%" fill="#777"></rect></svg>
+        <div className='home'>
+            {/* Slide show */}
+            <div className='header-show'>
+                <div className='d-flex  align-items-center' style={{ height: '100vh' }}>
+                    <div className='px-5'>
+                        <div className='text-box p-5'>
 
-                    <div className="container">
-                        <div className="carousel-caption text-start">
-                            <h1>Example headline.</h1>
-                            <p>Some representative placeholder content for the first slide of the carousel.</p>
-                            <p><a className="btn btn-lg btn-primary" href="/">Sign up today</a></p>
-                        </div>
-                    </div>
-                </div>
-                <div className="carousel-item active">
-                    <svg className="bd-placeholder-img" width="100%" height="100vh" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false"><rect width="100%" height="100%" fill="#777"></rect></svg>
-
-                    <div className="container">
-                        <div className="carousel-caption">
-                            <h1>Another example headline.</h1>
-                            <p>Some representative placeholder content for the second slide of the carousel.</p>
-                            <p><a className="btn btn-lg btn-primary" href="/">Learn more</a></p>
-                        </div>
-                    </div>
-                </div>
-                <div className="carousel-item">
-                    <svg className="bd-placeholder-img" width="100%" height="100vh" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false"><rect width="100%" height="100%" fill="#777"></rect></svg>
-
-                    <div className="container">
-                        <div className="carousel-caption text-end">
-                            <h1>One more for good measure.</h1>
-                            <p>Some representative placeholder content for the third slide of this carousel.</p>
-                            <p><a className="btn btn-lg btn-primary" href="/">Browse gallery</a></p>
+                            <h5 >TRUSTED DENVER TECH CENTER DENTISTS</h5>
+                            <h1>
+                                Exceptional care
+                                for all ages
+                            </h1>
+                            <br />
+                            <button className='btn btn-warning fw-bold'>Book Online</button>
                         </div>
                     </div>
                 </div>
             </div>
-            <button className="carousel-control-prev" type="button" data-bs-target="#myCarousel" data-bs-slide="prev">
-                <span className="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span className="visually-hidden">Previous</span>
-            </button>
-            <button className="carousel-control-next" type="button" data-bs-target="#myCarousel" data-bs-slide="next">
-                <span className="carousel-control-next-icon" aria-hidden="true"></span>
-                <span className="visually-hidden">Next</span>
-            </button>
-        </div>
-        {/* Second path */}
-        <div className="p-5  bg-light rounded-3">
-            <div className="container-fluid py-5">
-                <h1 className="display-5 fw-bold">Custom jumbotron</h1>
-                <p className="col-md-8 fs-4">Using a series of utilities, you can create this jumbotron, just like the one in previous versions of Bootstrap. Check out the examples below for how you can remix and restyle it to your liking.</p>
-                <button className="btn btn-primary btn-lg" type="button">Example button</button>
-            </div>
-        </div>
-        {/* Third path */}
-        <div className="row align-items-md-stretch">
-            <div className="col-md-6">
-                <div className="h-100 p-5 text-white bg-dark rounded-3">
-                    <h2>Change the background</h2>
-                    <p>Swap the background-color utility and add a `.text-*` color utility to mix up the jumbotron look. Then, mix and match with additional component themes and more.</p>
-                    <button className="btn btn-outline-light" type="button">Example button</button>
+            {/* Second path */}
+            <div className="p-5  bg-light rounded-3">
+                <div className='row'>
+
+                    <div className="col-lg-8 col-sm-12 py-5">
+                        <h1 className="display-5 fw-bold">Dentistry Done Right</h1>
+                        <p className=" fs-4">Adults and kids, we welcome patients of all ages! Our team is passionate about building lifetime relationships through positive experiences, featuring:</p>
+                        <div className='ms-5'>
+
+                            <p className='border-start border-warning ps-2'>+ Transparent Pricing</p>
+                            <p className='border-start border-warning ps-2'>+ Unparalleled Warranty</p>
+                            <p className='border-start border-warning ps-2'>+ Dedicated Care</p>
+                        </div>
+                        <p className='border-start border-warning fw-bold ps-2'> “Our word is our worth. We promise to do it right, timely, and for a fair price.”</p>
+                    </div>
+                    <div className='col-lg-4 col-sm-12 d-flex align-items-center justify-content-center '>
+                        <img className='w-100 shadow' src="https://www.mouthhealthy.org/-/media/project/ada-organization/ada/mouthhealthy/images/femaledentist_1110x700.jpg?rev=4f53ea8f24ab4313a1b4fc9ac8a5b132&w=1306&hash=3CF43309A893D8DC64CC8331739F7A14" alt="" />
+                    </div>
                 </div>
             </div>
-            <div className="col-md-6">
-                <div className="h-100 p-5 bg-light border rounded-3">
-                    <h2>Add borders</h2>
-                    <p>Or, keep it light and add a border for some added definition to the boundaries of your content. Be sure to look under the hood at the source HTML here as we've adjusted the alignment and sizing of both column's content for equal-height.</p>
-                    <button className="btn btn-outline-secondary" type="button">Example button</button>
+            {/* Third path */}
+            <div className="row align-items-md-stretch">
+                <div className='col-md-12 mx-5'>
+                    <h1 className=''>
+                        <img src="https://www.villagedentaldtc.com/wp-content/uploads/2021/08/noun_Quotation-Marks_479904.svg" alt="..." />
+                        <br />
+                        Kind words from our patients
+
+                    </h1>
+                    <div>
+                        <p className='border-bottom'>
+                            1,000 + 5-star reviews!
+                        </p>
+                    </div>
+                </div>
+                <div className='row'>
+                    <div className="col-lg-6 col-md-12 my-5">
+                        <div className="h-100 m-5 p-5  text-white customer-comment-1  ">
+                            <h2>— Sherryll K.</h2>
+                            <hr />
+                            <p>
+                                <strong>
+
+                                    Unlike other Can Tho dentists, Shiny Teeth Dental takes you where you’re at rather than chastising or shaming. I can’t recommend them highly enough. You will be well cared for!
+                                </strong>
+                            </p>
+
+                        </div>
+                    </div>
+
+                    <div className="col-lg-6 col-md-12 my-5">
+                        <div className="h-100 m-5 p-5  text-white customer-comment-2 " >
+                            <h2 >— Lisa J.</h2>
+                            <hr />
+                            <p>
+                                <strong>
+
+                                    It’s a pleasure to go to the dentist at Shiny Teeth Dental. The office is gorgeous, feels peaceful & clean. The staff has an upbeat attitude. Dr. Zervas is so kind & genuine.
+                                </strong>
+                            </p>
+
+                        </div>
+                    </div>
+                    <div className="col-12 my-5">
+                        <div className=" d-flex align-items-center justify-content-center " >
+                            <div className='customer-comment-3 d-flex align-items-center'>
+                                <div className='text-white p-5'>
+                                    <h2 >— JoAnn B.</h2>
+                                    <hr />
+                                    <p>
+                                        <strong>
+
+                                            Everything about this office is excellent! The staff is friendly and attentive. The assistants make you feel comfortable. Probably the best dentist I have ever seen. Wonderful place! Wonderful staff! Wonderful doctors!
+                                        </strong>
+                                    </p>
+                                </div>
+
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            {/* End */}
+            <div className="row p-5 m-5 align-items-center rounded-3  shadow">
+                <div className="col-lg-7 p-3 p-lg-5 pt-lg-3">
+                    <h1 className="display-4 fw-bold lh-1">Visit Us</h1>
+                    <p className="lead">We’re conveniently located in the Can Tho Center area. Find us on the 4th floor of the Office Park building. Plenty of free parking available.</p>
+                    <h6>
+                        <i className="fa-solid fa-location-dot"></i> 5670 Greenwood Plaza Blvd., Suite 404 Greenwood Village, CO 80111
+                    </h6>
+                    <h6>
+                        <i className="fa-solid fa-clock"></i> Monday–Thursday: 9AM–5PM
+                    </h6>
+                    <br />
+                    <div className="d-grid gap-2 d-md-flex justify-content-md-start mb-4 mb-lg-3">
+                        <button type="button" className="btn btn-primary btn-lg px-4 me-md-2 fw-bold">Contact Us</button>
+                    </div>
+                </div>
+                <div className="col-lg-4 offset-lg-1 p-0 overflow-hidden shadow">
+                    <img className="rounded-lg-3 w-100" src="https://www.villagedentaldtc.com/wp-content/uploads/2021/08/blue-waiting-room-chairs-village-dental-test.jpg" alt="" width="720" />
                 </div>
             </div>
         </div>
-        {/* End */}
-        <div className="row p-4 pb-0 pe-lg-0 pt-lg-5 align-items-center rounded-3  shadow">
-            <div className="col-lg-7 p-3 p-lg-5 pt-lg-3">
-                <h1 className="display-4 fw-bold lh-1">Border hero with cropped image and shadows</h1>
-                <p className="lead">Quickly design and customize responsive mobile-first sites with Bootstrap, the world’s most popular front-end open source toolkit, featuring Sass variables and mixins, responsive grid system, extensive prebuilt components, and powerful JavaScript plugins.</p>
-                <div className="d-grid gap-2 d-md-flex justify-content-md-start mb-4 mb-lg-3">
-                    <button type="button" className="btn btn-primary btn-lg px-4 me-md-2 fw-bold">Primary</button>
-                    <button type="button" className="btn btn-outline-secondary btn-lg px-4">Default</button>
-                </div>
-            </div>
-            <div className="col-lg-4 offset-lg-1 p-0 overflow-hidden shadow">
-                <img className="rounded-lg-3 w-100" src="https://cdn.create.vista.com/api/media/small/477699788/stock-photo-side-view-arabian-doctor-looking" alt="" width="720" />
-            </div>
-        </div>
+
     </>);
 }
 
