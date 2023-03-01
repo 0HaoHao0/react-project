@@ -14,6 +14,7 @@ export const login = async (userName, password) => {
       data = response;
     })
     .catch((error) => {
+      toast.error("username or password is incorrect, Please try again");
       // handle error
       console.log(error);
     });
@@ -33,6 +34,29 @@ export const getUserInfo = async () => {
     .catch((error) => {
       // handle error
       toast.error("Please try again");
+      console.log(error);
+    });
+
+  return data;
+};
+
+export const forgotpassword = async (userName) => {
+  let data;
+  await axios({
+    method: "post",
+    url: "/api/ForgotPassword/ResetPasswordByEmail",
+    params: {
+      prefixUrl: "http://localhost:3000/resetpassword",
+    },
+    data: {
+      userName: userName,
+    },
+  })
+    .then((response) => {
+      data = response;
+    })
+    .catch((error) => {
+      // handle error
       console.log(error);
     });
 

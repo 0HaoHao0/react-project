@@ -176,7 +176,7 @@ function Aboutus() {
                             <img
                               alt=""
                               className="img-fluid move-animation img-member"
-                              src="https://scontent.fsgn5-13.fna.fbcdn.net/v/t39.30808-6/283948474_2913668802266320_491078146547266123_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=174925&_nc_ohc=FpN1ahiGJl4AX86Jgh_&_nc_ht=scontent.fsgn5-13.fna&oh=00_AfDHO4tddZy721MpI_NEYXX-yJYyH-nEwVuNA_MF7kmk8w&oe=63EB84E3"
+                              src="https://scontent.fsgn5-6.fna.fbcdn.net/v/t1.6435-9/95793805_2317530408551811_2212027853883572224_n.jpg?_nc_cat=108&ccb=1-7&_nc_sid=174925&_nc_ohc=zqc03ojZcv0AX_gMXNG&_nc_ht=scontent.fsgn5-6.fna&oh=00_AfAI8KHY7Q-Cy-ZmHwrvUP7gR0wJMhuT0Yx1ePuht_ga1Q&oe=640EDE12"
                             />
                           </div>
                           <div className="info-area">
@@ -204,7 +204,7 @@ function Aboutus() {
                             <img
                               alt=""
                               className="img-fluid move-animation img-member"
-                              src="https://scontent.fsgn5-14.fna.fbcdn.net/v/t39.30808-6/292090471_748534723130923_7716904725897867278_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=174925&_nc_ohc=WUNvuuG_9vMAX9Qw1-4&_nc_ht=scontent.fsgn5-14.fna&oh=00_AfCI5fLlI_vPUaLxeM4UzgDYT6zM-44e4-OtpCVu1is-Ug&oe=63EBEC04"
+                              src="https://scontent.fsgn5-6.fna.fbcdn.net/v/t1.6435-9/95793805_2317530408551811_2212027853883572224_n.jpg?_nc_cat=108&ccb=1-7&_nc_sid=174925&_nc_ohc=zqc03ojZcv0AX_gMXNG&_nc_ht=scontent.fsgn5-6.fna&oh=00_AfAI8KHY7Q-Cy-ZmHwrvUP7gR0wJMhuT0Yx1ePuht_ga1Q&oe=640EDE12"
                             />
                           </div>
                           <div className="info-area">

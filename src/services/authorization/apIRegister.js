@@ -54,3 +54,24 @@ export const VerifyUserByCode = async (userId, code) => {
 
   return data;
 };
+
+export const SendCodeToEmail = async (email) => {
+  let data;
+  await axios({
+    method: "post",
+    url: "/api/Verify/RequiredConfirmAccount",
+    data: {
+      emailRequired: email,
+    },
+  })
+    .then((response) => {
+      data = response;
+    })
+    .catch((error) => {
+      // handle error
+      toast.error("Code error, Please try again!!!");
+      console.log(error);
+    });
+
+  return data;
+};

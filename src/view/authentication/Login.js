@@ -11,7 +11,11 @@ import { Link, useNavigate } from "react-router-dom";
 //Facebooklogin
 // None
 //API
-import { login, getUserInfo } from "../../services/authorization/apILogin";
+import {
+  login,
+  getUserInfo,
+  forgotpassword,
+} from "../../services/authorization/apILogin";
 import axios from "axios";
 
 //Redux
@@ -32,12 +36,12 @@ function Login() {
     if (userName.trim() === "") {
       setDataError((prevState) => ({
         ...prevState,
-        userName: "Name cannot be empty!",
+        userName: "UserName cannot be empty!",
       }));
     } else if (userName.length < 5) {
       setDataError((prevState) => ({
         ...prevState,
-        userName: "Name cannot must be least 6",
+        userName: "UserName cannot must be least 6",
       }));
     } else {
       setDataError((prevState) => ({
@@ -64,6 +68,14 @@ function Login() {
         ...prevState,
         password: "",
       }));
+    }
+  };
+
+  const handleSubmitForgetPassword = async (event) => {
+    validateUserName();
+    const res = await forgotpassword(userName);
+    if (res.status === 200) {
+      toast.success(res.data);
     }
   };
 
@@ -181,6 +193,17 @@ function Login() {
                         <Link to="/register">Register in here</Link>
                       </span>
                     </div>
+                    <div className="signin">
+                      <span>
+                        <Link
+                          onClick={() => {
+                            setLoginStyle(4);
+                          }}
+                        >
+                          Forget password?
+                        </Link>
+                      </span>
+                    </div>
                   </div>
                 </div>
               </>
@@ -241,7 +264,7 @@ function Login() {
                   </div>
                 </div>
               </>
-            ) : (
+            ) : loginStyle === 3 ? (
               <>
                 {/* Login Facebook */}
 
@@ -290,6 +313,43 @@ function Login() {
                           </div>
                         </div>
                       </div>
+                    </div>
+                  </div>
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="col-md-6 right">
+                  <div className="input-box">
+                    <header>Forget Password</header>
+                    <div className="px-4">
+                      <label htmlFor="InputPhone" className="form-label">
+                        UserName:
+                      </label>
+                      <input
+                        type="text"
+                        onBlur={validateUserName}
+                        defaultValue={userName}
+                        onChange={(e) => {
+                          setUserName(e.target.value);
+                        }}
+                        className="form-control"
+                      />
+                      {dataError.userName && (
+                        <span className="error">{dataError.userName}</span>
+                      )}
+                      <div id="emailHelp" className="form-text">
+                        We'll never share your username with anyone else.
+                      </div>
+
+                      <button
+                        className="btn btn-primary text-center mt-4"
+                        onClick={() => {
+                          handleSubmitForgetPassword();
+                        }}
+                      >
+                        Submit
+                      </button>
                     </div>
                   </div>
                 </div>

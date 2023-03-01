@@ -11,7 +11,6 @@ function PatientGetInfo() {
   const [patientInfo, setPatientInfo] = useState(state);
   const [isLoading, setIsLoading] = useState(false);
 
-
   //Convert Date
   const convertDate = (obj) => {
     if (obj == null) {
@@ -61,7 +60,11 @@ function PatientGetInfo() {
         <div>
           <h1>Patient Profile</h1>
         </div>
-        {isLoading && <div className="alert alert-warning">Please wait while we update your medical record...</div>}
+        {isLoading && (
+          <div className="alert alert-warning">
+            Please wait while we update your medical record...
+          </div>
+        )}
         <hr />
         <div className="row">
           <div className="col-lg-3 col-sm-12 form-left">
@@ -95,7 +98,6 @@ function PatientGetInfo() {
                     className="img-avatar"
                   />
                   <label className="fw-bold label-avatar">
-
                     <span className="span-avatar">
                       {patientInfo.baseUser.userName}
                     </span>
@@ -167,7 +169,6 @@ function PatientGetInfo() {
               <div className="col-lg-9 col-sm-12 form-right">
                 <div className="form-group my-3 d-flex">
                   <label className="fw-bold label-avatar-2">
-                    {" "}
                     {" "}
                     <span className="span-avatar">
                       {patientInfo.baseUser.userName}
