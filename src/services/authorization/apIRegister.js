@@ -26,13 +26,17 @@ export const register = async (userData) => {
     })
     .catch((error) => {
       // handle error
+      let res = error.response;
+      let errors = res.data.errors;
+
       Swal.fire({
         icon: "error",
         title: "Registration failed",
-        text: "Error, Please try again",
+        text: errors.join("\n"),
       });
       console.log(error);
     });
+    
   await Swal.hideLoading();
   return data;
 };
