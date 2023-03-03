@@ -4,12 +4,12 @@ function Home() {
         <div className='home'>
             {/* Slide show */}
             <div className='header-show'>
-                <div className='d-flex  align-items-center vh-100'>
+                <div className='d-flex align-items-center vh-100 vw-100'>
                     <div className='px-5'>
                         <div className='text-box p-5'>
 
                             <h5 >TRUSTED DENVER TECH CENTER DENTISTS</h5>
-                            <h1>
+                            <h1 className=" fw-bold">
                                 Exceptional care
                                 for all ages
                             </h1>
@@ -24,7 +24,7 @@ function Home() {
                 <div className='row'>
 
                     <div className="col-lg-8 col-sm-12 py-5">
-                        <h1 className="display-5 fw-bold">Dentistry Done Right</h1>
+                        <h1 className=" fw-bold">Dentistry Done Right</h1>
                         <p className=" fs-4">Adults and kids, we welcome patients of all ages! Our team is passionate about building lifetime relationships through positive experiences, featuring:</p>
                         <div className='ms-5'>
 
@@ -42,12 +42,15 @@ function Home() {
             {/* Third path */}
             <div className="row g-0">
                 <div className='row p-5'>
-                    <h1 className='col'>
+                    <div className='col'>
                         <img src="https://www.villagedentaldtc.com/wp-content/uploads/2021/08/noun_Quotation-Marks_479904.svg" alt="..." />
                         <br />
-                        Kind words from our patients
+                        <h1 className='fw-bold'>
 
-                    </h1>
+                            Kind words from our patients
+                        </h1>
+
+                    </div>
                     <div>
                         <p className='border-bottom'>
                             1,000 + 5-star reviews!
@@ -107,7 +110,7 @@ function Home() {
             {/* End */}
             <div className="row p-5 m-5 align-items-center rounded-3  shadow">
                 <div className="col-lg-7 p-3 p-lg-5 pt-lg-3">
-                    <h1 className="display-4 fw-bold lh-1">Visit Us</h1>
+                    <h1 className='fw-bold'>Visit Us</h1>
                     <p className="lead">We’re conveniently located in the Can Tho Center area. Find us on the 4th floor of the Office Park building. Plenty of free parking available.</p>
                     <h6>
                         <i className="fa-solid fa-location-dot"></i> 5670 Greenwood Plaza Blvd., Suite 404 Greenwood Village, CO 80111

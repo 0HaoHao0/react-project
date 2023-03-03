@@ -1,4 +1,23 @@
 .service {
+    .card {
+        transition: transform 1s ease-in-out;
+    }
+
+    .card:hover {
+        transform: translate3d(10px, -10px, 0px);
+    }
+
+    .card-text {
+        text-align: justify;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        /* number of lines to show */
+        -webkit-box-orient: vertical;
+    }
+
+
     .cover-page {
         background-image: url('https://www.mgeonline.com/wp-content/uploads/2018/03/dentist-chair_4460x4460-1024x683.jpg');
         background-position: center;
@@ -9,4 +28,16 @@
             background-color: rgb(255, 255, 255, 0.8);
         }
     }
+
+    .four-page {
+        .services-box {
+            height: 75vh;
+        }
+
+        .services-box:hover {
+            box-shadow: rgba(6, 24, 44, 0.4) 0px 0px 0px 2px, rgba(6, 24, 44, 0.65) 0px 4px 6px -1px, rgba(255, 255, 255, 0.08) 0px 1px 0px inset;
+        }
+    }
+
+
 }

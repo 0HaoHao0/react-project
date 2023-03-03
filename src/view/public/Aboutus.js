@@ -102,7 +102,7 @@ function Aboutus() {
             <div className="col-md-6 order-2 order-lg-1">
               <i className="fa fa-bar-chart fa-2x mb-3 text-primary"></i>
               <h1 className="fw-bold">The Technologies That Use</h1>
-              <p className="font-italic text-muted mb-4">
+              <p className=" text-muted mb-4">
                 The projects that we include the technologies we use are:
                 Reactjs, ASP.Net Core Api, MicroServices Automatpter.
               </p>
@@ -129,7 +129,7 @@ function Aboutus() {
             <div className="col-md-6">
               <i className="fa fa-leaf fa-2x mb-3 text-primary"></i>
               <h1 className="fw-bold">The Services</h1>
-              <p className="font-italic text-muted mb-4">
+              <p className=" text-muted mb-4">
                 Including services such as: Procedures to remove tartar. Scrape
                 tartar. Teeth polishing. Deep tooth treatment. Deep tooth
                 filling. Dental pulp treatment. Treatment of wisdom teeth.
@@ -149,8 +149,8 @@ function Aboutus() {
           <div className="container py-5">
             <div className="row mb-4">
               <div className="col-lg-5">
-                <h2 className="display-4 font-weight-bold">Our Teams</h2>
-                <p className="font-italic text-muted">
+                <h1 className="display-4 fw-bold">Our Teams</h1>
+                <p className=" text-muted">
                   Lorem ipsum dolor sit amet, consectetur adipisicing elit.
                 </p>
               </div>
