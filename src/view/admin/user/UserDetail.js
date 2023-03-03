@@ -17,11 +17,10 @@ function UserDetail() {
 
     const options = [
         { value: "0", label: "Patient" },
-        { value: "1", label: "Doctor" },
         { value: "2", label: "Receptionist" },
         { value: "3", label: "Technical" },
         { value: "4", label: "Expert" },
-        { value: "4", label: "Administrator" },
+        { value: "5", label: "Administrator" },
     ];
 
 
@@ -171,9 +170,9 @@ function UserDetail() {
                                 <div className="col-3 fw-bold">Confirm Email: </div>
                                 <div className="col-9 text-left ">
                                     {state.emailConfirmed ?
-                                        <button className="btn btn-primary"> Confirmed</button>
+                                        <button className="btn btn-success" disabled><i className="fa-solid fa-check"></i></button>
                                         :
-                                        <button className="btn btn-danger">Not Confirmed</button>
+                                        <button className="btn btn-danger" disabled><i className="fa-solid fa-x"></i></button>
                                     }
                                 </div>
                             </div>

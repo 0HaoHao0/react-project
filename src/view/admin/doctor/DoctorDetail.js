@@ -149,7 +149,7 @@ function DoctorDetail() {
                                         <label htmlFor="full-name">Email Confirm: </label>
                                     </div>
                                     <div className="col-md-8 ">
-                                        <button className={`btn ${!state.baseUser.emailConfirmed ? 'btn-danger' : 'btn-success'}`} disabled> {!state.baseUser.emailConfirmed ? "Not-Confrim" : "Confirm"}</button>
+                                        <button className={`btn ${!state.baseUser.emailConfirmed ? 'btn-danger' : 'btn-success'}`} disabled> {!state.baseUser.emailConfirmed ? <i className="fa-solid fa-x"></i> : <i className="fa-solid fa-check"></i>}</button>
                                     </div>
                                 </div>
                                 {/*  */}
@@ -158,7 +158,7 @@ function DoctorDetail() {
                                         <label htmlFor="full-name">Lock: </label>
                                     </div>
                                     <div className="col-md-8 ">
-                                        <button className={`btn ${!state.baseUser.isLock ? 'btn-success' : 'btn-danger'}`} disabled> {!state.baseUser.isLock ? "Un_Lock" : "Lock"}</button>
+                                        <button className={`btn ${!state.baseUser.isLock ? 'btn-success' : 'btn-danger'}`} disabled> {!state.baseUser.isLock ? <i className="fa-solid fa-lock-open"></i> : <i className="fa-solid fa-lock"></i>}</button>
                                     </div>
                                 </div>
                             </div>

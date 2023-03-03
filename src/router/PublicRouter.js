@@ -11,6 +11,7 @@ import Contact from "../view/public/Contact";
 
 
 import Home from "../view/public/Home";
+import Service from "../view/user/Service";
 
 function PublicRouter() {
 
@@ -42,6 +43,8 @@ function PublicRouter() {
             </>
           )
         }
+        <Route path='services' element={<Service />}></Route>
+
       </Routes>
       <Footer />
     </>

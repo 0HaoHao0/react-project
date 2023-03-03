@@ -4,7 +4,7 @@ function Home() {
         <div className='home'>
             {/* Slide show */}
             <div className='header-show'>
-                <div className='d-flex  align-items-center' style={{ height: '100vh' }}>
+                <div className='d-flex  align-items-center vh-100'>
                     <div className='px-5'>
                         <div className='text-box p-5'>
 
@@ -40,9 +40,9 @@ function Home() {
                 </div>
             </div>
             {/* Third path */}
-            <div className="row align-items-md-stretch">
-                <div className='col-md-12 mx-5'>
-                    <h1 className=''>
+            <div className="row g-0">
+                <div className='row p-5'>
+                    <h1 className='col'>
                         <img src="https://www.villagedentaldtc.com/wp-content/uploads/2021/08/noun_Quotation-Marks_479904.svg" alt="..." />
                         <br />
                         Kind words from our patients
@@ -54,8 +54,8 @@ function Home() {
                         </p>
                     </div>
                 </div>
-                <div className='row'>
-                    <div className="col-lg-6 col-md-12 my-5">
+                <div className='row p-5'>
+                    <div className="col-lg-6 col-md-12 mt-5">
                         <div className="h-100 m-5 p-5  text-white customer-comment-1  ">
                             <h2>— Sherryll K.</h2>
                             <hr />
@@ -69,7 +69,7 @@ function Home() {
                         </div>
                     </div>
 
-                    <div className="col-lg-6 col-md-12 my-5">
+                    <div className="col-lg-6 col-md-12 mt-5">
                         <div className="h-100 m-5 p-5  text-white customer-comment-2 " >
                             <h2 >— Lisa J.</h2>
                             <hr />
@@ -82,7 +82,7 @@ function Home() {
 
                         </div>
                     </div>
-                    <div className="col-12 my-5">
+                    <div className="col-12 mt-5">
                         <div className=" d-flex align-items-center justify-content-center " >
                             <div className='customer-comment-3 d-flex align-items-center'>
                                 <div className='text-white p-5'>

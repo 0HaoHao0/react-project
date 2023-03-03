@@ -4,7 +4,6 @@ import "./App.css";
 import AdminRouter from "../router/AdminRouter";
 import UserRouter from "../router/UserRouter";
 
-import Service from './user/Service';
 import ResetPassword from "./authentication/ResetPassword";
 import Login from './authentication/Login'
 import Register from './authentication/Register';
@@ -14,6 +13,7 @@ import axios from 'axios';
 import { useSelector } from 'react-redux';
 import Profile from './authentication/Profile';
 
+import ResetPassword from "./authentication/ResetPassword";
 
 function App() {
   axios.defaults.baseURL = "https://localhost:44355/";
@@ -29,7 +29,6 @@ function App() {
     <Routes>
       {/* Home Router */}
       <Route path="*" element={<PublicRouter />}></Route>
-      <Route path='service' element={<Service />}></Route>
 
       {
         !user.userInfo && (
