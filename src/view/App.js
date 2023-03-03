@@ -13,8 +13,6 @@ import axios from 'axios';
 import { useSelector } from 'react-redux';
 import Profile from './authentication/Profile';
 
-import ResetPassword from "./authentication/ResetPassword";
-
 function App() {
   axios.defaults.baseURL = "https://localhost:44355/";
   axios.defaults.headers.common["Authorization"] =
