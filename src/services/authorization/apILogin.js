@@ -1,5 +1,4 @@
 import axios from "axios";
-import { toast } from "react-toastify";
 export const login = async (userName, password) => {
   let data;
   await axios({
@@ -14,11 +13,9 @@ export const login = async (userName, password) => {
       data = response;
     })
     .catch((error) => {
-      toast.error("username or password is incorrect, Please try again");
-      // handle error
-      console.log(error);
+      data = error.response;
+      console.log(data);
     });
-
   return data;
 };
 
@@ -32,11 +29,9 @@ export const getUserInfo = async () => {
       data = response;
     })
     .catch((error) => {
-      // handle error
-      toast.error("Please try again");
+      data = error.response;
       console.log(error);
     });
-
   return data;
 };
 
@@ -57,6 +52,7 @@ export const forgotpassword = async (userName) => {
     })
     .catch((error) => {
       // handle error
+      data = error.response;
       console.log(error);
     });
 
