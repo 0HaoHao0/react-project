@@ -1,5 +1,4 @@
 import axios from "axios";
-import { toast } from "react-toastify";
 import Swal from "sweetalert2";
 
 export const register = async (userData) => {
@@ -42,6 +41,7 @@ export const register = async (userData) => {
 };
 export const VerifyUserByCode = async (userId, code) => {
   let data;
+  await Swal.showLoading();
   await axios({
     method: "get",
     url: "/api/Verify/EmailVerifyUser",
@@ -49,33 +49,41 @@ export const VerifyUserByCode = async (userId, code) => {
   })
     .then((response) => {
       data = response;
+      Swal.fire({
+        icon: "success",
+        title: "Email Verify Successfully",
+      });
     })
     .catch((error) => {
       // handle error
-      toast.error("Code error, Please try again!!!");
+      data = error.response;
       console.log(error);
     });
-
   return data;
 };
 
 export const SendCodeToEmail = async (email) => {
   let data;
+  await Swal.showLoading();
   await axios({
     method: "post",
     url: "/api/Verify/RequiredConfirmAccount",
     data: {
-      emailRequired: email,
-    },
+      Email: email
+    }
   })
     .then((response) => {
       data = response;
+      Swal.fire({
+        icon: "success",
+        title: "Successful",
+        text: data.data
+      });
     })
     .catch((error) => {
       // handle error
-      toast.error("Code error, Please try again!!!");
+      data = error.response;
       console.log(error);
     });
-
   return data;
 };

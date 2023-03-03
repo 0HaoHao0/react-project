@@ -21,6 +21,7 @@ import axios from "axios";
 //Redux
 import { createUser } from "../../redux/features/userSlide";
 import { useDispatch } from "react-redux";
+import Swal from "sweetalert2";
 function Login() {
   const [loginStyle, setLoginStyle] = useState(1);
 
@@ -79,25 +80,69 @@ function Login() {
     }
   };
 
-  const loginNormal = async (event) => {
+  const loginNormal = async (e) => {
     validateUserName();
     validatePassWord();
-
+    Swal.showLoading();
     const res = await login(userName, password);
     if (res.status === 200) {
-      toast.success("Sign in Successful");
       // Set header token
       localStorage.setItem("app_token", "Bearer " + res.data.token);
       axios.defaults.headers.common["Authorization"] =
         "Bearer " + res.data.token;
       // Get user information
-      const userInfo = await getUserInfo();
-      // Set Userinfo
-      dispatch(createUser(userInfo.data));
-      //Navigate
-      if (userInfo.data.role === "Administrator") {
-        navigate("/admin");
+      let resonse = await getUserInfo();
+      if(resonse.status !== 200) {
+        return;
       }
+      // Set Userinfo
+      let userInfo = resonse.data;
+      dispatch(createUser(userInfo));
+
+      if (userInfo.role === "Administrator") {
+        navigate("/admin");
+        await Swal.fire({
+          icon: "success",
+          title: "Welcome the administrator!",
+        });
+        return;
+      }
+      if(userInfo.emailConfirmed) {
+        //Navigate
+        if(userInfo.role === "Patient") {
+          navigate("/home");
+        }
+        else {
+          navigate("/home");
+        }
+        await Swal.fire({
+          icon: "success",
+          title: "Sign in Successful",
+        });
+      }
+      else {
+        navigate("/emailconfirm");
+        await Swal.fire({
+          icon: "warning",
+          title: "Welcome, you must verify your account!",
+        });
+      }
+
+    }
+    else if (res.status !== 500) {
+      let message = res.data;
+      Swal.fire({
+        icon: "error",
+        title: "Failed!",
+        text: message,
+      });
+    }
+    else {
+      Swal.fire({
+        icon: "error",
+        title: "Failed!",
+        text: "Something went wrong!",
+      });
     }
   };
 
@@ -119,15 +164,15 @@ function Login() {
                       <input
                         type="text"
                         className="input"
-                        id="email"
-                        required
-                        value={userName}
+                        id="username"
+                        defaultValue={userName}
                         onBlur={validateUserName}
                         onChange={(e) => {
                           setUserName(e.target.value);
                         }}
+                        required
                       />
-                      <label htmlFor="email">Username</label>
+                      <label htmlFor="username">Username</label>
                       {dataError.userName && (
                         <span className="error">{dataError.userName}</span>
                       )}
@@ -138,7 +183,7 @@ function Login() {
                         className="input"
                         id="password"
                         required
-                        value={password}
+                        defaultValue={password}
                         onBlur={validatePassWord}
                         onChange={(e) => {
                           setPassWord(e.target.value);
