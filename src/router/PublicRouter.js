@@ -6,6 +6,7 @@ import Aboutus from "../view/public/Aboutus";
 import Contact from "../view/public/Contact";
 
 import Home from "../view/public/Home";
+import Service from "../view/user/Service";
 
 function PublicRouter() {
   return (
@@ -15,6 +16,8 @@ function PublicRouter() {
         <Route path="*" element={<Home />}></Route>
         <Route path="contact" element={<Contact />}></Route>
         <Route path="aboutus" element={<Aboutus />}></Route>
+        <Route path='services' element={<Service />}></Route>
+
       </Routes>
       <Footer />
     </>

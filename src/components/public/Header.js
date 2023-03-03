@@ -15,6 +15,7 @@ function Header() {
 
   const logOut = () => {
     axios.defaults.headers.common['Authorization'] = "";
+    localStorage.clear();
     dispatch(deleteUser())
     nagivate('/login');
   };

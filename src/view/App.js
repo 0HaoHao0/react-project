@@ -11,7 +11,6 @@ import PublicRouter from '../router/PublicRouter';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
 import Profile from './authentication/Profile';
-import Service from './user/Service';
 import ResetPassword from "./authentication/ResetPassword";
 
 function App() {
@@ -28,9 +27,11 @@ function App() {
       {/* Home Router */}
       <Route path="*" element={<PublicRouter />}></Route>
       {/* Authencation Router */}
+
+
+
       {!role ? (
         <>
-          <Route path='/service' element={<Service />}></Route>
           <Route path="/login" element={<Login />}></Route>
           <Route path="/register" element={<Register />}></Route>
           <Route path="/resetpassword" element={<ResetPassword />}></Route>
