@@ -80,7 +80,7 @@ function UserDetail() {
                     navigate("/admin/user");
                 }
                 else {
-                    toast.error("Something was wrong !!!")
+                    toast.error("Cannot delete this account, you can try lock!");
                 }
             } else {
                 // Xử lý khi người dùng bấm Cancel
