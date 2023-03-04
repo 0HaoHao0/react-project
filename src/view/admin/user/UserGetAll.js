@@ -163,8 +163,10 @@ function UserGetAll() {
                                             <td>{value.phoneNumber}</td>
                                             <td>{value.role}</td>
                                             <td>{value.isLock === true
-                                                ? <button className="btn btn-success" onClick={() => handleAccess(value.isLock, value.id)}>Un-Lock</button>
-                                                : <button className="btn btn-danger" onClick={() => handleAccess(value.isLock, value.id)}>Lock</button>
+                                                ?
+                                                <button className="btn btn-danger" onClick={() => handleAccess(value.isLock, value.id)}><i className="fa-solid fa-lock"></i></button>
+                                                :
+                                                <button className="btn btn-success" onClick={() => handleAccess(value.isLock, value.id)}><i className="fa-solid fa-lock-open"></i></button>
                                             }</td>
                                             <td>
                                                 <Link
