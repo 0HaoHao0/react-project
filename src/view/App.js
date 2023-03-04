@@ -15,38 +15,36 @@ import Profile from './authentication/Profile';
 
 function App() {
   axios.defaults.baseURL = "https://localhost:44355/";
-  axios.defaults.headers.common["Authorization"] =
-  localStorage.getItem("app_token");
+  axios.defaults.headers.common["Authorization"] = localStorage.getItem("app_token");
 
-  const user = useSelector((state) => state.user) || {};
-
-  const { role } = user.userInfo || {};
-  console.log(!user.userInfo);
+  const user = useSelector((state) => state.user); // user return {} or { userInfo: {...} }
   
   return (
     <Routes>
       {/* Home Router */}
+      
       <Route path="*" element={<PublicRouter />}></Route>
 
       {
-        !user.userInfo && (
+        user.userInfo === undefined ? (
           <>
           <Route path="login" element={<Login />}></Route>
           <Route path="register" element={<Register />}></Route>
           <Route path="resetpassword" element={<ResetPassword />}></Route>
           </>
-        )
+        ) : null
       }
       {/* Authencation Router */}
-      {role && (
-        <>
-          <Route path="/profile" element={<Profile />}></Route>
-        </>
-      )
+      {
+        user.userInfo !== undefined ? (
+          <>
+            <Route path="/profile" element={<Profile />}></Route>
+          </>
+        ) : null
       }
       {/* User Router */}
       {
-        role === "Patient" ? (
+        user.userInfo && (user.userInfo.role === "Patient") ? (
           <>
             <Route path="/user/*" element={<UserRouter />}></Route>
           </>
@@ -54,7 +52,7 @@ function App() {
       }
       {/* Admin Router */}
       {
-        role === "Administrator" ? (
+        user.userInfo && (user.userInfo.role === "Administrator") ? (
           <>
             <Route path="/admin/*" element={<AdminRouter />}></Route>
           </>

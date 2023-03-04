@@ -225,29 +225,27 @@ function Profile() {
                       style={{ width: "170px" }}
                     />
                     <h2 className="fw-bolder profile-role">
-                      {userInfo.role}{" "}
+                      <span className="p-2">{userInfo.userName}</span>
                       <i className="fa-solid fa-circle-check"></i>
                     </h2>
-                    <div className="d-flex justify-content-center mt-5">
+                    <div className="d-flex justify-content-center" style={{ gap: "10px" }}>
                       <button
                         type="button"
-                        className="btn btn-primary w-100 profile-button"
+                        className={"btn btn" + (changleStyle !== 1 ? "-outline" : "") + "-primary w-100 profile-button"}
                         onClick={() => {
                           setChangleStyle(1);
                         }}
                       >
                         <i className="fa-solid fa-user icon-change"></i>
-                        User Info
                       </button>
                       <button
                         type="button"
-                        className="btn btn-outline-primary ms-1 w-100 profile-button"
+                        className={"btn btn" + (changleStyle !== 2 ? "-outline" : "") + "-primary w-100 profile-button"}
                         onClick={() => {
                           setChangleStyle(2);
                         }}
                       >
-                        <i className="fa-solid fa-lock icon-change"></i>
-                        Change Password
+                      Update Password
                       </button>
                     </div>
                   </div>
@@ -306,306 +304,306 @@ function Profile() {
                 </div>
               </div>
               {changleStyle === 1 ? (
-                <>
-                  <div className="col-lg-8">
-                    <div className="card mb-4">
-                      <div className="card-body profile-right">
-                        <div className="row">
-                          <div className="col-sm-3 mt-1">
-                            <p className="mb-0 fw-bolder">FullName</p>
-                          </div>
-                          <div className="col-sm-9 mt-1">
-                            <p className="text-muted mb-0 fw-bolder">
-                              {userInfo.fullName}
-                            </p>
-                          </div>
-                        </div>
-                        <hr className="mt-3" />
-                        <div className="row">
-                          <div className="col-sm-3 mt-1">
-                            <p className="mb-0 fw-bolder ">UserName</p>
-                          </div>
-                          <div className="col-sm-9 mt-1">
-                            <p className="text-muted mb-0 fw-bolder ">
-                              {userInfo.userName}
-                            </p>
-                          </div>
-                        </div>
-                        <hr className="mt-3" />
-                        <div className="row">
-                          <div className="col-sm-3 mt-1">
-                            <p className="mb-0 fw-bolder">Email</p>
-                          </div>
-                          <div className="col-sm-9 mt-1 d-flex justify-content-between">
-                            <p className="text-muted mb-0 fw-bolder">
-                              {userInfo.email}
-                            </p>
-                            {!userInfo.emailConfirmed ? (
-                              userInfo.emailConfirmed === false ? (
-                                <button
-                                  className="btn btn-primary px-4"
-                                  onClick={() => {
-                                    setChangleStyle(3);
-                                  }}
-                                >
-                                  Unconfirmed
-                                </button>
-                              ) : null
-                            ) : (
-                              <p className="text-primary fw-bolder">
-                                Verified
-                                <i className="fa-solid fa-circle-check px-3"></i>
-                              </p>
-                            )}
-                          </div>
-                        </div>
-                        <hr className="mt-3" />
-                        <div className="row">
-                          <div className="col-sm-3 mt-2">
-                            <p className="mb-0 fw-bolder">Phone</p>
-                          </div>
-                          <div className="col-sm-9 mt-2">
-                            <p className="text-muted mb-0 fw-bolder">
-                              {userInfo.phoneNumber}
-                            </p>
-                          </div>
-                        </div>
-                        <hr className="mt-3" />
-                        <div className="row">
-                          <div className="col-sm-3 mt-1">
-                            <p className="mb-0 fw-bolder">Gender</p>
-                          </div>
-                          <div className="col-sm-9 mt-1">
-                            <p className="text-muted mb-0 fw-bolder">
-                              {userInfo.gender}
-                            </p>
-                          </div>
-                        </div>
-                        <hr className="mt-3" />
-                        <div className="row">
-                          <div className="col-sm-3 mt-2">
-                            <p className="mb-0 fw-bolder">BirthDate</p>
-                          </div>
-                          <div className="col-sm-9 mt-2">
-                            <p className="text-muted mb-0 fw-bolder">
-                              {userInfo.birthDate}
-                            </p>
-                          </div>
-                        </div>
+              <>
+              <div className="col-lg-8">
+                <div className="card mb-4">
+                  <div className="card-body profile-right">
+                    <div className="row">
+                      <div className="col-sm-3 mt-1">
+                        <p className="mb-0 fw-bolder">FullName</p>
+                      </div>
+                      <div className="col-sm-9 mt-1">
+                        <p className="text-muted mb-0 fw-bolder">
+                          {userInfo.fullName}
+                        </p>
                       </div>
                     </div>
+                    <hr className="mt-3" />
                     <div className="row">
-                      <div className="col-md-6">
-                        <div className="card mb-4 mb-md-0">
-                          <div className="card-body">
-                            <p className="mb-4">
-                              <span className="text-primary font-italic me-1">
-                                assigment
-                              </span>{" "}
-                              Project Status
-                            </p>
-                            <p className="mb-1" style={{ fontSize: ".77rem" }}>
-                              Web Design
-                            </p>
-                            <div
-                              className="progress rounded"
-                              style={{ height: "5px" }}
-                            >
-                              <div
-                                className="progress-bar"
-                                role="progressbar"
-                                style={{ width: "80%" }}
-                                aria-valuenow="80"
-                                aria-valuemin="0"
-                                aria-valuemax="100"
-                              ></div>
-                            </div>
-                            <p
-                              className="mt-4 mb-1"
-                              style={{ fontSize: ".77rem" }}
-                            >
-                              Website Markup
-                            </p>
-                            <div
-                              className="progress rounded"
-                              style={{ height: "5px" }}
-                            >
-                              <div
-                                className="progress-bar"
-                                role="progressbar"
-                                style={{ width: "72%" }}
-                                aria-valuenow="72"
-                                aria-valuemin="0"
-                                aria-valuemax="100"
-                              ></div>
-                            </div>
-                            <p
-                              className="mt-4 mb-1"
-                              style={{ fontSize: ".77rem" }}
-                            >
-                              One Page
-                            </p>
-                            <div
-                              className="progress rounded"
-                              style={{ height: "5px" }}
-                            >
-                              <div
-                                className="progress-bar"
-                                role="progressbar"
-                                style={{ width: "89%" }}
-                                aria-valuenow="89"
-                                aria-valuemin="0"
-                                aria-valuemax="100"
-                              ></div>
-                            </div>
-                            <p
-                              className="mt-4 mb-1"
-                              style={{ fontSize: ".77rem" }}
-                            >
-                              Mobile Template
-                            </p>
-                            <div
-                              className="progress rounded"
-                              style={{ height: "5px" }}
-                            >
-                              <div
-                                className="progress-bar"
-                                role="progressbar"
-                                style={{ width: "55%" }}
-                                aria-valuenow="55"
-                                aria-valuemin="0"
-                                aria-valuemax="100"
-                              ></div>
-                            </div>
-                            <p
-                              className="mt-4 mb-1"
-                              style={{ fontSize: ".77rem" }}
-                            >
-                              Backend API
-                            </p>
-                            <div
-                              className="progress rounded mb-2"
-                              style={{ height: "5px" }}
-                            >
-                              <div
-                                className="progress-bar"
-                                role="progressbar"
-                                style={{ width: "66%" }}
-                                aria-valuenow="66"
-                                aria-valuemin="0"
-                                aria-valuemax="100"
-                              ></div>
-                            </div>
-                          </div>
-                        </div>
+                      <div className="col-sm-3 mt-1">
+                        <p className="mb-0 fw-bolder ">UserName</p>
                       </div>
-                      <div className="col-md-6">
-                        <div className="card mb-4 mb-md-0">
-                          <div className="card-body">
-                            <p className="mb-4">
-                              <span className="text-primary font-italic me-1">
-                                assigment
-                              </span>{" "}
-                              Project Status
-                            </p>
-                            <p className="mb-1" style={{ fontSize: ".77rem" }}>
-                              Web Design
-                            </p>
-                            <div
-                              className="progress rounded"
-                              style={{ height: "5px" }}
+                      <div className="col-sm-9 mt-1">
+                        <p className="text-muted mb-0 fw-bolder ">
+                          {userInfo.userName}
+                        </p>
+                      </div>
+                    </div>
+                    <hr className="mt-3" />
+                    <div className="row">
+                      <div className="col-sm-3 mt-1">
+                        <p className="mb-0 fw-bolder">Email</p>
+                      </div>
+                      <div className="col-sm-9 mt-1 d-flex justify-content-between">
+                        <p className="text-muted mb-0 fw-bolder">
+                          {userInfo.email}
+                        </p>
+                        {!userInfo.emailConfirmed ? (
+                          userInfo.emailConfirmed === false ? (
+                            <button
+                              className="btn btn-primary px-4"
+                              onClick={() => {
+                                setChangleStyle(3);
+                              }}
                             >
-                              <div
-                                className="progress-bar"
-                                role="progressbar"
-                                style={{ width: "80%" }}
-                                aria-valuenow="80"
-                                aria-valuemin="0"
-                                aria-valuemax="100"
-                              ></div>
-                            </div>
-                            <p
-                              className="mt-4 mb-1"
-                              style={{ fontSize: ".77rem" }}
-                            >
-                              Website Markup
-                            </p>
-                            <div
-                              className="progress rounded"
-                              style={{ height: "5px" }}
-                            >
-                              <div
-                                className="progress-bar"
-                                role="progressbar"
-                                style={{ width: "72%" }}
-                                aria-valuenow="72"
-                                aria-valuemin="0"
-                                aria-valuemax="100"
-                              ></div>
-                            </div>
-                            <p
-                              className="mt-4 mb-1"
-                              style={{ fontSize: ".77rem" }}
-                            >
-                              One Page
-                            </p>
-                            <div
-                              className="progress rounded"
-                              style={{ height: "5px" }}
-                            >
-                              <div
-                                className="progress-bar"
-                                role="progressbar"
-                                style={{ width: "89%" }}
-                                aria-valuenow="89"
-                                aria-valuemin="0"
-                                aria-valuemax="100"
-                              ></div>
-                            </div>
-                            <p
-                              className="mt-4 mb-1"
-                              style={{ fontSize: ".77rem" }}
-                            >
-                              Mobile Template
-                            </p>
-                            <div
-                              className="progress rounded"
-                              style={{ height: "5px" }}
-                            >
-                              <div
-                                className="progress-bar"
-                                role="progressbar"
-                                style={{ width: "55%" }}
-                                aria-valuenow="55"
-                                aria-valuemin="0"
-                                aria-valuemax="100"
-                              ></div>
-                            </div>
-                            <p
-                              className="mt-4 mb-1"
-                              style={{ fontSize: ".77rem" }}
-                            >
-                              Backend API
-                            </p>
-                            <div
-                              className="progress rounded mb-2"
-                              style={{ height: "5px" }}
-                            >
-                              <div
-                                className="progress-bar"
-                                role="progressbar"
-                                style={{ width: "66%" }}
-                                aria-valuenow="66"
-                                aria-valuemin="0"
-                                aria-valuemax="100"
-                              ></div>
-                            </div>
-                          </div>
+                              Unconfirmed
+                            </button>
+                          ) : null
+                        ) : (
+                          <p className="text-primary fw-bolder">
+                            Verified
+                            <i className="fa-solid fa-circle-check px-3"></i>
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                    <hr className="mt-3" />
+                    <div className="row">
+                      <div className="col-sm-3 mt-2">
+                        <p className="mb-0 fw-bolder">Phone</p>
+                      </div>
+                      <div className="col-sm-9 mt-2">
+                        <p className="text-muted mb-0 fw-bolder">
+                          {userInfo.phoneNumber}
+                        </p>
+                      </div>
+                    </div>
+                    <hr className="mt-3" />
+                    <div className="row">
+                      <div className="col-sm-3 mt-1">
+                        <p className="mb-0 fw-bolder">Gender</p>
+                      </div>
+                      <div className="col-sm-9 mt-1">
+                        <p className="text-muted mb-0 fw-bolder">
+                          {userInfo.gender}
+                        </p>
+                      </div>
+                    </div>
+                    <hr className="mt-3" />
+                    <div className="row">
+                      <div className="col-sm-3 mt-2">
+                        <p className="mb-0 fw-bolder">BirthDate</p>
+                      </div>
+                      <div className="col-sm-9 mt-2">
+                        <p className="text-muted mb-0 fw-bolder">
+                          {userInfo.birthDate}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="row">
+                  <div className="col-md-6">
+                    <div className="card mb-4 mb-md-0">
+                      <div className="card-body">
+                        <p className="mb-4">
+                          <span className="text-primary font-italic me-1">
+                            assigment
+                          </span>{" "}
+                          Project Status
+                        </p>
+                        <p className="mb-1" style={{ fontSize: ".77rem" }}>
+                          Web Design
+                        </p>
+                        <div
+                          className="progress rounded"
+                          style={{ height: "5px" }}
+                        >
+                          <div
+                            className="progress-bar"
+                            role="progressbar"
+                            style={{ width: "80%" }}
+                            aria-valuenow="80"
+                            aria-valuemin="0"
+                            aria-valuemax="100"
+                          ></div>
+                        </div>
+                        <p
+                          className="mt-4 mb-1"
+                          style={{ fontSize: ".77rem" }}
+                        >
+                          Website Markup
+                        </p>
+                        <div
+                          className="progress rounded"
+                          style={{ height: "5px" }}
+                        >
+                          <div
+                            className="progress-bar"
+                            role="progressbar"
+                            style={{ width: "72%" }}
+                            aria-valuenow="72"
+                            aria-valuemin="0"
+                            aria-valuemax="100"
+                          ></div>
+                        </div>
+                        <p
+                          className="mt-4 mb-1"
+                          style={{ fontSize: ".77rem" }}
+                        >
+                          One Page
+                        </p>
+                        <div
+                          className="progress rounded"
+                          style={{ height: "5px" }}
+                        >
+                          <div
+                            className="progress-bar"
+                            role="progressbar"
+                            style={{ width: "89%" }}
+                            aria-valuenow="89"
+                            aria-valuemin="0"
+                            aria-valuemax="100"
+                          ></div>
+                        </div>
+                        <p
+                          className="mt-4 mb-1"
+                          style={{ fontSize: ".77rem" }}
+                        >
+                          Mobile Template
+                        </p>
+                        <div
+                          className="progress rounded"
+                          style={{ height: "5px" }}
+                        >
+                          <div
+                            className="progress-bar"
+                            role="progressbar"
+                            style={{ width: "55%" }}
+                            aria-valuenow="55"
+                            aria-valuemin="0"
+                            aria-valuemax="100"
+                          ></div>
+                        </div>
+                        <p
+                          className="mt-4 mb-1"
+                          style={{ fontSize: ".77rem" }}
+                        >
+                          Backend API
+                        </p>
+                        <div
+                          className="progress rounded mb-2"
+                          style={{ height: "5px" }}
+                        >
+                          <div
+                            className="progress-bar"
+                            role="progressbar"
+                            style={{ width: "66%" }}
+                            aria-valuenow="66"
+                            aria-valuemin="0"
+                            aria-valuemax="100"
+                          ></div>
                         </div>
                       </div>
                     </div>
                   </div>
-                </>
+                  <div className="col-md-6">
+                    <div className="card mb-4 mb-md-0">
+                      <div className="card-body">
+                        <p className="mb-4">
+                          <span className="text-primary font-italic me-1">
+                            assigment
+                          </span>{" "}
+                          Project Status
+                        </p>
+                        <p className="mb-1" style={{ fontSize: ".77rem" }}>
+                          Web Design
+                        </p>
+                        <div
+                          className="progress rounded"
+                          style={{ height: "5px" }}
+                        >
+                          <div
+                            className="progress-bar"
+                            role="progressbar"
+                            style={{ width: "80%" }}
+                            aria-valuenow="80"
+                            aria-valuemin="0"
+                            aria-valuemax="100"
+                          ></div>
+                        </div>
+                        <p
+                          className="mt-4 mb-1"
+                          style={{ fontSize: ".77rem" }}
+                        >
+                          Website Markup
+                        </p>
+                        <div
+                          className="progress rounded"
+                          style={{ height: "5px" }}
+                        >
+                          <div
+                            className="progress-bar"
+                            role="progressbar"
+                            style={{ width: "72%" }}
+                            aria-valuenow="72"
+                            aria-valuemin="0"
+                            aria-valuemax="100"
+                          ></div>
+                        </div>
+                        <p
+                          className="mt-4 mb-1"
+                          style={{ fontSize: ".77rem" }}
+                        >
+                          One Page
+                        </p>
+                        <div
+                          className="progress rounded"
+                          style={{ height: "5px" }}
+                        >
+                          <div
+                            className="progress-bar"
+                            role="progressbar"
+                            style={{ width: "89%" }}
+                            aria-valuenow="89"
+                            aria-valuemin="0"
+                            aria-valuemax="100"
+                          ></div>
+                        </div>
+                        <p
+                          className="mt-4 mb-1"
+                          style={{ fontSize: ".77rem" }}
+                        >
+                          Mobile Template
+                        </p>
+                        <div
+                          className="progress rounded"
+                          style={{ height: "5px" }}
+                        >
+                          <div
+                            className="progress-bar"
+                            role="progressbar"
+                            style={{ width: "55%" }}
+                            aria-valuenow="55"
+                            aria-valuemin="0"
+                            aria-valuemax="100"
+                          ></div>
+                        </div>
+                        <p
+                          className="mt-4 mb-1"
+                          style={{ fontSize: ".77rem" }}
+                        >
+                          Backend API
+                        </p>
+                        <div
+                          className="progress rounded mb-2"
+                          style={{ height: "5px" }}
+                        >
+                          <div
+                            className="progress-bar"
+                            role="progressbar"
+                            style={{ width: "66%" }}
+                            aria-valuenow="66"
+                            aria-valuemin="0"
+                            aria-valuemax="100"
+                          ></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              </>
               ) : changleStyle === 2 ? (
                 <>
                   <div className="col-lg-8">

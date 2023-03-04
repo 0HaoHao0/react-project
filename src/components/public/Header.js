@@ -101,7 +101,7 @@ function Header() {
                     Hi, {user.userInfo.fullName}
                   </div>
                   <Link
-                    to="/"
+                    to="/profile"
                     className="btn btn-primary mx-lg-2 my-lg-0 my-sm-2"
                   >
                     Profile
