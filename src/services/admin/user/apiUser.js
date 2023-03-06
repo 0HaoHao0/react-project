@@ -47,6 +47,7 @@ export const deleteUser = async (id) => {
         data = response;
     }).catch((error) => {
         // handle error
+        data = error.response;
         console.log(error);
     })
 
