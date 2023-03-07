@@ -9,7 +9,6 @@ function UserDetail() {
     const navigate = useNavigate()
 
     const [patientInfo, setPatientInfo] = useState(state);
-    const [isLoading, setIsLoading] = useState(false);
 
 
     let roleId = undefined;
@@ -45,16 +44,22 @@ function UserDetail() {
                     toast.error("You haven't selected the role yet!");
                 }
                 else {
-                    setIsLoading(true);
+                    Swal.fire({
+                        title: "Loading...",
+                        html: "Please wait a moment"
+                    })
+                    Swal.showLoading();
 
                     const res = await updateRole(patientInfo.id, roleId);
 
-
-                    setPatientInfo(res.data);
-
-                    setIsLoading(false);
-
-                    toast.success("Update Successful!");
+                    if (res.status === 200) {
+                        setPatientInfo(res.data);
+                        toast.success("Update Successful!");
+                    }
+                    else {
+                        toast.error("Something was wrong, please contact to Admin !!!")
+                    }
+                    Swal.close();
                 }
             } else {
                 // Xử lý khi người dùng bấm Cancel
@@ -74,13 +79,21 @@ function UserDetail() {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 // Xử lý khi người dùng bấm OK
+                Swal.fire({
+                    title: "Loading...",
+                    html: "Please wait a moment"
+                })
+                Swal.showLoading();
                 const res = await deleteUser(state.id);
+                Swal.close();
+
                 if (res.status === 200) {
                     toast.success("Delete Successful!");
                     navigate("/admin/user");
                 }
                 else {
                     toast.error("Cannot delete this account, you can try lock!");
+
                 }
             } else {
                 // Xử lý khi người dùng bấm Cancel
@@ -94,33 +107,41 @@ function UserDetail() {
                 <div>
                     <h1>User Detail</h1>
                 </div>
-                {isLoading && <div className="alert alert-warning">Please wait while we update your role...</div>}
                 <hr />
+                <h1 className="alert alert-dark" role="alert" >Profile </h1>
                 <div className="row">
-                    <div className="col-12 text-center">
-                        <img height="150px" width="150px" src={state.imageURL} alt="" />
+
+                    <div className="col-12 text-center my-4">
+                        <img height="150px" width="150px" src={state.imageURL} alt="..." />
                     </div>
                     <div className="col-12 row">
                         <div className="col-lg-6 col-sm-12">
                             <div className="row my-2">
-                                <div className="col-3 fw-bold">User Name: </div>
-                                <div className="col-9 text-left ">
-                                    {state.userName}
+                                <div className="col-md-3">
+                                    <label htmlFor="UserName">User Name: </label>
                                 </div>
-                            </div>
-                            <div className="row my-2">
-                                <div className="col-3 fw-bold">Full Name: </div>
-                                <div className="col-9 text-left ">
-                                    {state.fullName}
-                                </div>
-                            </div>
-                            <div className="row my-2">
-                                <div className="col-3 fw-bold">Phone Number: </div>
-                                <div className="col-9 text-left ">
-                                    {state.phoneNumber}
+                                <div className="col-md-9 ">
+                                    <input type="text" className="form-control" id="UserName" placeholder={state.fullName} readOnly />
                                 </div>
                             </div>
 
+                            <div className="row my-2">
+                                <div className="col-md-3">
+                                    <label htmlFor="FullName">Full Name: </label>
+                                </div>
+                                <div className="col-md-9 ">
+                                    <input type="text" className="form-control" id="FullName" placeholder={state.fullName} readOnly />
+                                </div>
+                            </div>
+
+                            <div className="row my-2">
+                                <div className="col-md-3">
+                                    <label htmlFor="PhoneNumber">Phone Number: </label>
+                                </div>
+                                <div className="col-md-9 ">
+                                    <input type="text" className="form-control" id="PhoneNumber" placeholder={state.phoneNumber} readOnly />
+                                </div>
+                            </div>
                             <div className="row my-2">
                                 <div className="col-3 fw-bold">Role: </div>
                                 <div className="col-9 text-left">
@@ -142,33 +163,42 @@ function UserDetail() {
                         </div>
                         <div className="col-lg-6 col-sm-12">
                             <div className="row my-2">
-                                <div className="col-3 fw-bold">Birth Date: </div>
-                                <div className="col-9 text-left ">
-                                    {state.birthDate}
+                                <div className="col-md-3">
+                                    <label htmlFor="BirthDate">Birth Date: </label>
+                                </div>
+                                <div className="col-md-9 ">
+                                    <input type="text" className="form-control" id="BirthDate" placeholder={state.birthDate} readOnly />
                                 </div>
                             </div>
                             <div className="row my-2">
-                                <div className="col-3 fw-bold">Gender: </div>
-                                <div className="col-9 text-left ">
-                                    {state.gender}
+                                <div className="col-md-3">
+                                    <label htmlFor="Gender">Gender: </label>
+                                </div>
+                                <div className="col-md-9 ">
+                                    <input type="text" className="form-control" id="Gender" placeholder={state.gender} readOnly />
                                 </div>
                             </div>
                             <div className="row my-2">
-                                <div className="col-3 fw-bold">Address: </div>
-                                <div className="col-9 text-left ">
-                                    {state.address}
+                                <div className="col-md-3">
+                                    <label htmlFor="Address">Address: </label>
                                 </div>
-                            </div>
-
-                            <div className="row my-2">
-                                <div className="col-3 fw-bold">Email: </div>
-                                <div className="col-9 text-left ">
-                                    {state.email}
+                                <div className="col-md-9 ">
+                                    <input type="text" className="form-control" id="Address" placeholder={state.address} readOnly />
                                 </div>
                             </div>
                             <div className="row my-2">
-                                <div className="col-3 fw-bold">Confirm Email: </div>
-                                <div className="col-9 text-left ">
+                                <div className="col-md-3">
+                                    <label htmlFor="Email">Email: </label>
+                                </div>
+                                <div className="col-md-9 ">
+                                    <input type="text" className="form-control" id="Email" placeholder={state.email} readOnly />
+                                </div>
+                            </div>
+                            <div className="row my-2">
+                                <div className="col-md-3">
+                                    <label htmlFor="EmailValidated">Email Validated: </label>
+                                </div>
+                                <div className="col-md-9 ">
                                     {state.emailConfirmed ?
                                         <button className="btn btn-success" disabled><i className="fa-solid fa-check"></i></button>
                                         :
@@ -176,6 +206,7 @@ function UserDetail() {
                                     }
                                 </div>
                             </div>
+
                         </div>
                     </div>
                     <div className="row my-2">

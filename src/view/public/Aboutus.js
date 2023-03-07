@@ -1,4 +1,10 @@
 import "./Aboutus.scss";
+//image member
+import phuc from "../../assets/images/user/phuc.jpg";
+import bang from "../../assets/images/user/bang.jpg";
+import hao from "../../assets/images/user/hao.jpg";
+import dat from "../../assets/images/user/dat.jpg";
+import duy from "../../assets/images/user/duy.jpg";
 function Aboutus() {
   return (
     <div className="aboutus">
@@ -102,7 +108,7 @@ function Aboutus() {
             <div className="col-md-6 order-2 order-lg-1">
               <i className="fa fa-bar-chart fa-2x mb-3 text-primary"></i>
               <h1 className="fw-bold">The Technologies That Use</h1>
-              <p className=" text-muted mb-4">
+              <p className="font-italic text-muted mb-4">
                 The projects that we include the technologies we use are:
                 Reactjs, ASP.Net Core Api, MicroServices Automatpter.
               </p>
@@ -129,7 +135,7 @@ function Aboutus() {
             <div className="col-md-6">
               <i className="fa fa-leaf fa-2x mb-3 text-primary"></i>
               <h1 className="fw-bold">The Services</h1>
-              <p className=" text-muted mb-4">
+              <p className="font-italic text-muted mb-4">
                 Including services such as: Procedures to remove tartar. Scrape
                 tartar. Teeth polishing. Deep tooth treatment. Deep tooth
                 filling. Dental pulp treatment. Treatment of wisdom teeth.
@@ -149,8 +155,8 @@ function Aboutus() {
           <div className="container py-5">
             <div className="row mb-4">
               <div className="col-lg-5">
-                <h1 className="display-4 fw-bold">Our Teams</h1>
-                <p className=" text-muted">
+                <h2 className="display-4 font-weight-bold">Our Teams</h2>
+                <p className="font-italic text-muted">
                   Lorem ipsum dolor sit amet, consectetur adipisicing elit.
                 </p>
               </div>
@@ -176,7 +182,7 @@ function Aboutus() {
                             <img
                               alt=""
                               className="img-fluid move-animation img-member"
-                              src="https://scontent.fsgn5-6.fna.fbcdn.net/v/t1.6435-9/95793805_2317530408551811_2212027853883572224_n.jpg?_nc_cat=108&ccb=1-7&_nc_sid=174925&_nc_ohc=zqc03ojZcv0AX_gMXNG&_nc_ht=scontent.fsgn5-6.fna&oh=00_AfAI8KHY7Q-Cy-ZmHwrvUP7gR0wJMhuT0Yx1ePuht_ga1Q&oe=640EDE12"
+                              src={phuc}
                             />
                           </div>
                           <div className="info-area">
@@ -190,7 +196,7 @@ function Aboutus() {
                             <img
                               alt=""
                               className="img-fluid move-animation img-member"
-                              src="https://scontent.fsgn5-6.fna.fbcdn.net/v/t1.6435-9/95793805_2317530408551811_2212027853883572224_n.jpg?_nc_cat=108&ccb=1-7&_nc_sid=174925&_nc_ohc=zqc03ojZcv0AX_gMXNG&_nc_ht=scontent.fsgn5-6.fna&oh=00_AfAI8KHY7Q-Cy-ZmHwrvUP7gR0wJMhuT0Yx1ePuht_ga1Q&oe=640EDE12"
+                              src={bang}
                             />
                             <h4>BackEnd</h4>
                             <p>Đặng Đỗ Hữu Bằng</p>
@@ -204,7 +210,7 @@ function Aboutus() {
                             <img
                               alt=""
                               className="img-fluid move-animation img-member"
-                              src="https://scontent.fsgn5-6.fna.fbcdn.net/v/t1.6435-9/95793805_2317530408551811_2212027853883572224_n.jpg?_nc_cat=108&ccb=1-7&_nc_sid=174925&_nc_ohc=zqc03ojZcv0AX_gMXNG&_nc_ht=scontent.fsgn5-6.fna&oh=00_AfAI8KHY7Q-Cy-ZmHwrvUP7gR0wJMhuT0Yx1ePuht_ga1Q&oe=640EDE12"
+                              src={hao}
                             />
                           </div>
                           <div className="info-area">
@@ -218,7 +224,7 @@ function Aboutus() {
                             <img
                               alt=""
                               className="img-fluid move-animation img-member"
-                              src="https://scontent.fsgn5-2.fna.fbcdn.net/v/t1.6435-9/148181759_2853916518184952_4370270346601138128_n.jpg?_nc_cat=105&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=NGs7RIoo7_gAX-NvAE7&_nc_ht=scontent.fsgn5-2.fna&oh=00_AfBnZcgeTTIvDD9HCwtwbNBJctq1UrCrqkYdYa6rkWhWQA&oe=640ED0E4"
+                              src={dat}
                             />
                           </div>
                           <div className="info-area">
@@ -232,7 +238,7 @@ function Aboutus() {
                             <img
                               alt=""
                               className="img-fluid move-animation img-member"
-                              src="https://scontent.fsgn5-2.fna.fbcdn.net/v/t1.6435-9/75279155_2608386596112944_73059678627561472_n.jpg?_nc_cat=105&ccb=1-7&_nc_sid=174925&_nc_ohc=o_DXdCdg77EAX8fvqNg&_nc_ht=scontent.fsgn5-2.fna&oh=00_AfDFa8rsJQIBydNALe30j47r5BLeTZyB7nyiBzx_D2xm9w&oe=640EE4D9"
+                              src={duy}
                             />
                             <h4>Tester</h4>
                             <p>Nguyễn Khánh Duy</p>

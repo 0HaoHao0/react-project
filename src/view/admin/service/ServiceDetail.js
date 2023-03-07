@@ -3,6 +3,9 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
 import { deleteService } from "../../../services/admin/service/apiService";
+// CkEditor
+import Editor from 'ckeditor5-custom-build/build/ckeditor';
+import { CKEditor } from '@ckeditor/ckeditor5-react'
 
 function ServiceDetail() {
     let { state } = useLocation();
@@ -20,7 +23,13 @@ function ServiceDetail() {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 // Xử lý khi người dùng bấm OK
+                Swal.fire({
+                    title: "Loading...",
+                    html: "Please wait a moment"
+                })
+                Swal.showLoading()
                 await deleteService(state.id);
+                Swal.close();
                 toast.success("Delete Successful!");
                 navigate("/admin/service");
             } else {
@@ -81,11 +90,25 @@ function ServiceDetail() {
                         <label htmlFor="lastTimeModified" className="form-label">Last Modified </label>
                         <input type="text" className="form-control" id="lastTimeModified" value={formatDate(state.lastTimeModified)} readOnly />
                     </div>
-                    <div className="mb-3">
-                        <label htmlFor="description" className="form-label">Description</label>
-                        <textarea className="form-control" id="description" rows={3} value={state.description} readOnly />
-                    </div>
 
+
+                </div>
+                <div className="mb-3">
+                    <label htmlFor="description" className="form-label">Description</label>
+                    <div className="bg-white p-4 shadow-sm border">
+                        <CKEditor
+                            editor={Editor}
+                            config={
+                                {
+                                    toolbar: []
+                                }
+                            }
+                            data={state.description}
+                            disabled={true}
+                        />
+
+
+                    </div>
                 </div>
             </div>
 

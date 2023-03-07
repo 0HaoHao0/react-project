@@ -18,12 +18,12 @@ function PublicRouter() {
   const user = useSelector((state) => state.user);
   const canConfirmed = user.userInfo && !user.userInfo.emailConfirmed;
   console.log("Can confirmed: ", canConfirmed);
-  
+
   const navigate = useNavigate();
 
   useEffect(() => {
     console.log(window.location.href);
-    if(canConfirmed && !window.location.href.endsWith("emailconfirm") && user.userInfo.role !== "Administrator") {
+    if (canConfirmed && !window.location.href.endsWith("emailconfirm") && user.userInfo.role !== "Administrator") {
       navigate("/emailconfirm");
     }
   }, [canConfirmed, navigate, user]);
@@ -39,7 +39,7 @@ function PublicRouter() {
         {
           canConfirmed && (
             <>
-            <Route path="emailconfirm" element={<Emailconfirm />}></Route>
+              <Route path="emailconfirm" element={<Emailconfirm />}></Route>
             </>
           )
         }

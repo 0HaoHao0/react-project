@@ -10,8 +10,8 @@ import DeviceUpdate from "../view/admin/device/DeviceUpdate";
 import DoctorCreate from "../view/admin/doctor/DoctorCreate";
 import DoctorDetail from "../view/admin/doctor/DoctorDetail";
 import DoctorGetAll from "../view/admin/doctor/DoctorGetAll";
+import PatientDetail from "../view/admin/patient/PatientDetail";
 import PatientGetAll from "../view/admin/patient/PatientGetAll";
-import PatientGetInfo from "../view/admin/patient/PatientGetInfo";
 import RoomCreate from "../view/admin/room/RoomCreate";
 import RoomDetail from "../view/admin/room/RoomDetail";
 import RoomGetAll from "../view/admin/room/RoomGetAll";
@@ -41,7 +41,7 @@ function AdminRouter() {
 
               {/* Patient */}
               <Route path="/patient" element={<PatientGetAll />}></Route>
-              <Route path="/patient/info" element={<PatientGetInfo />}></Route>
+              <Route path="/patient/info" element={<PatientDetail />}></Route>
 
               {/* Doctor */}
               <Route path="/doctor" element={<DoctorGetAll />}></Route>

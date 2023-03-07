@@ -83,8 +83,16 @@ function Login() {
   const loginNormal = async (e) => {
     validateUserName();
     validatePassWord();
+
+    Swal.fire({
+      title: "Loading...",
+      html: "Please wait a moment"
+    })
     Swal.showLoading();
     const res = await login(userName, password);
+
+    Swal.close()
+
     if (res.status === 200) {
       // Set header token
       localStorage.setItem("app_token", "Bearer " + res.data.token);
@@ -92,7 +100,7 @@ function Login() {
         "Bearer " + res.data.token;
       // Get user information
       let resonse = await getUserInfo();
-      if(resonse.status !== 200) {
+      if (resonse.status !== 200) {
         return;
       }
       // Set Userinfo
@@ -101,31 +109,19 @@ function Login() {
 
       if (userInfo.role === "Administrator") {
         navigate("/admin");
-        await Swal.fire({
-          icon: "success",
-          title: "Welcome the administrator!",
-        });
         return;
       }
-      if(userInfo.emailConfirmed) {
+      if (userInfo.emailConfirmed) {
         //Navigate
-        if(userInfo.role === "Patient") {
+        if (userInfo.role === "Patient") {
           navigate("/home");
         }
         else {
           navigate("/home");
         }
-        await Swal.fire({
-          icon: "success",
-          title: "Sign in Successful",
-        });
       }
       else {
         navigate("/emailconfirm");
-        await Swal.fire({
-          icon: "warning",
-          title: "Welcome, you must verify your account!",
-        });
       }
 
     }
@@ -267,7 +263,7 @@ function Login() {
                       <PhoneInput
                         placeholder="Enter phone number"
                         defaultCountry="VN"
-                        onChange={() => {}}
+                        onChange={() => { }}
                       />
 
                       <div id="emailHelp" className="form-text">

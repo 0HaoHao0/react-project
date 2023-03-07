@@ -11,7 +11,6 @@ function DoctorDetail() {
 
     const [changeView, setChangeView] = useState(0)
 
-    const [isLoading, setIsLoading] = useState(false);
 
     const handleUpdate = () => {
         Swal.fire({
@@ -36,11 +35,16 @@ function DoctorDetail() {
                 let formData = new FormData();
                 formData.append("Id", state.id);
                 formData.append("CertificateFile", file);
-                setIsLoading(true);
+
+                Swal.fire({
+                    title: "Loading...",
+                    html: "Please wait a moment"
+                })
+                Swal.showLoading()
                 const res = await updateDoctor(formData);
                 setDoctorInfo(res.data);
-                setIsLoading(false);
 
+                Swal.close()
                 toast.success("Update Successful !");
             }
         });
@@ -49,7 +53,6 @@ function DoctorDetail() {
         <div className="doctor-detail">
             <div>
                 <h1>Doctor Profile</h1>
-                {isLoading && <div className="alert alert-warning">Please wait while we update your certificate...</div>}
             </div>
             <hr />
             <div className="row">
@@ -146,7 +149,7 @@ function DoctorDetail() {
                                 {/*  */}
                                 <div className="row align-items-center mb-2">
                                     <div className="col-md-4">
-                                        <label htmlFor="full-name">Email Confirm: </label>
+                                        <label htmlFor="full-name">Email Validated: </label>
                                     </div>
                                     <div className="col-md-8 ">
                                         <button className={`btn ${!state.baseUser.emailConfirmed ? 'btn-danger' : 'btn-success'}`} disabled> {!state.baseUser.emailConfirmed ? <i className="fa-solid fa-x"></i> : <i className="fa-solid fa-check"></i>}</button>

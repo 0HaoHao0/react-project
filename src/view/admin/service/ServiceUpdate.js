@@ -6,6 +6,17 @@ import Swal from "sweetalert2";
 import { getDevice } from "../../../services/admin/device/apiDevice";
 import { updateService } from "../../../services/admin/service/apiService";
 
+// Editor
+import Editor from 'ckeditor5-custom-build/build/ckeditor';
+import { CKEditor } from '@ckeditor/ckeditor5-react'
+
+
+
+const editorConfiguration = {
+
+};
+
+
 function ServiceUpdate() {
     let { state } = useLocation();
 
@@ -21,6 +32,7 @@ function ServiceUpdate() {
 
     //Handle Image
     const [imageFileUrl, setImageFileUrl] = useState(null)
+
 
 
 
@@ -51,6 +63,7 @@ function ServiceUpdate() {
             [name]: value
         }));
     };
+
 
     const handleImage = (e) => {
         const { name, files } = e.target;
@@ -118,7 +131,14 @@ function ServiceUpdate() {
                     fromData.append("Price", serviceData.price)
                     fromData.append("DeviceIdList", serviceData.DeviceIdList && serviceData.DeviceIdList.length ? serviceData.DeviceIdList : [0])
 
+                    Swal.fire({
+                        title: "Loading...",
+                        html: "Please wait a moment"
+                    })
+                    Swal.showLoading()
                     const res = await updateService(fromData);
+                    Swal.close()
+
                     if (res.status === 200) {
                         toast.success("Update Service Success")
                         navigate('/admin/service')
@@ -209,15 +229,49 @@ function ServiceUpdate() {
 
 
 
+
+
+                </div>
+                <div className="col-12 mb-3">
                     <label htmlFor="description" className="form-label">Description: </label>
-                    <textarea className={`form-control  ${isTouched.description && (dataError.description ? "is-invalid" : "is-valid")}`}
-                        id="description" name="description" placeholder={serviceData.description} value={serviceData.description}
-                        onBlur={validate} onChange={handleChange}></textarea>
-                    {dataError.description
-                        ? <div className="invalid-feedback">
-                            {dataError.description}
-                        </div>
-                        : null}
+                    <CKEditor
+                        editor={Editor}
+                        config={{
+                            cloudServices: {
+                                tokenUrl: 'https://96022.cke-cs.com/token/dev/4f421aeddafb7c431e79a6743fefd3a8fc56e68d043e13455ccf262b10c4?limit=10',
+                                uploadUrl: 'https://96022.cke-cs.com/easyimage/upload/'
+                            }
+                        }}
+                        data={serviceData.description}
+                        onChange={(event, editor) => {
+                            const data = editor.getData();
+                            const e =
+                            {
+                                target: {
+                                    name: 'description',
+                                    value: data,
+                                }
+                            }
+                            handleChange(e);
+                        }}
+                        onBlur={(event, editor) => {
+                            const data = editor.getData();
+                            const e =
+                            {
+                                target: {
+                                    name: 'description',
+                                    value: data,
+                                }
+                            }
+                            validate(e)
+                        }}
+                    />
+                    <div>
+                        {dataError.description
+                            && <span className="text-danger">
+                                {dataError.description}
+                            </span>}
+                    </div>
 
                 </div>
             </div>

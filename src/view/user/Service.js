@@ -49,7 +49,7 @@ function Service() {
                             <button className="btn btn-primary " type="button">See More</button>
                         </div>
                         <div className='row row-cols-sm-2 g-5 '>
-                            {services && services.slice(0, 2).map((service, index) =>
+                            {services && services.data.slice(0, 2).map((service, index) =>
                                 <div className='col '>
                                     <div className="card shadow  h-100 " >
                                         <img className="card-img-top" src={service.imageURL} alt="..." />
@@ -111,7 +111,7 @@ function Service() {
                 </div>
                 <div className="container">
                     <div className='services-box row overflow-auto border rounded-3  '>
-                        {services && services.map((service, index) =>
+                        {services && services.data.map((service, index) =>
                             <div className='col-lg-4  col-md-12  p-5'>
                                 <div className="card shadow  h-100 " style={{ width: '15rem' }} >
                                     <img className="card-img-top" src={service.imageURL} alt="..." />

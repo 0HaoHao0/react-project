@@ -4,6 +4,12 @@ import { toast } from "react-toastify";
 import { getDevice } from "../../../services/admin/device/apiDevice";
 import { createService } from "../../../services/admin/service/apiService";
 
+// Editor
+import Editor from 'ckeditor5-custom-build/build/ckeditor';
+import { CKEditor } from '@ckeditor/ckeditor5-react'
+import Swal from "sweetalert2";
+
+
 function ServiceCreate() {
     const navigate = useNavigate()
 
@@ -79,7 +85,14 @@ function ServiceCreate() {
             fromData.append("Price", serviceData.Price)
             fromData.append("DeviceIdList", serviceData.DeviceIdList && serviceData.DeviceIdList.length ? serviceData.DeviceIdList : [0])
 
+            Swal.fire({
+                title: "Loading...",
+                html: "Please wait a moment"
+            })
+            Swal.showLoading()
             const res = await createService(fromData);
+            Swal.close()
+
             if (res.status === 200) {
                 toast.success("Create Service Success")
                 navigate('/admin/service')
@@ -167,16 +180,48 @@ function ServiceCreate() {
                         : null}
 
 
-                    <label htmlFor="Description" className="form-label">Description: </label>
-                    <textarea className={`form-control  ${isTouched.Description && (dataError.Description ? "is-invalid" : "is-valid")}`}
-                        id="Description" name="Description" placeholder="Service for ..."
-                        onBlur={validate} onChange={handleChange}></textarea>
-                    {dataError.Description
-                        ? <div className="invalid-feedback">
-                            {dataError.Description}
-                        </div>
-                        : null}
 
+                </div>
+                <div className="col-12 mb-3">
+
+                    <label htmlFor="Description" className="form-label">Description: </label>
+                    <CKEditor
+                        editor={Editor}
+                        config={{
+                            cloudServices: {
+                                tokenUrl: 'https://96022.cke-cs.com/token/dev/4f421aeddafb7c431e79a6743fefd3a8fc56e68d043e13455ccf262b10c4?limit=10',
+                                uploadUrl: 'https://96022.cke-cs.com/easyimage/upload/'
+                            }
+                        }}
+                        onChange={(event, editor) => {
+                            const data = editor.getData();
+                            const e =
+                            {
+                                target: {
+                                    name: 'Description',
+                                    value: data,
+                                }
+                            }
+                            handleChange(e);
+                        }}
+                        onBlur={(event, editor) => {
+                            const data = editor.getData();
+                            const e =
+                            {
+                                target: {
+                                    name: 'Description',
+                                    value: data,
+                                }
+                            }
+                            validate(e)
+                        }}
+                    />
+                    <div>
+                        {dataError.description
+                            && <span className="text-danger">
+                                {dataError.description}
+                            </span>}
+                    </div>
                 </div>
             </div>
             <div className="row">

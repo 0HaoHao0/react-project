@@ -12,7 +12,7 @@ export const getAllService = async (page) => {
         data = response;
     }).catch((error) => {
         // handle error
-        console.log(error);
+        data = error.response;
     })
 
     return data;
@@ -28,7 +28,8 @@ export const getService = async () => {
         data = response;
     }).catch((error) => {
         // handle error
-        console.log(error);
+        data = error.response;
+
     })
 
     return data;
@@ -48,7 +49,7 @@ export const createService = async (fromData) => {
         data = response;
     }).catch((error) => {
         // handle error
-        console.log(error);
+        data = error.response;
     })
 
     return data;
@@ -65,7 +66,7 @@ export const deleteService = async (id) => {
         data = response;
     }).catch((error) => {
         // handle error
-        console.log(error);
+        data = error.response;
     })
 
     return data;
@@ -81,7 +82,8 @@ export const updateService = async (fromData) => {
         data = response;
     }).catch((error) => {
         // handle error
-        console.log(error);
+        data = error.response;
+
     })
 
     return data;
