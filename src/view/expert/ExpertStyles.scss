@@ -1,0 +1,19 @@
+.pop-up-flat {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background: rgba($color: #999999, $alpha: 0.5);
+}
+
+.img-fill {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
