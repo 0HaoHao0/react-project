@@ -1,7 +1,7 @@
 import axios from "axios";
 
 
-export const callAPI = ({method, endpoint, params, data, formData, callback}) => {
+export const callAPI = ({method, endpoint, params=null, data=null, formData=false, callback=null}) => {
     axios({
         method: method,
         url: endpoint,
@@ -12,10 +12,10 @@ export const callAPI = ({method, endpoint, params, data, formData, callback}) =>
         }
     })
     .then(response => {
-        callback(response.status);
+        if(callback) callback(response);
     })
     .catch(error => {
-        callback(error.response.status);
+        if(callback) callback(error.response);
     });
 }
 
