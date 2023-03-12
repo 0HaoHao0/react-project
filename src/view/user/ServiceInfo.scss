@@ -1,0 +1,23 @@
+.service-info {
+    .booking-btn {
+        z-index: 99;
+        position: fixed;
+        top: 50%;
+        right: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
+        animation-name: move-up-down;
+        animation-duration: 2s;
+        animation-iteration-count: infinite;
+        animation-direction: alternate;
+    }
+
+    @keyframes move-up-down {
+        from {
+            transform: translateY(-10px);
+        }
+
+        to {
+            transform: translateY(10px);
+        }
+    }
+}

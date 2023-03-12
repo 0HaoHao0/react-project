@@ -1,0 +1,29 @@
+@import url('https://fonts.googleapis.com/css2?family=Tilt+Neon&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans&display=swap');
+
+body {
+  margin: 0;
+
+
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  font-family: 'Tilt Neon', cursive;
+
+  p {
+    font-family: 'Noto Sans', sans-serif;
+
+  }
+
+}
+
+.ckeditor {
+  font-family: 'Noto Sans', sans-serif;
+
+  h1,
+  h3 {
+    font-family: 'Noto Sans', sans-serif;
+  }
+
+}

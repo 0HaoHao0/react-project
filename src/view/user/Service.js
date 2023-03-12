@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { getAllService } from '../../services/admin/service/apiService';
 import './Service.scss'
 function Service() {
@@ -55,8 +56,8 @@ function Service() {
                                         <img className="card-img-top" src={service.imageURL} alt="..." />
                                         <div className="card-body d-flex flex-column justify-content-between">
                                             <h5 className="card-title fw-bold  my-3"> {service.serviceName}</h5>
-                                            <p className="card-text     ">{service.description}</p>
-                                            <button className='btn btn-warning '>Book Now <i className="fa-solid fa-calendar-days"></i></button>
+                                            <Link to={'/services/info'} state={service} className='btn btn-primary '>Detail <i className="fa-solid fa-circle-info"></i></Link>
+                                            <Link to={`/booking`} state={service} className='btn btn-warning '>Book Now <i className="fa-solid fa-calendar-days"></i></Link>
                                         </div>
                                     </div>
                                 </div>
@@ -117,8 +118,8 @@ function Service() {
                                     <img className="card-img-top" src={service.imageURL} alt="..." />
                                     <div className="card-body d-flex flex-column justify-content-between">
                                         <h5 className="card-title fw-bold  my-3"> {service.serviceName}</h5>
-                                        <p className="card-text     ">{service.description}</p>
-                                        <button className='btn btn-warning '>Book Now <i className="fa-solid fa-calendar-days"></i></button>
+                                        <Link to={'/services/info'} state={service} className='btn btn-primary '>Detail <i className="fa-solid fa-circle-info"></i></Link>
+                                        <Link to={`/booking`} state={service} className='btn btn-warning '>Book Now <i className="fa-solid fa-calendar-days"></i></Link>
                                     </div>
                                 </div>
                             </div>

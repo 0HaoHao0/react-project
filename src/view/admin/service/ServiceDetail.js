@@ -96,16 +96,18 @@ function ServiceDetail() {
                 <div className="mb-3">
                     <label htmlFor="description" className="form-label">Description</label>
                     <div className="bg-white p-4 shadow-sm border">
-                        <CKEditor
-                            editor={Editor}
-                            config={
-                                {
-                                    toolbar: []
+                        <div className="ckeditor">
+                            <CKEditor
+                                editor={Editor}
+                                config={
+                                    {
+                                        toolbar: []
+                                    }
                                 }
-                            }
-                            data={state.description}
-                            disabled={true}
-                        />
+                                data={state.description}
+                                disabled={true}
+                            />
+                        </div>
 
 
                     </div>

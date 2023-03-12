@@ -11,13 +11,14 @@ import Contact from "../view/public/Contact";
 
 
 import Home from "../view/public/Home";
+import Booking from "../view/user/Booking";
 import Service from "../view/user/Service";
+import ServiceInfo from "../view/user/ServiceInfo";
 
 function PublicRouter() {
 
   const user = useSelector((state) => state.user);
   const canConfirmed = user.userInfo && !user.userInfo.emailConfirmed;
-  console.log("Can confirmed: ", canConfirmed);
 
   const navigate = useNavigate();
 
@@ -44,6 +45,8 @@ function PublicRouter() {
           )
         }
         <Route path='services' element={<Service />}></Route>
+        <Route path='services/info' element={<ServiceInfo />}></Route>
+        <Route path="/booking" element={<Booking />}></Route>
 
       </Routes>
       <Footer />
