@@ -1,9 +1,10 @@
 import { useState } from "react";
+import Swal from "sweetalert2";
 import { callAPI } from "../../services/expert/apiExpert";
 import "./ExpertStyles.scss"
 
 
-function CreateModelForm() {
+function CreateModelForm({ handleCreateSuccess = (result) => {} }) {
 
     const [moduleName, setModuleName] = useState("");
     const [file, setFile] = useState(null);
@@ -29,7 +30,24 @@ function CreateModelForm() {
         formData.append('accuracy', acc);
 
         console.log(formData);
-
+        Swal.showLoading();
+        callAPI({
+            method: "POST",
+            endpoint: "http://127.0.0.1:8000/api/segmentation_modules/",
+            formData: true,
+            data: formData,
+            callback: (response) => {
+                console.log(response);
+                if(response.status === 201) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success'
+                    });
+                    handleCreateSuccess(response.data);
+                }
+            }
+        })
+        
     }
 
     return (
