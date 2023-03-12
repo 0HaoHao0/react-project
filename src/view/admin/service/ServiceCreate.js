@@ -185,37 +185,39 @@ function ServiceCreate() {
                 <div className="col-12 mb-3">
 
                     <label htmlFor="Description" className="form-label">Description: </label>
-                    <CKEditor
-                        editor={Editor}
-                        config={{
-                            cloudServices: {
-                                tokenUrl: 'https://96022.cke-cs.com/token/dev/4f421aeddafb7c431e79a6743fefd3a8fc56e68d043e13455ccf262b10c4?limit=10',
-                                uploadUrl: 'https://96022.cke-cs.com/easyimage/upload/'
-                            }
-                        }}
-                        onChange={(event, editor) => {
-                            const data = editor.getData();
-                            const e =
-                            {
-                                target: {
-                                    name: 'Description',
-                                    value: data,
+                    <div className="ckeditor">
+                        <CKEditor
+                            editor={Editor}
+                            config={{
+                                cloudServices: {
+                                    tokenUrl: 'https://96022.cke-cs.com/token/dev/4f421aeddafb7c431e79a6743fefd3a8fc56e68d043e13455ccf262b10c4?limit=10',
+                                    uploadUrl: 'https://96022.cke-cs.com/easyimage/upload/'
                                 }
-                            }
-                            handleChange(e);
-                        }}
-                        onBlur={(event, editor) => {
-                            const data = editor.getData();
-                            const e =
-                            {
-                                target: {
-                                    name: 'Description',
-                                    value: data,
+                            }}
+                            onChange={(event, editor) => {
+                                const data = editor.getData();
+                                const e =
+                                {
+                                    target: {
+                                        name: 'Description',
+                                        value: data,
+                                    }
                                 }
-                            }
-                            validate(e)
-                        }}
-                    />
+                                handleChange(e);
+                            }}
+                            onBlur={(event, editor) => {
+                                const data = editor.getData();
+                                const e =
+                                {
+                                    target: {
+                                        name: 'Description',
+                                        value: data,
+                                    }
+                                }
+                                validate(e)
+                            }}
+                        />
+                    </div>
                     <div>
                         {dataError.description
                             && <span className="text-danger">
