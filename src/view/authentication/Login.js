@@ -111,17 +111,19 @@ function Login() {
         navigate("/admin");
         return;
       }
-      if (userInfo.emailConfirmed) {
-        //Navigate
-        if (userInfo.role === "Patient") {
+
+      if(userInfo.role === "Expert") {
+        navigate("/expert");
+        return;
+      }
+      
+      if (userInfo.role === "Patient") {
+        if(userInfo.emailConfirmed) {
           navigate("/home");
         }
         else {
-          navigate("/home");
+          navigate("/emailconfirm");
         }
-      }
-      else {
-        navigate("/emailconfirm");
       }
 
     }
