@@ -10,6 +10,10 @@ import DeviceUpdate from "../view/admin/device/DeviceUpdate";
 import DoctorCreate from "../view/admin/doctor/DoctorCreate";
 import DoctorDetail from "../view/admin/doctor/DoctorDetail";
 import DoctorGetAll from "../view/admin/doctor/DoctorGetAll";
+import NewsCreate from "../view/admin/news/NewsCreate";
+import NewsDetail from "../view/admin/news/NewsDetail";
+import NewsGetAll from "../view/admin/news/NewsGetAll";
+import NewsUpdate from "../view/admin/news/NewUpdate";
 import PatientDetail from "../view/admin/patient/PatientDetail";
 import PatientGetAll from "../view/admin/patient/PatientGetAll";
 import RoomCreate from "../view/admin/room/RoomCreate";
@@ -63,7 +67,11 @@ function AdminRouter() {
               <Route path="/room/create" element={<RoomCreate />}></Route>
               <Route path="/room/detail" element={<RoomDetail />}></Route>
               <Route path="/room/update" element={<RoomUpdate />}></Route>
-
+              {/* News */}
+              <Route path="/news" element={<NewsGetAll />}></Route>
+              <Route path="/news/create" element={<NewsCreate />}></Route>
+              <Route path="/news/detail" element={<NewsDetail />}></Route>
+              <Route path="/news/update" element={<NewsUpdate />}></Route>
               {/* Contact */}
               <Route path="/contact" element={<ContactGetAll />}></Route>
               <Route path="/contact/detail" element={<ContactDetail />}></Route>

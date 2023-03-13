@@ -194,6 +194,32 @@ function AdminSidebar() {
             </li>
             <li className="nav-item">
               <div className="nav-link text-white ">
+                <i className="nav-icon fas fa-newspaper" />
+                <p>
+                  New
+                  <i className="right fas fa-angle-left" />
+
+                </p>
+              </div>
+              <ul className="nav nav-treeview">
+                <li className="nav-item">
+                  <Link to='/admin/news' className="nav-link">
+                    <i className="far fa-circle nav-icon" />
+                    <p>Get All</p>
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link to='/admin/news/create' className="nav-link">
+                    <i className="far fa-circle nav-icon" />
+                    <p>Create</p>
+                    <span className="right badge badge-danger">New</span>
+                  </Link>
+                </li>
+
+              </ul>
+            </li>
+            <li className="nav-item">
+              <div className="nav-link text-white ">
                 <i className="nav-icon fas fa-chart-pie" />
                 <p>
                   Contact
