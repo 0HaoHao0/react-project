@@ -6,6 +6,7 @@ import "./Header.scss";
 // Redux
 import { deleteUser } from "../../redux/features/userSlide";
 import axios from "axios";
+import Cookies from "universal-cookie/cjs/Cookies";
 function Header() {
   const nagivate = useNavigate();
 
@@ -16,6 +17,8 @@ function Header() {
   const logOut = () => {
     axios.defaults.headers.common['Authorization'] = "";
     localStorage.clear();
+    const cookie = new Cookies();
+    cookie.remove('_to');
     dispatch(deleteUser())
     nagivate('/login');
   };

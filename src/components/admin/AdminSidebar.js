@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
+import Cookies from "universal-cookie/cjs/Cookies";
 import { deleteUser } from "../../redux/features/userSlide";
 
 function AdminSidebar() {
@@ -11,6 +12,9 @@ function AdminSidebar() {
   const dispatch = useDispatch()
   const logOut = () => {
     axios.defaults.headers.common['Authorization'] = "";
+    localStorage.clear();
+    const cookie = new Cookies();
+    cookie.remove('_to');
     dispatch(deleteUser())
     nagivate('/login');
   }

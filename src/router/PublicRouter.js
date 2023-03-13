@@ -23,7 +23,6 @@ function PublicRouter() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log(window.location.href);
     if (canConfirmed && !window.location.href.endsWith("emailconfirm") && user.userInfo.role === "Patient") {
       navigate("/emailconfirm");
     }

@@ -10,12 +10,25 @@ import Register from './authentication/Register';
 
 import PublicRouter from '../router/PublicRouter';
 import axios from 'axios';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Profile from './authentication/Profile';
 import Expert from "./expert/Expert";
+import Cookies from "universal-cookie/cjs/Cookies";
+import { deleteUser } from "../redux/features/userSlide";
+
+const cookie = new Cookies();
 
 function App() {
+  const dispatch = useDispatch();
+
+  if (!cookie.get('_to')) {
+    axios.defaults.headers.common['Authorization'] = "";
+    localStorage.clear();
+    dispatch(deleteUser())
+  }
+
   axios.defaults.baseURL = "https://localhost:44355/";
+
   axios.defaults.headers.common["Authorization"] = localStorage.getItem("app_token");
 
   const user = useSelector((state) => state.user); // user return {} or { userInfo: {...} }
