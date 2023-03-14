@@ -45,12 +45,15 @@ function Register() {
   }, []);
   //Validate Username
   const validateUserName = () => {
+    let result = true;
     if (userData.userName.trim() === "") {
+      result = false;
       setDataError((prevState) => ({
         ...prevState,
         userName: "Username cannot be empty!",
       }));
     } else if (userData.userName.length <= 6) {
+      result = false;
       setDataError((prevState) => ({
         ...prevState,
         userName: "Username cannot must be least 6",
@@ -61,15 +64,19 @@ function Register() {
         userName: "",
       }));
     }
+    return result;
   };
   //Validate Fullname
   const validateFullName = () => {
+    let result = true;
     if (userData.fullName.trim() === "") {
+      result = false;
       setDataError((prevState) => ({
         ...prevState,
         fullName: "Fullname cannot be empty!",
       }));
     } else if (userData.fullName.length <= 6) {
+      result = false;
       setDataError((prevState) => ({
         ...prevState,
         fullName: "Fullname cannot must be least 6",
@@ -80,21 +87,26 @@ function Register() {
         fullName: "",
       }));
     }
+    return result;
   };
   //Validate Password
   const validatePassWord = () => {
+    let result = true;
     if (userData.password.trim() === "") {
+      result = false;
       setDataError((prevState) => ({
         ...prevState,
         password: "Password cannot be empty!",
       }));
     } else if (userData.password !== userData.confirmpassword) {
+      result = false;
       setDataError((prevState) => ({
         ...prevState,
         password: "dont match",
         confirmpassword: "dont match",
       }));
     } else if (userData.password.length < 6) {
+      result = false;
       setDataError((prevState) => ({
         ...prevState,
         password: "Password must be at least 6 characters long",
@@ -105,21 +117,26 @@ function Register() {
         password: "",
       }));
     }
+    return result;
   };
   // Validate ConfirmPassword
   const validateConfirmPassWord = () => {
+    let result = true;
     if (userData.confirmpassword.trim() === "") {
+      result = false;
       setDataError((prevState) => ({
         ...prevState,
         confirmpassword: "password cannot be empty!",
       }));
     } else if (userData.password !== userData.confirmpassword) {
+      result = false;
       setDataError((prevState) => ({
         ...prevState,
         password: "dont match",
         confirmpassword: "dont match",
       }));
     } else if (userData.password.length < 6) {
+      result = false;
       setDataError((prevState) => ({
         ...prevState,
         confirmpassword: "ConfirmPassword must be at least 6 characters long",
@@ -130,16 +147,20 @@ function Register() {
         confirmpassword: "",
       }));
     }
+    return result;
   };
   //Validate Email
   const validateEmail = () => {
+    let result = true;
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (userData.email.trim() === "") {
+      result = false;
       setDataError((prevState) => ({
         ...prevState,
         email: "Email cannot be empty!",
       }));
     } else if (!emailRegex.test(userData.email)) {
+      result = false;
       setDataError((prevState) => ({
         ...prevState,
         email: "Invalid email format!",
@@ -150,16 +171,20 @@ function Register() {
         email: "",
       }));
     }
+    return result;
   };
 
   //Validate Phone
   const validatePhone = () => {
+    let result = true;
     if (userData.phoneNumber.trim() === "") {
+      result = false;
       setDataError((prevState) => ({
         ...prevState,
         phoneNumber: "Phone cannot be empty!",
       }));
     } else if (isNaN(userData.phoneNumber)) {
+      result = false;
       setDataError((prevState) => ({
         ...prevState,
         contactPhone: "Phone must be a number",
@@ -170,10 +195,13 @@ function Register() {
         phoneNumber: "",
       }));
     }
+    return result;
   };
   //Validate Gender
   const validateGender = () => {
+    let result = true;
     if (userData.gender.trim() === "") {
+      result = false;
       setDataError((prevState) => ({
         ...prevState,
         gender: "Gender cannot be empty!",
@@ -184,7 +212,7 @@ function Register() {
         gender: "",
       }));
     }
-    console.log(userData.gender);
+    return result;
   };
 
   const handlePhone = (e) => {
@@ -197,13 +225,17 @@ function Register() {
 
   //Submit
   const handleSubmit = async (e) => {
-    validateUserName();
-    validateFullName();
-    validatePassWord();
-    validateConfirmPassWord();
-    validateEmail();
-    validatePhone();
-    validateGender();
+    let userOk =
+      validateUserName() &&
+      validateFullName() &&
+      validatePassWord() &&
+      validateConfirmPassWord() &&
+      validateEmail() &&
+      validatePhone() &&
+      validateGender();
+    if (!userOk) {
+      return;
+    }
     const res = await register(userData);
     if (res.status === 200) {
       console.log(res);
