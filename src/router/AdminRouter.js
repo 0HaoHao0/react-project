@@ -13,7 +13,7 @@ import DoctorGetAll from "../view/admin/doctor/DoctorGetAll";
 import NewsCreate from "../view/admin/news/NewsCreate";
 import NewsDetail from "../view/admin/news/NewsDetail";
 import NewsGetAll from "../view/admin/news/NewsGetAll";
-import NewsUpdate from "../view/admin/news/NewUpdate";
+import NewsUpdate from "../view/admin/news/NewsUpdate";
 import PatientDetail from "../view/admin/patient/PatientDetail";
 import PatientGetAll from "../view/admin/patient/PatientGetAll";
 import RoomCreate from "../view/admin/room/RoomCreate";

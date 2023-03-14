@@ -70,7 +70,7 @@ function NewsCreate() {
             fromData.append("Title", newsData.Title)
             fromData.append("PublishDate", newsData.PublishDate)
             fromData.append("Content", newsData.Content)
-            fromData.append("ServiceId", newsData.ServiceId && newsData.ServiceId.length ? newsData.ServiceId : [0])
+            fromData.append("ServicesId", newsData.ServiceId && newsData.ServiceId.length ? newsData.ServiceId : [0])
 
             Swal.fire({
                 title: "Loading...",
@@ -115,11 +115,11 @@ function NewsCreate() {
         <>
             <div className="news-create">
                 <div className="row">
-                    <h1>Service Create</h1>
+                    <h1>News Create</h1>
                 </div>
                 <hr />
                 <div className="row">
-                    <h4 className="alert alert-secondary">Service Infomation</h4>
+                    <h4 className="alert alert-secondary">News Infomation</h4>
                     <div className="col-lg-6 col-sm-12 ">
                         <label htmlFor="Title" className="form-label">Title: </label>
                         <input type="text" className={`form-control  ${isTouched.Title && (dataError.Title ? "is-invalid" : "is-valid")}`}

@@ -57,7 +57,7 @@ function Service() {
                                         <div className="card-body d-flex flex-column justify-content-between">
                                             <h5 className="card-title fw-bold  my-3"> {service.serviceName}</h5>
                                             <Link to={'/services/info'} state={service} className='btn btn-primary '>Detail <i className="fa-solid fa-circle-info"></i></Link>
-                                            <Link to={`/booking`} state={service} className='btn btn-warning '>Book Now <i className="fa-solid fa-calendar-days"></i></Link>
+                                            <Link to={`/user/booking`} state={service} className='btn btn-warning '>Book Now <i className="fa-solid fa-calendar-days"></i></Link>
                                         </div>
                                     </div>
                                 </div>
@@ -119,7 +119,7 @@ function Service() {
                                     <div className="card-body d-flex flex-column justify-content-between">
                                         <h5 className="card-title fw-bold  my-3"> {service.serviceName}</h5>
                                         <Link to={'/services/info'} state={service} className='btn btn-primary '>Detail <i className="fa-solid fa-circle-info"></i></Link>
-                                        <Link to={`/booking`} state={service} className='btn btn-warning '>Book Now <i className="fa-solid fa-calendar-days"></i></Link>
+                                        <Link to={`/user/booking`} state={service} className='btn btn-warning '>Book Now <i className="fa-solid fa-calendar-days"></i></Link>
                                     </div>
                                 </div>
                             </div>
