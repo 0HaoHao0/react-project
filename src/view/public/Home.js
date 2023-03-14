@@ -1,5 +1,34 @@
 import './Home.scss'
+import logo from '../../assets/images/logo/Logo-nbg-lg.png'
+import { useState } from 'react';
+import { useEffect } from 'react';
+import { getAllNews } from '../../services/admin/news/apiNew';
+import { toast } from 'react-toastify';
+import { Link } from 'react-router-dom';
 function Home() {
+    const [news, setNews] = useState();
+
+    const loadNews = async () => {
+
+        const res = await getAllNews()
+
+        if (res.status === 200) {
+            setNews(res.data.data)
+        }
+        else {
+            toast.error("Can not load News, Please contact to Admin !")
+        }
+    }
+
+    useEffect(() => {
+        loadNews()
+
+        return () => {
+
+        }
+    }, [])
+
+
     return (<>
         <div className='home'>
             {/* Slide show */}
@@ -39,6 +68,37 @@ function Home() {
                     </div>
                 </div>
             </div>
+            {/* News */}
+            <div className=''>
+                <div className='row shadow p-5 m-5'>
+                    <div className="col-lg-6 col-sm-12 d-flex align-items-center justify-content-center">
+                        <img className='w-50' src={logo} alt="..." />
+                    </div>
+                    <div className="col-lg-6 col-sm-12">
+                        <h1 className='fw-bold text-start'>News:</h1>
+                        <div className='border rounded-2 shadow-sm p-2'>
+                            {news ?
+                                <>
+                                    <div>
+                                        {news.slice(-10).reverse().map((value, index) =>
+                                            <>
+                                                <div>
+                                                    <i className="fa-solid fa-cloud"></i> <Link to={'/news'} state={value} >{value.title}</Link>
+                                                </div>
+                                            </>)}
+                                    </div>
+                                </>
+                                :
+                                <>
+                                    <div className='d-flex align-items-center justify-content-center h-100 '>
+                                        Loading...
+                                    </div>
+                                </>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
             {/* Third path */}
             <div className="row g-0">
                 <div className='row p-5'>
@@ -59,29 +119,39 @@ function Home() {
                 </div>
                 <div className='row p-5'>
                     <div className="col-lg-6 col-md-12 mt-5">
-                        <div className="h-100 m-5 p-5  text-white customer-comment-1  ">
-                            <h2>— Sherryll K.</h2>
-                            <hr />
-                            <p>
-                                <strong>
+                        <div className='d-flex align-items-center justify-content-center'>
+                            <div className='customer-comment-2 d-flex align-items-center'>
+                                <div className='text-white p-5'>
 
-                                    Unlike other Can Tho dentists, Shiny Teeth Dental takes you where you’re at rather than chastising or shaming. I can’t recommend them highly enough. You will be well cared for!
-                                </strong>
-                            </p>
+                                    <h2>— Sherryll K.</h2>
+                                    <hr />
+                                    <p>
+                                        <strong>
 
+                                            Unlike other Can Tho dentists, Shiny Teeth Dental takes you where you’re at rather than chastising or shaming. I can’t recommend them highly enough. You will be well cared for!
+                                        </strong>
+                                    </p>
+
+                                </div>
+                            </div>
                         </div>
                     </div>
 
                     <div className="col-lg-6 col-md-12 mt-5">
-                        <div className="h-100 m-5 p-5  text-white customer-comment-2 " >
-                            <h2 >— Lisa J.</h2>
-                            <hr />
-                            <p>
-                                <strong>
+                        <div className='d-flex align-items-center justify-content-center'>
+                            <div className='customer-comment-2 d-flex align-items-center'>
+                                <div className='text-white p-5'>
+                                    <h2 >— Lisa J.</h2>
+                                    <hr />
+                                    <p>
+                                        <strong>
 
-                                    It’s a pleasure to go to the dentist at Shiny Teeth Dental. The office is gorgeous, feels peaceful & clean. The staff has an upbeat attitude. Dr. Zervas is so kind & genuine.
-                                </strong>
-                            </p>
+                                            It’s a pleasure to go to the dentist at Shiny Teeth Dental. The office is gorgeous, feels peaceful & clean. The staff has an upbeat attitude. Dr. Zervas is so kind & genuine.
+                                        </strong>
+                                    </p>
+                                </div>
+                            </div>
+
 
                         </div>
                     </div>

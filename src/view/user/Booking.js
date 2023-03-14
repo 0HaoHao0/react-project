@@ -3,12 +3,13 @@ import file from '../../assets/file/HospitalMedicalReport.docx'
 import moment from "moment";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { createAppointment, getFreeDoctors, getSlots } from "../../services/user/ApiAppointment";
 import { toast } from 'react-toastify';
 
 function Booking() {
     const { state } = useLocation();
+    const navigate = useNavigate();
     const user = useSelector((state) => state.user);
 
     const [appointment, setAppointment] = useState({
@@ -143,8 +144,10 @@ function Booking() {
 
     }
     return (<>
-        <div className="booking py-5">
-            <div className="row g-5 m-5">
+        <div className="booking m-5">
+            <button className="btn btn-danger btn-back" type="button" onClick={() => { navigate(-1) }}><i className="fa-solid fa-backward"></i> Back</button>
+
+            <div className="row g-5 ">
                 <div className="col-lg-6 col-sm-12 ">
                     <div className="border shadow h-100 p-5 row align-content-center">
                         <div className="row  justify-content-center mb-5">
@@ -175,17 +178,22 @@ function Booking() {
 
                         <div className="form-group">
                             <label htmlFor="date">Select a date: </label>
-                            <input id="date-picker" name="Date" className="form-control" type="date" onChange={handleChange} min={moment().format("YYYY-MM-DD")} />
+                            <input id="date-picker" name="Date" className="form-control" type="date" onChange={handleChange}
+                                onKeyDown={(e) => {
+                                    e.preventDefault();
+                                }}
+                                min={moment().add(1, 'days').format("YYYY-MM-DD")}
+                                max={moment().endOf('week').format("YYYY-MM-DD")} />
                         </div>
 
                         <div className="form-group">
                             <label htmlFor="date-picker">Select a slot: </label>
-                            <div className="row ">
+                            <div className="row justify-content-center ">
                                 {slots && slots.map((value, index) =>
-                                    <div className="col-4" onClick={() => handleCard(value.id)} key={value.id}>
-                                        <div className={`card m-1 ${appointment && (appointment.Slot === value.id ? 'bg-primary' : null)} `}>
+                                    <div className="col " onClick={() => handleCard(value.id)} key={value.id}>
+                                        <div className={`card overflow-auto m-1 ${appointment && (appointment.Slot === value.id ? 'bg-primary' : null)} `}>
                                             <div className="card-body">
-                                                <h5 className="card-title">Slot: {value.id}</h5>
+                                                <h5 className="card-title">Slot: {value.id + 1}</h5>
                                                 <p className="card-text">Time: {value.short_description}</p>
                                             </div>
                                         </div>
@@ -229,7 +237,7 @@ function Booking() {
                     </div>
                 </div>
             </div>
-            <div className="text-center">
+            <div className="text-center my-5">
                 <button className="btn btn-primary w-50" type="button" onClick={handleSubmit}>Book Now</button>
             </div>
         </div>

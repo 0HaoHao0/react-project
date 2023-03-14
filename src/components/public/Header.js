@@ -71,6 +71,21 @@ function Header() {
                     Services
                   </NavLink>
                 </li>
+                {user.userInfo && (user.userInfo.role === 'Patient')
+                  ? <>
+                    <li className="nav-item">
+                      <NavLink
+                        to="/user/appointment"
+                        className={({ isActive }) =>
+                          isActive ? "nav-link active" : "nav-link"
+                        }
+                      >
+                        Appointment
+                      </NavLink>
+                    </li>
+                  </>
+                  : null}
+
                 <li className="nav-item">
                   <NavLink
                     to="/contact"

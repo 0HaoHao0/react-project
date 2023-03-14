@@ -19,6 +19,24 @@ export const createAppointment = async (fromData) => {
     return data;
 }
 
+export const getAllAppointment = async (filter) => {
+    let data;
+    await axios({
+        method: 'get',
+        url: '/api/Appointment/GetAll',
+        params: {
+
+        }
+    }).then((response) => {
+        data = response;
+    }).catch((error) => {
+        // handle error
+        data = error.response;
+    })
+
+    return data;
+}
+
 export const getSlots = async () => {
     let data;
     await axios({

@@ -11,7 +11,7 @@ import Contact from "../view/public/Contact";
 
 
 import Home from "../view/public/Home";
-import Booking from "../view/user/Booking";
+import News from "../view/public/News";
 import Service from "../view/user/Service";
 import ServiceInfo from "../view/user/ServiceInfo";
 
@@ -36,6 +36,10 @@ function PublicRouter() {
         <Route path="*" element={<Home />}></Route>
         <Route path="contact" element={<Contact />}></Route>
         <Route path="aboutus" element={<Aboutus />}></Route>
+        <Route path="news" element={<News />}></Route>
+        <Route path='services' element={<Service />}></Route>
+        <Route path='services/info' element={<ServiceInfo />}></Route>
+
         {
           canConfirmed && (
             <>
@@ -43,9 +47,6 @@ function PublicRouter() {
             </>
           )
         }
-        <Route path='services' element={<Service />}></Route>
-        <Route path='services/info' element={<ServiceInfo />}></Route>
-        <Route path="/booking" element={<Booking />}></Route>
 
       </Routes>
       <Footer />
