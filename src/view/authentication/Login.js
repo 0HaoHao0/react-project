@@ -22,6 +22,7 @@ import axios from "axios";
 import { createUser } from "../../redux/features/userSlide";
 import { useDispatch } from "react-redux";
 import Swal from "sweetalert2";
+import Cookies from "universal-cookie";
 function Login() {
   const [loginStyle, setLoginStyle] = useState(1);
 
@@ -98,6 +99,10 @@ function Login() {
       localStorage.setItem("app_token", "Bearer " + res.data.token);
       axios.defaults.headers.common["Authorization"] =
         "Bearer " + res.data.token;
+      // Set time expires 
+      const cookie = new Cookies();
+      cookie.set('_to', 'fcb629f3192b94ad77929397722f54c2', { maxAge: 10800 })
+
       // Get user information
       let resonse = await getUserInfo();
       if (resonse.status !== 200) {
@@ -112,13 +117,13 @@ function Login() {
         return;
       }
 
-      if(userInfo.role === "Expert") {
+      if (userInfo.role === "Expert") {
         navigate("/expert");
         return;
       }
-      
+
       if (userInfo.role === "Patient") {
-        if(userInfo.emailConfirmed) {
+        if (userInfo.emailConfirmed) {
           navigate("/home");
         }
         else {

@@ -88,3 +88,35 @@ export const updateService = async (fromData) => {
 
     return data;
 }
+
+export const publicService = async (id) => {
+    let data;
+    await axios({
+        method: 'put',
+        url: `/api/Service/MakePublic/${id}`,
+    }).then((response) => {
+        data = response;
+    }).catch((error) => {
+        // handle error
+        data = error.response;
+
+    })
+
+    return data;
+}
+
+export const hiddenService = async (id) => {
+    let data;
+    await axios({
+        method: 'put',
+        url: `/api/Service/MakeHidden/${id}`,
+    }).then((response) => {
+        data = response;
+    }).catch((error) => {
+        // handle error
+        data = error.response;
+
+    })
+
+    return data;
+}

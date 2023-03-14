@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { toast } from "react-toastify";
-import { getAllService } from "../../../services/admin/service/apiService";
+import { getAllService, hiddenService, publicService } from "../../../services/admin/service/apiService";
 
 import DataLoading from "../../../components/admin/DataLoading";
 import Pagiation from "../../../components/admin/Pagination";
@@ -11,10 +11,14 @@ import "datatables.net-dt/css/jquery.dataTables.min.css";
 import $ from "jquery";
 import { Link } from "react-router-dom";
 import { useEffect } from "react";
+import Swal from "sweetalert2";
 
 function ServiceGetAll() {
 
     const [serviceData, setServiceData] = useState();
+
+    const [isReset, setIsReset] = useState(1);
+
 
     const currentPage = serviceData ? serviceData.page : null;
     const totalPage = serviceData ? serviceData.total_pages : null;
@@ -35,14 +39,74 @@ function ServiceGetAll() {
 
 
     useEffect(() => {
-        $('#table').DataTable().destroy();
 
         loadData();
 
         return () => {
 
         }
-    }, []);
+    }, [isReset]);
+
+    const handleState = (id, isPublic) => {
+        if (isPublic) {
+            Swal.fire({
+                title: 'Are you sure?',
+                html: 'Do you want to block this service?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'OK',
+                cancelButtonText: 'Cancel',
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        title: "Loading...",
+                        html: "Please wait a moment"
+                    })
+                    Swal.showLoading()
+                    const res = await hiddenService(id);
+                    Swal.close()
+                    if (res.status === 200) {
+                        toast.success("Succesfull !")
+                        setIsReset(isReset + 1);
+                    }
+                    else {
+                        toast.error('Something was wrong !')
+                    }
+                } else {
+                    // Do something if Cancel button is clicked
+                }
+            });
+        }
+        else {
+            Swal.fire({
+                title: 'Are you sure?',
+                html: 'Do you want to un-block this service?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'OK',
+                cancelButtonText: 'Cancel',
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        title: "Loading...",
+                        html: "Please wait a moment"
+                    })
+                    Swal.showLoading()
+                    const res = await publicService(id);
+                    Swal.close()
+                    if (res.status === 200) {
+                        toast.success('Succesfull !')
+                        setIsReset(isReset - 1);
+                    }
+                    else {
+                        toast.error('Something was wrong !')
+                    }
+                } else {
+                    // Do something if Cancel button is clicked
+                }
+            });
+        }
+    }
 
     // Pagination
     const peviousPage = () => {
@@ -109,6 +173,7 @@ function ServiceGetAll() {
                                     <th>Service Name</th>
                                     <th>Service Code</th>
                                     <th>Price</th>
+                                    <th>State</th>
                                     <th>More</th>
                                 </tr>
                             </thead>
@@ -119,6 +184,14 @@ function ServiceGetAll() {
                                         <td>{value.serviceName}</td>
                                         <td>{value.serviceCode}</td>
                                         <td>{value.price}</td>
+                                        <td >{
+                                            value.isPublic
+                                                ?
+                                                <button className="btn btn-success" key={'public'} type="button" onClick={() => handleState(value.id, value.isPublic)}><i class="fa-solid fa-lock-open"></i></button>
+                                                :
+                                                <button className="btn btn-danger" key={'block'} type="button" onClick={() => handleState(value.id, value.isPublic)}><i class="fa-solid fa-lock"></i></button>
+
+                                        }</td>
                                         <td>
                                             <Link
                                                 to="detail"
