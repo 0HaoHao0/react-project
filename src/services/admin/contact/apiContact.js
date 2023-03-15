@@ -1,18 +1,33 @@
 import axios from "axios";
 
-export const getAllContact = async (page) => {
+export const getContactStates = () => {
+    let data = [
+        { id: "0", name: "Pending" },
+        { id: "1", name: "Done" },
+        { id: "2", name: "Ignore" }
+    ];
+
+    return data;
+}
+
+export const getAllContact = async ({ page, from, to, state, keyword }) => {
     let data;
     await axios({
         method: 'get',
         url: '/api/Contact/GetAll',
         params: {
-            page: page
+            page: page,
+            state: state,
+            from: from,
+            to: to,
+            keyword: keyword,
         },
     }).then((response) => {
         data = response;
     }).catch((error) => {
         // handle error
         console.log(error);
+        data = error.response;
     })
 
     return data;
