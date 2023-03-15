@@ -14,12 +14,15 @@ function Contact() {
 
   //Validate contactName
   const validateContactName = () => {
+    let result = true;
     if (contactName.trim() === "") {
+      result = false;
       setDataError((prevState) => ({
         ...prevState,
         contactName: "Name cannot be empty!",
       }));
     } else if (contactName.length <= 6) {
+      result = false;
       setDataError((prevState) => ({
         ...prevState,
         contactName: "Name cannot must be least 6",
@@ -30,15 +33,19 @@ function Contact() {
         contactName: "",
       }));
     }
+    return result;
   };
   //Validate contact
   const validateContactPhone = () => {
+    let result = true;
     if (contactPhone.trim() === "") {
+      result = false;
       setDataError((prevState) => ({
         ...prevState,
         contactPhone: "Phone cannot be empty!",
       }));
     } else if (isNaN(contactPhone)) {
+      result = false;
       setDataError((prevState) => ({
         ...prevState,
         contactPhone: "Phone must be a number",
@@ -49,17 +56,21 @@ function Contact() {
         contactPhone: "",
       }));
     }
+    return result;
   };
 
   // Validate ContactEmail
   const validateContactEmail = () => {
+    let result = true;
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (contactEmail.trim() === "") {
+      result = false;
       setDataError((prevState) => ({
         ...prevState,
         contactEmail: "Email cannot be empty!",
       }));
     } else if (!emailRegex.test(contactEmail)) {
+      result = false;
       setDataError((prevState) => ({
         ...prevState,
         contactEmail: "Invalid email format!",
@@ -70,16 +81,20 @@ function Contact() {
         contactEmail: "",
       }));
     }
+    return result;
   };
 
   //Validate ContactContent
   const validateContent = () => {
+    let result = true;
     if (contactContent.trim() === "") {
+      result = false;
       setDataError((prevState) => ({
         ...prevState,
         contactContent: "Content cannot be empty!",
       }));
     } else if (contactName.length <= 6) {
+      result = false;
       setDataError((prevState) => ({
         ...prevState,
         contactContent: "Content cannot must be least 6",
@@ -90,14 +105,19 @@ function Contact() {
         contactContent: "",
       }));
     }
+    return result;
   };
 
   //Handle Submit
   const handleSubmit = async (e) => {
-    validateContactName();
-    validateContactPhone();
-    validateContactEmail();
-    validateContent();
+    let userOk =
+      validateContactName() &&
+      validateContactPhone() &&
+      validateContactEmail() &&
+      validateContent();
+    if (!userOk) {
+      return;
+    }
     const res = await ContactCreate(
       contactName,
       contactPhone,
