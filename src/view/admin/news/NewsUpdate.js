@@ -10,7 +10,6 @@ import Editor from 'ckeditor5-custom-build/build/ckeditor';
 import { CKEditor } from '@ckeditor/ckeditor5-react'
 import { updateNews } from "../../../services/admin/news/apiNew";
 import moment from "moment";
-
 function NewsUpdate() {
     let { state } = useLocation();
 
@@ -33,11 +32,11 @@ function NewsUpdate() {
             const resDevice = await getService();
             setService(resDevice.data)
 
-            // //Set RoomId and SerIdList
-            // setNewsData((prevState) => ({
-            //     ...prevState,
-            //     ServiceId: state.devices.map(service => service.id)
-            // }))
+            //Set RoomId and SerIdList
+            setNewsData((prevState) => ({
+                ...prevState,
+                ServiceId: state.services.map(service => service.id)
+            }))
 
         }
         load();
@@ -96,7 +95,11 @@ function NewsUpdate() {
                     fromData.append("Title", newsData.title)
                     fromData.append("PublishDate", newsData.publishDate)
                     fromData.append("Content", newsData.content)
-                    fromData.append("ServiceId", newsData.ServiceId && newsData.ServiceId.length ? newsData.ServiceId : [0])
+
+                    newsData.ServiceId.forEach(element => {
+                        fromData.append("ServicesId", element)
+                    });
+                    // newsData.ServiceId && newsData.ServiceId.length ? newsData.ServiceId : [0]
 
                     Swal.fire({
                         title: "Loading...",
@@ -150,7 +153,7 @@ function NewsUpdate() {
     return (<>
         <div className="news-update">
             <div className="row">
-                <h1>News Create</h1>
+                <h1>News Update</h1>
             </div>
             <hr />
             <div className="row">
@@ -230,7 +233,7 @@ function NewsUpdate() {
             </div>
             <div className="row">
                 <h4 className="alert alert-secondary">Service Select</h4>
-                {/* <div className="col-12 row mb-3">
+                <div className="col-12 row mb-3">
                     {service.map((service) => (
                         <div className="col-4" key={service.id}>
                             <div
@@ -238,14 +241,13 @@ function NewsUpdate() {
                                 onClick={() => handleService(service.id)}
                             >
                                 <div className="card-body">
-                                    <h6 >{`Id: ${service.id}`}</h6>
+                                    <h6 >{`Id: ${service.id}, ${service.code}`}</h6>
                                     <h6 className="card-subtitle">{`${service.name}`}</h6>
-                                    <p className="card-text">{`Service Code: ${service.code}`}</p>
                                 </div>
                             </div>
                         </div>
                     ))}
-                </div> */}
+                </div>
             </div>
 
             <button className="btn btn-primary" onClick={handleUpdateNews}>Update</button>

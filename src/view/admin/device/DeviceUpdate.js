@@ -134,7 +134,6 @@ function DeviceUpdate() {
                     fromData.append("Status", deviceData.status)
                     fromData.append("RoomId", deviceData.RoomId)
                     fromData.append("ServiceIdList", deviceData.ServiceIdList && deviceData.ServiceIdList.length ? deviceData.ServiceIdList : [0])
-                    console.log(fromData.get("ServiceIdList"));
 
                     const res = await updateDevice(fromData);
                     if (res.status === 200) {
@@ -289,7 +288,6 @@ function DeviceUpdate() {
                                 <div className="card-body">
                                     <h6 >{`Id: ${service.id}`}</h6>
                                     <h6 className="card-subtitle">{`Device Name: ${service.name}`}</h6>
-                                    <p className="card-text">{`description: ${service.description}`}</p>
                                 </div>
                             </div>
                         </div>

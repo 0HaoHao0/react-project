@@ -107,10 +107,11 @@ function NewsDetail() {
             <div className="row">
                 <h4 className="alert alert-secondary">Services</h4>
                 {state.services.map((service) =>
-                    <div className="col-4" key={service}>
+                    <div className="col-4" key={service.id}>
                         <div className="card" >
                             <div className="card-body">
-                                <h5 >Id: {service}</h5>
+                                <h5 >Id: {service.id}, {service.serviceCode}</h5>
+                                <p>{service.serviceName}</p>
                             </div>
                         </div>
                     </div>

@@ -35,12 +35,15 @@ function Login() {
 
   //Validate UserName
   const validateUserName = () => {
+    let result = true;
     if (userName.trim() === "") {
+      result = false;
       setDataError((prevState) => ({
         ...prevState,
         userName: "UserName cannot be empty!",
       }));
     } else if (userName.length < 5) {
+      result = false;
       setDataError((prevState) => ({
         ...prevState,
         userName: "UserName cannot must be least 6",
@@ -51,16 +54,20 @@ function Login() {
         userName: "",
       }));
     }
+    return result;
   };
 
   //Validate Password
   const validatePassWord = () => {
+    let result = true;
     if (password.trim() === "") {
+      result = false;
       setDataError((prevState) => ({
         ...prevState,
         password: "Password cannot be empty!",
       }));
     } else if (password.length < 6) {
+      result = false;
       setDataError((prevState) => ({
         ...prevState,
         password: "Password must be at least 6 characters long",
@@ -71,6 +78,7 @@ function Login() {
         password: "",
       }));
     }
+    return result;
   };
 
   const handleSubmitForgetPassword = async (event) => {
@@ -82,17 +90,19 @@ function Login() {
   };
 
   const loginNormal = async (e) => {
-    validateUserName();
-    validatePassWord();
+    let userOk = validateUserName() && validatePassWord();
+    if (!userOk) {
+      return;
+    }
 
     Swal.fire({
       title: "Loading...",
-      html: "Please wait a moment"
-    })
+      html: "Please wait a moment",
+    });
     Swal.showLoading();
     const res = await login(userName, password);
 
-    Swal.close()
+    Swal.close();
 
     if (res.status === 200) {
       // Set header token
@@ -125,22 +135,18 @@ function Login() {
       if (userInfo.role === "Patient") {
         if (userInfo.emailConfirmed) {
           navigate("/home");
-        }
-        else {
+        } else {
           navigate("/emailconfirm");
         }
       }
-
-    }
-    else if (res.status !== 500) {
+    } else if (res.status !== 500) {
       let message = res.data;
       Swal.fire({
         icon: "error",
         title: "Failed!",
         text: message,
       });
-    }
-    else {
+    } else {
       Swal.fire({
         icon: "error",
         title: "Failed!",
@@ -154,16 +160,16 @@ function Login() {
       <div className="wrapper">
         <div className="container main">
           <div className="row">
-            <div className="col-md-6 side-image">
+            <div className="col-md-6 col-sm-12 side-image">
               <img src={logo} alt="logo" className="img-login" />
             </div>
 
             {loginStyle === 1 ? (
               <>
-                <div className="col-md-6 right">
+                <div className="col-md-6 col-sm-12 right">
                   <div className="input-box">
                     <header>Sign In</header>
-                    <div className="input-field">
+                    <div className="input-field col-md-12 col-sm-12">
                       <input
                         type="text"
                         className="input"
@@ -180,7 +186,7 @@ function Login() {
                         <span className="error">{dataError.userName}</span>
                       )}
                     </div>
-                    <div className="input-field">
+                    <div className="input-field col-md-12 col-sm-12">
                       <input
                         type="password"
                         className="input"
@@ -270,7 +276,7 @@ function Login() {
                       <PhoneInput
                         placeholder="Enter phone number"
                         defaultCountry="VN"
-                        onChange={() => { }}
+                        onChange={() => {}}
                       />
 
                       <div id="emailHelp" className="form-text">
