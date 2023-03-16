@@ -10,6 +10,7 @@ import { Provider } from 'react-redux'
 import { PersistGate } from 'redux-persist/integration/react'
 import { persistStore } from 'redux-persist'
 import { ToastContainer } from 'react-toastify';
+import { ProSidebarProvider } from 'react-pro-sidebar';
 import 'react-toastify/dist/ReactToastify.css';
 
 
@@ -21,7 +22,9 @@ root.render(
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
         <BrowserRouter>
-          <App />
+          <ProSidebarProvider>
+            <App />
+          </ProSidebarProvider>
         </BrowserRouter>
       </PersistGate>
     </Provider>
