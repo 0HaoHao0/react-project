@@ -82,7 +82,7 @@ function Home() {
                                     <div>
                                         {news.slice(-10).reverse().map((value, index) =>
                                             <>
-                                                <div>
+                                                <div key={value.id}>
                                                     <i className="fa-solid fa-cloud"></i> <Link to={'/news'} state={value} >{value.title}</Link>
                                                 </div>
                                             </>)}
