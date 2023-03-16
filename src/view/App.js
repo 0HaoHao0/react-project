@@ -15,6 +15,9 @@ import Profile from './authentication/Profile';
 import Expert from "./expert/Expert";
 import Cookies from "universal-cookie/cjs/Cookies";
 import { deleteUser } from "../redux/features/userSlide";
+import DoctorRouter from "../router/DoctorRouter";
+import ReceptionistRouter from "../router/ReceptionistRouter";
+import TechnicianRouter from "../router/TechnicianRouter";
 
 const cookie = new Cookies();
 
@@ -61,6 +64,30 @@ function App() {
         user.userInfo && (user.userInfo.role === "Patient") ? (
           <>
             <Route path="/user/*" element={<UserRouter />}></Route>
+          </>
+        ) : null
+      }
+      {/* Doctor Router */}
+      {
+        user.userInfo && (user.userInfo.role === "Doctor") ? (
+          <>
+            <Route path="/doctor/*" element={<DoctorRouter />}></Route>
+          </>
+        ) : null
+      }
+      {/* Receptionist Router */}
+      {
+        user.userInfo && (user.userInfo.role === "Receptionist") ? (
+          <>
+            <Route path="/receptionist/*" element={<ReceptionistRouter />}></Route>
+          </>
+        ) : null
+      }
+      {/* Technician Router */}
+      {
+        user.userInfo && (user.userInfo.role === "Technician") ? (
+          <>
+            <Route path="/technician/*" element={<TechnicianRouter />}></Route>
           </>
         ) : null
       }
