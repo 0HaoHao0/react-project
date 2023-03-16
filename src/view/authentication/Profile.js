@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getUserInfo } from "../../services/authorization/apILogin";
-import { profile } from "../../services/authorization/apIProfile";
+import { profile, updateProfile } from "../../services/authorization/apIProfile";
 //toast
 import { toast } from "react-toastify";
 import "./Profile.scss";
@@ -10,6 +10,7 @@ import {
   SendCodeToEmail,
   VerifyUserByCode,
 } from "../../services/authorization/apIRegister";
+import Swal from "sweetalert2";
 
 function Profile() {
   const [changleStyle, setChangleStyle] = useState(1);
@@ -21,6 +22,55 @@ function Profile() {
   const [isTouched, setIsTouched] = useState({}); // biến cờ
   const [code, setCode] = useState("");
   const [verifiedEmail, setVerifiedEmail] = useState("");
+
+  const [isUpdatePage, setIsUpdatePage] = useState(false);
+  const [updatedUserInfo, setUpdatedUserInfo] = useState({
+    FullName: null,
+    BirthDate: null,
+    Gender: null,
+    Address: null,
+    PhoneNumber: null,
+  });
+
+  const handleUpdateUserInfo = async () => {
+
+    Swal.fire({
+      title: "Waiting..."
+    });
+    Swal.showLoading();
+    const res = await updateProfile({
+      userId: userInfo.id,
+      newInfo: updatedUserInfo
+    });
+
+    if(res.status === 200) {
+      toast.success();
+      setUserInfo(res.data);
+      setIsUpdatePage(false);
+      Swal.close();
+    }
+    else if(res.status === 400) {
+      let errors = res.data;
+      let messages = "";
+      errors.forEach(item => {
+        messages += item.description + "\n";
+      });
+
+      Swal.fire({
+        icon: "error",
+        title: "Error!",
+        text: messages
+      });
+      
+    }
+    else {
+      Swal.fire({
+        icon: "error",
+        title: "Something went wrong!"
+      })
+    }
+
+  }
 
   const navigate = useNavigate();
 
@@ -80,15 +130,7 @@ function Profile() {
       result = false;
       setDataError((prevState) => ({
         ...prevState,
-        newPassword: "The new password cannot be the same as the old password",
-        oldPassword: "The new password cannot be the same as the old password",
-      }));
-    } else if (newPassword !== confirmPassword) {
-      result = false;
-      setDataError((prevState) => ({
-        ...prevState,
-        newPassword: "dont match",
-        confirmpassword: "dont match",
+        newPassword: "The new password cannot be the same as the old password."
       }));
     } else if (newPassword.length < 6) {
       result = false;
@@ -121,14 +163,7 @@ function Profile() {
       result = false;
       setDataError((prevState) => ({
         ...prevState,
-        confirmPassword: "dont match",
-        newPassword: "dont match",
-      }));
-    } else if (confirmPassword.length < 6) {
-      result = false;
-      setDataError((prevState) => ({
-        ...prevState,
-        confirmPassword: "Password must be at least 6 characters long",
+        confirmPassword: "The confirm password is not exactly.",
       }));
     } else {
       setDataError((prevState) => ({
@@ -223,14 +258,40 @@ function Profile() {
     if (!passOk) {
       return;
     }
+
+    Swal.fire({
+      title: "Waiting for response..."
+    });
+    Swal.showLoading();
     let res = await profile(userInfo.id, oldPassword, newPassword);
     if (res.status === 200) {
-      toast.success("Submit Successful");
-      navigate("/profile");
+      let message = res.data;
+      toast.success(message);
+      Swal.close();
+    }
+    else if(res.status === 400) {
+      let errors = res.data;
+      let messages = "";
+      errors.forEach(item => {
+        messages += item.description + "\n";
+      });
+
+      Swal.fire({
+        icon: "error",
+        title: "Error!",
+        text: messages
+      });
+      
+    }
+    else {
+      Swal.fire({
+        icon: "error",
+        title: "Something went wrong!"
+      })
     }
   };
 
-  const handleSendCodeToEmail = async () => {
+  const handleSendCodeToEmail = async (e) => {
     let emailOk = validateVerifiedEmail();
     if (!emailOk) {
       return;
@@ -241,6 +302,7 @@ function Profile() {
       toast.success(res.data);
     }
   };
+
   const handleConfirmCodeUser = async (e) => {
     let codeOk = validateInsertCode();
     if (!codeOk) {
@@ -267,8 +329,8 @@ function Profile() {
                 <img
                   src={userInfo.imageURL}
                   alt="avatar"
-                  width="180"
-                  height="180"
+                  width="190"
+                  height="190"
                   className="profile-imgg"
                 />
 
@@ -332,15 +394,40 @@ function Profile() {
             <>
               <div className="col col-lg-9 col-sm-12">
                 <div className="main">
-                  <h2>USER INFORMATION</h2>
+                  <div className="d-flex align-items-center gap-2">
+                    <h2 className="pt-4">USER INFORMATION</h2>
+                    <div className="ml-3 pt-3" onClick={(e) => {
+                      console.log("Clicked Edit...");
+                      setIsUpdatePage(true);
+                    }}>
+                      <i className="fa-solid fa-pen-to-square"></i>
+                    </div>
+                  </div>
+                  <hr />
                   <div className="card">
                     <div className="card-body">
-                      <table>
+                      <table className="">
                         <tbody>
                           <tr>
                             <td className="fw-bold fs-">Fullname</td>
                             <td>:</td>
-                            <td className="profile-td">{userInfo.fullName}</td>
+                            <td className="profile-td">
+                              {
+                                isUpdatePage ? 
+                                <input 
+                                  type="text" 
+                                  className="form-control"
+                                  placeholder={userInfo.fullName}
+                                  onChange={(e) => {
+                                    setUpdatedUserInfo({
+                                      ...updatedUserInfo,
+                                      FullName: e.target.value
+                                    });
+                                  }}
+                                />
+                                : userInfo.fullName
+                              }
+                            </td>
                           </tr>
                           <tr>
                             <td className="fw-bold fs-">Username</td>
@@ -375,21 +462,102 @@ function Profile() {
                             <td className="fw-bold fs-">Phone</td>
                             <td>:</td>
                             <td className="profile-td">
-                              {userInfo.phoneNumber}
+                              {
+                                isUpdatePage ? 
+                                <input 
+                                  type="text"
+                                  className="form-control"
+                                  placeholder={userInfo.phoneNumber}
+                                  onChange={(e) => {
+                                    setUpdatedUserInfo({
+                                      ...updatedUserInfo,
+                                      PhoneNumber: e.target.value
+                                    });
+                                  }}
+                                />
+                                : userInfo.phoneNumber
+                              }
                             </td>
                           </tr>
                           <tr>
                             <td className="fw-bold fs-">Gender</td>
                             <td>:</td>
-                            <td className="profile-td">{userInfo.gender}</td>
+                            <td className="profile-td">
+                            {
+                                isUpdatePage ? 
+                                <select 
+                                  className="form-control"
+                                  defaultValue={userInfo.gender}
+                                  onChange={(e) => {
+                                    setUpdatedUserInfo({
+                                      ...updatedUserInfo,
+                                      Gender: e.target.value
+                                    });
+                                  }}
+                                >
+                                  <option value="Male">Male</option>
+                                  <option value="Female">Female</option>
+                                  <option value="Other">Other</option>
+                                </select>
+                                : userInfo.gender
+                              }
+                            </td>
                           </tr>
                           <tr>
                             <td className="fw-bold fs-">Birthdate</td>
                             <td>:</td>
                             <td className="profile-td">
-                              {convertDate(userInfo.birthDate)}
+                              {
+                                isUpdatePage ? 
+                                <input type="date"
+                                  className="form-control"
+                                  defaultValue={convertDate(userInfo.birthDate)}
+                                  onChange={(e) => {
+                                    setUpdatedUserInfo({
+                                      ...updatedUserInfo,
+                                      BirthDate: convertDate(e.target.value)
+                                    })
+                                  }}
+                                />
+                                : convertDate(userInfo.birthDate)
+                              }
                             </td>
                           </tr>
+                          <tr>
+                            <td className="fw-bold fs-">Address</td>
+                            <td>:</td>
+                            <td className="profile-td">
+                              {
+                                isUpdatePage ? 
+                                <input type="text"
+                                  className="form-control"
+                                  placeholder={userInfo.address}
+                                  onChange={(e) => {
+                                    setUpdatedUserInfo({
+                                      ...updatedUserInfo,
+                                      Address: e.target.value
+                                    })
+                                  }} 
+                                />
+                                : userInfo.address
+                              }
+                            </td>
+                          </tr>
+                          {
+                            isUpdatePage && 
+                            <tr className="text-end">
+                              <td></td>
+                              <td></td>
+                              <td className="profile-td">
+                                <button className="btn btn-danger mx-2" onClick={(e) => setIsUpdatePage(false)}>
+                                  Close
+                                </button>
+                                <button className="btn btn-primary mx-2" onClick={handleUpdateUserInfo}>
+                                  Submit
+                                </button>
+                              </td>
+                            </tr>
+                          }
                         </tbody>
                       </table>
                     </div>
