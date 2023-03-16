@@ -254,7 +254,7 @@ function Profile() {
 
   return (
     <>
-      <div className="profile vh-100">
+      <div className="profile">
         <div className="navbar-top">
           <div className="title">
             <h1>Profile</h1>
