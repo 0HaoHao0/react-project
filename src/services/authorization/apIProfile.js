@@ -1,5 +1,4 @@
 import axios from "axios";
-import { toast } from "react-toastify";
 export const profile = async (userId, oldPassword, newPassword) => {
   let data;
   await axios({
@@ -15,9 +14,31 @@ export const profile = async (userId, oldPassword, newPassword) => {
       data = response;
     })
     .catch((error) => {
-      toast.error("password error, Please try again!!!");
       // handle error
       console.log(error);
+      data = error.response;
+    });
+
+  return data;
+};
+
+export const updateProfile = async ({ userId, newInfo }) => {
+  let data;
+  await axios({
+    method: "put",
+    url: "/api/User/Update",
+    data: {
+      userId: userId,
+      ...newInfo,
+    },
+  })
+    .then((response) => {
+      data = response;
+    })
+    .catch((error) => {
+      // handle error
+      console.log(error);
+      data = error.response;
     });
 
   return data;

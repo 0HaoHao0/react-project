@@ -35,12 +35,15 @@ export const register = async (userData) => {
       });
       console.log(error);
     });
-    
+
   await Swal.hideLoading();
   return data;
 };
 export const VerifyUserByCode = async (userId, code) => {
   let data;
+  Swal.fire({
+    title: "Waiting for response...",
+  });
   await Swal.showLoading();
   await axios({
     method: "get",
@@ -49,10 +52,6 @@ export const VerifyUserByCode = async (userId, code) => {
   })
     .then((response) => {
       data = response;
-      Swal.fire({
-        icon: "success",
-        title: "Email Verify Successfully",
-      });
     })
     .catch((error) => {
       // handle error
@@ -64,20 +63,23 @@ export const VerifyUserByCode = async (userId, code) => {
 
 export const SendCodeToEmail = async (email) => {
   let data;
+  Swal.fire({
+    title: "Waiting for response...",
+  });
   await Swal.showLoading();
   await axios({
     method: "post",
     url: "/api/Verify/RequiredConfirmAccount",
     data: {
-      Email: email
-    }
+      Email: email,
+    },
   })
     .then((response) => {
       data = response;
       Swal.fire({
         icon: "success",
         title: "Successful",
-        text: data.data
+        text: data.data,
       });
     })
     .catch((error) => {
