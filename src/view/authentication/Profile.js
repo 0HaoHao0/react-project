@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { getUserInfo } from "../../services/authorization/apILogin";
 import { profile } from "../../services/authorization/apIProfile";
 //toast
@@ -28,6 +28,7 @@ function Profile() {
     let data = (await getUserInfo()).data;
     console.log(data);
     setUserInfo(data);
+    setVerifiedEmail(data.email);
   };
   useEffect(() => {
     getData();
@@ -35,17 +36,20 @@ function Profile() {
 
   //validate new password
   const validateOldPassWord = () => {
+    let result = true;
     setIsTouched((prevState) => ({
       ...prevState,
       oldPassword: "Touch",
     }));
 
     if (oldPassword.trim() === "") {
+      result = false;
       setDataError((prevState) => ({
         ...prevState,
         oldPassword: "Password cannot be empty!",
       }));
     } else if (oldPassword.length < 6) {
+      result = false;
       setDataError((prevState) => ({
         ...prevState,
         oldPassword: "Password must be at least 6 characters long",
@@ -56,32 +60,38 @@ function Profile() {
         oldPassword: "",
       }));
     }
+    return result;
   };
   //validate new password
   const validateNewPassWord = () => {
+    let result = true;
     setIsTouched((prevState) => ({
       ...prevState,
       newPassword: "Touch",
     }));
 
     if (newPassword.trim() === "") {
+      result = false;
       setDataError((prevState) => ({
         ...prevState,
         newPassword: "Password cannot be empty!",
       }));
     } else if (newPassword === oldPassword) {
+      result = false;
       setDataError((prevState) => ({
         ...prevState,
         newPassword: "The new password cannot be the same as the old password",
         oldPassword: "The new password cannot be the same as the old password",
       }));
     } else if (newPassword !== confirmPassword) {
+      result = false;
       setDataError((prevState) => ({
         ...prevState,
         newPassword: "dont match",
         confirmpassword: "dont match",
       }));
     } else if (newPassword.length < 6) {
+      result = false;
       setDataError((prevState) => ({
         ...prevState,
         newPassword: "Password must be at least 6 characters long",
@@ -92,25 +102,30 @@ function Profile() {
         newPassword: "",
       }));
     }
+    return result;
   };
   //validate confirm password
   const validateConfirmPassWord = () => {
+    let result = true;
     setIsTouched((prevState) => ({
       ...prevState,
       confirmPassword: "Touch",
     }));
     if (confirmPassword.trim() === "") {
+      result = false;
       setDataError((prevState) => ({
         ...prevState,
         confirmPassword: "Password cannot be empty!",
       }));
     } else if (confirmPassword !== newPassword) {
+      result = false;
       setDataError((prevState) => ({
         ...prevState,
         confirmPassword: "dont match",
         newPassword: "dont match",
       }));
     } else if (confirmPassword.length < 6) {
+      result = false;
       setDataError((prevState) => ({
         ...prevState,
         confirmPassword: "Password must be at least 6 characters long",
@@ -121,21 +136,25 @@ function Profile() {
         confirmPassword: "",
       }));
     }
+    return result;
   };
   // validateVerifiedEmail
   const validateVerifiedEmail = (e) => {
+    let result = true;
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     setIsTouched((prevState) => ({
       ...prevState,
       verifiedEmail: "is-invalid",
     }));
-    let verifiedEmail = e.target.value;
+    // let verifiedEmail = e.target.value;
     if (verifiedEmail.trim() === "") {
+      result = false;
       setDataError((prevState) => ({
         ...prevState,
         verifiedEmail: "Email cannot be empty!",
       }));
     } else if (!emailRegex.test(verifiedEmail)) {
+      result = false;
       setDataError((prevState) => ({
         ...prevState,
         verifiedEmail: "Invalid email format!",
@@ -150,24 +169,29 @@ function Profile() {
         verifiedEmail: "",
       }));
     }
+    return result;
   };
   // validateInsertCode
   const validateInsertCode = () => {
+    let result = true;
     setIsTouched((prevState) => ({
       ...prevState,
       code: "Touch",
     }));
     if (code.trim() === "") {
+      result = false;
       setDataError((prevState) => ({
         ...prevState,
         code: "Code cannot be empty!",
       }));
     } else if (code.length < 6) {
+      result = false;
       setDataError((prevState) => ({
         ...prevState,
         code: "code must be at least 6 characters long",
       }));
     } else if (code.length > 6) {
+      result = false;
       setDataError((prevState) => ({
         ...prevState,
         code: "code cannot be more than 6",
@@ -178,21 +202,39 @@ function Profile() {
         code: "",
       }));
     }
+    return result;
+  };
+
+  //Convert Date
+  const convertDate = (obj) => {
+    if (obj == null) {
+      return null;
+    } else {
+      let date = obj.split("T")[0];
+      return date;
+    }
   };
 
   const handleSubmitAccount = async (e) => {
-    validateOldPassWord();
-    validateNewPassWord();
-    validateConfirmPassWord();
+    let passOk =
+      validateOldPassWord() &&
+      validateNewPassWord() &&
+      validateConfirmPassWord();
+    if (!passOk) {
+      return;
+    }
     let res = await profile(userInfo.id, oldPassword, newPassword);
     if (res.status === 200) {
-      console.log("thanh cong");
       toast.success("Submit Successful");
       navigate("/profile");
     }
   };
 
   const handleSendCodeToEmail = async () => {
+    let emailOk = validateVerifiedEmail();
+    if (!emailOk) {
+      return;
+    }
     setChangleStyle(4);
     const res = await SendCodeToEmail(verifiedEmail);
     if (res.status === 200) {
@@ -200,7 +242,10 @@ function Profile() {
     }
   };
   const handleConfirmCodeUser = async (e) => {
-    validateInsertCode();
+    let codeOk = validateInsertCode();
+    if (!codeOk) {
+      return;
+    }
     const res = await VerifyUserByCode(userInfo.id, code);
     if (res.status === 200) {
       toast.success(res.data);
@@ -209,616 +254,510 @@ function Profile() {
 
   return (
     <>
-      <div className="profile">
-        <section style={{ backgroundColor: "#eee" }}>
-          <div className="container py-5">
-            <div className="row"></div>
+      <div className="profile vh-100">
+        <div className="navbar-top">
+          <div className="title">
+            <h1>Profile</h1>
+          </div>
+        </div>
+        <div className="row">
+          <div className="col col-lg-3 col-sm-12">
+            <div className="sidenav vh-100">
+              <div className="profile-img">
+                <img
+                  src={userInfo.imageURL}
+                  alt="avatar"
+                  width="180"
+                  height="180"
+                  className="profile-imgg"
+                />
 
-            <div className="row">
-              <div className="col-lg-4">
-                <div className="card mb-4">
-                  <div className="card-body text-center profile-left">
-                    <img
-                      src={userInfo.imageURL}
-                      alt="avatar"
-                      className="rounded-circle img-fluid"
-                      style={{ width: "170px" }}
-                    />
-                    <h2 className="fw-bolder profile-role">
-                      <span className="p-2">{userInfo.userName}</span>
-                      <i className="fa-solid fa-circle-check"></i>
-                    </h2>
-                    <div className="d-flex justify-content-center" style={{ gap: "10px" }}>
-                      <button
-                        type="button"
-                        className={"btn btn" + (changleStyle !== 1 ? "-outline" : "") + "-primary w-100 profile-button"}
-                        onClick={() => {
-                          setChangleStyle(1);
-                        }}
-                      >
-                        <i className="fa-solid fa-user icon-change"></i>
-                      </button>
-                      <button
-                        type="button"
-                        className={"btn btn" + (changleStyle !== 2 ? "-outline" : "") + "-primary w-100 profile-button"}
-                        onClick={() => {
-                          setChangleStyle(2);
-                        }}
-                      >
-                      Update Password
-                      </button>
-                    </div>
-                  </div>
-                </div>
-                <div className="card mb-4 mb-lg-0">
-                  <div className="card-body p-0">
-                    <ul className="list-group list-group-flush rounded-3">
-                      <li className="list-group-item d-flex justify-content-between align-items-center p-3">
-                        <i className="fas fa-globe fa-lg text-warning"></i>
-                        <Link
-                          className="mb-0 fw-bolder"
-                          onClick={() => {
-                            setChangleStyle(3);
-                          }}
-                        >
-                          Email
-                        </Link>
-                      </li>
-                      <li className="list-group-item d-flex justify-content-between align-items-center p-3">
-                        <i
-                          className="fab fa-github fa-lg"
-                          style={{ color: "#333333" }}
-                        ></i>
-                        <p className="mb-0 fw-bolder">A Chảy</p>
-                      </li>
-                      <li className="list-group-item d-flex justify-content-between align-items-center p-3">
-                        <i
-                          className="fab fa-twitter fa-lg"
-                          style={{ color: "#55acee" }}
-                        ></i>
-                        <p className="mb-0 fw-bolder">A Chảy</p>
-                      </li>
-                      <li className="list-group-item d-flex justify-content-between align-items-center p-3">
-                        <i
-                          className="fab fa-instagram fa-lg"
-                          style={{ color: "#ac2bac" }}
-                        ></i>
-                        <p className="mb-0 fw-bolder">A Chảy</p>
-                      </li>
-                      <li className="list-group-item d-flex justify-content-between align-items-center p-3">
-                        <i
-                          className="fab fa-facebook-f fa-lg"
-                          style={{ color: "#3b5998" }}
-                        ></i>
-                        <p className="mb-0 fw-bolder">A Chảy</p>
-                      </li>
-                      <li className="list-group-item d-flex justify-content-between align-items-center p-3">
-                        <i
-                          className="fab fa-facebook-f fa-lg"
-                          style={{ color: "#3b5998" }}
-                        ></i>
-                        <p className="mb-0 fw-bolder">A Chảy</p>
-                      </li>
-                    </ul>
-                  </div>
+                <div className="name text-primary text-uppercase">
+                  {userInfo.userName}{" "}
+                  <i className="fa-solid fa-circle-check"></i>
                 </div>
               </div>
-              {changleStyle === 1 ? (
-              <>
-              <div className="col-lg-8">
-                <div className="card mb-4">
-                  <div className="card-body profile-right">
-                    <div className="row">
-                      <div className="col-sm-3 mt-1">
-                        <p className="mb-0 fw-bolder">FullName</p>
-                      </div>
-                      <div className="col-sm-9 mt-1">
-                        <p className="text-muted mb-0 fw-bolder">
-                          {userInfo.fullName}
-                        </p>
-                      </div>
-                    </div>
-                    <hr className="mt-3" />
-                    <div className="row">
-                      <div className="col-sm-3 mt-1">
-                        <p className="mb-0 fw-bolder ">UserName</p>
-                      </div>
-                      <div className="col-sm-9 mt-1">
-                        <p className="text-muted mb-0 fw-bolder ">
-                          {userInfo.userName}
-                        </p>
-                      </div>
-                    </div>
-                    <hr className="mt-3" />
-                    <div className="row">
-                      <div className="col-sm-3 mt-1">
-                        <p className="mb-0 fw-bolder">Email</p>
-                      </div>
-                      <div className="col-sm-9 mt-1 d-flex justify-content-between">
-                        <p className="text-muted mb-0 fw-bolder">
-                          {userInfo.email}
-                        </p>
-                        {!userInfo.emailConfirmed ? (
-                          userInfo.emailConfirmed === false ? (
-                            <button
-                              className="btn btn-primary px-4"
-                              onClick={() => {
-                                setChangleStyle(3);
-                              }}
-                            >
-                              Unconfirmed
-                            </button>
-                          ) : null
-                        ) : (
-                          <p className="text-primary fw-bolder">
-                            Verified
-                            <i className="fa-solid fa-circle-check px-3"></i>
-                          </p>
-                        )}
-                      </div>
-                    </div>
-                    <hr className="mt-3" />
-                    <div className="row">
-                      <div className="col-sm-3 mt-2">
-                        <p className="mb-0 fw-bolder">Phone</p>
-                      </div>
-                      <div className="col-sm-9 mt-2">
-                        <p className="text-muted mb-0 fw-bolder">
-                          {userInfo.phoneNumber}
-                        </p>
-                      </div>
-                    </div>
-                    <hr className="mt-3" />
-                    <div className="row">
-                      <div className="col-sm-3 mt-1">
-                        <p className="mb-0 fw-bolder">Gender</p>
-                      </div>
-                      <div className="col-sm-9 mt-1">
-                        <p className="text-muted mb-0 fw-bolder">
-                          {userInfo.gender}
-                        </p>
-                      </div>
-                    </div>
-                    <hr className="mt-3" />
-                    <div className="row">
-                      <div className="col-sm-3 mt-2">
-                        <p className="mb-0 fw-bolder">BirthDate</p>
-                      </div>
-                      <div className="col-sm-9 mt-2">
-                        <p className="text-muted mb-0 fw-bolder">
-                          {userInfo.birthDate}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
+              <div className="sidenav-url mt-5">
+                <div className="url">
+                  <button
+                    type="button"
+                    className={
+                      "btn btn" +
+                      (changleStyle !== 1 ? "-outline" : "") +
+                      "-primary w-50 text-center"
+                    }
+                    onClick={() => {
+                      setChangleStyle(1);
+                    }}
+                  >
+                    UserInfo
+                    <i className="fa-solid fa-user icon-change profile-icon"></i>
+                  </button>
+                  <hr align="center" />
                 </div>
-                <div className="row">
-                  <div className="col-md-6">
-                    <div className="card mb-4 mb-md-0">
-                      <div className="card-body">
-                        <p className="mb-4">
-                          <span className="text-primary font-italic me-1">
-                            assigment
-                          </span>{" "}
-                          Project Status
-                        </p>
-                        <p className="mb-1" style={{ fontSize: ".77rem" }}>
-                          Web Design
-                        </p>
-                        <div
-                          className="progress rounded"
-                          style={{ height: "5px" }}
-                        >
-                          <div
-                            className="progress-bar"
-                            role="progressbar"
-                            style={{ width: "80%" }}
-                            aria-valuenow="80"
-                            aria-valuemin="0"
-                            aria-valuemax="100"
-                          ></div>
-                        </div>
-                        <p
-                          className="mt-4 mb-1"
-                          style={{ fontSize: ".77rem" }}
-                        >
-                          Website Markup
-                        </p>
-                        <div
-                          className="progress rounded"
-                          style={{ height: "5px" }}
-                        >
-                          <div
-                            className="progress-bar"
-                            role="progressbar"
-                            style={{ width: "72%" }}
-                            aria-valuenow="72"
-                            aria-valuemin="0"
-                            aria-valuemax="100"
-                          ></div>
-                        </div>
-                        <p
-                          className="mt-4 mb-1"
-                          style={{ fontSize: ".77rem" }}
-                        >
-                          One Page
-                        </p>
-                        <div
-                          className="progress rounded"
-                          style={{ height: "5px" }}
-                        >
-                          <div
-                            className="progress-bar"
-                            role="progressbar"
-                            style={{ width: "89%" }}
-                            aria-valuenow="89"
-                            aria-valuemin="0"
-                            aria-valuemax="100"
-                          ></div>
-                        </div>
-                        <p
-                          className="mt-4 mb-1"
-                          style={{ fontSize: ".77rem" }}
-                        >
-                          Mobile Template
-                        </p>
-                        <div
-                          className="progress rounded"
-                          style={{ height: "5px" }}
-                        >
-                          <div
-                            className="progress-bar"
-                            role="progressbar"
-                            style={{ width: "55%" }}
-                            aria-valuenow="55"
-                            aria-valuemin="0"
-                            aria-valuemax="100"
-                          ></div>
-                        </div>
-                        <p
-                          className="mt-4 mb-1"
-                          style={{ fontSize: ".77rem" }}
-                        >
-                          Backend API
-                        </p>
-                        <div
-                          className="progress rounded mb-2"
-                          style={{ height: "5px" }}
-                        >
-                          <div
-                            className="progress-bar"
-                            role="progressbar"
-                            style={{ width: "66%" }}
-                            aria-valuenow="66"
-                            aria-valuemin="0"
-                            aria-valuemax="100"
-                          ></div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="col-md-6">
-                    <div className="card mb-4 mb-md-0">
-                      <div className="card-body">
-                        <p className="mb-4">
-                          <span className="text-primary font-italic me-1">
-                            assigment
-                          </span>{" "}
-                          Project Status
-                        </p>
-                        <p className="mb-1" style={{ fontSize: ".77rem" }}>
-                          Web Design
-                        </p>
-                        <div
-                          className="progress rounded"
-                          style={{ height: "5px" }}
-                        >
-                          <div
-                            className="progress-bar"
-                            role="progressbar"
-                            style={{ width: "80%" }}
-                            aria-valuenow="80"
-                            aria-valuemin="0"
-                            aria-valuemax="100"
-                          ></div>
-                        </div>
-                        <p
-                          className="mt-4 mb-1"
-                          style={{ fontSize: ".77rem" }}
-                        >
-                          Website Markup
-                        </p>
-                        <div
-                          className="progress rounded"
-                          style={{ height: "5px" }}
-                        >
-                          <div
-                            className="progress-bar"
-                            role="progressbar"
-                            style={{ width: "72%" }}
-                            aria-valuenow="72"
-                            aria-valuemin="0"
-                            aria-valuemax="100"
-                          ></div>
-                        </div>
-                        <p
-                          className="mt-4 mb-1"
-                          style={{ fontSize: ".77rem" }}
-                        >
-                          One Page
-                        </p>
-                        <div
-                          className="progress rounded"
-                          style={{ height: "5px" }}
-                        >
-                          <div
-                            className="progress-bar"
-                            role="progressbar"
-                            style={{ width: "89%" }}
-                            aria-valuenow="89"
-                            aria-valuemin="0"
-                            aria-valuemax="100"
-                          ></div>
-                        </div>
-                        <p
-                          className="mt-4 mb-1"
-                          style={{ fontSize: ".77rem" }}
-                        >
-                          Mobile Template
-                        </p>
-                        <div
-                          className="progress rounded"
-                          style={{ height: "5px" }}
-                        >
-                          <div
-                            className="progress-bar"
-                            role="progressbar"
-                            style={{ width: "55%" }}
-                            aria-valuenow="55"
-                            aria-valuemin="0"
-                            aria-valuemax="100"
-                          ></div>
-                        </div>
-                        <p
-                          className="mt-4 mb-1"
-                          style={{ fontSize: ".77rem" }}
-                        >
-                          Backend API
-                        </p>
-                        <div
-                          className="progress rounded mb-2"
-                          style={{ height: "5px" }}
-                        >
-                          <div
-                            className="progress-bar"
-                            role="progressbar"
-                            style={{ width: "66%" }}
-                            aria-valuenow="66"
-                            aria-valuemin="0"
-                            aria-valuemax="100"
-                          ></div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                <div className="url">
+                  <button
+                    type="button"
+                    className={
+                      "btn btn" +
+                      (changleStyle !== 2 ? "-outline" : "") +
+                      "-primary w-50 profile-button text-center"
+                    }
+                    onClick={() => {
+                      setChangleStyle(2);
+                    }}
+                  >
+                    Update Password
+                    <i className="fa-solid fa-lock profile-icon"></i>
+                  </button>
+                  <hr align="center" />
+                </div>
+                <div className="url">
+                  <button
+                    type="button"
+                    className="btn btn-danger w-50 profile-button text-center"
+                    onClick={() => {
+                      navigate(-1);
+                    }}
+                  >
+                    Back
+                    <i className="fa-solid fa-backward profile-icon"></i>
+                  </button>
+                  <hr align="center" />
                 </div>
               </div>
-              </>
-              ) : changleStyle === 2 ? (
-                <>
-                  <div className="col-lg-8">
-                    <div className="card mb-4">
-                      <div className="card-body profile-right">
-                        <div className="row">
-                          <div className="col-sm-3">
-                            <label className="mb-0 fw-bolder profile-h5">
-                              Old Password
-                            </label>
-                          </div>
-                          <div className="col-sm-9">
-                            <input
-                              type="password"
-                              className={`text-muted mb-0 class-input form-control profile-input ${
-                                isTouched.oldPassword &&
-                                (dataError.oldPassword
-                                  ? "is-invalid"
-                                  : "is-valid")
-                              }`}
-                              onBlur={validateOldPassWord}
-                              onChange={(e) => {
-                                setOldPassword(e.target.value);
-                              }}
-                            />
-                            {dataError.oldPassword ? (
-                              <p className="invalid-feedback">
-                                {dataError.oldPassword}
-                              </p>
-                            ) : null}
-                          </div>
-                        </div>
-                        <div className="row">
-                          <div className="col-sm-3">
-                            <label className="mb-0 fw-bolder profile-h5">
-                              New Password
-                            </label>
-                          </div>
-                          <div className="col-sm-9">
-                            <input
-                              type="password"
-                              className={`text-muted mb-0 class-input form-control profile-input ${
-                                isTouched.newPassword &&
-                                (dataError.newPassword
-                                  ? "is-invalid"
-                                  : "is-valid")
-                              }`}
-                              onBlur={validateNewPassWord}
-                              onChange={(e) => {
-                                setNewPassword(e.target.value);
-                              }}
-                            />
-                            {dataError.newPassword ? (
-                              <p className="invalid-feedback">
-                                {dataError.newPassword}
-                              </p>
-                            ) : null}
-                          </div>
-                        </div>
-                        {/* confirm password */}
-                        <div className="row">
-                          <div className="col-sm-3">
-                            <label className="mb-0 fw-bolder profile-h5">
-                              Confirm Password
-                            </label>
-                          </div>
-                          <div className="col-sm-9">
-                            <input
-                              type="password"
-                              onBlur={validateConfirmPassWord}
-                              className={`text-muted mb-0 class-input form-control profile-input ${
-                                isTouched.confirmPassword &&
-                                (dataError.confirmPassword
-                                  ? "is-invalid"
-                                  : "is-valid")
-                              }`}
-                              onChange={(e) => {
-                                setConfirmPassword(e.target.value);
-                              }}
-                            />
-                            {dataError.confirmPassword ? (
-                              <p className="invalid-feedback">
-                                {dataError.confirmPassword}
-                              </p>
-                            ) : null}
-                          </div>
-                        </div>
-
-                        <div className="row">
-                          <div className="col-sm-3"></div>
-                          <div className="col-sm-9">
-                            <input
-                              type="submit"
-                              className="btn btn-primary profile-submit w-25"
-                              onClick={(e) => handleSubmitAccount(e)}
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </>
-              ) : changleStyle === 3 ? (
-                <>
-                  <div className="col-lg-8">
-                    <div className="card mb-4">
-                      <div className="card-body profile-right">
-                        <div className="input-box">
-                          <header className="header-2 h4 text-center fw-bolder">
-                            Insert Email account
-                          </header>
-                          {/* Code */}
-                          <div className="form-group mt-5">
-                            <label htmlFor="inputEmail">Email</label>
-                            <div className="input-group">
-                              <input
-                                type="email"
-                                className={`form-control ${isTouched.verifiedEmail}`}
-                                id="inputEmail"
-                                onBlur={validateVerifiedEmail}
-                                defaultValue={userInfo.email}
-                                onChange={(e) => {
-                                  setVerifiedEmail(e.target.value);
-                                }}
-                                required
-                              />
-                              {dataError.verifiedEmail ? (
-                                <p className="invalid-feedback">
-                                  {dataError.verifiedEmail}
-                                </p>
-                              ) : null}
-                            </div>
-                            <div className="invalid-feedback">
-                              Please provide a valid email address.
-                            </div>
-                          </div>
-
-                          <div className="input-field">
-                            <input
-                              type="submit"
-                              className="btn btn-primary"
-                              value="Submit"
-                              onClick={(e) => {
-                                handleSendCodeToEmail(e);
-                              }}
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </>
-              ) : (
-                <>
-                  <div className="col-lg-8">
-                    <div className="card mb-4">
-                      <div className="card-body profile-right">
-                        <div className="input-box">
-                          <header className="header-2 h4 text-center fw-bolder">
-                            Email account confirmation
-                          </header>
-                          {/* Code */}
-                          <div className="form-group mt-5">
-                            <label htmlFor="inputEmail">Code</label>
-                            <div>
-                              <input
-                                type="email"
-                                className={`form-control text-center ${
-                                  isTouched.code &&
-                                  (dataError.code ? "is-invalid" : "is-valid")
-                                }`}
-                                id="inputEmail"
-                                onBlur={validateInsertCode}
-                                value={code}
-                                onChange={(e) => setCode(e.target.value)}
-                                required
-                              />
-                              {dataError.code ? (
-                                <p className="invalid-feedback">
-                                  {dataError.code}
-                                </p>
-                              ) : null}
-                            </div>
-                            <div className="invalid-feedback">
-                              Please provide a valid email address.
-                            </div>
-                          </div>
-
-                          <div className="input-field">
-                            <input
-                              type="submit"
-                              className="btn btn-primary"
-                              value="Confirm"
-                              onClick={() => {
-                                handleConfirmCodeUser();
-                              }}
-                            />
-                            <input
-                              type="submit"
-                              className="btn btn-primary mx-2"
-                              value="Resend"
-                              onClick={() => {
-                                handleSendCodeToEmail();
-                              }}
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </>
-              )}
             </div>
           </div>
-        </section>
+          {changleStyle === 1 ? (
+            <>
+              <div className="col col-lg-9 col-sm-12">
+                <div className="main">
+                  <h2>USER INFORMATION</h2>
+                  <div className="card">
+                    <div className="card-body">
+                      <table>
+                        <tbody>
+                          <tr>
+                            <td className="fw-bold fs-">Fullname</td>
+                            <td>:</td>
+                            <td className="profile-td">{userInfo.fullName}</td>
+                          </tr>
+                          <tr>
+                            <td className="fw-bold fs-">Username</td>
+                            <td>:</td>
+                            <td className="profile-td">{userInfo.userName}</td>
+                          </tr>
+                          <tr>
+                            <td className="fw-bold fs-">Email</td>
+                            <td>:</td>
+                            <td className="profile-td">{userInfo.email}</td>
+                            {!userInfo.emailConfirmed ? (
+                              userInfo.emailConfirmed === false ? (
+                                <td>
+                                  <button
+                                    className="btn btn-warning fw-bold px-4 unconfrim"
+                                    onClick={() => {
+                                      setChangleStyle(3);
+                                    }}
+                                  >
+                                    Unconfirmed
+                                  </button>
+                                </td>
+                              ) : null
+                            ) : (
+                              <td className="text-primary fw-bolder">
+                                Verified
+                                <i className="fa-solid fa-circle-check px-3"></i>
+                              </td>
+                            )}
+                          </tr>
+                          <tr>
+                            <td className="fw-bold fs-">Phone</td>
+                            <td>:</td>
+                            <td className="profile-td">
+                              {userInfo.phoneNumber}
+                            </td>
+                          </tr>
+                          <tr>
+                            <td className="fw-bold fs-">Gender</td>
+                            <td>:</td>
+                            <td className="profile-td">{userInfo.gender}</td>
+                          </tr>
+                          <tr>
+                            <td className="fw-bold fs-">Birthdate</td>
+                            <td>:</td>
+                            <td className="profile-td">
+                              {convertDate(userInfo.birthDate)}
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+
+                  <h2>SOCIAL MEDIA</h2>
+                  <div className="card">
+                    <div className="card-body">
+                      <div className="social-media">
+                        <span className="fa-stack fa-sm">
+                          <i className="fas fa-circle fa-stack-2x"></i>
+                          <i className="fab fa-facebook fa-stack-1x fa-inverse"></i>
+                        </span>
+                        <span className="fa-stack fa-sm">
+                          <i className="fas fa-circle fa-stack-2x"></i>
+                          <i className="fab fa-twitter fa-stack-1x fa-inverse"></i>
+                        </span>
+                        <span className="fa-stack fa-sm">
+                          <i className="fas fa-circle fa-stack-2x"></i>
+                          <i className="fab fa-instagram fa-stack-1x fa-inverse"></i>
+                        </span>
+                        <span className="fa-stack fa-sm">
+                          <i className="fas fa-circle fa-stack-2x"></i>
+                          <i className="fab fa-invision fa-stack-1x fa-inverse"></i>
+                        </span>
+                        <span className="fa-stack fa-sm">
+                          <i className="fas fa-circle fa-stack-2x"></i>
+                          <i className="fab fa-github fa-stack-1x fa-inverse"></i>
+                        </span>
+                        <span className="fa-stack fa-sm">
+                          <i className="fas fa-circle fa-stack-2x"></i>
+                          <i className="fab fa-whatsapp fa-stack-1x fa-inverse"></i>
+                        </span>
+                        <span className="fa-stack fa-sm">
+                          <i className="fas fa-circle fa-stack-2x"></i>
+                          <i className="fab fa-snapchat fa-stack-1x fa-inverse"></i>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </>
+          ) : changleStyle === 2 ? (
+            <>
+              <div className="col-lg-9 col-sm-12">
+                <div className="main">
+                  <h2 className="mt-5">UPDATE PASSWORD</h2>
+                  <div className="card">
+                    <div className="card-body">
+                      <div className="row">
+                        <div className="col-sm-3">
+                          <label className="mb-0 fw-bolder profile-h5">
+                            Old Password
+                          </label>
+                        </div>
+                        <div className="col-sm-9">
+                          <input
+                            type="password"
+                            className={`text-muted mb-0 class-input form-control profile-input ${
+                              isTouched.oldPassword &&
+                              (dataError.oldPassword
+                                ? "is-invalid"
+                                : "is-valid")
+                            }`}
+                            onBlur={validateOldPassWord}
+                            onChange={(e) => {
+                              setOldPassword(e.target.value);
+                            }}
+                          />
+                          {dataError.oldPassword ? (
+                            <p className="invalid-feedback">
+                              {dataError.oldPassword}
+                            </p>
+                          ) : null}
+                        </div>
+                      </div>
+                      {/* New password */}
+                      <div className="row mt-1">
+                        <div className="col-sm-3">
+                          <label className="mb-0 fw-bolder profile-h5">
+                            New Password
+                          </label>
+                        </div>
+                        <div className="col-sm-9">
+                          <input
+                            type="password"
+                            className={`text-muted mb-0 class-input form-control profile-input ${
+                              isTouched.newPassword &&
+                              (dataError.newPassword
+                                ? "is-invalid"
+                                : "is-valid")
+                            }`}
+                            onBlur={validateNewPassWord}
+                            onChange={(e) => {
+                              setNewPassword(e.target.value);
+                            }}
+                          />
+                          {dataError.newPassword ? (
+                            <p className="invalid-feedback">
+                              {dataError.newPassword}
+                            </p>
+                          ) : null}
+                        </div>
+                      </div>
+                      {/* confirm password */}
+                      <div className="row mt-1">
+                        <div className="col-sm-3">
+                          <label className="mb-0 fw-bolder profile-h5">
+                            Confirm Password
+                          </label>
+                        </div>
+                        <div className="col-sm-9">
+                          <input
+                            type="password"
+                            onBlur={validateConfirmPassWord}
+                            className={`text-muted mb-0 class-input form-control profile-input ${
+                              isTouched.confirmPassword &&
+                              (dataError.confirmPassword
+                                ? "is-invalid"
+                                : "is-valid")
+                            }`}
+                            onChange={(e) => {
+                              setConfirmPassword(e.target.value);
+                            }}
+                          />
+                          {dataError.confirmPassword ? (
+                            <p className="invalid-feedback">
+                              {dataError.confirmPassword}
+                            </p>
+                          ) : null}
+                        </div>
+                      </div>
+                      <div className="row">
+                        <div className="col-sm-3"></div>
+                        <div className="col-sm-9">
+                          <input
+                            type="submit"
+                            className="btn btn-primary profile-submit w-25"
+                            onClick={(e) => handleSubmitAccount(e)}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <h2>SOCIAL MEDIA</h2>
+                  <div className="card">
+                    <div className="card-body">
+                      <div className="social-media">
+                        <span className="fa-stack fa-sm">
+                          <i className="fas fa-circle fa-stack-2x"></i>
+                          <i className="fab fa-facebook fa-stack-1x fa-inverse"></i>
+                        </span>
+                        <span className="fa-stack fa-sm">
+                          <i className="fas fa-circle fa-stack-2x"></i>
+                          <i className="fab fa-twitter fa-stack-1x fa-inverse"></i>
+                        </span>
+                        <span className="fa-stack fa-sm">
+                          <i className="fas fa-circle fa-stack-2x"></i>
+                          <i className="fab fa-instagram fa-stack-1x fa-inverse"></i>
+                        </span>
+                        <span className="fa-stack fa-sm">
+                          <i className="fas fa-circle fa-stack-2x"></i>
+                          <i className="fab fa-invision fa-stack-1x fa-inverse"></i>
+                        </span>
+                        <span className="fa-stack fa-sm">
+                          <i className="fas fa-circle fa-stack-2x"></i>
+                          <i className="fab fa-github fa-stack-1x fa-inverse"></i>
+                        </span>
+                        <span className="fa-stack fa-sm">
+                          <i className="fas fa-circle fa-stack-2x"></i>
+                          <i className="fab fa-whatsapp fa-stack-1x fa-inverse"></i>
+                        </span>
+                        <span className="fa-stack fa-sm">
+                          <i className="fas fa-circle fa-stack-2x"></i>
+                          <i className="fab fa-snapchat fa-stack-1x fa-inverse"></i>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </>
+          ) : changleStyle === 3 ? (
+            <>
+              <div className="col-lg-9 col-sm-12">
+                <div className="main">
+                  <h2 className="mt-5">INSERT EMAIL ACCOUNT</h2>
+                  <div className="card">
+                    <div className="card-body">
+                      <div className="form-group">
+                        <label
+                          className="profile-label-insertemail"
+                          htmlFor="inputEmail"
+                        >
+                          Email
+                        </label>
+                        <div className="input-group">
+                          <input
+                            type="email"
+                            className={`form-control ${isTouched.verifiedEmail}`}
+                            id="inputEmail"
+                            onBlur={validateVerifiedEmail}
+                            defaultValue={userInfo.email}
+                            onChange={(e) => {
+                              setVerifiedEmail(e.target.value);
+                            }}
+                            required
+                          />
+                          {dataError.verifiedEmail ? (
+                            <p className="invalid-feedback">
+                              {dataError.verifiedEmail}
+                            </p>
+                          ) : null}
+                        </div>
+                        <div className="invalid-feedback">
+                          Please provide a valid email address.
+                        </div>
+                      </div>
+
+                      <div className="input-field">
+                        <input
+                          type="submit"
+                          className="btn btn-primary"
+                          value="Submit"
+                          onClick={(e) => {
+                            handleSendCodeToEmail(e);
+                          }}
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <h2>SOCIAL MEDIA</h2>
+                  <div className="card">
+                    <div className="card-body">
+                      <div className="social-media">
+                        <span className="fa-stack fa-sm">
+                          <i className="fas fa-circle fa-stack-2x"></i>
+                          <i className="fab fa-facebook fa-stack-1x fa-inverse"></i>
+                        </span>
+                        <span className="fa-stack fa-sm">
+                          <i className="fas fa-circle fa-stack-2x"></i>
+                          <i className="fab fa-twitter fa-stack-1x fa-inverse"></i>
+                        </span>
+                        <span className="fa-stack fa-sm">
+                          <i className="fas fa-circle fa-stack-2x"></i>
+                          <i className="fab fa-instagram fa-stack-1x fa-inverse"></i>
+                        </span>
+                        <span className="fa-stack fa-sm">
+                          <i className="fas fa-circle fa-stack-2x"></i>
+                          <i className="fab fa-invision fa-stack-1x fa-inverse"></i>
+                        </span>
+                        <span className="fa-stack fa-sm">
+                          <i className="fas fa-circle fa-stack-2x"></i>
+                          <i className="fab fa-github fa-stack-1x fa-inverse"></i>
+                        </span>
+                        <span className="fa-stack fa-sm">
+                          <i className="fas fa-circle fa-stack-2x"></i>
+                          <i className="fab fa-whatsapp fa-stack-1x fa-inverse"></i>
+                        </span>
+                        <span className="fa-stack fa-sm">
+                          <i className="fas fa-circle fa-stack-2x"></i>
+                          <i className="fab fa-snapchat fa-stack-1x fa-inverse"></i>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </>
+          ) : (
+            <>
+              <div className="col-lg-9 col-sm-12">
+                <div className="main">
+                  <h2 className="mt-5">EMAIL ACCOUNT CONFIRMATION</h2>
+                  <div className="card">
+                    <div className="card-body">
+                      <div className="form-group">
+                        <label
+                          className="profile-label-insertemail"
+                          htmlFor="inputEmail"
+                        >
+                          Code
+                        </label>
+                        <div className="input-group">
+                          <input
+                            type="email"
+                            className={`form-control text-center ${
+                              isTouched.code &&
+                              (dataError.code ? "is-invalid" : "is-valid")
+                            }`}
+                            id="inputEmail"
+                            onBlur={validateInsertCode}
+                            value={code}
+                            onChange={(e) => setCode(e.target.value)}
+                            required
+                          />
+                          {dataError.code ? (
+                            <p className="invalid-feedback">{dataError.code}</p>
+                          ) : null}
+                        </div>
+                        <div className="invalid-feedback">
+                          Please provide a valid email address.
+                        </div>
+                      </div>
+
+                      <div className="input-field">
+                        <input
+                          type="submit"
+                          className="btn btn-primary"
+                          value="Confirm"
+                          onClick={() => {
+                            handleConfirmCodeUser();
+                          }}
+                        />
+                        <input
+                          type="submit"
+                          className="btn btn-primary mx-2"
+                          value="Resend"
+                          onClick={() => {
+                            handleSendCodeToEmail();
+                          }}
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <h2>SOCIAL MEDIA</h2>
+                  <div className="card">
+                    <div className="card-body">
+                      <div className="social-media">
+                        <span className="fa-stack fa-sm">
+                          <i className="fas fa-circle fa-stack-2x"></i>
+                          <i className="fab fa-facebook fa-stack-1x fa-inverse"></i>
+                        </span>
+                        <span className="fa-stack fa-sm">
+                          <i className="fas fa-circle fa-stack-2x"></i>
+                          <i className="fab fa-twitter fa-stack-1x fa-inverse"></i>
+                        </span>
+                        <span className="fa-stack fa-sm">
+                          <i className="fas fa-circle fa-stack-2x"></i>
+                          <i className="fab fa-instagram fa-stack-1x fa-inverse"></i>
+                        </span>
+                        <span className="fa-stack fa-sm">
+                          <i className="fas fa-circle fa-stack-2x"></i>
+                          <i className="fab fa-invision fa-stack-1x fa-inverse"></i>
+                        </span>
+                        <span className="fa-stack fa-sm">
+                          <i className="fas fa-circle fa-stack-2x"></i>
+                          <i className="fab fa-github fa-stack-1x fa-inverse"></i>
+                        </span>
+                        <span className="fa-stack fa-sm">
+                          <i className="fas fa-circle fa-stack-2x"></i>
+                          <i className="fab fa-whatsapp fa-stack-1x fa-inverse"></i>
+                        </span>
+                        <span className="fa-stack fa-sm">
+                          <i className="fas fa-circle fa-stack-2x"></i>
+                          <i className="fab fa-snapchat fa-stack-1x fa-inverse"></i>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </>
+          )}
+        </div>
       </div>
     </>
   );
