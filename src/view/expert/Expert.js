@@ -5,6 +5,7 @@ import SegmentationRequestForm from "./SegmentationRequestForm";
 import ListRequestResult from "./ListRequestResult";
 import Swal from "sweetalert2";
 import logo from "../../assets/images/logo/Logo.png";
+import { toast } from "react-toastify";
 
 function Expert() {
 
@@ -137,6 +138,27 @@ function Expert() {
         })
     }, []);
 
+    const handleRemoveItemResult = (item) => {
+
+        callAPI({
+            method: "DELETE",
+            endpoint: "http://127.0.0.1:8000/api/predict/" + item.id,
+            callback: (response) => {
+                console.log(response);
+
+                if(response.status === 204) {
+                    setListResult(listResult.filter(i => i !== item));
+                    if(currentSelectedId === item.instance_id) {
+                        // Can reset UI if needed 
+                    }
+                }
+                else {
+                    toast.error("Something wrong!");
+                }
+            }
+        });
+    }
+
     return (
         <>
             <div className="expert">
@@ -182,7 +204,7 @@ function Expert() {
                                     <tbody>
                                         {
                                             modelList.map(item => (
-                                                <tr key={item.id}>
+                                                <tr key={item.id} className={item.id === currentActiveModelInfo?.module_selected ? "bg-light" : null}>
                                                     <td>{item.id}</td>
                                                     <td>{item.module_name}</td>
                                                     <td>{item.accuracy}</td>
@@ -284,6 +306,19 @@ function Expert() {
                                         <p>Note: {itemResultText.Note}</p>
                                     }
                                     <hr />
+                                    <ListRequestResult
+                                        setShowResult={(item) => {
+                                            setImageResultSet(item.prediction_result_set[0]?.image_result_set);
+                                            setItemResultText({
+                                                teethCount: item.prediction_result_set[0]?.teeth_count,
+                                                Note: item.purpose
+                                            });
+                                            setCurrentSelectedId(item.instance_id);
+                                        }}
+                                        listResult={listResult}
+                                        currentSelectedId={currentSelectedId}
+                                        handleRemoveItem={handleRemoveItemResult}
+                                    />
                                 </div>
                                 <div className="col-md-6">
                                     <div className="border rounded shadow p-2">
