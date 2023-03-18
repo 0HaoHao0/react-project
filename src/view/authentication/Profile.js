@@ -14,10 +14,12 @@ import {
   VerifyUserByCode,
 } from "../../services/authorization/apIRegister";
 import Swal from "sweetalert2";
+import { useDispatch } from "react-redux";
+import { createUser } from "../../redux/features/userSlide";
 
 function Profile() {
   const [changleStyle, setChangleStyle] = useState(1);
-  const [userInfo, setUserInfo] = useState({});
+  const [userInfo, setUserInfo] = useState();
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -25,6 +27,8 @@ function Profile() {
   const [isTouched, setIsTouched] = useState({}); // biến cờ
   const [code, setCode] = useState("");
   const [verifiedEmail, setVerifiedEmail] = useState("");
+
+  const dispatch = useDispatch();
 
   const [isUpdatePage, setIsUpdatePage] = useState(false);
   const [updatedUserInfo, setUpdatedUserInfo] = useState({
@@ -73,10 +77,18 @@ function Profile() {
   const navigate = useNavigate();
 
   const getData = async () => {
-    let data = (await getUserInfo()).data;
-    console.log(data);
-    setUserInfo(data);
-    setVerifiedEmail(data.email);
+
+    let res = await getUserInfo();
+    if(res.status === 200) {
+      let data = res.data;
+      console.log(data);
+      setUserInfo(data);
+      setVerifiedEmail(data.email);
+      dispatch(createUser(data))
+    }
+    else {
+      toast.error("Something wrong!");
+    }
   };
   useEffect(() => {
     getData();
@@ -309,6 +321,13 @@ function Profile() {
         icon: "success",
         title: "Email Verify Successfully",
       });
+      let newUserInfo = {
+        ...userInfo,
+        emailConfirmed: true 
+      }
+      dispatch(createUser(newUserInfo));
+      setChangleStyle(1);
+
     } else if (res.status === 400) {
       Swal.fire({
         icon: "error",
@@ -324,623 +343,627 @@ function Profile() {
 
   return (
     <>
-      <div className="profile">
-        <div className="row">
-          <div className="col col-lg-3 col-sm-12">
-            <div className="sidenav vh-100">
-              <div className="profile-img">
-                <img
-                  src={userInfo.imageURL}
-                  alt="avatar"
-                  width="190"
-                  height="190"
-                  className="profile-imgg"
-                />
+    {
+      userInfo ? (
+        <div className="profile">
+          <div className="row">
+            <div className="col col-lg-3 col-sm-12">
+              <div className="sidenav vh-100">
+                <div className="profile-img">
+                  <img
+                    src={userInfo.imageURL}
+                    alt="avatar"
+                    width="190"
+                    height="190"
+                    className="profile-imgg"
+                  />
 
-                <div className="name text-primary text-uppercase">
-                  {userInfo.userName}{" "}
-                  <i className="fa-solid fa-circle-check"></i>
+                  <div className="name text-primary text-uppercase">
+                    {userInfo.userName}{" "}
+                    <i className="fa-solid fa-circle-check"></i>
+                  </div>
                 </div>
-              </div>
-              <div className="sidenav-url mt-5">
-                <div className="url">
-                  <button
-                    type="button"
-                    className={
-                      "btn btn" +
-                      (changleStyle !== 1 ? "-outline" : "") +
-                      "-primary w-50 text-center"
-                    }
-                    onClick={() => {
-                      setChangleStyle(1);
-                    }}
-                  >
-                    UserInfo
-                    <i className="fa-solid fa-user icon-change profile-icon"></i>
-                  </button>
-                  <hr align="center" />
-                </div>
-                <div className="url">
-                  <button
-                    type="button"
-                    className={
-                      "btn btn" +
-                      (changleStyle !== 2 ? "-outline" : "") +
-                      "-primary w-50 profile-button text-center"
-                    }
-                    onClick={() => {
-                      setChangleStyle(2);
-                    }}
-                  >
-                    Update Password
-                    <i className="fa-solid fa-lock profile-icon"></i>
-                  </button>
-                  <hr align="center" />
-                </div>
-                <div className="url">
-                  <button
-                    type="button"
-                    className="btn btn-danger w-50 profile-button text-center"
-                    onClick={() => {
-                      navigate(-1);
-                    }}
-                  >
-                    Back
-                    <i className="fa-solid fa-backward profile-icon"></i>
-                  </button>
-                  <hr align="center" />
+                <div className="sidenav-url mt-5">
+                  <div className="url">
+                    <button
+                      type="button"
+                      className={
+                        "btn btn" +
+                        (changleStyle !== 1 ? "-outline" : "") +
+                        "-primary w-50 text-center"
+                      }
+                      onClick={() => {
+                        setChangleStyle(1);
+                      }}
+                    >
+                      UserInfo
+                      <i className="fa-solid fa-user icon-change profile-icon"></i>
+                    </button>
+                    <hr align="center" />
+                  </div>
+                  <div className="url">
+                    <button
+                      type="button"
+                      className={
+                        "btn btn" +
+                        (changleStyle !== 2 ? "-outline" : "") +
+                        "-primary w-50 profile-button text-center"
+                      }
+                      onClick={() => {
+                        setChangleStyle(2);
+                      }}
+                    >
+                      Update Password
+                      <i className="fa-solid fa-lock profile-icon"></i>
+                    </button>
+                    <hr align="center" />
+                  </div>
+                  <div className="url">
+                    <button
+                      type="button"
+                      className="btn btn-danger w-50 profile-button text-center"
+                      onClick={() => {
+                        navigate(-1);
+                      }}
+                    >
+                      Back
+                      <i className="fa-solid fa-backward profile-icon"></i>
+                    </button>
+                    <hr align="center" />
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-          {changleStyle === 1 ? (
-            <>
-              <div className="col col-lg-9 col-sm-12">
-                <div className="main" style={{ marginTop: "5%" }}>
-                  <div className="d-flex align-items-center gap-2">
-                    <h2 className="pt-4">USER INFORMATION</h2>
-                    <div
-                      className="ml-3 pt-3"
-                      onClick={(e) => {
-                        console.log("Clicked Edit...");
-                        setIsUpdatePage(true);
-                      }}
-                    >
-                      <i className="fa-solid fa-pen-to-square"></i>
+            {changleStyle === 1 ? (
+              <>
+                <div className="col col-lg-9 col-sm-12">
+                  <div className="main" style={{ marginTop: "5%" }}>
+                    <div className="d-flex align-items-center gap-2">
+                      <h2 className="pt-4">USER INFORMATION</h2>
+                      <div
+                        className="ml-3 pt-3"
+                        onClick={(e) => {
+                          console.log("Clicked Edit...");
+                          setIsUpdatePage(true);
+                        }}
+                      >
+                        <i className="fa-solid fa-pen-to-square"></i>
+                      </div>
                     </div>
-                  </div>
-                  <hr />
-                  <div className="card">
-                    <div className="card-body">
-                      <table className="">
-                        <tbody>
-                          <tr>
-                            <td className="fw-bold fs-">Fullname</td>
-                            <td>:</td>
-                            <td className="profile-td">
-                              {isUpdatePage ? (
-                                <input
-                                  type="text"
-                                  className="form-control"
-                                  placeholder={userInfo.fullName}
-                                  onChange={(e) => {
-                                    setUpdatedUserInfo({
-                                      ...updatedUserInfo,
-                                      FullName: e.target.value,
-                                    });
-                                  }}
-                                />
-                              ) : (
-                                userInfo.fullName
-                              )}
-                            </td>
-                          </tr>
-                          <tr>
-                            <td className="fw-bold fs-">Username</td>
-                            <td>:</td>
-                            <td className="profile-td">{userInfo.userName}</td>
-                          </tr>
-                          <tr>
-                            <td className="fw-bold fs-">Email</td>
-                            <td>:</td>
-                            <td className="profile-td">{userInfo.email}</td>
-                            {!userInfo.emailConfirmed ? (
-                              userInfo.emailConfirmed === false ? (
+                    <hr />
+                    
+                    <div className="card">
+                      <div className="card-body">
+                        <table className="">
+                          <tbody>
+                            <tr>
+                              <td className="fw-bold fs-">Fullname</td>
+                              <td>:</td>
+                              <td className="profile-td">
+                                {isUpdatePage ? (
+                                  <input
+                                    type="text"
+                                    className="form-control"
+                                    placeholder={userInfo.fullName}
+                                    onChange={(e) => {
+                                      setUpdatedUserInfo({
+                                        ...updatedUserInfo,
+                                        FullName: e.target.value,
+                                      });
+                                    }}
+                                  />
+                                ) : (
+                                  userInfo.fullName
+                                )}
+                              </td>
+                            </tr>
+                            <tr>
+                              <td className="fw-bold fs-">Username</td>
+                              <td>:</td>
+                              <td className="profile-td">{userInfo.userName}</td>
+                            </tr>
+                            <tr>
+                              <td className="fw-bold fs-">Email</td>
+                              <td>:</td>
+                              <td className="profile-td">{userInfo.email}</td>
+                              {!userInfo.emailConfirmed ? (
                                 <td>
                                   <button
-                                    className="btn btn-warning fw-bold px-4 unconfrim"
+                                    className="btn btn-warning text-white unconfrim"
                                     onClick={() => {
                                       setChangleStyle(3);
                                     }}
                                   >
-                                    Unconfirmed
+                                    Click To Verify
                                   </button>
-                                </td>
-                              ) : null
-                            ) : (
-                              <td className="text-primary fw-bolder">
-                                Verified
-                                <i className="fa-solid fa-circle-check px-3"></i>
                               </td>
-                            )}
-                          </tr>
-                          <tr>
-                            <td className="fw-bold fs-">Phone</td>
-                            <td>:</td>
-                            <td className="profile-td">
-                              {isUpdatePage ? (
-                                <input
-                                  type="text"
-                                  className="form-control"
-                                  placeholder={userInfo.phoneNumber}
-                                  onChange={(e) => {
-                                    setUpdatedUserInfo({
-                                      ...updatedUserInfo,
-                                      PhoneNumber: e.target.value,
-                                    });
-                                  }}
-                                />
                               ) : (
-                                userInfo.phoneNumber
+                                <td className="text-primary fw-bolder">
+                                  Verified
+                                  <i className="fa-solid fa-circle-check px-3"></i>
+                                </td>
                               )}
-                            </td>
-                          </tr>
-                          <tr>
-                            <td className="fw-bold fs-">Gender</td>
-                            <td>:</td>
-                            <td className="profile-td">
-                              {isUpdatePage ? (
-                                <select
-                                  className="form-control"
-                                  defaultValue={userInfo.gender}
-                                  onChange={(e) => {
-                                    setUpdatedUserInfo({
-                                      ...updatedUserInfo,
-                                      Gender: e.target.value,
-                                    });
-                                  }}
-                                >
-                                  <option value="Male">Male</option>
-                                  <option value="Female">Female</option>
-                                  <option value="Other">Other</option>
-                                </select>
-                              ) : (
-                                userInfo.gender
-                              )}
-                            </td>
-                          </tr>
-                          <tr>
-                            <td className="fw-bold fs-">Birthdate</td>
-                            <td>:</td>
-                            <td className="profile-td">
-                              {isUpdatePage ? (
-                                <input
-                                  type="date"
-                                  className="form-control"
-                                  defaultValue={convertDate(userInfo.birthDate)}
-                                  onChange={(e) => {
-                                    setUpdatedUserInfo({
-                                      ...updatedUserInfo,
-                                      BirthDate: convertDate(e.target.value),
-                                    });
-                                  }}
-                                />
-                              ) : (
-                                convertDate(userInfo.birthDate)
-                              )}
-                            </td>
-                          </tr>
-                          <tr>
-                            <td className="fw-bold fs-">Address</td>
-                            <td>:</td>
-                            <td className="profile-td">
-                              {isUpdatePage ? (
-                                <input
-                                  type="text"
-                                  className="form-control"
-                                  placeholder={userInfo.address}
-                                  onChange={(e) => {
-                                    setUpdatedUserInfo({
-                                      ...updatedUserInfo,
-                                      Address: e.target.value,
-                                    });
-                                  }}
-                                />
-                              ) : (
-                                userInfo.address
-                              )}
-                            </td>
-                          </tr>
-                          {isUpdatePage && (
-                            <tr className="text-end">
-                              <td></td>
-                              <td></td>
-                              <td className="">
-                                <button
-                                  className="btn btn-danger mx-2"
-                                  onClick={(e) => setIsUpdatePage(false)}
-                                >
-                                  Close
-                                </button>
-                                <button
-                                  className="btn btn-primary mx-2"
-                                  onClick={handleUpdateUserInfo}
-                                >
-                                  Submit
-                                </button>
+                            </tr>
+                            <tr>
+                              <td className="fw-bold fs-">Phone</td>
+                              <td>:</td>
+                              <td className="profile-td">
+                                {isUpdatePage ? (
+                                  <input
+                                    type="text"
+                                    className="form-control"
+                                    placeholder={userInfo.phoneNumber}
+                                    onChange={(e) => {
+                                      setUpdatedUserInfo({
+                                        ...updatedUserInfo,
+                                        PhoneNumber: e.target.value,
+                                      });
+                                    }}
+                                  />
+                                ) : (
+                                  userInfo.phoneNumber
+                                )}
                               </td>
                             </tr>
-                          )}
-                        </tbody>
-                      </table>
+                            <tr>
+                              <td className="fw-bold fs-">Gender</td>
+                              <td>:</td>
+                              <td className="profile-td">
+                                {isUpdatePage ? (
+                                  <select
+                                    className="form-control"
+                                    defaultValue={userInfo.gender}
+                                    onChange={(e) => {
+                                      setUpdatedUserInfo({
+                                        ...updatedUserInfo,
+                                        Gender: e.target.value,
+                                      });
+                                    }}
+                                  >
+                                    <option value="Male">Male</option>
+                                    <option value="Female">Female</option>
+                                    <option value="Other">Other</option>
+                                  </select>
+                                ) : (
+                                  userInfo.gender
+                                )}
+                              </td>
+                            </tr>
+                            <tr>
+                              <td className="fw-bold fs-">Birthdate</td>
+                              <td>:</td>
+                              <td className="profile-td">
+                                {isUpdatePage ? (
+                                  <input
+                                    type="date"
+                                    className="form-control"
+                                    defaultValue={convertDate(userInfo.birthDate)}
+                                    onChange={(e) => {
+                                      setUpdatedUserInfo({
+                                        ...updatedUserInfo,
+                                        BirthDate: convertDate(e.target.value),
+                                      });
+                                    }}
+                                  />
+                                ) : (
+                                  convertDate(userInfo.birthDate)
+                                )}
+                              </td>
+                            </tr>
+                            <tr>
+                              <td className="fw-bold fs-">Address</td>
+                              <td>:</td>
+                              <td className="profile-td">
+                                {isUpdatePage ? (
+                                  <input
+                                    type="text"
+                                    className="form-control"
+                                    placeholder={userInfo.address}
+                                    onChange={(e) => {
+                                      setUpdatedUserInfo({
+                                        ...updatedUserInfo,
+                                        Address: e.target.value,
+                                      });
+                                    }}
+                                  />
+                                ) : (
+                                  userInfo.address
+                                )}
+                              </td>
+                            </tr>
+                            {isUpdatePage && (
+                              <tr className="text-end">
+                                <td></td>
+                                <td></td>
+                                <td className="">
+                                  <button
+                                    className="btn btn-danger mx-2"
+                                    onClick={(e) => setIsUpdatePage(false)}
+                                  >
+                                    Close
+                                  </button>
+                                  <button
+                                    className="btn btn-primary mx-2"
+                                    onClick={handleUpdateUserInfo}
+                                  >
+                                    Submit
+                                  </button>
+                                </td>
+                              </tr>
+                            )}
+                          </tbody>
+                        </table>
+                      </div>
                     </div>
-                  </div>
 
-                  <h2>SOCIAL MEDIA</h2>
-                  <div className="card">
-                    <div className="card-body">
-                      <div className="social-media">
-                        <span className="fa-stack fa-sm">
-                          <i className="fas fa-circle fa-stack-2x"></i>
-                          <i className="fab fa-facebook fa-stack-1x fa-inverse"></i>
-                        </span>
-                        <span className="fa-stack fa-sm">
-                          <i className="fas fa-circle fa-stack-2x"></i>
-                          <i className="fab fa-twitter fa-stack-1x fa-inverse"></i>
-                        </span>
-                        <span className="fa-stack fa-sm">
-                          <i className="fas fa-circle fa-stack-2x"></i>
-                          <i className="fab fa-instagram fa-stack-1x fa-inverse"></i>
-                        </span>
-                        <span className="fa-stack fa-sm">
-                          <i className="fas fa-circle fa-stack-2x"></i>
-                          <i className="fab fa-invision fa-stack-1x fa-inverse"></i>
-                        </span>
-                        <span className="fa-stack fa-sm">
-                          <i className="fas fa-circle fa-stack-2x"></i>
-                          <i className="fab fa-github fa-stack-1x fa-inverse"></i>
-                        </span>
-                        <span className="fa-stack fa-sm">
-                          <i className="fas fa-circle fa-stack-2x"></i>
-                          <i className="fab fa-whatsapp fa-stack-1x fa-inverse"></i>
-                        </span>
-                        <span className="fa-stack fa-sm">
-                          <i className="fas fa-circle fa-stack-2x"></i>
-                          <i className="fab fa-snapchat fa-stack-1x fa-inverse"></i>
-                        </span>
+                    <h2>SOCIAL MEDIA</h2>
+                    <div className="card">
+                      <div className="card-body">
+                        <div className="social-media">
+                          <span className="fa-stack fa-sm">
+                            <i className="fas fa-circle fa-stack-2x"></i>
+                            <i className="fab fa-facebook fa-stack-1x fa-inverse"></i>
+                          </span>
+                          <span className="fa-stack fa-sm">
+                            <i className="fas fa-circle fa-stack-2x"></i>
+                            <i className="fab fa-twitter fa-stack-1x fa-inverse"></i>
+                          </span>
+                          <span className="fa-stack fa-sm">
+                            <i className="fas fa-circle fa-stack-2x"></i>
+                            <i className="fab fa-instagram fa-stack-1x fa-inverse"></i>
+                          </span>
+                          <span className="fa-stack fa-sm">
+                            <i className="fas fa-circle fa-stack-2x"></i>
+                            <i className="fab fa-invision fa-stack-1x fa-inverse"></i>
+                          </span>
+                          <span className="fa-stack fa-sm">
+                            <i className="fas fa-circle fa-stack-2x"></i>
+                            <i className="fab fa-github fa-stack-1x fa-inverse"></i>
+                          </span>
+                          <span className="fa-stack fa-sm">
+                            <i className="fas fa-circle fa-stack-2x"></i>
+                            <i className="fab fa-whatsapp fa-stack-1x fa-inverse"></i>
+                          </span>
+                          <span className="fa-stack fa-sm">
+                            <i className="fas fa-circle fa-stack-2x"></i>
+                            <i className="fab fa-snapchat fa-stack-1x fa-inverse"></i>
+                          </span>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            </>
-          ) : changleStyle === 2 ? (
-            <>
-              <div className="col-lg-9 col-sm-12">
-                <div className="main" style={{ marginTop: "10%" }}>
-                  <h2 className="main-h2">UPDATE PASSWORD</h2>
-                  <hr />
-                  <div className="card">
-                    <div className="card-body">
-                      <div className="row">
-                        <div className="col-sm-3">
-                          <label className="mb-0 fw-bolder profile-h5">
-                            Old Password
-                          </label>
+              </>
+            ) : changleStyle === 2 ? (
+              <>
+                <div className="col-lg-9 col-sm-12">
+                  <div className="main" style={{ marginTop: "10%" }}>
+                    <h2 className="main-h2">UPDATE PASSWORD</h2>
+                    <hr />
+                    <div className="card">
+                      <div className="card-body">
+                        <div className="row">
+                          <div className="col-sm-3">
+                            <label className="mb-0 fw-bolder profile-h5">
+                              Old Password
+                            </label>
+                          </div>
+                          <div className="col-sm-9">
+                            <input
+                              type="password"
+                              className={`text-muted mb-0 class-input form-control profile-input ${
+                                isTouched.oldPassword &&
+                                (dataError.oldPassword
+                                  ? "is-invalid"
+                                  : "is-valid")
+                              }`}
+                              onBlur={validateOldPassWord}
+                              onChange={(e) => {
+                                setOldPassword(e.target.value);
+                              }}
+                            />
+                            {dataError.oldPassword ? (
+                              <p className="invalid-feedback">
+                                {dataError.oldPassword}
+                              </p>
+                            ) : null}
+                          </div>
                         </div>
-                        <div className="col-sm-9">
-                          <input
-                            type="password"
-                            className={`text-muted mb-0 class-input form-control profile-input ${
-                              isTouched.oldPassword &&
-                              (dataError.oldPassword
-                                ? "is-invalid"
-                                : "is-valid")
-                            }`}
-                            onBlur={validateOldPassWord}
-                            onChange={(e) => {
-                              setOldPassword(e.target.value);
-                            }}
-                          />
-                          {dataError.oldPassword ? (
-                            <p className="invalid-feedback">
-                              {dataError.oldPassword}
-                            </p>
-                          ) : null}
+                        {/* New password */}
+                        <div className="row mt-1">
+                          <div className="col-sm-3">
+                            <label className="mb-0 fw-bolder profile-h5">
+                              New Password
+                            </label>
+                          </div>
+                          <div className="col-sm-9">
+                            <input
+                              type="password"
+                              className={`text-muted mb-0 class-input form-control profile-input ${
+                                isTouched.newPassword &&
+                                (dataError.newPassword
+                                  ? "is-invalid"
+                                  : "is-valid")
+                              }`}
+                              onBlur={validateNewPassWord}
+                              onChange={(e) => {
+                                setNewPassword(e.target.value);
+                              }}
+                            />
+                            {dataError.newPassword ? (
+                              <p className="invalid-feedback">
+                                {dataError.newPassword}
+                              </p>
+                            ) : null}
+                          </div>
+                        </div>
+                        {/* confirm password */}
+                        <div className="row mt-1">
+                          <div className="col-sm-3">
+                            <label className="mb-0 fw-bolder profile-h5">
+                              Confirm Password
+                            </label>
+                          </div>
+                          <div className="col-sm-9">
+                            <input
+                              type="password"
+                              onBlur={validateConfirmPassWord}
+                              className={`text-muted mb-0 class-input form-control profile-input ${
+                                isTouched.confirmPassword &&
+                                (dataError.confirmPassword
+                                  ? "is-invalid"
+                                  : "is-valid")
+                              }`}
+                              onChange={(e) => {
+                                setConfirmPassword(e.target.value);
+                              }}
+                            />
+                            {dataError.confirmPassword ? (
+                              <p className="invalid-feedback">
+                                {dataError.confirmPassword}
+                              </p>
+                            ) : null}
+                          </div>
+                        </div>
+                        <div className="row">
+                          <div className="col-sm-3"></div>
+                          <div className="col-sm-9">
+                            <input
+                              type="submit"
+                              className="btn btn-primary profile-submit w-25"
+                              onClick={(e) => handleSubmitAccount(e)}
+                            />
+                          </div>
                         </div>
                       </div>
-                      {/* New password */}
-                      <div className="row mt-1">
-                        <div className="col-sm-3">
-                          <label className="mb-0 fw-bolder profile-h5">
-                            New Password
-                          </label>
-                        </div>
-                        <div className="col-sm-9">
-                          <input
-                            type="password"
-                            className={`text-muted mb-0 class-input form-control profile-input ${
-                              isTouched.newPassword &&
-                              (dataError.newPassword
-                                ? "is-invalid"
-                                : "is-valid")
-                            }`}
-                            onBlur={validateNewPassWord}
-                            onChange={(e) => {
-                              setNewPassword(e.target.value);
-                            }}
-                          />
-                          {dataError.newPassword ? (
-                            <p className="invalid-feedback">
-                              {dataError.newPassword}
-                            </p>
-                          ) : null}
-                        </div>
-                      </div>
-                      {/* confirm password */}
-                      <div className="row mt-1">
-                        <div className="col-sm-3">
-                          <label className="mb-0 fw-bolder profile-h5">
-                            Confirm Password
-                          </label>
-                        </div>
-                        <div className="col-sm-9">
-                          <input
-                            type="password"
-                            onBlur={validateConfirmPassWord}
-                            className={`text-muted mb-0 class-input form-control profile-input ${
-                              isTouched.confirmPassword &&
-                              (dataError.confirmPassword
-                                ? "is-invalid"
-                                : "is-valid")
-                            }`}
-                            onChange={(e) => {
-                              setConfirmPassword(e.target.value);
-                            }}
-                          />
-                          {dataError.confirmPassword ? (
-                            <p className="invalid-feedback">
-                              {dataError.confirmPassword}
-                            </p>
-                          ) : null}
+                    </div>
+                    <h2>SOCIAL MEDIA</h2>
+                    <div className="card">
+                      <div className="card-body">
+                        <div className="social-media">
+                          <span className="fa-stack fa-sm">
+                            <i className="fas fa-circle fa-stack-2x"></i>
+                            <i className="fab fa-facebook fa-stack-1x fa-inverse"></i>
+                          </span>
+                          <span className="fa-stack fa-sm">
+                            <i className="fas fa-circle fa-stack-2x"></i>
+                            <i className="fab fa-twitter fa-stack-1x fa-inverse"></i>
+                          </span>
+                          <span className="fa-stack fa-sm">
+                            <i className="fas fa-circle fa-stack-2x"></i>
+                            <i className="fab fa-instagram fa-stack-1x fa-inverse"></i>
+                          </span>
+                          <span className="fa-stack fa-sm">
+                            <i className="fas fa-circle fa-stack-2x"></i>
+                            <i className="fab fa-invision fa-stack-1x fa-inverse"></i>
+                          </span>
+                          <span className="fa-stack fa-sm">
+                            <i className="fas fa-circle fa-stack-2x"></i>
+                            <i className="fab fa-github fa-stack-1x fa-inverse"></i>
+                          </span>
+                          <span className="fa-stack fa-sm">
+                            <i className="fas fa-circle fa-stack-2x"></i>
+                            <i className="fab fa-whatsapp fa-stack-1x fa-inverse"></i>
+                          </span>
+                          <span className="fa-stack fa-sm">
+                            <i className="fas fa-circle fa-stack-2x"></i>
+                            <i className="fab fa-snapchat fa-stack-1x fa-inverse"></i>
+                          </span>
                         </div>
                       </div>
-                      <div className="row">
-                        <div className="col-sm-3"></div>
-                        <div className="col-sm-9">
+                    </div>
+                  </div>
+                </div>
+              </>
+            ) : changleStyle === 3 ? (
+              <>
+                <div className="col-lg-9 col-sm-12">
+                  <div className="main" style={{ marginTop: "10%" }}>
+                    <h2 className="mt-5">INSERT EMAIL ACCOUNT</h2>
+                    <div className="card">
+                      <div className="card-body">
+                        <div className="form-group">
+                          <label
+                            className="profile-label-insertemail"
+                            htmlFor="inputEmail"
+                          >
+                            Email
+                          </label>
+                          <div className="input-group">
+                            <input
+                              type="email"
+                              className={`form-control ${isTouched.verifiedEmail}`}
+                              id="inputEmail"
+                              onBlur={validateVerifiedEmail}
+                              defaultValue={userInfo.email}
+                              onChange={(e) => {
+                                setVerifiedEmail(e.target.value);
+                              }}
+                              required
+                            />
+                            {dataError.verifiedEmail ? (
+                              <p className="invalid-feedback">
+                                {dataError.verifiedEmail}
+                              </p>
+                            ) : null}
+                          </div>
+                          <div className="invalid-feedback">
+                            Please provide a valid email address.
+                          </div>
+                        </div>
+
+                        <div className="input-field">
                           <input
                             type="submit"
-                            className="btn btn-primary profile-submit w-25"
-                            onClick={(e) => handleSubmitAccount(e)}
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <h2>SOCIAL MEDIA</h2>
-                  <div className="card">
-                    <div className="card-body">
-                      <div className="social-media">
-                        <span className="fa-stack fa-sm">
-                          <i className="fas fa-circle fa-stack-2x"></i>
-                          <i className="fab fa-facebook fa-stack-1x fa-inverse"></i>
-                        </span>
-                        <span className="fa-stack fa-sm">
-                          <i className="fas fa-circle fa-stack-2x"></i>
-                          <i className="fab fa-twitter fa-stack-1x fa-inverse"></i>
-                        </span>
-                        <span className="fa-stack fa-sm">
-                          <i className="fas fa-circle fa-stack-2x"></i>
-                          <i className="fab fa-instagram fa-stack-1x fa-inverse"></i>
-                        </span>
-                        <span className="fa-stack fa-sm">
-                          <i className="fas fa-circle fa-stack-2x"></i>
-                          <i className="fab fa-invision fa-stack-1x fa-inverse"></i>
-                        </span>
-                        <span className="fa-stack fa-sm">
-                          <i className="fas fa-circle fa-stack-2x"></i>
-                          <i className="fab fa-github fa-stack-1x fa-inverse"></i>
-                        </span>
-                        <span className="fa-stack fa-sm">
-                          <i className="fas fa-circle fa-stack-2x"></i>
-                          <i className="fab fa-whatsapp fa-stack-1x fa-inverse"></i>
-                        </span>
-                        <span className="fa-stack fa-sm">
-                          <i className="fas fa-circle fa-stack-2x"></i>
-                          <i className="fab fa-snapchat fa-stack-1x fa-inverse"></i>
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </>
-          ) : changleStyle === 3 ? (
-            <>
-              <div className="col-lg-9 col-sm-12">
-                <div className="main" style={{ marginTop: "10%" }}>
-                  <h2 className="mt-5">INSERT EMAIL ACCOUNT</h2>
-                  <div className="card">
-                    <div className="card-body">
-                      <div className="form-group">
-                        <label
-                          className="profile-label-insertemail"
-                          htmlFor="inputEmail"
-                        >
-                          Email
-                        </label>
-                        <div className="input-group">
-                          <input
-                            type="email"
-                            className={`form-control ${isTouched.verifiedEmail}`}
-                            id="inputEmail"
-                            onBlur={validateVerifiedEmail}
-                            defaultValue={userInfo.email}
-                            onChange={(e) => {
-                              setVerifiedEmail(e.target.value);
+                            className="btn btn-primary"
+                            value="Submit"
+                            onClick={(e) => {
+                              handleSendCodeToEmail(e);
                             }}
-                            required
                           />
-                          {dataError.verifiedEmail ? (
-                            <p className="invalid-feedback">
-                              {dataError.verifiedEmail}
-                            </p>
-                          ) : null}
                         </div>
-                        <div className="invalid-feedback">
-                          Please provide a valid email address.
-                        </div>
-                      </div>
-
-                      <div className="input-field">
-                        <input
-                          type="submit"
-                          className="btn btn-primary"
-                          value="Submit"
-                          onClick={(e) => {
-                            handleSendCodeToEmail(e);
-                          }}
-                        />
                       </div>
                     </div>
-                  </div>
 
-                  <h2>SOCIAL MEDIA</h2>
-                  <div className="card">
-                    <div className="card-body">
-                      <div className="social-media">
-                        <span className="fa-stack fa-sm">
-                          <i className="fas fa-circle fa-stack-2x"></i>
-                          <i className="fab fa-facebook fa-stack-1x fa-inverse"></i>
-                        </span>
-                        <span className="fa-stack fa-sm">
-                          <i className="fas fa-circle fa-stack-2x"></i>
-                          <i className="fab fa-twitter fa-stack-1x fa-inverse"></i>
-                        </span>
-                        <span className="fa-stack fa-sm">
-                          <i className="fas fa-circle fa-stack-2x"></i>
-                          <i className="fab fa-instagram fa-stack-1x fa-inverse"></i>
-                        </span>
-                        <span className="fa-stack fa-sm">
-                          <i className="fas fa-circle fa-stack-2x"></i>
-                          <i className="fab fa-invision fa-stack-1x fa-inverse"></i>
-                        </span>
-                        <span className="fa-stack fa-sm">
-                          <i className="fas fa-circle fa-stack-2x"></i>
-                          <i className="fab fa-github fa-stack-1x fa-inverse"></i>
-                        </span>
-                        <span className="fa-stack fa-sm">
-                          <i className="fas fa-circle fa-stack-2x"></i>
-                          <i className="fab fa-whatsapp fa-stack-1x fa-inverse"></i>
-                        </span>
-                        <span className="fa-stack fa-sm">
-                          <i className="fas fa-circle fa-stack-2x"></i>
-                          <i className="fab fa-snapchat fa-stack-1x fa-inverse"></i>
-                        </span>
+                    <h2>SOCIAL MEDIA</h2>
+                    <div className="card">
+                      <div className="card-body">
+                        <div className="social-media">
+                          <span className="fa-stack fa-sm">
+                            <i className="fas fa-circle fa-stack-2x"></i>
+                            <i className="fab fa-facebook fa-stack-1x fa-inverse"></i>
+                          </span>
+                          <span className="fa-stack fa-sm">
+                            <i className="fas fa-circle fa-stack-2x"></i>
+                            <i className="fab fa-twitter fa-stack-1x fa-inverse"></i>
+                          </span>
+                          <span className="fa-stack fa-sm">
+                            <i className="fas fa-circle fa-stack-2x"></i>
+                            <i className="fab fa-instagram fa-stack-1x fa-inverse"></i>
+                          </span>
+                          <span className="fa-stack fa-sm">
+                            <i className="fas fa-circle fa-stack-2x"></i>
+                            <i className="fab fa-invision fa-stack-1x fa-inverse"></i>
+                          </span>
+                          <span className="fa-stack fa-sm">
+                            <i className="fas fa-circle fa-stack-2x"></i>
+                            <i className="fab fa-github fa-stack-1x fa-inverse"></i>
+                          </span>
+                          <span className="fa-stack fa-sm">
+                            <i className="fas fa-circle fa-stack-2x"></i>
+                            <i className="fab fa-whatsapp fa-stack-1x fa-inverse"></i>
+                          </span>
+                          <span className="fa-stack fa-sm">
+                            <i className="fas fa-circle fa-stack-2x"></i>
+                            <i className="fab fa-snapchat fa-stack-1x fa-inverse"></i>
+                          </span>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            </>
-          ) : (
-            <>
-              <div className="col-lg-9 col-sm-12">
-                <div className="main" style={{ marginTop: "10%" }}>
-                  <h2 className="mt-5">EMAIL ACCOUNT CONFIRMATION</h2>
-                  <div className="card">
-                    <div className="card-body">
-                      <div className="form-group">
-                        <label
-                          className="profile-label-insertemail"
-                          htmlFor="inputEmail"
-                        >
-                          Code
-                        </label>
-                        <div className="input-group">
+              </>
+            ) : (
+              <>
+                <div className="col-lg-9 col-sm-12">
+                  <div className="main" style={{ marginTop: "10%" }}>
+                    <h2 className="mt-5">EMAIL ACCOUNT CONFIRMATION</h2>
+                    <div className="card">
+                      <div className="card-body">
+                        <div className="form-group">
+                          <label
+                            className="profile-label-insertemail"
+                            htmlFor="inputEmail"
+                          >
+                            Code
+                          </label>
+                          <div className="input-group">
+                            <input
+                              type="email"
+                              className={`form-control text-center ${
+                                isTouched.code &&
+                                (dataError.code ? "is-invalid" : "is-valid")
+                              }`}
+                              id="inputEmail"
+                              onBlur={validateInsertCode}
+                              value={code}
+                              onChange={(e) => setCode(e.target.value)}
+                              required
+                            />
+                            {dataError.code ? (
+                              <p className="invalid-feedback">{dataError.code}</p>
+                            ) : null}
+                          </div>
+                          <div className="invalid-feedback">
+                            Please provide a valid email address.
+                          </div>
+                        </div>
+
+                        <div className="input-field">
                           <input
-                            type="email"
-                            className={`form-control text-center ${
-                              isTouched.code &&
-                              (dataError.code ? "is-invalid" : "is-valid")
-                            }`}
-                            id="inputEmail"
-                            onBlur={validateInsertCode}
-                            value={code}
-                            onChange={(e) => setCode(e.target.value)}
-                            required
+                            type="submit"
+                            className="btn btn-primary"
+                            value="Confirm"
+                            onClick={() => {
+                              handleConfirmCodeUser();
+                            }}
                           />
-                          {dataError.code ? (
-                            <p className="invalid-feedback">{dataError.code}</p>
-                          ) : null}
+                          <input
+                            type="submit"
+                            className="btn btn-primary mx-2"
+                            value="Resend"
+                            onClick={() => {
+                              handleSendCodeToEmail();
+                            }}
+                          />
                         </div>
-                        <div className="invalid-feedback">
-                          Please provide a valid email address.
-                        </div>
-                      </div>
-
-                      <div className="input-field">
-                        <input
-                          type="submit"
-                          className="btn btn-primary"
-                          value="Confirm"
-                          onClick={() => {
-                            handleConfirmCodeUser();
-                          }}
-                        />
-                        <input
-                          type="submit"
-                          className="btn btn-primary mx-2"
-                          value="Resend"
-                          onClick={() => {
-                            handleSendCodeToEmail();
-                          }}
-                        />
                       </div>
                     </div>
-                  </div>
 
-                  <h2>SOCIAL MEDIA</h2>
-                  <div className="card">
-                    <div className="card-body">
-                      <div className="social-media">
-                        <span className="fa-stack fa-sm">
-                          <i className="fas fa-circle fa-stack-2x"></i>
-                          <i className="fab fa-facebook fa-stack-1x fa-inverse"></i>
-                        </span>
-                        <span className="fa-stack fa-sm">
-                          <i className="fas fa-circle fa-stack-2x"></i>
-                          <i className="fab fa-twitter fa-stack-1x fa-inverse"></i>
-                        </span>
-                        <span className="fa-stack fa-sm">
-                          <i className="fas fa-circle fa-stack-2x"></i>
-                          <i className="fab fa-instagram fa-stack-1x fa-inverse"></i>
-                        </span>
-                        <span className="fa-stack fa-sm">
-                          <i className="fas fa-circle fa-stack-2x"></i>
-                          <i className="fab fa-invision fa-stack-1x fa-inverse"></i>
-                        </span>
-                        <span className="fa-stack fa-sm">
-                          <i className="fas fa-circle fa-stack-2x"></i>
-                          <i className="fab fa-github fa-stack-1x fa-inverse"></i>
-                        </span>
-                        <span className="fa-stack fa-sm">
-                          <i className="fas fa-circle fa-stack-2x"></i>
-                          <i className="fab fa-whatsapp fa-stack-1x fa-inverse"></i>
-                        </span>
-                        <span className="fa-stack fa-sm">
-                          <i className="fas fa-circle fa-stack-2x"></i>
-                          <i className="fab fa-snapchat fa-stack-1x fa-inverse"></i>
-                        </span>
+                    <h2>SOCIAL MEDIA</h2>
+                    <div className="card">
+                      <div className="card-body">
+                        <div className="social-media">
+                          <span className="fa-stack fa-sm">
+                            <i className="fas fa-circle fa-stack-2x"></i>
+                            <i className="fab fa-facebook fa-stack-1x fa-inverse"></i>
+                          </span>
+                          <span className="fa-stack fa-sm">
+                            <i className="fas fa-circle fa-stack-2x"></i>
+                            <i className="fab fa-twitter fa-stack-1x fa-inverse"></i>
+                          </span>
+                          <span className="fa-stack fa-sm">
+                            <i className="fas fa-circle fa-stack-2x"></i>
+                            <i className="fab fa-instagram fa-stack-1x fa-inverse"></i>
+                          </span>
+                          <span className="fa-stack fa-sm">
+                            <i className="fas fa-circle fa-stack-2x"></i>
+                            <i className="fab fa-invision fa-stack-1x fa-inverse"></i>
+                          </span>
+                          <span className="fa-stack fa-sm">
+                            <i className="fas fa-circle fa-stack-2x"></i>
+                            <i className="fab fa-github fa-stack-1x fa-inverse"></i>
+                          </span>
+                          <span className="fa-stack fa-sm">
+                            <i className="fas fa-circle fa-stack-2x"></i>
+                            <i className="fab fa-whatsapp fa-stack-1x fa-inverse"></i>
+                          </span>
+                          <span className="fa-stack fa-sm">
+                            <i className="fas fa-circle fa-stack-2x"></i>
+                            <i className="fab fa-snapchat fa-stack-1x fa-inverse"></i>
+                          </span>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            </>
-          )}
+              </>
+            )}
+          </div>
         </div>
-      </div>
+      ) : 
+      null
+    }
     </>
   );
 }
