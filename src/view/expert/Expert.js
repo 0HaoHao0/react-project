@@ -249,7 +249,22 @@ function Expert() {
                                         </div>
                                     )
                                 }
+                                <hr />
+                            <div className="col-sm-12">
+                                <ListRequestResult 
+                                    setShowResult={(item) => {
+                                        setImageResultSet(item.prediction_result_set[0]?.image_result_set);
+                                        setItemResultText({
+                                            teethCount: item.prediction_result_set[0]?.teeth_count,
+                                            Note: item.purpose
+                                        });
+                                        setCurrentSelectedId(item.instance_id);
+                                    }}
+                                    listResult={listResult}
+                                    currentSelectedId={currentSelectedId}
+                                />
                             </div>
+                        </div>
                         </div>
 
                         <div className="col-md-6">
