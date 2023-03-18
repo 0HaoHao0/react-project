@@ -4,6 +4,7 @@ import CreateModelForm from "./CreateModelForm";
 import SegmentationRequestForm from "./SegmentationRequestForm";
 import ListRequestResult from "./ListRequestResult";
 import Swal from "sweetalert2";
+import { toast } from "react-toastify";
 
 function Expert() {
 
@@ -136,6 +137,27 @@ function Expert() {
         })
     }, []);
 
+    const handleRemoveItemResult = (item) => {
+
+        callAPI({
+            method: "DELETE",
+            endpoint: "http://127.0.0.1:8000/api/predict/" + item.id,
+            callback: (response) => {
+                console.log(response);
+
+                if(response.status === 204) {
+                    setListResult(listResult.filter(i => i !== item));
+                    if(currentSelectedId === item.instance_id) {
+                        // Can reset UI if needed 
+                    }
+                }
+                else {
+                    toast.error("Something wrong!");
+                }
+            }
+        });
+    }
+
     return (
         <>
             <div className="expert">
@@ -181,7 +203,7 @@ function Expert() {
                                     <tbody>
                                         {
                                             modelList.map(item => (
-                                                <tr key={item.id}>
+                                                <tr key={item.id} className={item.id === currentActiveModelInfo?.module_selected ? "bg-light" : null}>
                                                     <td>{item.id}</td>
                                                     <td>{item.module_name}</td>
                                                     <td>{item.accuracy}</td>
@@ -279,6 +301,7 @@ function Expert() {
                                         }}
                                         listResult={listResult}
                                         currentSelectedId={currentSelectedId}
+                                        handleRemoveItem={handleRemoveItemResult}
                                     />
                                 </div>
                                 <div className="col-md-6">
