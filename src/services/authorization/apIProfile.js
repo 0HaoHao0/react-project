@@ -22,14 +22,15 @@ export const profile = async (userId, oldPassword, newPassword) => {
   return data;
 };
 
-export const updateProfile = async ({ userId, newInfo }) => {
+export const updateProfile = async ({userId, newInfo}) => {
+
   let data;
   await axios({
     method: "put",
     url: "/api/User/Update",
     data: {
       userId: userId,
-      ...newInfo,
+      ...newInfo
     },
   })
     .then((response) => {
@@ -42,4 +43,5 @@ export const updateProfile = async ({ userId, newInfo }) => {
     });
 
   return data;
-};
+
+}

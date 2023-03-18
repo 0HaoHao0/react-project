@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useState } from "react";
 import Pagiation from "../../../components/admin/Pagination";
 import { getAllContact } from "../../../services/admin/contact/apiContact";
+import ContactFilter from "./ContactFilter";
 
 
 //Datatable Modules
@@ -18,31 +19,50 @@ function ContactGetAll() {
     const currentPage = contactData ? contactData.page : null;
     const totalPage = contactData ? contactData.total_pages : null;
 
-    const loadData = async (page) => {
-        const res = await getAllContact(page);
+    const [filterData, setFilterData] = useState({
+        from: null,
+        to: null,
+        state: null,
+        keyword: null,
+    });
 
-        setContactData(res.data);
+    const loadData = async ({ page }) => {
 
-
-        $('#table').DataTable({
-            destroy: true,
-            retrieve: true,
-            paging: false,
-            ordering: false,
+        const res = await getAllContact({
+            page: page,
+            from: filterData.from,
+            to: filterData.to,
+            state: filterData.state,
+            keyword: filterData.keyword
         });
+
+        if(res.status === 200) {
+            setContactData(res.data);
+        }
+        else {
+            toast.error("Something went wrong!");
+        }
 
     }
 
     useEffect(() => {
-        loadData();
-    }, [])
+        loadData({
+            page: 1
+        });
+
+    }, [filterData]);
 
     // Pagination
-    const peviousPage = () => {
-        loadData(currentPage - 1);
+    const peviousPage = (e) => {
+        loadData({
+            page: currentPage - 1
+        });
     }
+
     const nextPage = (e) => {
-        loadData(currentPage + 1);
+        loadData({
+            page: currentPage + 1
+        });
     }
     const enterPage = (e) => {
         if (e.keyCode === 13) {
@@ -82,6 +102,9 @@ function ContactGetAll() {
                         <h1>Contact Management</h1>
                     </div>
                     <hr />
+
+                    <ContactFilter filterData={filterData} setFilterData={setFilterData} />
+
                     <div className="overflow-auto mb-4">
 
                         <table id="table" className="table table-hover" >
@@ -90,7 +113,7 @@ function ContactGetAll() {
                                     <th>Id</th>
                                     <th>Full Name</th>
                                     <th>Phone Number</th>
-                                    <th>Email</th>
+                                    <th>Date</th>
                                     <th>State</th>
                                     <th>Content</th>
                                 </tr>
@@ -102,7 +125,7 @@ function ContactGetAll() {
                                             <td>{value.id}</td>
                                             <td>{value.name}</td>
                                             <td>{value.phoneNumber}</td>
-                                            <td>{value.email}</td>
+                                            <td>{value.timeCreated.slice(0, 10)}</td>
                                             <td><button className={`btn ${value.state === "Pending" ? "btn-danger" : value.state === "Done" ? "btn-primary" : "btn-warning"}`}>{value.state}</button> </td>
                                             <td><Link to='detail' state={value} className="btn btn-success"><i className="fa-solid fa-circle-info"></i></Link></td>
                                         </tr>

@@ -412,7 +412,7 @@ function Profile() {
                   <hr />
                   <div className="card">
                     <div className="card-body">
-                      <table>
+                      <table className="">
                         <tbody>
                           <tr>
                             <td className="fw-bold fs-">Fullname</td>

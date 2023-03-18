@@ -4,6 +4,7 @@ import CreateModelForm from "./CreateModelForm";
 import SegmentationRequestForm from "./SegmentationRequestForm";
 import ListRequestResult from "./ListRequestResult";
 import Swal from "sweetalert2";
+import { toast } from "react-toastify";
 
 function Expert() {
 
@@ -136,6 +137,27 @@ function Expert() {
         })
     }, []);
 
+    const handleRemoveItemResult = (item) => {
+
+        callAPI({
+            method: "DELETE",
+            endpoint: "http://127.0.0.1:8000/api/predict/" + item.id,
+            callback: (response) => {
+                console.log(response);
+
+                if(response.status === 204) {
+                    setListResult(listResult.filter(i => i !== item));
+                    if(currentSelectedId === item.instance_id) {
+                        // Can reset UI if needed 
+                    }
+                }
+                else {
+                    toast.error("Something wrong!");
+                }
+            }
+        });
+    }
+
     return (
         <>
             <div className="expert">
@@ -181,7 +203,7 @@ function Expert() {
                                     <tbody>
                                         {
                                             modelList.map(item => (
-                                                <tr key={item.id}>
+                                                <tr key={item.id} className={item.id === currentActiveModelInfo?.module_selected ? "bg-light" : null}>
                                                     <td>{item.id}</td>
                                                     <td>{item.module_name}</td>
                                                     <td>{item.accuracy}</td>
@@ -227,7 +249,8 @@ function Expert() {
                                         </div>
                                     )
                                 }
-                            </div>
+                                
+                        </div>
                         </div>
 
                         <div className="col-md-6">
@@ -251,7 +274,7 @@ function Expert() {
                                     </div>
                                     <div className="col-md-6">
                                         <div className="border rounded shadow p-2">
-                                            <img className="img-fill" src={previewURL || "https://images.unsplash.com/photo-1677857387640-d26016fa8eb7?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHx0b3BpYy1mZWVkfDZ8SnBnNktpZGwtSGt8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=60"}
+                                            <img className="img-fill" src={previewURL || "https://fakeimg.pl/350x200/?text=Put X-Ray Image&font=lobster"}
                                                 alt="preview" />
                                         </div>
                                     </div>
@@ -279,6 +302,7 @@ function Expert() {
                                         }}
                                         listResult={listResult}
                                         currentSelectedId={currentSelectedId}
+                                        handleRemoveItem={handleRemoveItemResult}
                                     />
                                 </div>
                                 <div className="col-md-6">
@@ -290,7 +314,7 @@ function Expert() {
                                                         <img key={index} className="img-fill" src={item.image}
                                                             alt={item.title} />
                                                     )) :
-                                                    <img className="img-fill" src="https://images.unsplash.com/photo-1678307746237-c06bb9531298?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHx0b3BpYy1mZWVkfDV8NnNNVmpUTFNrZVF8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=60" alt="example" />
+                                                    <img className="img-fill" src="https://fakeimg.pl/350x200/?text=Result&font=lobster" alt="example" />
                                             }
                                         </div>
                                     </div>

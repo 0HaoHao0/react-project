@@ -22,14 +22,15 @@ function SmartList({ data, maxRows, renderItemFn }) {
             <li key={index}>{renderItemFn(item)}</li>
           ))}
         </ul>
+        <hr />
         <div className="d-flex justify-content-between px-2">
             {
                 (numRows > maxRows) && 
-                <button className="btn btn-sm btn-info" onClick={handleLessClick}>Show Less</button>
+                <button className="btn btn-sm btn-info mr-auto" onClick={handleLessClick}>Show Less</button>
             }
             {
                 (numRows < data.length) &&
-                <button className="btn btn-sm btn-success" onClick={handleMoreClick}>Show More</button>
+                <button className="btn btn-sm btn-success ml-auto" onClick={handleMoreClick}>Show More</button>
             }
         </div>
       </div>
@@ -40,6 +41,7 @@ function ListRequestResult({
     setShowResult = () => {},
     listResult = [],
     currentSelectedId = null,
+    handleRemoveItem = () => {}
 })
 {
 
@@ -58,6 +60,7 @@ function ListRequestResult({
                     <span style={{ cursor: "pointer" }} onClick={(e) => handleItemSelected(item)} className={(currentSelectedId === item.instance_id) ? "text-primary" : "text-dark"}>
                         {item.module_name + " | " + new Date(item.upload_at).toLocaleString()}
                     </span>
+                    <u style={{ cursor: "pointer" }} onClick={(e) => handleRemoveItem(item)} className="mx-2 fw-bold text-mute text-danger">Remove</u>
                     </>
                 )}
             />
