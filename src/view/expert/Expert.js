@@ -4,7 +4,6 @@ import CreateModelForm from "./CreateModelForm";
 import SegmentationRequestForm from "./SegmentationRequestForm";
 import ListRequestResult from "./ListRequestResult";
 import Swal from "sweetalert2";
-import logo from "../../assets/images/logo/Logo.png";
 import { toast } from "react-toastify";
 
 function Expert() {
@@ -146,9 +145,9 @@ function Expert() {
             callback: (response) => {
                 console.log(response);
 
-                if(response.status === 204) {
+                if (response.status === 204) {
                     setListResult(listResult.filter(i => i !== item));
-                    if(currentSelectedId === item.instance_id) {
+                    if (currentSelectedId === item.instance_id) {
                         // Can reset UI if needed 
                     }
                 }
@@ -251,21 +250,21 @@ function Expert() {
                                     )
                                 }
                                 <hr />
-                            <div className="col-sm-12">
-                                <ListRequestResult 
-                                    setShowResult={(item) => {
-                                        setImageResultSet(item.prediction_result_set[0]?.image_result_set);
-                                        setItemResultText({
-                                            teethCount: item.prediction_result_set[0]?.teeth_count,
-                                            Note: item.purpose
-                                        });
-                                        setCurrentSelectedId(item.instance_id);
-                                    }}
-                                    listResult={listResult}
-                                    currentSelectedId={currentSelectedId}
-                                />
+                                <div className="col-sm-12">
+                                    <ListRequestResult
+                                        setShowResult={(item) => {
+                                            setImageResultSet(item.prediction_result_set[0]?.image_result_set);
+                                            setItemResultText({
+                                                teethCount: item.prediction_result_set[0]?.teeth_count,
+                                                Note: item.purpose
+                                            });
+                                            setCurrentSelectedId(item.instance_id);
+                                        }}
+                                        listResult={listResult}
+                                        currentSelectedId={currentSelectedId}
+                                    />
+                                </div>
                             </div>
-                        </div>
                         </div>
 
                         <div className="col-md-6">
