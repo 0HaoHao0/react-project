@@ -35,3 +35,37 @@ export const getAppointment = async (id) => {
 
     return data;
 }
+export const getAppointmentState = async () => {
+    let data;
+    await axios({
+        method: 'get',
+        url: `/api/SelectBoxItems/GetAppointmentStates`,
+    }).then((response) => {
+        data = response;
+    }).catch((error) => {
+        // handle error
+        data = error.response;
+    })
+
+    return data;
+}
+
+export const updateAppointmentState = async (id, state) => {
+    let data;
+    await axios({
+        method: 'put',
+        url: `/api/Appointment/UpdateState/${id}`,
+        params: {
+            id: id,
+            state: state,
+
+        }
+    }).then((response) => {
+        data = response;
+    }).catch((error) => {
+        // handle error
+        data = error.response;
+    })
+
+    return data;
+}
