@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { getUserInfo } from "../../services/authorization/apILogin";
 import {
   profile,
@@ -14,6 +14,7 @@ import {
   VerifyUserByCode,
 } from "../../services/authorization/apIRegister";
 import Swal from "sweetalert2";
+import { getPatientInfo, updateMedicalRecord } from "../../services/admin/patient/apiPatient";
 
 function Profile() {
   const [changleStyle, setChangleStyle] = useState(1);
@@ -25,7 +26,6 @@ function Profile() {
   const [isTouched, setIsTouched] = useState({}); // biến cờ
   const [code, setCode] = useState("");
   const [verifiedEmail, setVerifiedEmail] = useState("");
-
   const [isUpdatePage, setIsUpdatePage] = useState(false);
   const [updatedUserInfo, setUpdatedUserInfo] = useState({
     FullName: null,
@@ -34,6 +34,8 @@ function Profile() {
     Address: null,
     PhoneNumber: null,
   });
+  const [medicalRecord, setMedicalRecord] = useState(""); 
+
 
   const handleUpdateUserInfo = async () => {
     Swal.fire({
@@ -74,13 +76,90 @@ function Profile() {
 
   const getData = async () => {
     let data = (await getUserInfo()).data;
-    console.log(data);
     setUserInfo(data);
     setVerifiedEmail(data.email);
   };
   useEffect(() => {
     getData();
   }, []);
+
+
+
+
+  useEffect(() => {
+    if(changleStyle === 5) 
+    {
+      const getPatient = async () => {
+        const res = await getPatientInfo(userInfo.id)
+         if ( res.status === 200)
+         {
+          setMedicalRecord(res.data.medicalRecordFile.fileURL);
+          console.log(res.data);
+         }
+         else {
+           toast.error(res.status + ": Something Error")
+         }
+      }
+      getPatient();
+    }
+  },[changleStyle, userInfo.id])
+
+  //Update Medical Record
+  const handleUpdate = () => {
+    Swal.fire({
+      title: "Select a file",
+      html: '<input type="file" id="custom-file" className="form-control">',
+      showCancelButton: true,
+      cancelButtonText: "Cancel",
+      confirmButtonText: "Confirm",
+      allowOutsideClick: false,
+      focusConfirm: false,
+      preConfirm: () => {
+        const file = document.getElementById("custom-file").files[0];
+        if (!file) {
+          Swal.showValidationMessage("You need to choose a file");
+        }
+        return { file: file };
+      },
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        const file = result.value.file;
+        Swal.fire({
+          title: "Loading...",
+          html: "Please wait a moment",
+        });
+        Swal.showLoading();
+        // Handle file here
+        let formData = new FormData();
+        formData.append("Id", userInfo.id);
+        formData.append("File", file);
+        const res = await updateMedicalRecord(formData);
+        Swal.close();
+        if (res.status === 200)
+        {
+          setMedicalRecord(res.data.medicalRecordFile.fileURL);
+          Swal.fire({
+            icon: "success",
+            title: "Update Sucessfull!",
+          });
+        }
+        else if (res.status === 400)
+        {
+          Swal.fire({
+            icon: "error",
+            title: res.data,
+          });
+        }
+        else {
+          Swal.fire({
+            icon: "error",
+            title: "something error",
+          });
+        }
+      }
+    });
+  };
+
 
   //validate new password
   const validateOldPassWord = () => {
@@ -291,11 +370,28 @@ function Profile() {
     if (!emailOk) {
       return;
     }
-    setChangleStyle(4);
+  
     const res = await SendCodeToEmail(verifiedEmail);
     if (res.status === 200) {
+      setUserInfo({
+        ...userInfo,
+        email: verifiedEmail
+      });
+      setChangleStyle(4);
       console.log("Sending success");
     }
+    else if (res.status === 400) {
+      Swal.fire({
+        icon: "error",
+        title: res.data,
+      });
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "Something error!",
+      });
+    }
+
   };
 
   const handleConfirmCodeUser = async (e) => {
@@ -373,6 +469,23 @@ function Profile() {
                     }}
                   >
                     Update Password
+                    <i className="fa-solid fa-lock profile-icon"></i>
+                  </button>
+                  <hr align="center" />
+                </div>
+                <div className="url">
+                  <button
+                    type="button"
+                    className={
+                      "btn btn" +
+                      (changleStyle !== 5 ? "-outline" : "") +
+                      "-primary w-50 profile-button text-center"
+                    }
+                    onClick={() => {
+                     setChangleStyle(5);
+                    }}
+                  >
+                    Medical Record
                     <i className="fa-solid fa-lock profile-icon"></i>
                   </button>
                   <hr align="center" />
@@ -843,7 +956,7 @@ function Profile() {
                 </div>
               </div>
             </>
-          ) : (
+          ) : changleStyle === 4 ? (
             <>
               <div className="col-lg-9 col-sm-12">
                 <div className="main" style={{ marginTop: "10%" }}>
@@ -897,6 +1010,64 @@ function Profile() {
                           }}
                         />
                       </div>
+                    </div>
+                  </div>
+
+                  <h2>SOCIAL MEDIA</h2>
+                  <div className="card">
+                    <div className="card-body">
+                      <div className="social-media">
+                        <span className="fa-stack fa-sm">
+                          <i className="fas fa-circle fa-stack-2x"></i>
+                          <i className="fab fa-facebook fa-stack-1x fa-inverse"></i>
+                        </span>
+                        <span className="fa-stack fa-sm">
+                          <i className="fas fa-circle fa-stack-2x"></i>
+                          <i className="fab fa-twitter fa-stack-1x fa-inverse"></i>
+                        </span>
+                        <span className="fa-stack fa-sm">
+                          <i className="fas fa-circle fa-stack-2x"></i>
+                          <i className="fab fa-instagram fa-stack-1x fa-inverse"></i>
+                        </span>
+                        <span className="fa-stack fa-sm">
+                          <i className="fas fa-circle fa-stack-2x"></i>
+                          <i className="fab fa-invision fa-stack-1x fa-inverse"></i>
+                        </span>
+                        <span className="fa-stack fa-sm">
+                          <i className="fas fa-circle fa-stack-2x"></i>
+                          <i className="fab fa-github fa-stack-1x fa-inverse"></i>
+                        </span>
+                        <span className="fa-stack fa-sm">
+                          <i className="fas fa-circle fa-stack-2x"></i>
+                          <i className="fab fa-whatsapp fa-stack-1x fa-inverse"></i>
+                        </span>
+                        <span className="fa-stack fa-sm">
+                          <i className="fas fa-circle fa-stack-2x"></i>
+                          <i className="fab fa-snapchat fa-stack-1x fa-inverse"></i>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </>
+          ) : (
+            <>
+               <div className="col col-lg-9 col-sm-12">
+                <div className="main" style={{ marginTop: "7%" }}>
+                  <div className="d-flex align-items-center gap-2">
+                    <h2 className="pt-4">MEDICAL RECORD INFORMATION</h2>
+                    <div
+                      className="ml-3 pt-3"
+                      onClick={() => handleUpdate()}
+                    >
+                      <i className="fa-solid fa-pen-to-square"></i>
+                    </div>
+                  </div>
+                  <hr />
+                  <div className="card">
+                    <div className="card-body">
+                      <Link to={medicalRecord} className="btn btn-primary" target="_blank">View</Link>
                     </div>
                   </div>
 
