@@ -25,16 +25,6 @@ function UpdateState({ currentState, handleChangeState }) {
 
 
 
-    useEffect(() => {
-
-
-        return () => {
-
-        }
-    }, [])
-
-
-
     return (
         <div>
             {!appointmentState
@@ -47,7 +37,7 @@ function UpdateState({ currentState, handleChangeState }) {
                         <div className="col-12">
 
                             <select className='form-select' onChange={(e) => handleChangeState(e)}>
-                                <option disabled defaultValue>{currentState}</option>
+                                <option disabled value={currentState} selected>{currentState}</option>
                                 {appointmentState.map(option => (
                                     <option
                                         key={option.id}
@@ -281,14 +271,13 @@ function DoctorAppointmentDetail() {
                                 </thead>
                                 <tbody>
                                     {appointmentInfo.documents.map((value, index) =>
-                                        <>
-                                            <tr >
-                                                <th scope="row">{value.id}</th>
-                                                <td>{value.title}</td>
-                                                <td><a href={value.file.fileURL} target='_blank' rel="noreferrer">View</a></td>
-                                                <td><button className='btn btn-sm btn-danger' onClick={() => handleDetele(value.id)}>Delete</button></td>
-                                            </tr>
-                                        </>)}
+                                        <tr key={value.id} >
+                                            <th scope="row">{value.id}</th>
+                                            <td>{value.title}</td>
+                                            <td><a href={value.file.fileURL} target='_blank' rel="noreferrer">View</a></td>
+                                            <td><button className='btn btn-sm btn-danger' onClick={() => handleDetele(value.id)}>Delete</button></td>
+                                        </tr>
+                                    )}
                                 </tbody>
 
                             </table>
