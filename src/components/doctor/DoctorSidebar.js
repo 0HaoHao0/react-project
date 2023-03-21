@@ -2,6 +2,7 @@ import {
     Sidebar, Menu, MenuItem, SubMenu, useProSidebar
 
 } from 'react-pro-sidebar';
+import { Link } from 'react-router-dom';
 import './DoctorSidebar.scss'
 function DoctorSidebar() {
 
@@ -19,7 +20,7 @@ function DoctorSidebar() {
                         color: "white",
                         fontWeight: "bold "
                     },
-                    [`.ps-menu-button:active`]: {
+                    [`.ps-menu-button.ps-active`]: {
                         backgroundColor: '#335B8C',
                         color: "white !important",
                         fontWeight: "bold !important"
@@ -50,30 +51,39 @@ function DoctorSidebar() {
                 <Menu className='overflow-auto h-75' menuItemStyles={{
                     button: ({ level, active, disabled }) => {
                         return {
+
                             color: disabled ? '#97DEFF' : '#146C94',
                             backgroundColor:
                                 '#C9EEFF',
+                        }
+                    },
+                    icon: () => {
+                        return {
+                            color: '#0A2647',
+                            backgroundColor: '#62CDFF',
                         }
                     }
 
                 }}>
                     {!collapsed && <div className='w-100 text-center'>
-                        <span>Api</span>
+                        <span>Main funtion</span>
                     </div>
                     }
 
-                    <SubMenu label="Appointment" icon={<i className="fa-solid fa-calendar-check"></i>} >
-                        <MenuItem > Pie charts </MenuItem>
-                        <MenuItem> Line charts </MenuItem>
+                    <SubMenu label="Appointment" active icon={<i className="fa-solid fa-calendar-check"></i>} >
+                        <MenuItem component={<Link to={'/doctor/appointment-queue'}></Link>}> Queue </MenuItem>
+                        <MenuItem component={<Link to={'/doctor/appointment-history'}></Link>}> History </MenuItem>
                     </SubMenu>
-                    <MenuItem icon={<i className='bx bxl-postgresql'></i>}> Documentation </MenuItem>
-
                 </Menu>
                 {/* Footer */}
-                <Menu>
+                <Menu >
+
+
                     <MenuItem icon={<i className='bx bx-info-circle' ></i>} >
                         Profile
                     </MenuItem>
+
+
                     <MenuItem icon={<i className='bx bxs-log-out'></i>} onClick={() => { console.log('text'); }}
                         rootStyles={{
                             [`.ps-menu-button:hover`]: {

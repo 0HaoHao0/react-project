@@ -8,7 +8,6 @@ import ContactFilter from "./ContactFilter";
 //Datatable Modules
 import "datatables.net-dt/js/dataTables.dataTables.min.mjs"
 import "datatables.net-dt/css/jquery.dataTables.min.css"
-import $ from 'jquery';
 import DataLoading from "../../../components/admin/DataLoading";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
@@ -19,50 +18,48 @@ function ContactGetAll() {
     const currentPage = contactData ? contactData.page : null;
     const totalPage = contactData ? contactData.total_pages : null;
 
-    const [filterData, setFilterData] = useState({
+    const [filter, setFilter] = useState({
         from: null,
         to: null,
         state: null,
         keyword: null,
+        page: currentPage,
     });
 
-    const loadData = async ({ page }) => {
-
-        const res = await getAllContact({
-            page: page,
-            from: filterData.from,
-            to: filterData.to,
-            state: filterData.state,
-            keyword: filterData.keyword
-        });
-
-        if(res.status === 200) {
-            setContactData(res.data);
-        }
-        else {
-            toast.error("Something went wrong!");
-        }
-
-    }
 
     useEffect(() => {
-        loadData({
-            page: 1
-        });
 
-    }, [filterData]);
+        const loadData = async (filter) => {
+            const res = await getAllContact(
+                filter
+            );
+
+            if (res.status === 200) {
+                setContactData(res.data);
+            }
+            else {
+                toast.error("Something went wrong!");
+            }
+
+        }
+
+        loadData(filter);
+
+    }, [filter]);
 
     // Pagination
     const peviousPage = (e) => {
-        loadData({
+        setFilter((peviousPage) => ({
+            ...peviousPage,
             page: currentPage - 1
-        });
+        }));
     }
 
     const nextPage = (e) => {
-        loadData({
+        setFilter((peviousPage) => ({
+            ...peviousPage,
             page: currentPage + 1
-        });
+        }));
     }
     const enterPage = (e) => {
         if (e.keyCode === 13) {
@@ -74,7 +71,11 @@ function ContactGetAll() {
                     toast.error("Max Page is " + totalPage)
                 }
                 else {
-                    loadData(e.target.value);
+                    const page = e.target.value
+                    setFilter((peviousPage) => ({
+                        ...peviousPage,
+                        page: page,
+                    }));
                     e.target.value = "";
                     e.target.blur();
                 }
@@ -103,7 +104,7 @@ function ContactGetAll() {
                     </div>
                     <hr />
 
-                    <ContactFilter filterData={filterData} setFilterData={setFilterData} />
+                    <ContactFilter filter={filter} setFilter={setFilter} />
 
                     <div className="overflow-auto mb-4">
 

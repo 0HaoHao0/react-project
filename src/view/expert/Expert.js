@@ -145,9 +145,9 @@ function Expert() {
             callback: (response) => {
                 console.log(response);
 
-                if(response.status === 204) {
+                if (response.status === 204) {
                     setListResult(listResult.filter(i => i !== item));
-                    if(currentSelectedId === item.instance_id) {
+                    if (currentSelectedId === item.instance_id) {
                         // Can reset UI if needed 
                     }
                 }
@@ -249,8 +249,7 @@ function Expert() {
                                         </div>
                                     )
                                 }
-                                
-                        </div>
+                            </div>  
                         </div>
 
                         <div className="col-md-6">
