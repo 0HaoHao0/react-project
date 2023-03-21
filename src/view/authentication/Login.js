@@ -131,6 +131,10 @@ function Login() {
         navigate("/expert");
         return;
       }
+      if (userInfo.role === "Doctor") {
+        navigate("/doctor");
+        return;
+      }
 
       if (userInfo.role === "Patient") {
         if (userInfo.emailConfirmed) {
@@ -276,7 +280,7 @@ function Login() {
                       <PhoneInput
                         placeholder="Enter phone number"
                         defaultCountry="VN"
-                        onChange={() => {}}
+                        onChange={() => { }}
                       />
 
                       <div id="emailHelp" className="form-text">

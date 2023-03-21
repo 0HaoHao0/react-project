@@ -9,7 +9,7 @@ export const getAllAppointment = async (filter) => {
             DoctorId: filter.id,
             Page: filter.currentPage,
             PageSize: filter.pageSize,
-            startDate: filter.startDate
+            startDate: filter.startDate,
         }
     }).then((response) => {
         data = response;
@@ -59,6 +59,42 @@ export const updateAppointmentState = async (id, state) => {
             id: id,
             state: state,
 
+        }
+    }).then((response) => {
+        data = response;
+    }).catch((error) => {
+        // handle error
+        data = error.response;
+    })
+
+    return data;
+}
+
+export const addDocument = async (fromData) => {
+    let data;
+    await axios({
+        method: 'post',
+        url: `/api/Appointment/DoctorAddDocument`,
+        data: fromData,
+        headers: {
+            'content-type': 'multipart/form-data'
+        },
+    }).then((response) => {
+        data = response;
+    }).catch((error) => {
+        // handle error
+        data = error.response;
+    })
+
+    return data;
+}
+export const deleteDocument = async (id) => {
+    let data;
+    await axios({
+        method: 'delete',
+        url: `/api/Appointment/RemoveDocument/${id}`,
+        params: {
+            id: id
         }
     }).then((response) => {
         data = response;
