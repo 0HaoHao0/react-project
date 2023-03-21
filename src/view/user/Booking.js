@@ -1,5 +1,5 @@
 import './Booking.scss'
-import file from '../../assets/file/HospitalMedicalReport.docx'
+import file from '../../assets/file/HospitalDocument.docx'
 import moment from "moment";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";

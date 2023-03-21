@@ -13,6 +13,7 @@ import Swal from 'sweetalert2';
 import { getAllAppointment } from "../../services/doctor/DoctorApi";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
+import { Link } from "react-router-dom";
 
 function DoctorAppointmentQueue() {
     const [appointment, setAppointment] = useState();
@@ -109,14 +110,27 @@ function DoctorAppointmentQueue() {
             <hr />
             <div className="row g-0 overflow-auto p-5 ">
                 <div className="col-sm-12 col-lg-6 border shadow-sm ">
-                    <h6 className="text-center p-4">Appointment information</h6>
+                    <h4 className="text-center p-4">Appointment information</h4>
+
                     <div className="p-2">
                         {appointmentInfo
                             ?
                             <>
+                                <div className="mb-2 text-center">
+                                    <Link
+                                        to={`/doctor/appointment-detail/${appointmentInfo.id}`}
+                                        className="btn btn-success  text-decoration-none"
+                                    >
+                                        <i className="fa-solid fa-circle-info"></i>
+                                        Detail
+                                    </Link>
+                                </div>
+
                                 {/* Key info */}
                                 <div className='row g-0 justify-content-around'>
-                                    <h1 className='col-12 alert alert-primary'>Key Information</h1>
+                                    <h1 className='col-12 alert alert-primary'>Key Information
+
+                                    </h1>
                                     <div className='col-auto '>
                                         <div className="form-group">
                                             <label htmlFor="date">Date: </label>
@@ -225,7 +239,7 @@ function DoctorAppointmentQueue() {
 
                 </div>
                 <div className="col-sm-12 col-lg-6 border shadow-sm">
-                    <h6 className="text-center p-4">Schedule</h6>
+                    <h4 className="text-center p-4">Schedule</h4>
                     <div className='p-2'>
 
                         <Paper className="shadow">

@@ -39,7 +39,7 @@ function DoctorAppointmentHistory() {
             Swal.showLoading()
             const res = await getAllAppointment(filter);
 
-            setAppointmentData(res.data);
+            setAppointmentData(res.data)
 
             $('#table').DataTable({
                 destroy: true,
@@ -131,7 +131,6 @@ function DoctorAppointmentHistory() {
                                         <td >
                                             <Link
                                                 to={`/doctor/appointment-detail/${value.id}`}
-                                                state={value}
                                                 className="btn btn-success"
                                             >
                                                 <i className="fa-solid fa-circle-info"></i>
