@@ -12,6 +12,7 @@ export const getAllPatient = async (page) => {
         data = response;
     }).catch((error) => {
         // handle error
+        data = error.response;
         console.log(error);
     })
 
@@ -28,6 +29,25 @@ export const updateMedicalRecord = async (formData) => {
         data = response;
     }).catch((error) => {
         // handle error
+        data = error.response;
+    })
+
+    return data;
+}
+
+export const getPatientInfo = async (id) => {
+    let data;
+    await axios({
+        method: 'get',
+        url: '/api/Patient/GetPatientById',
+        params: {
+            id: id
+        },
+    }).then((response) => {
+        data = response;
+    }).catch((error) => {
+        // handle error
+        data = error.response;
         console.log(error);
     })
 
