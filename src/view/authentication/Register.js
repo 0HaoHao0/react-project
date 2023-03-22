@@ -10,8 +10,10 @@ import { Link, useNavigate } from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
 import {
   register,
+  SendCodeToEmail,
   VerifyUserByCode,
 } from "../../services/authorization/apIRegister";
+import axios from "axios";
 function Register() {
   const [userData, setUserData] = useState({
     userName: "",
@@ -23,11 +25,12 @@ function Register() {
     gender: "",
   });
   const [userId, setUserId] = useState();
-  const [code, setCode] = useState();
+  const [code, setCode] = useState("");
   const [changeConfirmRegister, setChangeConfirmRegister] = useState(1);
 
   const [dataError, setDataError] = useState("");
   const dataRef = useRef();
+  const [CodeClickedTime, setCodeClickedTime] = useState(null);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -98,13 +101,6 @@ function Register() {
         ...prevState,
         password: "Password cannot be empty!",
       }));
-    } else if (userData.password !== userData.confirmpassword) {
-      result = false;
-      setDataError((prevState) => ({
-        ...prevState,
-        password: "dont match",
-        confirmpassword: "dont match",
-      }));
     } else if (userData.password.length < 6) {
       result = false;
       setDataError((prevState) => ({
@@ -132,8 +128,7 @@ function Register() {
       result = false;
       setDataError((prevState) => ({
         ...prevState,
-        password: "dont match",
-        confirmpassword: "dont match",
+        confirmpassword: "The confirm password is not exactly",
       }));
     } else if (userData.password.length < 6) {
       result = false;
@@ -215,6 +210,36 @@ function Register() {
     return result;
   };
 
+  //validate Code
+  const validateInsertCode = () => {
+    let result = true;
+    if (code.trim() === "") {
+      result = false;
+      setDataError((prevState) => ({
+        ...prevState,
+        code: "Code cannot be empty!",
+      }));
+    } else if (code.length < 6) {
+      result = false;
+      setDataError((prevState) => ({
+        ...prevState,
+        code: "code must be at least 6 characters long",
+      }));
+    } else if (code.length > 6) {
+      result = false;
+      setDataError((prevState) => ({
+        ...prevState,
+        code: "code cannot be more than 6",
+      }));
+    } else {
+      setDataError((prevState) => ({
+        ...prevState,
+        code: "",
+      }));
+    }
+    return result;
+  };
+
   const handlePhone = (e) => {
     setUserData((prevState) => ({
       ...prevState,
@@ -241,15 +266,61 @@ function Register() {
       console.log(res);
       setUserId(res.data.id);
       toast.success("Create Successful");
+      localStorage.setItem("app_token", "Bearer " + res.data.token);
+      axios.defaults.headers.common["Authorization"] =
+        "Bearer " + res.data.token;
+
       setChangeConfirmRegister(2);
     }
   };
 
+  const handleSendCodeToEmail = async (e) => {
+    let canClick =
+      CodeClickedTime === null ||
+      new Date().getTime() - CodeClickedTime > 15000;
+    if (canClick) {
+      setCodeClickedTime(new Date().getTime());
+    } else {
+      let diff =
+        15 - Math.floor((new Date().getTime() - CodeClickedTime) / 1000);
+      toast.warning("Waiting in " + diff + "s");
+      return;
+    }
+
+    const res = await SendCodeToEmail(userData.email);
+    if (res.status === 200) {
+      toast.success(res.data);
+    } else if (res.status < 500) {
+      toast.error(res.data || "Something went Wrong!");
+    } else {
+      toast.error("Something went Wrong!");
+    }
+  };
+
   const handleConfirmCode = async (e) => {
+    let canClick =
+      CodeClickedTime === null ||
+      new Date().getTime() - CodeClickedTime > 15000;
+    if (canClick) {
+      setCodeClickedTime(new Date().getTime());
+    } else {
+      let diff =
+        15 - Math.floor((new Date().getTime() - CodeClickedTime) / 1000);
+      toast.warning("Waiting in " + diff + "s");
+      return;
+    }
+    let codeOk = validateInsertCode();
+    if (!codeOk) {
+      return;
+    }
     const confirm = await VerifyUserByCode(userId, code);
     if (confirm.status === 200) {
       toast.success("Confirm Successful");
       navigate("/login");
+    } else if (confirm.status < 500) {
+      toast.error(confirm.data);
+    } else {
+      toast.error("Something went wrong!");
     }
   };
 
@@ -471,9 +542,9 @@ function Register() {
                           type="email"
                           className="form-control text-center"
                           id="inputEmail"
+                          onBlur={validateInsertCode}
                           value={code}
                           onChange={(e) => setCode(e.target.value)}
-                          required
                         />
                         <div className="input-group-append">
                           <span className="input-group-text">
@@ -481,17 +552,27 @@ function Register() {
                           </span>
                         </div>
                       </div>
+                      {dataError.code && (
+                        <p className="error-2 ml-2                                                        ">
+                          {dataError.code}
+                        </p>
+                      )}
                       <div className="invalid-feedback">
                         Please provide a valid email address.
                       </div>
                     </div>
-
-                    <div className="input-field mx-5">
+                    <div className="">
                       <input
                         type="submit"
-                        className="btn btn-primary"
+                        className="btn btn-primary w-25"
                         value="Confirm"
                         onClick={(e) => handleConfirmCode(e)}
+                      />
+                      <input
+                        type="submit"
+                        className="btn btn-primary w-25 ml-3"
+                        value="Resend"
+                        onClick={(e) => handleSendCodeToEmail(e)}
                       />
                     </div>
                   </div>

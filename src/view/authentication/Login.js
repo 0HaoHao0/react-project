@@ -33,6 +33,9 @@ function Login() {
   const [password, setPassWord] = useState("");
   const [dataError, setDataError] = useState("");
 
+  const [forgotPasswordClickedTime, setForgotPasswordClickedTime] =
+    useState(null);
+
   //Validate UserName
   const validateUserName = () => {
     let result = true;
@@ -82,10 +85,27 @@ function Login() {
   };
 
   const handleSubmitForgetPassword = async (event) => {
+    let canClick =
+      forgotPasswordClickedTime === null ||
+      new Date().getTime() - forgotPasswordClickedTime > 15000;
+    if (canClick) {
+      setForgotPasswordClickedTime(new Date().getTime());
+    } else {
+      let diff =
+        15 -
+        Math.floor((new Date().getTime() - forgotPasswordClickedTime) / 1000);
+      toast.warning("Waiting in " + diff + "s");
+      return;
+    }
+
     validateUserName();
     const res = await forgotpassword(userName);
     if (res.status === 200) {
       toast.success(res.data);
+    } else if (res.status < 500) {
+      toast.error(res.data);
+    } else {
+      toast.error("Something went wrong!");
     }
   };
 
@@ -109,9 +129,9 @@ function Login() {
       localStorage.setItem("app_token", "Bearer " + res.data.token);
       axios.defaults.headers.common["Authorization"] =
         "Bearer " + res.data.token;
-      // Set time expires 
+      // Set time expires
       const cookie = new Cookies();
-      cookie.set('_to', 'fcb629f3192b94ad77929397722f54c2', { maxAge: 10800 })
+      cookie.set("_to", "fcb629f3192b94ad77929397722f54c2", { maxAge: 10800 });
 
       // Get user information
       let resonse = await getUserInfo();
@@ -280,7 +300,7 @@ function Login() {
                       <PhoneInput
                         placeholder="Enter phone number"
                         defaultCountry="VN"
-                        onChange={() => { }}
+                        onChange={() => {}}
                       />
 
                       <div id="emailHelp" className="form-text">
@@ -406,7 +426,7 @@ function Login() {
                           handleSubmitForgetPassword();
                         }}
                       >
-                        Submit
+                        Send
                       </button>
                     </div>
                   </div>
