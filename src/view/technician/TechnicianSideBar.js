@@ -45,7 +45,7 @@ export function TechnicianSideBar() {
                     <Form.Label>Search</Form.Label>
                     <Form.Control type="text" placeholder="Enter search term" value={search} onChange={handleSearchChange} />
                 </Form.Group>
-
+                <hr />
                 <Button variant="primary" type="submit">
                     Filter
                 </Button>
