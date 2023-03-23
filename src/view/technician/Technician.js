@@ -3,20 +3,25 @@ import { getAppointmentQueueAPI } from '../../services/technician/apiTechnician'
 import { TechnicianSideBar } from './TechnicianSideBar';
 import { Link } from 'react-router-dom';
 import Swal from 'sweetalert2';
+import { toast } from 'react-toastify';
+
+import "./Technician.scss";
 
 
 function Technician() {
 
     const [appointmentQueue, setAppointmentQueue] = useState([]);
     const [paramsFilter, setParamsFilter] = useState({
-        from: null,
-        to: new Date().toISOString(),
+        startDate: null,
+        endDate: new Date().toISOString().slice(0, 10),
         state: null,
+        phoneNumber: null,
+        userName: null,
     });
 
     const [paginated, setPaginated] = useState({
         page: 1,
-        pageSize: 10,
+        pageSize: 5,
     });
 
     useEffect(() => {
@@ -25,17 +30,24 @@ function Technician() {
             icon: "info",
             title: "Waiting to get data...",
         });
+
         Swal.showLoading();
         getAppointmentQueueAPI(paramsFilter, (res) => {
-
-            if (res.status === 200) {
+            if (res && res.status === 200) {
                 console.log(res.data);
                 let queue = res.data.data;
                 setAppointmentQueue(queue);
+
+                setPaginated({
+                    page : res.data.page,
+                    pageSize : res.data.total_pages,
+                });
+
             }
             else {
-                console.log(res);
+                toast.error("Something wrong!");
             }
+
             Swal.close();
         });
 
@@ -73,55 +85,75 @@ function Technician() {
                         {
                             appointmentQueueGroupByDate &&
                             appointmentQueueGroupByDate.map(({ label, data }) => (
-                                <div className="mb-2">
-                                    <div className="row">
-                                        <h3 className="col-md-3 px-2 mb-2 text-center">{new Date(label).toLocaleDateString()}</h3>
-                                        <div className="col-md-9">
-                                            <div className="row">
-                                                {data.map((item, idx) => (
-                                                    <div key={idx} className="col-lg-4 col-md-6">
-                                                        <Link to={"."} style={{ color: 'inherit' }}>
-                                                            <div className={`rounded border shadow card card-${cardColors[item.state]}`}>
-                                                                <div className="card-header text-center">
-                                                                    <h4>{item.patient.baseUser.fullName}</h4>
+                                <div key={label} className="card">
+                                    <div className={`card-body ${(new Date(label).toLocaleDateString() === (new Date()).toLocaleDateString() ? "bg-light shadow" : "")}`}>
+                                        <div className={`row`}>
+                                            <div className="col-lg-3 px-2 mb-2">
+                                                <div className="bg-dark text-white">
+                                                    <h3 className="text-center">{new Date(label).toLocaleDateString()}</h3>
+                                                    <hr className="w-100"/>
+                                                </div>
+                                            </div>
+                                            <div className="col-lg-9">
+                                                <div className="row justify-content-center">
+                                                    {data.map((item, idx) => (
+                                                        <div key={idx} className="col-md-6">
+                                                            <Link to={"."} style={{ color: 'inherit' }}>
+                                                                <div className={`rounded border shadow card card-${cardColors[item.state]}`}>
+                                                                    <div className="card-header text-center">
+                                                                        <h4>{item.patient.baseUser.fullName}</h4>
+                                                                    </div>
+                                                                    <div className="card-body">
+                                                                        <div className="row">
+                                                                            <span className="col-4 text-end">Patient:</span>
+                                                                            <span className="col-8 text-start">{item.patient.baseUser.userName}</span>
+                                                                        </div>
+                                                                        <div className="row">
+                                                                            <span className="col-4 text-end">State:</span>
+                                                                            <span className="col-8 text-start">
+                                                                                <span className={"badge bg-" + cardColors[item.state]}>{item.state}</span>
+                                                                            </span>
+                                                                        </div>
+                                                                        <div className="row">
+                                                                            <span className="col-4 text-end">Phone:</span>
+                                                                            <span className="col-8 text-start">{item.patient.baseUser.phoneNumber}</span>
+                                                                        </div>
+                                                                        <div className="row">
+                                                                            <span className="col-4 text-end">Doctor:</span>
+                                                                            <span className="col-8 text-start">{item.doctor.baseUser.fullName}</span>
+                                                                        </div>
+                                                                        <div className="row">
+                                                                            <span className="col-4 text-end">Service:</span>
+                                                                            <span className="col-8 text-start">{item.service.serviceName}</span>
+                                                                        </div>
+                                                                        <div className="row">
+                                                                            <span className="col-4 text-end">Time:</span>
+                                                                            <span className="col-8 text-start">{item.time}</span>
+                                                                        </div>
+                                                                    </div>
                                                                 </div>
-                                                                <div className="card-body">
-                                                                    <div className="row">
-                                                                        <span className="col-4 text-end">Patient:</span>
-                                                                        <span className="col-8 text-start">{item.patient.baseUser.userName}</span>
-                                                                    </div>
-                                                                    <div className="row">
-                                                                        <span className="col-4 text-end">State:</span>
-                                                                        <span className="col-8 text-start">
-                                                                            <span className={"badge bg-" + cardColors[item.state]}>{item.state}</span>
-                                                                        </span>
-                                                                    </div>
-                                                                    <div className="row">
-                                                                        <span className="col-4 text-end">Phone:</span>
-                                                                        <span className="col-8 text-start">{item.patient.baseUser.phoneNumber}</span>
-                                                                    </div>
-                                                                    <div className="row">
-                                                                        <span className="col-4 text-end">Doctor:</span>
-                                                                        <span className="col-8 text-start">{item.doctor.baseUser.fullName}</span>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </Link>
-                                                    </div>
-                                                ))}
+                                                            </Link>
+                                                        </div>
+                                                    ))}
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <hr />
                                 </div>
                             ))
                         }
-
                     </div>
 
                 </div>
-                <div className="col-3 p-4 bg-light rounded shadow">
-                    <TechnicianSideBar />
+                <div className="technican-sidebar-wrapper col-3 p-4 bg-light rounded shadow">
+                    <TechnicianSideBar initialValue={paramsFilter} handleSubmitFilter={(formData) => {
+                        setParamsFilter({
+                            ...paramsFilter,
+                            ...formData,
+                            phoneNumber: formData.searchText,
+                            userName: formData.searchText,
+                        });
+                    }}/>
                 </div>
             </div>
         </div>
