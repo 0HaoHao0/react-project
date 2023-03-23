@@ -1,5 +1,4 @@
 import { Route, Routes } from "react-router";
-import AdminHeader from "../components/admin/AdminHeader";
 import AdminSidebar from "../components/admin/AdminSidebar";
 import ContactDetail from "../view/admin/contact/ContactDetail";
 import ContactGetAll from "../view/admin/contact/ContactGetAll";
@@ -30,14 +29,12 @@ import UserGetAll from "../view/admin/user/UserGetAll";
 function AdminRouter() {
   return (
     <>
-      <body className="hold-transition sidebar-mini">
-        <div className="wrapper">
-          <AdminHeader />
-
+      <div className="row g-0 flex-nowrap p-5">
+        <div className="col-auto" >
           <AdminSidebar />
-
-          <div className="content-wrapper p-4">
-
+        </div>
+        <div className="col ">
+          <div className="vh-100 overflow-auto p-2 border-top border-end border-bottom ">
             <Routes>
               {/* User */}
               <Route path="/user" element={<UserGetAll />}></Route>
@@ -78,7 +75,7 @@ function AdminRouter() {
             </Routes>
           </div>
         </div>
-      </body>
+      </div>
     </>
   );
 }

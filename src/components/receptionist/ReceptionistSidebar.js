@@ -3,13 +3,13 @@ import {
 
 } from 'react-pro-sidebar';
 import { Link, useNavigate } from 'react-router-dom';
-import './DoctorSidebar.scss'
+import './ReceptionistSidebar.scss'
 import Cookies from "universal-cookie/cjs/Cookies";
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { deleteUser } from '../../redux/features/userSlide';
 
-function DoctorSidebar() {
+function ReceptionistSidebar() {
     const nagivate = useNavigate();
 
     const { collapseSidebar, collapsed } = useProSidebar();
@@ -26,19 +26,19 @@ function DoctorSidebar() {
     }
 
     return (<>
-        <div className="doctor-sidebar vh-100">
+        <div className="receptionist-sidebar vh-100">
 
             <Sidebar transitionDuration={0} className='style h-100 '
                 rootStyles={{
                     backgroundColor:
                         '#C9EEFF',
                     [`.ps-menu-button:hover`]: {
-                        backgroundColor: "#335B8C ",
+                        backgroundColor: "#8D7B68 ",
                         color: "white",
                         fontWeight: "bold "
                     },
                     [`.ps-menu-button.ps-active`]: {
-                        backgroundColor: '#335B8C',
+                        backgroundColor: '#8D7B68',
                         color: "white !important",
                         fontWeight: "bold !important"
                     },
@@ -48,7 +48,7 @@ function DoctorSidebar() {
                     <MenuItem icon={<i className="fa-solid fa-user-doctor"></i>}
                         rootStyles={{
                             [`.ps-menu-button:hover`]: {
-                                backgroundColor: "#335B8C !important ",
+                                backgroundColor: "#8D7B68 !important ",
                                 color: "white",
                                 fontWeight: "bold ",
                                 'border-top-left-radius': "50px"
@@ -60,7 +60,7 @@ function DoctorSidebar() {
                 </Menu> */}
                 <div  >
                     <span className='text-center m-5'>
-                        <h5><i className="fa-solid fa-user-doctor" /> {!collapsed && 'Doctor Management'}</h5>
+                        <h5><i className="fa-solid fa-users" /> {!collapsed && 'Management'}</h5>
                     </span>
 
                     <div className='btn-collapse btn btn-dark btn-xs' onClick={() => collapseSidebar()}><i className='bx bx-left-arrow-alt bx-spin' ></i></div>
@@ -69,15 +69,15 @@ function DoctorSidebar() {
                     button: ({ level, active, disabled }) => {
                         return {
 
-                            color: disabled ? '#97DEFF' : '#146C94',
+                            color: disabled ? '#97DEFF' : '#000000',
                             backgroundColor:
-                                '#C9EEFF',
+                                '#e3d1c1',
                         }
                     },
                     icon: () => {
                         return {
                             color: '#0A2647',
-                            backgroundColor: '#62CDFF',
+                            backgroundColor: '#A4907C',
                         }
                     }
 
@@ -87,16 +87,20 @@ function DoctorSidebar() {
                     </div>
                     }
 
+                    <MenuItem icon={<i className="fa-solid fa-comments"></i>}> Chat Box </MenuItem>
                     <SubMenu label="Appointment" icon={<i className="fa-solid fa-calendar-check"></i>} >
-                        <MenuItem component={<Link to={'/doctor/appointment-queue'}></Link>}> Queue </MenuItem>
-                        <MenuItem component={<Link to={'/doctor/appointment-history'}></Link>}> History </MenuItem>
+                        <MenuItem> Queue </MenuItem>
+                        <MenuItem> History </MenuItem>
                     </SubMenu>
+                    <MenuItem component={<Link to={'/receptionist/patient'}></Link>} icon={<i className="fa-solid fa-hospital-user"></i>}> Patient </MenuItem>
+                    <MenuItem component={<Link to={'/receptionist/contact'}></Link>} icon={<i className="fa-solid fa-address-card"></i>}> Contact </MenuItem>
+                    <MenuItem component={<Link to={'/receptionist/news'}></Link>} icon={<i className="fa-solid fa-newspaper"></i>}> News </MenuItem>
                 </Menu>
                 {/* Footer */}
                 <Menu >
 
 
-                    <MenuItem icon={<i className='bx bx-info-circle' ></i>} component={<Link to={'/profile'}></Link>}>
+                    <MenuItem icon={<i className='bx bx-info-circle' ></i>} >
                         Profile
                     </MenuItem>
 
@@ -120,4 +124,4 @@ function DoctorSidebar() {
     </>);
 }
 
-export default DoctorSidebar;
+export default ReceptionistSidebar;

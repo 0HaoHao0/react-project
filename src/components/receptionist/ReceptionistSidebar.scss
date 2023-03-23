@@ -1,0 +1,21 @@
+.receptionist-sidebar {
+    .btn-collapse {
+        position: absolute;
+        z-index: 9;
+        right: 0;
+        top: 65px;
+    }
+
+    .style {
+        border-top-left-radius: 50px;
+        border-bottom-left-radius: 50px;
+    }
+
+    .ps-sidebar-container {
+        background-color: #F1DEC9;
+        border-top-left-radius: 50px;
+        border-bottom-left-radius: 50px;
+
+    }
+
+}
