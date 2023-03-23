@@ -130,8 +130,12 @@ function Login() {
         navigate("/expert");
         return;
       }
+      if (userInfo.role === "Receptionist") {
+        navigate("/receptionist");
+        return;
+      }
       if (userInfo.role === "Doctor") {
-        navigate("/doctor");
+        navigate("/doctor/appointment-queue");
         return;
       }
 

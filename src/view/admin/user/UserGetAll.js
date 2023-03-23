@@ -27,6 +27,7 @@ function UserGetAll() {
             retrieve: true,
             paging: false,
             ordering: false,
+
         });
     };
 
@@ -139,10 +140,10 @@ function UserGetAll() {
                             <h1>User Management</h1>
                         </div>
                         <hr />
-                        <div className="overflow-auto mb-4">
+                        <div className="overflow-auto mb-4 ">
                             <table id="table" className="table table-hover">
                                 <thead>
-                                    <tr className="bg-dark">
+                                    <tr className="bg-dark text-white">
                                         <th>User Name</th>
                                         <th>Full Name</th>
                                         <th>Email</th>
