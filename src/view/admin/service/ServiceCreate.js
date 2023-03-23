@@ -83,7 +83,14 @@ function ServiceCreate() {
             fromData.append("Description", serviceData.Description)
             fromData.append("ImageFile", serviceData.ImageFile)
             fromData.append("Price", serviceData.Price)
-            fromData.append("DeviceIdList", serviceData.DeviceIdList && serviceData.DeviceIdList.length ? serviceData.DeviceIdList : [0])
+            if (serviceData.DeviceIdList) {
+                serviceData.DeviceIdList.forEach(element => {
+                    fromData.append("DeviceIdList", element)
+                });
+            }
+            else {
+                fromData.append("DeviceIdList", 0)
+            }
 
             Swal.fire({
                 title: "Loading...",
@@ -127,11 +134,9 @@ function ServiceCreate() {
     return (<>
         <div className="service-create">
 
-            <div className="row">
-                <h1>Service Create</h1>
-            </div>
+            <h1>Service Create</h1>
             <hr />
-            <div className="row">
+            <div className="container row">
                 <h4 className="alert alert-secondary">Service Infomation</h4>
                 <div className="col-lg-6 col-sm-12 mb-3">
                     <label htmlFor="ServiceName" className="form-label">Service Name: </label>
@@ -225,20 +230,15 @@ function ServiceCreate() {
                             </span>}
                     </div>
                 </div>
-            </div>
-            <div className="row">
                 <h4 className="alert alert-secondary">Device Select</h4>
-                <div className="col-12 row mb-3">
+                <div className="row mb-3">
                     {device.map((device) => (
-                        <div className="col-4" key={device.id}>
-                            <div
-                                className={`card ${serviceData.DeviceIdList && serviceData.DeviceIdList.includes(device.id) ? 'bg-primary' : ''}`}
-                                onClick={() => handleDevice(device.id)}
-                            >
+                        <div className="col-4 mb-2" key={device.id}>
+                            <div className={`card h-100 ${serviceData.DeviceIdList && serviceData.DeviceIdList.includes(device.id) ? 'bg-primary text-white' : ''}`}
+                                onClick={() => handleDevice(device.id)}>
                                 <div className="card-body">
-                                    <h6 >{`Id: ${device.id}`}</h6>
-                                    <h6 className="card-subtitle">{`Device Name: ${device.name}`}</h6>
-                                    <p className="card-text">{`Description: ${device.description}`}</p>
+                                    <h4 className="card-title">{`Id: ${device.id}`}</h4>
+                                    <p className="card-text">{`Service Name: ${device.name}`}</p>
                                 </div>
                             </div>
                         </div>

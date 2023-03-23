@@ -34,21 +34,6 @@ function AdminSidebar() {
         rootStyles={{
           backgroundColor:
             '#EAE7B1',
-          [`.ps-menu-button:hover`]: {
-            backgroundColor: "#1C6758 ",
-            color: "white",
-            fontWeight: "bold "
-          },
-          [`.ps-submenu-content:hover`]: {
-            backgroundColor: "#1C6758 ",
-            color: "white",
-            fontWeight: "bold "
-          },
-          [`.ps-menu-button.ps-active`]: {
-            backgroundColor: '#1C6758',
-            color: "white !important",
-            fontWeight: "bold !important"
-          },
         }}>
         <div  >
           <span className='text-center m-5'>
@@ -60,9 +45,12 @@ function AdminSidebar() {
         <Menu className='overflow-auto h-75' menuItemStyles={{
           button: ({ level, active, disabled }) => {
             return {
-
               backgroundColor:
                 '#7AA874',
+              '&:hover': {
+                backgroundColor: '#1C6758',
+                fontWeight: 'bold'
+              },
             }
           },
           icon: () => {
@@ -77,17 +65,43 @@ function AdminSidebar() {
           </div>
           }
 
-          <SubMenu label="User" icon={<i class="fa-solid fa-user"></i>} >
+          <SubMenu label="User" icon={<i className="fa-solid fa-user"></i>} >
             <MenuItem component={<Link to={'/admin/user'}></Link>}> Get All </MenuItem>
           </SubMenu>
 
-          <SubMenu label="Patient" icon={<i class="fa-solid fa-hospital-user"></i>} >
+          <SubMenu label="Patient" icon={<i className="fa-solid fa-hospital-user"></i>} >
             <MenuItem component={<Link to={'/admin/patient'}></Link>}> Get All </MenuItem>
+          </SubMenu>
+          <SubMenu label="Doctor" icon={<i className="fa-solid fa-user-doctor"></i>} >
+            <MenuItem component={<Link to={'/admin/doctor'}></Link>}> Get All </MenuItem>
+            <MenuItem component={<Link to={'/admin/doctor/create'}></Link>}>Create </MenuItem>
+          </SubMenu>
+          {!collapsed && <div className='w-100 text-center'>
+            <span>Extra funtion</span>
+          </div>
+          }
+          <SubMenu label="Service" icon={<i className="fa-solid fa-syringe"></i>} >
+            <MenuItem component={<Link to={'/admin/service'}></Link>}> Get All </MenuItem>
+            <MenuItem component={<Link to={'/admin/service/create'}></Link>}>Create </MenuItem>
           </SubMenu>
         </Menu>
         {/* Footer */}
-        <Menu >
+        <Menu menuItemStyles={{
+          button: ({ level, active, disabled }) => {
+            return {
 
+              backgroundColor:
+                '#7AA874',
+              '&:hover': {
+                backgroundColor: '#1C6758',
+                fontWeight: 'bold'
+
+              },
+            }
+          }
+
+
+        }}>
 
           <MenuItem icon={<i className='bx bx-info-circle' ></i>} component={<Link to={'/profile'}></Link>}>
             Profile

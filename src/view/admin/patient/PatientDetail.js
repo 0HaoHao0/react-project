@@ -26,7 +26,7 @@ function PatientDetail() {
         Swal.fire({
             title: "Select a file",
             html: '<label htmlFor="DocumentFile" className="">Document File: </label> <span className="mx-2"> <a href={file} download>Sample</a></span>' +
-                '<input type="file" id="custom-file" className="form-control ">',
+                '<input type="file" id="custom-file" class="form-control ">',
             showCancelButton: true,
             confirmButtonText: "Confirm",
             cancelButtonText: "Cancel",

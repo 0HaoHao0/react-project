@@ -143,7 +143,7 @@ function UserGetAll() {
                         <div className="overflow-auto mb-4 ">
                             <table id="table" className="table table-hover">
                                 <thead>
-                                    <tr className="bg-dark text-white">
+                                    <tr className="table-dark">
                                         <th>User Name</th>
                                         <th>Full Name</th>
                                         <th>Email</th>

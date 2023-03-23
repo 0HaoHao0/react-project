@@ -32,16 +32,7 @@ function DoctorSidebar() {
                 rootStyles={{
                     backgroundColor:
                         '#C9EEFF',
-                    [`.ps-menu-button:hover`]: {
-                        backgroundColor: "#335B8C ",
-                        color: "white",
-                        fontWeight: "bold "
-                    },
-                    [`.ps-menu-button.ps-active`]: {
-                        backgroundColor: '#335B8C',
-                        color: "white !important",
-                        fontWeight: "bold !important"
-                    },
+
                 }}>
 
                 <div  >
@@ -54,10 +45,13 @@ function DoctorSidebar() {
                 <Menu className='overflow-auto h-75' menuItemStyles={{
                     button: ({ level, active, disabled }) => {
                         return {
-
-                            color: disabled ? '#97DEFF' : '#146C94',
                             backgroundColor:
                                 '#C9EEFF',
+                            '&:hover': {
+                                backgroundColor: '#335B8C',
+                                color: 'white',
+                                fontWeight: 'bold'
+                            },
                         }
                     },
                     icon: () => {
@@ -79,7 +73,21 @@ function DoctorSidebar() {
                     </SubMenu>
                 </Menu>
                 {/* Footer */}
-                <Menu >
+                <Menu menuItemStyles={{
+                    button: ({ level, active, disabled }) => {
+                        return {
+
+                            backgroundColor:
+                                '#C9EEFF',
+                            '&:hover': {
+                                backgroundColor: '#335B8C',
+                                color: 'white',
+                                fontWeight: 'bold'
+                            },
+                        }
+                    },
+
+                }}>
 
 
                     <MenuItem icon={<i className='bx bx-info-circle' ></i>} component={<Link to={'/profile'}></Link>}>

@@ -237,7 +237,7 @@ function DoctorAppointmentDetail() {
                     <div className="col-12 ">
                         <div className="form-group text-primary">
                             <label htmlFor="state">State:</label>
-                            <button className="btn btn-xs btn-primary mx-2" type="button" onClick={() => handleUpdateState(appointmentInfo.state)}>Update</button>
+                            <button className="btn btn-sm btn-primary mx-2" type="button" onClick={() => handleUpdateState(appointmentInfo.state)}>Update</button>
 
                             <input id="state" className="form-control my-2" type="text" name="state" placeholder={appointmentInfo.state} disabled />
                         </div>
@@ -245,11 +245,11 @@ function DoctorAppointmentDetail() {
                         <div className="form-group text-primary">
 
                             <label htmlFor="state">Document:</label >
-                            <button className="btn btn-xs btn-primary mx-2" type="button" onClick={(e) => { handleUploadFile() }}>Add</button>
+                            <button className="btn btn-sm btn-primary mx-2" type="button" onClick={(e) => { handleUploadFile() }}>Add</button>
                             <br />
 
                             <table className='table border sha-sm dow table-hover my-2 text-dark'>
-                                <thead className='bg-dark'>
+                                <thead className='table-dark'>
                                     <tr>
                                         <th scope="col">Id</th>
                                         <th scope="col">Title</th>

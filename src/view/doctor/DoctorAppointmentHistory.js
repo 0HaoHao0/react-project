@@ -111,7 +111,7 @@ function DoctorAppointmentHistory() {
 
                         <table id="table" className="table table-hover">
                             <thead>
-                                <tr className="bg-dark">
+                                <tr className="table-dark">
                                     <th>Id</th>
                                     <th>Date</th>
                                     <th>Time</th>

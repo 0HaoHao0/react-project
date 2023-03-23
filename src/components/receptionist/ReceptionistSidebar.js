@@ -32,16 +32,6 @@ function ReceptionistSidebar() {
                 rootStyles={{
                     backgroundColor:
                         '#C9EEFF',
-                    [`.ps-menu-button:hover`]: {
-                        backgroundColor: "#8D7B68 ",
-                        color: "white",
-                        fontWeight: "bold "
-                    },
-                    [`.ps-menu-button.ps-active`]: {
-                        backgroundColor: '#8D7B68',
-                        color: "white !important",
-                        fontWeight: "bold !important"
-                    },
                 }}>
                 {/* Header */}
                 {/* <Menu>
@@ -69,9 +59,11 @@ function ReceptionistSidebar() {
                     button: ({ level, active, disabled }) => {
                         return {
 
-                            color: disabled ? '#97DEFF' : '#000000',
                             backgroundColor:
                                 '#e3d1c1',
+                            '&:hover': {
+                                backgroundColor: '#8D7B68',
+                            },
                         }
                     },
                     icon: () => {
@@ -97,7 +89,19 @@ function ReceptionistSidebar() {
                     <MenuItem component={<Link to={'/receptionist/news'}></Link>} icon={<i className="fa-solid fa-newspaper"></i>}> News </MenuItem>
                 </Menu>
                 {/* Footer */}
-                <Menu >
+                <Menu menuItemStyles={{
+                    button: ({ level, active, disabled }) => {
+                        return {
+
+                            backgroundColor:
+                                '#e3d1c1',
+                            '&:hover': {
+                                backgroundColor: '#8D7B68',
+                            },
+                        }
+                    },
+
+                }}>
 
 
                     <MenuItem icon={<i className='bx bx-info-circle' ></i>} >
@@ -112,7 +116,6 @@ function ReceptionistSidebar() {
                                 color: "white",
                                 fontWeight: "bold ",
                                 'borderBottomLeftRadius': "50px"
-
 
                             },
                         }}>
