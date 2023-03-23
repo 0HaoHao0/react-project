@@ -43,21 +43,7 @@ function DoctorSidebar() {
                         fontWeight: "bold !important"
                     },
                 }}>
-                {/* Header */}
-                {/* <Menu>
-                    <MenuItem icon={<i className="fa-solid fa-user-doctor"></i>}
-                        rootStyles={{
-                            [`.ps-menu-button:hover`]: {
-                                backgroundColor: "#335B8C !important ",
-                                color: "white",
-                                fontWeight: "bold ",
-                                'border-top-left-radius': "50px"
-                            },
-                        }}>
-                        Doctor Management
-                    </MenuItem>
-                    <div className='btn-collapse btn btn-dark btn-xs' onClick={() => collapseSidebar()}><i className='bx bx-left-arrow-alt bx-spin' ></i></div>
-                </Menu> */}
+
                 <div  >
                     <span className='text-center m-5'>
                         <h5><i className="fa-solid fa-user-doctor" /> {!collapsed && 'Doctor Management'}</h5>

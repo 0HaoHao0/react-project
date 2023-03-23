@@ -39,27 +39,17 @@ function AdminSidebar() {
             color: "white",
             fontWeight: "bold "
           },
+          [`.ps-submenu-content:hover`]: {
+            backgroundColor: "#1C6758 ",
+            color: "white",
+            fontWeight: "bold "
+          },
           [`.ps-menu-button.ps-active`]: {
             backgroundColor: '#1C6758',
             color: "white !important",
             fontWeight: "bold !important"
           },
         }}>
-        {/* Header */}
-        {/* <Menu>
-                  <MenuItem icon={<i className="fa-solid fa-user-doctor"></i>}
-                      rootStyles={{
-                          [`.ps-menu-button:hover`]: {
-                              backgroundColor: "#335B8C !important ",
-                              color: "white",
-                              fontWeight: "bold ",
-                              'border-top-left-radius': "50px"
-                          },
-                      }}>
-                      Doctor Management
-                  </MenuItem>
-                  <div className='btn-collapse btn btn-dark btn-xs' onClick={() => collapseSidebar()}><i className='bx bx-left-arrow-alt bx-spin' ></i></div>
-              </Menu> */}
         <div  >
           <span className='text-center m-5'>
             <h5><i className="fa-solid fa-gear" /> {!collapsed && 'Admin Management'}</h5>
@@ -87,9 +77,12 @@ function AdminSidebar() {
           </div>
           }
 
-          <SubMenu label="Appointment" icon={<i className="fa-solid fa-calendar-check"></i>} >
-            <MenuItem component={<Link to={'/doctor/appointment-queue'}></Link>}> Queue </MenuItem>
-            <MenuItem component={<Link to={'/doctor/appointment-history'}></Link>}> History </MenuItem>
+          <SubMenu label="User" icon={<i class="fa-solid fa-user"></i>} >
+            <MenuItem component={<Link to={'/admin/user'}></Link>}> Get All </MenuItem>
+          </SubMenu>
+
+          <SubMenu label="Patient" icon={<i class="fa-solid fa-hospital-user"></i>} >
+            <MenuItem component={<Link to={'/admin/patient'}></Link>}> Get All </MenuItem>
           </SubMenu>
         </Menu>
         {/* Footer */}
