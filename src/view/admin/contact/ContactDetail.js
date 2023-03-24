@@ -85,7 +85,7 @@ function ContactDetail() {
                     <h1>Contact Detail</h1>
                 </div>
                 <hr />
-                <div className="row">
+                <div className="container row">
                     <div className="col-lg-6 col-sm-12">
                         <div className="row my-2">
                             <div className="col-3 fw-bold">Id: </div>
@@ -144,11 +144,9 @@ function ContactDetail() {
                             <div className="col-9">
                                 <div className="input-group">
                                     <input className="form-control" type="date" value={formatDate(state.timeCreated)} readOnly={true} />
-                                    <div className="input-group-append">
-                                        <span className="input-group-text">
-                                            <i className="fas fa-calendar-alt"></i>
-                                        </span>
-                                    </div>
+                                    <span className="input-group-text">
+                                        <i className="fas fa-calendar-alt"></i>
+                                    </span>
                                 </div>
                             </div>
                         </div>
@@ -158,11 +156,9 @@ function ContactDetail() {
                             <div className="col-9">
                                 <div className="input-group">
                                     <input className="form-control" type="date" value={formatDate(state.lastTimeModified)} readOnly={true} />
-                                    <div className="input-group-append">
-                                        <span className="input-group-text">
-                                            <i className="fas fa-calendar-alt"></i>
-                                        </span>
-                                    </div>
+                                    <span className="input-group-text">
+                                        <i className="fas fa-calendar-alt"></i>
+                                    </span>
                                 </div>
                             </div>
                         </div>
@@ -172,11 +168,9 @@ function ContactDetail() {
                             <div className="col-9">
                                 <div className="input-group">
                                     <input className="form-control" type="date" value={formatDate(state.finishedTime)} readOnly={true} />
-                                    <div className="input-group-append">
-                                        <span className="input-group-text">
-                                            <i className="fas fa-calendar-alt"></i>
-                                        </span>
-                                    </div>
+                                    <span className="input-group-text">
+                                        <i className="fas fa-calendar-alt"></i>
+                                    </span>
                                 </div>
                             </div>
                         </div>

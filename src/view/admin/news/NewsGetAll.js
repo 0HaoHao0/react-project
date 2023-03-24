@@ -74,7 +74,7 @@ function NewsGetAll() {
         <div className="news-get-all">
             {!newsData ? (
                 <>
-                    <div className="row">
+                    <div className="row g-0">
                         <div className="col-6">
                             <h1>News Management</h1>
 
@@ -89,7 +89,7 @@ function NewsGetAll() {
                 </>
             ) : (
                 <>
-                    <div className="row">
+                    <div className="row g-0">
                         <div className="col-6">
                             <h1>News Management</h1>
 
@@ -103,7 +103,7 @@ function NewsGetAll() {
                     <div className="overflow-auto mb-4">
                         <table id="table" className="table table-hover">
                             <thead>
-                                <tr className="bg-dark">
+                                <tr className="table-dark">
                                     <th>Id</th>
                                     <th>Title</th>
                                     <th>Createtor</th>

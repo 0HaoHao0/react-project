@@ -139,7 +139,7 @@ function ServiceGetAll() {
         <div className="doctor-getall">
             {!serviceData ? (
                 <>
-                    <div className="row">
+                    <div className="row g-0">
                         <div className="col-6">
                             <h1>Service Management</h1>
 
@@ -154,7 +154,7 @@ function ServiceGetAll() {
                 </>
             ) : (
                 <>
-                    <div className="row">
+                    <div className="row g-0">
                         <div className="col-6">
                             <h1>Service Management</h1>
 
@@ -168,7 +168,7 @@ function ServiceGetAll() {
                     <div className="overflow-auto mb-4">
                         <table id="table" className="table table-hover">
                             <thead>
-                                <tr className="bg-dark">
+                                <tr className="table-dark">
                                     <th>Id</th>
                                     <th>Service Name</th>
                                     <th>Service Code</th>

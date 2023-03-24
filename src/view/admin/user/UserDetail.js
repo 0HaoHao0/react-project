@@ -109,7 +109,7 @@ function UserDetail() {
                 </div>
                 <hr />
                 <h1 className="alert alert-dark" role="alert" >Profile </h1>
-                <div className="row">
+                <div className="row g-0">
 
                     <div className="col-12 text-center my-4">
                         <img height="150px" width="150px" src={state.imageURL} alt="..." />
@@ -121,7 +121,7 @@ function UserDetail() {
                                     <label htmlFor="UserName">User Name: </label>
                                 </div>
                                 <div className="col-md-9 ">
-                                    <input type="text" className="form-control" id="UserName" placeholder={state.fullName} readOnly />
+                                    <input type="text" className="form-control bg-white" id="UserName" placeholder={state.fullName} disabled />
                                 </div>
                             </div>
 
@@ -130,7 +130,7 @@ function UserDetail() {
                                     <label htmlFor="FullName">Full Name: </label>
                                 </div>
                                 <div className="col-md-9 ">
-                                    <input type="text" className="form-control" id="FullName" placeholder={state.fullName} readOnly />
+                                    <input type="text" className="form-control bg-white" id="FullName" placeholder={state.fullName} disabled />
                                 </div>
                             </div>
 
@@ -139,14 +139,14 @@ function UserDetail() {
                                     <label htmlFor="PhoneNumber">Phone Number: </label>
                                 </div>
                                 <div className="col-md-9 ">
-                                    <input type="text" className="form-control" id="PhoneNumber" placeholder={state.phoneNumber} readOnly />
+                                    <input type="text" className="form-control bg-white" id="PhoneNumber" placeholder={state.phoneNumber} disabled />
                                 </div>
                             </div>
                             <div className="row my-2">
                                 <div className="col-3 fw-bold">Role: </div>
                                 <div className="col-9 text-left">
-                                    <select className='form-select' aria-label="Default select example" onChange={handleSelectChange}>
-                                        <option disabled selected>{patientInfo.role}</option>
+                                    <select className='form-select' defaultChecked={patientInfo.role} aria-label="Default select example" onChange={handleSelectChange}>
+                                        <option disabled defaultValue={patientInfo.role}>{patientInfo.role}</option>
                                         {options.map(option => (
                                             <option
                                                 key={option.value}
@@ -167,7 +167,7 @@ function UserDetail() {
                                     <label htmlFor="BirthDate">Birth Date: </label>
                                 </div>
                                 <div className="col-md-9 ">
-                                    <input type="text" className="form-control" id="BirthDate" placeholder={state.birthDate} readOnly />
+                                    <input type="text" className="form-control bg-white" id="BirthDate" placeholder={state.birthDate.split('T')[[0]]} disabled />
                                 </div>
                             </div>
                             <div className="row my-2">
@@ -175,7 +175,7 @@ function UserDetail() {
                                     <label htmlFor="Gender">Gender: </label>
                                 </div>
                                 <div className="col-md-9 ">
-                                    <input type="text" className="form-control" id="Gender" placeholder={state.gender} readOnly />
+                                    <input type="text" className="form-control bg-white" id="Gender" placeholder={state.gender} disabled />
                                 </div>
                             </div>
                             <div className="row my-2">
@@ -183,7 +183,7 @@ function UserDetail() {
                                     <label htmlFor="Address">Address: </label>
                                 </div>
                                 <div className="col-md-9 ">
-                                    <input type="text" className="form-control" id="Address" placeholder={state.address} readOnly />
+                                    <input type="text" className="form-control bg-white" id="Address" placeholder={state.address} disabled />
                                 </div>
                             </div>
                             <div className="row my-2">
@@ -191,7 +191,7 @@ function UserDetail() {
                                     <label htmlFor="Email">Email: </label>
                                 </div>
                                 <div className="col-md-9 ">
-                                    <input type="text" className="form-control" id="Email" placeholder={state.email} readOnly />
+                                    <input type="text" className="form-control bg-white" id="Email" placeholder={state.email} disabled />
                                 </div>
                             </div>
                             <div className="row my-2">

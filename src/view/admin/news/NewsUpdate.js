@@ -96,10 +96,14 @@ function NewsUpdate() {
                     fromData.append("PublishDate", newsData.publishDate)
                     fromData.append("Content", newsData.content)
 
-                    newsData.ServiceId.forEach(element => {
-                        fromData.append("ServicesId", element)
-                    });
-                    // newsData.ServiceId && newsData.ServiceId.length ? newsData.ServiceId : [0]
+                    if (newsData.ServiceId) {
+                        newsData.ServiceId.forEach(element => {
+                            fromData.append("ServicesId", element)
+                        });
+                    }
+                    else {
+                        fromData.append("ServicesId", 0)
+                    }
 
                     Swal.fire({
                         title: "Loading...",
@@ -152,101 +156,102 @@ function NewsUpdate() {
     }
     return (<>
         <div className="news-update">
-            <div className="row">
-                <h1>News Update</h1>
-            </div>
+            <h1>News Update</h1>
             <hr />
-            <div className="row">
-                <h4 className="alert alert-secondary">News Infomation</h4>
-                <div className="col-lg-6 col-sm-12 ">
-                    <label htmlFor="title" className="form-label">Title: </label>
-                    <input type="text" className={`form-control  ${isTouched.title && (dataError.title ? "is-invalid" : "is-valid")}`}
-                        id="title" name="title" placeholder={newsData.title} defaultValue={newsData.title}
-                        onBlur={validate} onChange={handleChange} />
-                    {dataError.title
-                        ? <div className="invalid-feedback">
-                            {dataError.title}
-                        </div>
-                        : null}
+            <div className="container">
+
+                <div className="row">
+                    <h4 className="alert alert-secondary">News Infomation</h4>
+                    <div className="col-lg-6 col-sm-12 ">
+                        <label htmlFor="title" className="form-label">Title: </label>
+                        <input type="text" className={`form-control  ${isTouched.title && (dataError.title ? "is-invalid" : "is-valid")}`}
+                            id="title" name="title" placeholder={newsData.title} defaultValue={newsData.title}
+                            onBlur={validate} onChange={handleChange} />
+                        {dataError.title
+                            ? <div className="invalid-feedback">
+                                {dataError.title}
+                            </div>
+                            : null}
 
 
 
-                </div>
-                <div className="col-lg-6 col-sm-12 ">
-
-                    <label htmlFor="publishDate" className="form-label">Publish Date: </label>
-                    <input type="date" className={`form-control  ${isTouched.publishDate && (dataError.publishDate ? "is-invalid" : "is-valid")}`}
-                        id="publishDate" name="publishDate" defaultValue={formartDate(newsData.publishDate)}
-                        onBlur={validate} onChange={handleChange} />
-                    {dataError.publishDate
-                        ? <div className="invalid-feedback">
-                            {dataError.publishDate}
-                        </div>
-                        : null}
-                </div>
-
-                <div className="col-12 mb-3">
-
-                    <label htmlFor="content" className="form-label">Content: </label>
-                    <div className="ckeditor">
-                        <CKEditor
-                            editor={Editor}
-                            config={{
-                                cloudServices: {
-                                    tokenUrl: 'https://96022.cke-cs.com/token/dev/4f421aeddafb7c431e79a6743fefd3a8fc56e68d043e13455ccf262b10c4?limit=10',
-                                    uploadUrl: 'https://96022.cke-cs.com/easyimage/upload/'
-                                }
-                            }}
-                            data={newsData.content}
-
-                            onChange={(event, editor) => {
-                                const data = editor.getData();
-                                const e =
-                                {
-                                    target: {
-                                        name: 'content',
-                                        value: data,
-                                    }
-                                }
-                                handleChange(e);
-                            }}
-                            onBlur={(event, editor) => {
-                                const data = editor.getData();
-                                const e =
-                                {
-                                    target: {
-                                        name: 'content',
-                                        value: data,
-                                    }
-                                }
-                                validate(e)
-                            }}
-                        />
                     </div>
-                    <div>
-                        {dataError.content
-                            && <span className="text-danger">
-                                {dataError.content}
-                            </span>}
+                    <div className="col-lg-6 col-sm-12 ">
+
+                        <label htmlFor="publishDate" className="form-label">Publish Date: </label>
+                        <input type="date" className={`form-control  ${isTouched.publishDate && (dataError.publishDate ? "is-invalid" : "is-valid")}`}
+                            id="publishDate" name="publishDate" defaultValue={formartDate(newsData.publishDate)}
+                            onBlur={validate} onChange={handleChange} />
+                        {dataError.publishDate
+                            ? <div className="invalid-feedback">
+                                {dataError.publishDate}
+                            </div>
+                            : null}
+                    </div>
+
+                    <div className="col-12 mb-3">
+
+                        <label htmlFor="content" className="form-label">Content: </label>
+                        <div className="ckeditor">
+                            <CKEditor
+                                editor={Editor}
+                                config={{
+                                    cloudServices: {
+                                        tokenUrl: 'https://96022.cke-cs.com/token/dev/4f421aeddafb7c431e79a6743fefd3a8fc56e68d043e13455ccf262b10c4?limit=10',
+                                        uploadUrl: 'https://96022.cke-cs.com/easyimage/upload/'
+                                    }
+                                }}
+                                data={newsData.content}
+
+                                onChange={(event, editor) => {
+                                    const data = editor.getData();
+                                    const e =
+                                    {
+                                        target: {
+                                            name: 'content',
+                                            value: data,
+                                        }
+                                    }
+                                    handleChange(e);
+                                }}
+                                onBlur={(event, editor) => {
+                                    const data = editor.getData();
+                                    const e =
+                                    {
+                                        target: {
+                                            name: 'content',
+                                            value: data,
+                                        }
+                                    }
+                                    validate(e)
+                                }}
+                            />
+                        </div>
+                        <div>
+                            {dataError.content
+                                && <span className="text-danger">
+                                    {dataError.content}
+                                </span>}
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div className="row">
-                <h4 className="alert alert-secondary">Service Select</h4>
-                <div className="col-12 row mb-3">
-                    {service.map((service) => (
-                        <div className="col-4" key={service.id}>
-                            <div
-                                className={`card ${newsData.ServiceId && newsData.ServiceId.includes(service.id) ? 'bg-primary' : ''}`}
-                                onClick={() => handleService(service.id)}
-                            >
-                                <div className="card-body">
-                                    <h6 >{`Id: ${service.id}, ${service.code}`}</h6>
-                                    <h6 className="card-subtitle">{`${service.name}`}</h6>
+                <div className="row">
+                    <h4 className="alert alert-secondary">Service Select</h4>
+                    <div className="row g-2">
+                        {service.map((service) => (
+                            <div className="col-4 mb-2 " key={service.id}>
+                                <div
+                                    className={`card h-100 ${newsData.ServiceId && newsData.ServiceId.includes(service.id) ? 'bg-primary text-white' : ''}`}
+                                    onClick={() => handleService(service.id)}
+                                >
+                                    <div className="card-body">
+                                        <h6 >{`Id: ${service.id}, ${service.code}`}</h6>
+                                        <h6 className="card-subtitle">{`${service.name}`}</h6>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    ))}
+                        ))}
+                    </div>
                 </div>
             </div>
 

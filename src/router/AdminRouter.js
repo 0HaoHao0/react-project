@@ -1,6 +1,6 @@
 import { Route, Routes } from "react-router";
-import AdminHeader from "../components/admin/AdminHeader";
 import AdminSidebar from "../components/admin/AdminSidebar";
+import AppointmentGetAll from "../view/admin/appointment/AppointmentGetAll";
 import ContactDetail from "../view/admin/contact/ContactDetail";
 import ContactGetAll from "../view/admin/contact/ContactGetAll";
 import DeviceCreate from "../view/admin/device/DeviceCreate";
@@ -30,14 +30,12 @@ import UserGetAll from "../view/admin/user/UserGetAll";
 function AdminRouter() {
   return (
     <>
-      <body className="hold-transition sidebar-mini">
-        <div className="wrapper">
-          <AdminHeader />
-
+      <div className="row g-0 flex-nowrap px-1">
+        <div className="col-auto" >
           <AdminSidebar />
-
-          <div className="content-wrapper p-4">
-
+        </div>
+        <div className="col ">
+          <div style={{ height: '100vh' }} className=" overflow-auto p-2 border-top border-end border-bottom ">
             <Routes>
               {/* User */}
               <Route path="/user" element={<UserGetAll />}></Route>
@@ -51,6 +49,8 @@ function AdminRouter() {
               <Route path="/doctor" element={<DoctorGetAll />}></Route>
               <Route path="/doctor/create" element={<DoctorCreate />}></Route>
               <Route path="/doctor/detail" element={<DoctorDetail />}></Route>
+              {/* Appointment */}
+              <Route path="/appointment" element={<AppointmentGetAll />}></Route>
 
               {/* Service */}
               <Route path="/service" element={<ServiceGetAll />}></Route>
@@ -78,7 +78,7 @@ function AdminRouter() {
             </Routes>
           </div>
         </div>
-      </body>
+      </div>
     </>
   );
 }

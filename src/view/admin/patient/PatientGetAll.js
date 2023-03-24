@@ -83,7 +83,7 @@ function PatientGetAll() {
             <div className="overflow-auto mb-4">
               <table id="table" className="table table-hover">
                 <thead>
-                  <tr className="bg-dark">
+                  <tr className="table-dark">
                     <th>No.</th>
                     <th>User Name</th>
                     <th>Full Name</th>
@@ -108,7 +108,7 @@ function PatientGetAll() {
                           state={value}
                           className="btn btn-success"
                         >
-                          <i class="fa-solid fa-circle-info"></i>
+                          <i className="fa-solid fa-circle-info"></i>
                         </Link>
                       </td>
                     </tr>

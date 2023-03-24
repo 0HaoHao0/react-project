@@ -75,8 +75,8 @@ function DeviceGetAll() {
         <div className="doctor-getall">
             {!deviceData ? (
                 <>
-                    <div className="row">
-                        <div className="col-6">
+                    <div className="row g-0">
+                        <div className="col-6 ">
                             <h1>Device Management</h1>
 
                         </div>
@@ -89,7 +89,7 @@ function DeviceGetAll() {
                 </>
             ) : (
                 <>
-                    <div className="row">
+                    <div className="row g-0">
                         <div className="col-6">
                             <h1>Device Management</h1>
 
@@ -103,7 +103,7 @@ function DeviceGetAll() {
                     <div className="overflow-auto mb-4">
                         <table id="table" className="table table-hover">
                             <thead>
-                                <tr className="bg-dark">
+                                <tr className="table-dark">
 
                                     <th>Device Id</th>
                                     <th>Device Name</th>

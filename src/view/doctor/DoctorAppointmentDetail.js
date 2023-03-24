@@ -23,36 +23,24 @@ function UpdateState({ currentState, handleChangeState }) {
         }
     ];
 
-
-
     return (
-        <div>
-            {!appointmentState
-                ?
-                <div>Loading...</div>
-                :
-                <>
-                    <div className="row g-0">
-                        <div className="col-12 my-2">Update State</div>
-                        <div className="col-12">
-
-                            <select className='form-select' onChange={(e) => handleChangeState(e)}>
-                                <option disabled value={currentState} selected>{currentState}</option>
-                                {appointmentState.map(option => (
-                                    <option
-                                        key={option.id}
-                                        value={option.id}
-                                        hidden={option.name === currentState}
-                                    >
-                                        {option.name}
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
-                    </div>
-                </>
-            }
-        </div >
+        <div className="row g-0">
+            <div className="col-12 my-2">Update State</div>
+            <div className="col-12">
+                <select className='form-select' defaultValue={currentState} onChange={(e) => handleChangeState(e.target.value)}>
+                    <option disabled value={currentState} >{currentState}</option>
+                    {appointmentState.map(option => (
+                        <option
+                            key={option.id}
+                            value={option.id}
+                            hidden={option.name === currentState}
+                        >
+                            {option.name}
+                        </option>
+                    ))}
+                </select>
+            </div>
+        </div>
     );
 }
 
@@ -75,7 +63,6 @@ function DoctorAppointmentDetail() {
     const { id } = useParams();
     const [appointmentInfo, setAppointmentInfo] = useState();
     const [loading, setLoading] = useState(0);
-
     const MySwal = withReactContent(Swal)
 
 
@@ -105,10 +92,10 @@ function DoctorAppointmentDetail() {
     }, [id, loading])
 
     const handleUpdateState = (currentState) => {
-        let state = null;
+        let state;
 
         const handleChangeState = (e) => {
-            state = e.target.value;
+            state = e;
         }
 
         MySwal.fire({
@@ -119,11 +106,11 @@ function DoctorAppointmentDetail() {
             icon: 'question',
         }).then(async (result) => {
             if (result.isConfirmed) {
-                Swal.fire({
+                MySwal.fire({
                     title: "Update State...",
                     html: "Please wait a moment"
                 })
-                Swal.showLoading()
+                MySwal.showLoading()
                 const res = await updateAppointmentState(appointmentInfo.id, state);
 
                 if (res.status === 200) {
@@ -132,7 +119,7 @@ function DoctorAppointmentDetail() {
                 else {
                     toast.error("Update failed, please contact to Admin !")
                 }
-                Swal.close()
+                MySwal.close()
             } else if (result.isDismissed) {
                 toast.info('Update has been cancelled')
             }
@@ -159,16 +146,17 @@ function DoctorAppointmentDetail() {
             confirmButtonText: "Update",
             icon: 'question',
         }).then(async (result) => {
+
             if (result.isConfirmed) {
                 const fromData = new FormData();
                 fromData.append('AppointmentId', appointmentInfo.id)
                 fromData.append('DocumentFile', data.DocumentFile)
                 fromData.append('Title', data.Title)
-                Swal.fire({
+                MySwal.fire({
                     title: "Upload file...",
                     html: "Please wait a moment"
                 })
-                Swal.showLoading()
+                MySwal.showLoading()
                 const res = await addDocument(fromData)
                 if (res.status === 200) {
                     setLoading(loading + 1);
@@ -176,7 +164,7 @@ function DoctorAppointmentDetail() {
                 else {
                     toast.error("Upload file failed, please contact to Admin !")
                 }
-                Swal.close()
+                MySwal.close()
             } else if (result.isDismissed) {
                 toast.info('Upload file has been cancelled')
             }
@@ -193,11 +181,11 @@ function DoctorAppointmentDetail() {
             icon: 'warning',
         }).then(async (result) => {
             if (result.isConfirmed) {
-                Swal.fire({
+                MySwal.fire({
                     title: "Update Document...",
                     html: "Please wait a moment"
                 })
-                Swal.showLoading()
+                MySwal.showLoading()
                 const res = await deleteDocument(id);
 
                 if (res.status === 200) {
@@ -206,7 +194,7 @@ function DoctorAppointmentDetail() {
                 else {
                     toast.error("Update document failed, please contact to Admin !")
                 }
-                Swal.close()
+                MySwal.close()
             } else if (result.isDismissed) {
                 toast.info('Delete document has been cancelled')
             }
@@ -249,7 +237,7 @@ function DoctorAppointmentDetail() {
                     <div className="col-12 ">
                         <div className="form-group text-primary">
                             <label htmlFor="state">State:</label>
-                            <button className="btn btn-xs btn-primary mx-2" type="button" onClick={() => handleUpdateState(appointmentInfo.state)}>Update</button>
+                            <button className="btn btn-sm btn-primary mx-2" type="button" onClick={() => handleUpdateState(appointmentInfo.state)}>Update</button>
 
                             <input id="state" className="form-control my-2" type="text" name="state" placeholder={appointmentInfo.state} disabled />
                         </div>
@@ -257,11 +245,11 @@ function DoctorAppointmentDetail() {
                         <div className="form-group text-primary">
 
                             <label htmlFor="state">Document:</label >
-                            <button className="btn btn-xs btn-primary mx-2" type="button" onClick={(e) => { handleUploadFile() }}>Add</button>
+                            <button className="btn btn-sm btn-primary mx-2" type="button" onClick={(e) => { handleUploadFile() }}>Add</button>
                             <br />
 
                             <table className='table border sha-sm dow table-hover my-2 text-dark'>
-                                <thead className='bg-dark'>
+                                <thead className='table-dark'>
                                     <tr>
                                         <th scope="col">Id</th>
                                         <th scope="col">Title</th>

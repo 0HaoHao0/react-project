@@ -46,88 +46,90 @@ function NewsDetail() {
 
     return (<>
         <div className="news-detail">
-            <div className="row">
-                <h1>News Detail</h1>
-            </div>
+            <h1>News Detail</h1>
             <hr />
-            <div className="row">
-                <div className="col-lg-6 col-xs-12">
-                    <div className="mb-3">
-                        <label htmlFor="id" className="form-label">Id</label>
-                        <input type="text" className="form-control" id="id" value={state.id} readOnly />
-                    </div>
-                    <div className="mb-3">
-                        <label htmlFor="title" className="form-label">Title</label>
-                        <input type="text" className="form-control" id="title" value={state.title} readOnly />
-                    </div>
-                    <div className="mb-3">
-                        <label htmlFor="creator" className="form-label">Createtor</label>
-                        <input type="text" className="form-control" id="creator" value={state.creator} readOnly></input>
-                    </div>
+            <div className="container">
 
-                </div>
-                <div className="col-lg-6 col-xs-12">
+                <div className="row">
+                    <div className="col-lg-6 col-xs-12">
+                        <div className="mb-3">
+                            <label htmlFor="id" className="form-label">Id</label>
+                            <input type="text" className="form-control bg-white" id="id" value={state.id} disabled />
+                        </div>
+                        <div className="mb-3">
+                            <label htmlFor="title" className="form-label">Title</label>
+                            <input type="text" className="form-control bg-white" id="title" value={state.title} disabled />
+                        </div>
+                        <div className="mb-3">
+                            <label htmlFor="creator" className="form-label">Createtor</label>
+                            <input type="text" className="form-control bg-white" id="creator" value={state.creator} disabled></input>
+                        </div>
 
-                    <div className="mb-3">
-                        <label htmlFor="publishDate" className="form-label">Publish Date </label>
-                        <input type="text" className="form-control" id="publishDate" value={formatDate(state.publishDate)} readOnly />
                     </div>
-                    <div className="mb-3">
-                        <label htmlFor="timeCreated" className="form-label">Time Created </label>
-                        <input type="text" className="form-control" id="timeCreated" value={formatDate(state.timeCreated)} readOnly />
-                    </div>
-                    <div className="mb-3">
-                        <label htmlFor="lastTimeModified" className="form-label">Last Modified </label>
-                        <input type="text" className="form-control" id="lastTimeModified" value={formatDate(state.lastTimeModified)} readOnly />
-                    </div>
+                    <div className="col-lg-6 col-xs-12">
 
-
-                </div>
-                <div className="mb-3">
-                    <label htmlFor="content" className="form-label">Content</label>
-                    <div className="bg-white p-4 shadow-sm border">
-                        <div className="ckeditor">
-                            <CKEditor
-                                editor={Editor}
-                                config={
-                                    {
-                                        toolbar: []
-                                    }
-                                }
-                                data={state.content}
-                                disabled={true}
-                            />
+                        <div className="mb-3">
+                            <label htmlFor="publishDate" className="form-label">Publish Date </label>
+                            <input type="text" className="form-control bg-white" id="publishDate" value={formatDate(state.publishDate)} disabled />
+                        </div>
+                        <div className="mb-3">
+                            <label htmlFor="timeCreated" className="form-label">Time Created </label>
+                            <input type="text" className="form-control bg-white" id="timeCreated" value={formatDate(state.timeCreated)} disabled />
+                        </div>
+                        <div className="mb-3">
+                            <label htmlFor="lastTimeModified" className="form-label">Last Modified </label>
+                            <input type="text" className="form-control bg-white" id="lastTimeModified" value={formatDate(state.lastTimeModified)} disabled />
                         </div>
 
 
                     </div>
-                </div>
-            </div>
+                    <div className="mb-3">
+                        <label htmlFor="content" className="form-label">Content</label>
+                        <div className="bg-white p-4 shadow-sm border">
+                            <div className="ckeditor">
+                                <CKEditor
+                                    editor={Editor}
+                                    config={
+                                        {
+                                            toolbar: []
+                                        }
+                                    }
+                                    data={state.content}
+                                    disabled={true}
+                                />
+                            </div>
 
-            <div className="row">
-                <h4 className="alert alert-secondary">Services</h4>
-                {state.services.map((service) =>
-                    <div className="col-4" key={service.id}>
-                        <div className="card" >
-                            <div className="card-body">
-                                <h5 >Id: {service.id}, {service.serviceCode}</h5>
-                                <p>{service.serviceName}</p>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div className="row">
+                    <h4 className="alert alert-secondary">Services</h4>
+                    {state.services.map((service) =>
+                        <div className="col-4 mb-2" key={service.id}>
+                            <div className="card mb-2 h-100" >
+                                <div className="card-body">
+                                    <h5 >Id: {service.id}, {service.serviceCode}</h5>
+                                    <p>{service.serviceName}</p>
+                                </div>
                             </div>
                         </div>
+
+                    )}
+                </div>
+                <div className="row ">
+                    <div className="col-6">
+                        <Link to={'/admin/news/update'} state={state} className="btn btn-primary">Update</Link>
+
                     </div>
+                    <div className="col-6">
+                        <button className="btn btn-danger ms-auto" onClick={handleDelete}>Delete</button>
 
-                )}
-            </div>
-            <div className="row">
-                <div className="col-6">
-                    <Link to={'/admin/news/update'} state={state} className="btn btn-primary">Update</Link>
-
-                </div>
-                <div className="col-6">
-                    <button className="btn btn-danger ms-auto" onClick={handleDelete}>Delete</button>
-
+                    </div>
                 </div>
             </div>
+
         </div>
     </>);
 }
