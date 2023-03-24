@@ -29,3 +29,24 @@ export const getAppointmentQueueAPI = (params = {}, callback = (res) => { consol
     });
 }
 
+export const getAppointmentDetailAPIs = ({id, params = {}, callback = (res) => console.log(res)}) => {
+    callAPI({
+        method: "GET",
+        endpoint: `/api/Appointment/Get/${id}`,
+        params: params,
+        callback: callback
+    });
+}
+
+export const getImageSegmentationResultAPIs = ({params = {}, callback = (res) => console.log(res)}) => {
+    callAPI({
+        method: "GET",
+        endpoint: `/api/Technician/GetSegmentationResults`,
+        params: params,
+        callback: callback
+    });
+}
+
+export const deleteImageSegmentationResultAPI = (resultId, callback) => {
+    
+}

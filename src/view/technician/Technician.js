@@ -260,12 +260,16 @@ function Technician() {
                                                 <div className="row flex-column align-items-center" style={{ rowGap: "10px" }}>
                                                     {data.map((item, idx) => (
                                                         <div key={idx} className="col-md-6">
-                                                            <Link to={"."} style={{ color: 'inherit' }} className="text-decoration-none">
+                                                            <Link to={"./detail_views/" + item.id} style={{ color: 'inherit' }} className="text-decoration-none">
                                                                 <div className={`rounded border shadow card`}>
                                                                     <div className={`card-header text-white text-center bg-${cardColors[item.state]}`}>
                                                                         <h4>{item.patient.baseUser.fullName}</h4>
                                                                     </div>
                                                                     <div className="card-body">
+                                                                        <div className="row">
+                                                                            <span className="col-4 text-end">Id:</span>
+                                                                            <span className="col-8 text-start">{item.id}</span>
+                                                                        </div>
                                                                         <div className="row">
                                                                             <span className="col-4 text-end">Patient:</span>
                                                                             <span className="col-8 text-start">{item.patient.baseUser.userName}</span>
