@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { getAppointmentQueueAPI } from '../../services/technician/apiTechnician';
 import { TechnicianSideBar } from './TechnicianSideBar';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { toast } from 'react-toastify';
 
@@ -58,6 +58,10 @@ function PagingBar({ pageIndex, pageCount, onPageChange }) {
 
 function Technician() {
 
+    const location = useLocation();
+    const params = new URLSearchParams(location.search);
+    const page = params.get("page");
+
     const navigate = useNavigate();
     const userInfo = useSelector((state) => state.user).userInfo;
     if (!userInfo) navigate("/login");
@@ -72,7 +76,7 @@ function Technician() {
     });
 
     const [paginated, setPaginated] = useState({
-        page: 0,
+        page: page || 1,
         pageSize: 0,
         pageTotals: 0,
     });
@@ -85,7 +89,10 @@ function Technician() {
         });
 
         Swal.showLoading();
-        getAppointmentQueueAPI(paramsFilter, (res) => {
+        getAppointmentQueueAPI({
+            ...paramsFilter,
+            page: page
+        }, (res) => {
             if (res && res.status === 200) {
                 console.log(res.data);
                 let queue = res.data.data;
@@ -103,7 +110,7 @@ function Technician() {
             Swal.close();
         });
 
-    }, [paramsFilter]);
+    }, [paramsFilter, page]);
 
     const fetchPage = (page, isAsync = false) => {
 
@@ -235,12 +242,7 @@ function Technician() {
                                 pageIndex={paginated.page}
                                 pageCount={paginated.pageTotals}
                                 onPageChange={(page) => {
-                                    setPaginated({
-                                        ...paginated,
-                                        page: page
-                                    });
-
-                                    fetchPage(page);
+                                    navigate("?page=" + page);
                                 }}
                             />
                         }

@@ -47,6 +47,34 @@ export const getImageSegmentationResultAPIs = ({params = {}, callback = (res) =>
     });
 }
 
-export const deleteImageSegmentationResultAPI = (resultId, callback) => {
-    
+export const deleteImageSegmentationResultAPI = ({ resultId, callback }) => {
+    callAPI({
+        method: "DELETE",
+        endpoint: "/api/Technician/RemoveSegmentationResult",
+        params: {
+            id: resultId
+        },
+        callback: callback
+    });
+}
+
+export const updateStateForAppointmentAPI = ({ appointmentId, stateIndex, callback = (res) => console.log(res) }) => {
+    callAPI({
+      method: "PUT",
+      endpoint: `/api/Appointment/UpdateState/${appointmentId}`,
+      params: {
+        state: stateIndex
+      },
+      callback: callback
+    });
+}
+
+export const uploadXRayImageAPI = ({ formData, callback }) => {
+    callAPI({
+        method: "POST",
+        endpoint: "/api/Technician/UploadXRayImage",
+        formData: true,
+        data: formData,
+        callback: callback
+    });
 }
