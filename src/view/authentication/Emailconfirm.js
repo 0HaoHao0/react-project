@@ -7,13 +7,13 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import Swal from "sweetalert2";
+//toast
+import { toast } from "react-toastify";
 import { createUser } from "../../redux/features/userSlide";
 import { getUserInfo } from "../../services/authorization/apILogin";
 function Emailconfirm() {
-
   const [changleStyle, setChangleStyle] = useState(1);
   const [isTouched, setIsTouched] = useState({});
-
 
   const navigate = useNavigate();
   const user = useSelector((state) => state.user);
@@ -22,7 +22,7 @@ function Emailconfirm() {
   const [verifiedEmail, setVerifiedEmail] = useState(user.userInfo.email);
   const [code, setCode] = useState("");
   const [dataError, setDataError] = useState({});
-
+  const [CodeClickedTime, setCodeClickedTime] = useState(null);
 
   // validateVerifiedEmail
   const validateVerifiedEmail = (e) => {
@@ -56,7 +56,6 @@ function Emailconfirm() {
 
   // validateInsertCode
   const validateInsertCode = () => {
-
     let isValid = false;
 
     setIsTouched((prevState) => ({
@@ -85,53 +84,74 @@ function Emailconfirm() {
   };
 
   const handleSendCodeToEmail = async (e) => {
-
+    let canClick =
+      CodeClickedTime === null ||
+      new Date().getTime() - CodeClickedTime > 15000;
+    if (canClick) {
+      setCodeClickedTime(new Date().getTime());
+    } else {
+      let diff =
+        15 - Math.floor((new Date().getTime() - CodeClickedTime) / 1000);
+      toast.warning("Waiting in " + diff + "s");
+      return;
+    }
     const res = await SendCodeToEmail(verifiedEmail);
     if (res.status === 200) {
-      setChangleStyle(2);
-    } else if(res.status !== 500) {
       Swal.fire({
-        icon: "error",
-        title: "Failed!",
-        text: res.data
+        icon: "success",
+        title: "Sending Success!",
+        text: res.data,
       });
-    }
-    else {
+      setChangleStyle(2);
+    } else if (res.status !== 500) {
       Swal.fire({
         icon: "error",
         title: "Failed!",
-        text: "Some thing went wrong!"
+        text: res.data,
+      });
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "Failed!",
+        text: "Some thing went wrong!",
       });
     }
   };
 
   const handleConfirmCodeUser = async (e) => {
-    if(validateInsertCode() === false) return;
+    if (validateInsertCode() === false) return;
+    let canClick =
+      CodeClickedTime === null ||
+      new Date().getTime() - CodeClickedTime > 15000;
+    if (canClick) {
+      setCodeClickedTime(new Date().getTime());
+    } else {
+      let diff =
+        15 - Math.floor((new Date().getTime() - CodeClickedTime) / 1000);
+      toast.warning("Waiting in " + diff + "s");
+      return;
+    }
     const res = await VerifyUserByCode(user.userInfo.id, code);
     if (res.status === 200) {
-      
       let newUserInfoRes = await getUserInfo();
-      if(newUserInfoRes.status === 200) {
+      if (newUserInfoRes.status === 200) {
         dispatch(createUser(newUserInfoRes.data));
       }
 
       navigate("/home");
-    }
-    else if(res.status !== 500) {
+    } else if (res.status !== 500) {
       Swal.fire({
         icon: "error",
         title: "Failed!",
-        text: res.data
+        text: res.data,
       });
-    }
-    else {
+    } else {
       Swal.fire({
         icon: "error",
         title: "Failed!",
-        text: "Some thing went wrong!"
+        text: "Some thing went wrong!",
       });
     }
-    
   };
 
   return (
