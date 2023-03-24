@@ -36,7 +36,7 @@ export const register = async (userData) => {
       console.log(error);
     });
 
-  await Swal.hideLoading();
+    Swal.close();
   return data;
 };
 export const VerifyUserByCode = async (userId, code) => {
@@ -58,6 +58,7 @@ export const VerifyUserByCode = async (userId, code) => {
       data = error.response;
       console.log(error);
     });
+    Swal.close();
   return data;
 };
 
@@ -87,5 +88,6 @@ export const SendCodeToEmail = async (email) => {
       data = error.response;
       console.log(error);
     });
+    Swal.close();
   return data;
 };
