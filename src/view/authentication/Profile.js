@@ -18,6 +18,10 @@ import {
   getPatientInfo,
   updateMedicalRecord,
 } from "../../services/admin/patient/apiPatient";
+import { getDoctorInfo } from "../../services/admin/doctor/apiDoctor";
+import { createUser } from "../../redux/features/userSlide";
+import { useDispatch } from "react-redux";
+import { updateAvatar } from "../../services/admin/user/apiUser";
 
 function Profile() {
   const [changleStyle, setChangleStyle] = useState(1);
@@ -38,7 +42,10 @@ function Profile() {
     PhoneNumber: null,
   });
   const [medicalRecord, setMedicalRecord] = useState(null);
+  const [certificateFile, setCertificateFile] = useState(null);
   const [CodeClickedTime, setCodeClickedTime] = useState(null);
+  const [updateImage, setUpdateImage] = useState(null);
+  const dispatch = useDispatch();
 
   const handleUpdateUserInfo = async () => {
     Swal.fire({
@@ -76,16 +83,26 @@ function Profile() {
   };
 
   const navigate = useNavigate();
-
+  //get userinfo
   const getData = async () => {
-    let data = (await getUserInfo()).data;
-    setUserInfo(data);
-    setVerifiedEmail(data.email);
+    let res = await getUserInfo();
+    if (res.status === 200) {
+      // Set Userinfo
+      let userInfo = res.data;
+      dispatch(createUser(userInfo));
+      setUserInfo(userInfo);
+      setVerifiedEmail(userInfo.email);
+    } else if (res.status < 500) {
+      toast.error(res.data);
+    } else {
+      toast.error("Something went wrong!!");
+    }
   };
   useEffect(() => {
     getData();
   }, []);
 
+  //get Patient
   useEffect(() => {
     if (changleStyle === 5) {
       Swal.fire({
@@ -109,7 +126,7 @@ function Profile() {
     }
   }, [changleStyle, userInfo.id]);
 
-  //Update Medical Record
+  //Update Medical Record Patient
   const handleUpdateMedicalRecord = () => {
     Swal.fire({
       title: "Select a file",
@@ -142,6 +159,85 @@ function Profile() {
         Swal.close();
         if (res.status === 200) {
           setMedicalRecord(res.data.medicalRecordFile);
+          Swal.fire({
+            icon: "success",
+            title: "Update Sucessfull!",
+          });
+        } else if (res.status < 500) {
+          Swal.fire({
+            icon: "error",
+            title: res.data,
+          });
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "Something wrong!",
+          });
+        }
+      }
+    });
+  };
+  //Get Doctor
+  useEffect(() => {
+    if (changleStyle === 6) {
+      Swal.fire({
+        icon: "info",
+        title: "Waiting to get data...",
+      });
+      Swal.showLoading();
+      const getDoctor = async () => {
+        const res = await getDoctorInfo(userInfo.id);
+        if (res.status === 200) {
+          setCertificateFile(res.data.certificate);
+          console.log(res.data);
+        } else if (res.status < 500) {
+          toast.error(res.data);
+        } else {
+          toast.error("Something wrong!");
+        }
+
+        Swal.close();
+      };
+      getDoctor();
+    }
+  }, [changleStyle, userInfo.id]);
+
+  //Update Avatar
+  const hanldeUpdateAvatar = async () => {
+    Swal.fire({
+      title: "Select a file",
+      html: '<input type="file" id="custom-file" className="form-control">',
+      showCancelButton: true,
+      cancelButtonText: "Cancel",
+      confirmButtonText: "Confirm",
+      allowOutsideClick: false,
+      focusConfirm: false,
+      preConfirm: () => {
+        const file = document.getElementById("custom-file").files[0];
+        if (!file) {
+          Swal.showValidationMessage("You need to choose a file");
+        }
+        return { file: file };
+      },
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        const file = result.value.file;
+        Swal.fire({
+          title: "Loading...",
+          html: "Please wait a moment",
+        });
+        Swal.showLoading();
+        // Handle file here
+        let formData = new FormData();
+        console.log(userInfo);
+        formData.append("userId", userInfo.id);
+        formData.append("image", file);
+        const res = await updateAvatar(formData);
+        Swal.close();
+        if (res.status === 200) {
+          console.log(res.data);
+          setUpdateImage(res.data.newImage);
+          setUserInfo(res.data.user)
           Swal.fire({
             icon: "success",
             title: "Update Sucessfull!",
@@ -450,17 +546,25 @@ function Profile() {
                 <img
                   src={userInfo.imageURL}
                   alt="avatar"
-                  width="190"
-                  height="190"
+                  width="200"
+                  height="200"
+                  value={updateImage}
                   className="profile-imgg"
                 />
-
                 <div className="name text-primary text-uppercase">
-                  {userInfo.userName}{" "}
+                  {userInfo.fullName}{" "}
                   <i className="fa-solid fa-circle-check"></i>
                 </div>
               </div>
+              {/* Update Avatar */}
               <div className="sidenav-url mt-5">
+                <div className="url">
+                  <button className="btn btn-success w-50" onClick={hanldeUpdateAvatar}>
+                    Update Avatar
+                    <i class="fa-solid fa-camera profile-icon"></i>
+                  </button>
+                  <hr align="center" />
+                </div>
                 <div className="url">
                   <button
                     type="button"
@@ -509,10 +613,30 @@ function Profile() {
                       }}
                     >
                       Medical Record
-                      <i className="fa-solid fa-lock profile-icon"></i>
+                      <i class="fa-solid fa-notes-medical profile-icon"></i>
                     </button>
                     <hr align="center" />
                   </div>
+                ) : userInfo.role === "Doctor" ? (
+                  <>
+                    <div className="url">
+                      <button
+                        type="button"
+                        className={
+                          "btn btn" +
+                          (changleStyle !== 6 ? "-outline" : "") +
+                          "-primary w-50 profile-button text-center"
+                        }
+                        onClick={() => {
+                          setChangleStyle(6);
+                        }}
+                      >
+                        Certificate File
+                        <i className="fa-solid fa-lock profile-icon"></i>
+                      </button>
+                      <hr align="center" />
+                    </div>
+                  </>
                 ) : (
                   <></>
                 )}
@@ -1079,7 +1203,7 @@ function Profile() {
                 </div>
               </div>
             </>
-          ) : (
+          ) : changleStyle === 5 ? (
             <>
               <div className="col col-lg-9 col-sm-12">
                 <div className="main" style={{ marginTop: "10%" }}>
@@ -1117,6 +1241,51 @@ function Profile() {
                               >
                                 Upload
                               </button>
+                            </span>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </>
+          ) : (
+            <>
+              <div className="col col-lg-9 col-sm-12">
+                <div className="main" style={{ marginTop: "10%" }}>
+                  <div className="d-flex align-items-center gap-2">
+                    <h2 className="pt-4">CERTIFICATE FILE INFORMATION</h2>
+                  </div>
+                  <hr />
+                  <div className="card py-4">
+                    <div className="card-body">
+                      {certificateFile && (
+                        <div className="">
+                          <div className="row">
+                            <span className="col-4 text-left">Uploaded At</span>
+                            <span className="col">:</span>
+                            <i className="col-7">
+                              {new Date(
+                                certificateFile.lastTimeModified
+                              ).toLocaleString()}
+                            </i>
+                          </div>
+                          <div className="row">
+                            <span className="col-4 text-left">
+                              Certificate File
+                            </span>
+                            <span className="col">:</span>
+                            <span className="col-7">
+                              {certificateFile.fileURL && (
+                                <Link
+                                  to={certificateFile.fileURL}
+                                  className="btn btn-primary"
+                                  target="_blank"
+                                >
+                                  View Details
+                                </Link>
+                              )}
                             </span>
                           </div>
                         </div>
