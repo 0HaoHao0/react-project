@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useState } from "react";
-import Pagiation from "../../components/admin/Pagination";
+import Pagiation from "../../../components/admin/Pagination";
 
 
 //Datatable Modules
@@ -8,7 +8,7 @@ import "datatables.net-dt/js/dataTables.dataTables.min.mjs"
 import "datatables.net-dt/css/jquery.dataTables.min.css"
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
-import { getAllContact } from "../../services/receptionist/apiReceptionistContact";
+import { getAllContact } from "../../../services/receptionist/apiReceptionistContact";
 
 function ReceptionistContact() {
     const [contactData, setContactData] = useState();
@@ -85,7 +85,7 @@ function ReceptionistContact() {
         }
     }
     return (<>
-        <div className="receptionist-contact">
+        <div className=" receptionist-contact">
             <h1>Contact Management</h1>
             <hr />
 
@@ -97,7 +97,7 @@ function ReceptionistContact() {
 
                         <table id="table" className="table table-hover" >
                             <thead>
-                                <tr className="bg-dark">
+                                <tr className="table-dark">
                                     <th>Id</th>
                                     <th>Full Name</th>
                                     <th>Phone Number</th>
@@ -114,7 +114,7 @@ function ReceptionistContact() {
                                             <td>{value.name}</td>
                                             <td>{value.phoneNumber}</td>
                                             <td>{value.timeCreated.slice(0, 10)}</td>
-                                            <td><button className={`btn ${value.state === "Pending" ? "btn-danger" : value.state === "Done" ? "btn-primary" : "btn-warning"}`}>{value.state}</button> </td>
+                                            <td><button className={`btn ${value.state === "Pending" ? "btn-danger" : value.state === "Done" ? "btn-primary" : "btn-warning"}`} disabled>{value.state}</button> </td>
                                             <td><Link to='detail' state={value} className="btn btn-success"><i className="fa-solid fa-circle-info"></i></Link></td>
                                         </tr>
                                     )

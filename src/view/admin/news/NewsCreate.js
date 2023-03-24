@@ -70,7 +70,15 @@ function NewsCreate() {
             fromData.append("Title", newsData.Title)
             fromData.append("PublishDate", newsData.PublishDate)
             fromData.append("Content", newsData.Content)
-            fromData.append("ServicesId", newsData.ServiceId && newsData.ServiceId.length ? newsData.ServiceId : [0])
+
+            if (newsData.ServiceId) {
+                newsData.ServiceId.forEach(element => {
+                    fromData.append("ServicesId", element)
+                });
+            }
+            else {
+                fromData.append("ServicesId", 0)
+            }
 
             Swal.fire({
                 title: "Loading...",
@@ -114,11 +122,9 @@ function NewsCreate() {
     return (
         <>
             <div className="news-create">
-                <div className="row">
-                    <h1>News Create</h1>
-                </div>
+                <h1>News Create</h1>
                 <hr />
-                <div className="row">
+                <div className="container row">
                     <h4 className="alert alert-secondary">News Infomation</h4>
                     <div className="col-lg-6 col-sm-12 ">
                         <label htmlFor="Title" className="form-label">Title: </label>
@@ -190,19 +196,17 @@ function NewsCreate() {
                                 </span>}
                         </div>
                     </div>
-                </div>
-                <div className="row">
                     <h4 className="alert alert-secondary">Service Select</h4>
-                    <div className="col-12 row mb-3">
+                    <div className=" row g-2">
                         {service.map((service) => (
-                            <div className="col-4" key={service.id}>
+                            <div className="col-4 mb-2" key={service.id}>
                                 <div
-                                    className={`card ${newsData.ServiceId && newsData.ServiceId.includes(service.id) ? 'bg-primary' : ''}`}
+                                    className={`card  h-100 ${newsData.ServiceId && newsData.ServiceId.includes(service.id) ? 'bg-primary text-white' : ''}`}
                                     onClick={() => handleService(service.id)}
                                 >
                                     <div className="card-body">
-                                        <h6 >{`Id: ${service.id}`}</h6>
-                                        <h6 className="card-subtitle">{`${service.name}`}</h6>
+                                        <h6 className="card-title">{`Id: ${service.id}`}</h6>
+                                        <h6 className="card-title">{`${service.name}`}</h6>
                                         <p className="card-text">{`Service Code: ${service.code}`}</p>
                                     </div>
                                 </div>

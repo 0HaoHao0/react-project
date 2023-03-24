@@ -81,11 +81,11 @@ function DoctorCreate() {
     }
     return (<>
         <div className="doctor-create">
-            <div className="row">
+            <div >
                 <h1>Doctor Create</h1>
             </div>
             <hr />
-            <div className="row">
+            <div className="row g-2">
                 <h4 className="alert alert-secondary">Doctor Infomation</h4>
                 <div className="col-lg-6 col-sm-12 mb-3">
 

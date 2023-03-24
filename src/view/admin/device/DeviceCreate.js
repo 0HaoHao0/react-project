@@ -134,11 +134,9 @@ function DeviceCreate() {
     return (<>
         <div className="device-create">
 
-            <div className="row">
-                <h1>Device Create</h1>
-            </div>
+            <h1>Device Create</h1>
             <hr />
-            <div className="row">
+            <div className="container row">
                 <h4 className="alert alert-secondary">Device Infomation</h4>
                 <div className="col-lg-6 col-sm-12 mb-3">
 
@@ -210,40 +208,33 @@ function DeviceCreate() {
                         : null}
 
                 </div>
-            </div>
-            <div className="row">
                 <h4 className="alert alert-secondary">Room </h4>
-                <div className="col-12 row mb-3">
+                <div className=" row mb-3">
                     {room.map((room) => (
-                        <div className="col-4" key={room.id}>
-                            <div
-                                className={`card ${deviceData.RoomId === room.id ? 'bg-primary' : ''}`}
-                                onClick={() => handleRoom(room.id)}
-                            >
-                                <div className="card-body">
-                                    <h6 className="card-title">{`Room Code: ${room.code}`}</h6>
-                                    <p className="card-text">{`Description: ${room.description}`}</p>
+                        <div className="col-4 mb-2" key={room.id}>
+                            <div className={`card ${deviceData.RoomId === room.id ? 'bg-primary text-white' : ''}`}
+                                onClick={() => handleRoom(room.id)}>
+                                <div class="card-body">
+                                    <h4 class="card-title">{`Room Code: ${room.code}`}</h4>
+                                    <p class="card-text">{`Description: ${room.description}`}</p>
                                 </div>
                             </div>
+
                         </div>
                     ))}
                 </div>
-            </div>
-            <div className="row">
                 <h4 className="alert alert-secondary">Services </h4>
-                <div className="col-12 row mb-3">
+                <div className=" row mb-3">
                     {service.map((service) => (
-                        <div className="col-4" key={service.id}>
-                            <div
-                                className={`card ${deviceData.ServiceIdList && deviceData.ServiceIdList.includes(service.id) ? 'bg-primary' : ''}`}
-                                onClick={() => handleService(service.id)}
-                            >
-                                <div className="card-body">
-                                    <h6 >{`Id: ${service.id}`}</h6>
-                                    <h6 className="card-subtitle">{`Device Name: ${service.name}`}</h6>
-                                    <p className="card-text">{`Description: ${service.description}`}</p>
+                        <div className="col-4 mb-2" key={service.id}>
+                            <div className={`card ${deviceData.ServiceIdList && deviceData.ServiceIdList.includes(service.id) ? 'bg-primary text-white' : ''}`}
+                                onClick={() => handleService(service.id)}>
+                                <div class="card-body">
+                                    <h4 class="card-title">{`Id: ${service.id}`}</h4>
+                                    <p class="card-text">{`Device Name: ${service.name}`}</p>
                                 </div>
                             </div>
+
                         </div>
                     ))}
                 </div>

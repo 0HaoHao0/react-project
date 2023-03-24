@@ -1,13 +1,13 @@
 import moment from "moment";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { deleteNews } from "../../../services/admin/news/apiNew";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
 // CkEditor
 import Editor from 'ckeditor5-custom-build/build/ckeditor';
 import { CKEditor } from '@ckeditor/ckeditor5-react'
+import { deleteNews } from "../../../services/receptionist/apiReceptionistNews";
 
-function NewsDetail() {
+function ReceptionistNewsDetail() {
     let { state } = useLocation();
     const navigate = useNavigate()
 
@@ -27,10 +27,17 @@ function NewsDetail() {
                     html: "Please wait a moment"
                 })
                 Swal.showLoading()
-                await deleteNews(state.id);
+                const res = await deleteNews(state.id);
                 Swal.close();
-                toast.success("Delete Successful!");
-                navigate("/admin/news");
+
+                if (res.status === 200) {
+                    toast.success("Delete Successful!");
+                    navigate("/receptionist/news");
+                }
+                else {
+                    toast.error("Something was wrong, please contact to admin !");
+                }
+
             } else {
                 // Xử lý khi người dùng bấm Cancel
                 toast.info("Delete cancelled");
@@ -104,7 +111,7 @@ function NewsDetail() {
                     </div>
                 </div>
 
-                <div className="row">
+                <div className="row ">
                     <h4 className="alert alert-secondary">Services</h4>
                     {state.services.map((service) =>
                         <div className="col-4 mb-2" key={service.id}>
@@ -120,7 +127,7 @@ function NewsDetail() {
                 </div>
                 <div className="row ">
                     <div className="col-6">
-                        <Link to={'/admin/news/update'} state={state} className="btn btn-primary">Update</Link>
+                        <Link to={'/receptionist/news/update'} state={state} className="btn btn-primary">Update</Link>
 
                     </div>
                     <div className="col-6">
@@ -134,4 +141,4 @@ function NewsDetail() {
     </>);
 }
 
-export default NewsDetail;
+export default ReceptionistNewsDetail;

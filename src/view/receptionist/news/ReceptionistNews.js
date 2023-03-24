@@ -1,8 +1,6 @@
-import { useState } from "react";
-import { toast } from "react-toastify";
-import { getAllDevice } from "../../../services/admin/device/apiDevice";
 
-import DataLoading from "../../../components/admin/DataLoading";
+import { useEffect, useState } from "react";
+
 import Pagiation from "../../../components/admin/Pagination";
 
 //Datatable Modules
@@ -10,19 +8,20 @@ import "datatables.net-dt/js/dataTables.dataTables.min.mjs";
 import "datatables.net-dt/css/jquery.dataTables.min.css";
 import $ from "jquery";
 import { Link } from "react-router-dom";
-import { useEffect } from "react";
+import { toast } from "react-toastify";
+import { getAllNews } from "../../../services/receptionist/apiReceptionistNews";
 
-function DeviceGetAll() {
+function ReceptionistNews() {
+    const [newsData, setNewsData] = useState();
 
-    const [deviceData, setDeviceData] = useState();
 
-    const currentPage = deviceData ? deviceData.page : null;
-    const totalPage = deviceData ? deviceData.total_pages : null;
+    const currentPage = newsData ? newsData.page : null;
+    const totalPage = newsData ? newsData.total_pages : null;
 
     const loadData = async (page) => {
-        const res = await getAllDevice(page);
+        const res = await getAllNews(page);
 
-        setDeviceData(res.data);
+        setNewsData(res.data);
 
         $('#table').DataTable({
             destroy: true,
@@ -35,7 +34,6 @@ function DeviceGetAll() {
 
 
     useEffect(() => {
-        $('#table').DataTable().destroy();
 
         loadData();
 
@@ -72,26 +70,30 @@ function DeviceGetAll() {
         }
     }
     return (<>
-        <div className="doctor-getall">
-            {!deviceData ? (
+        <div className="news-get-all">
+            {!newsData ? (
                 <>
                     <div className="row g-0">
-                        <div className="col-6 ">
-                            <h1>Device Management</h1>
+                        <div className="col-6">
+                            <h1>News Management</h1>
 
                         </div>
                         <div className="col-6 d-flex align-items-center justify-content-center">
                             <Link to='create' className="btn  btn-success">Create</Link>
+
                         </div>
                     </div>
                     <hr />
-                    <DataLoading></DataLoading>
+                    <div className="d-flex align-items-center justify-content-center">
+                        <h1>We are creating data table ...</h1>
+                        <div className="spinner-border mx-5" role="status" aria-hidden="true"></div>
+                    </div>
                 </>
             ) : (
                 <>
                     <div className="row g-0">
                         <div className="col-6">
-                            <h1>Device Management</h1>
+                            <h1>News Management</h1>
 
                         </div>
                         <div className="col-6 d-flex align-items-center justify-content-center">
@@ -104,21 +106,18 @@ function DeviceGetAll() {
                         <table id="table" className="table table-hover">
                             <thead>
                                 <tr className="table-dark">
-
-                                    <th>Device Id</th>
-                                    <th>Device Name</th>
-                                    <th>Device Value</th>
-                                    <th>Room Code</th>
+                                    <th>Id</th>
+                                    <th>Title</th>
+                                    <th>Createtor</th>
                                     <th>More</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {deviceData.data.map((value) => (
+                                {newsData.data.map((value) => (
                                     <tr key={value.id}>
                                         <td>{value.id}</td>
-                                        <td>{value.deviceName}</td>
-                                        <td>{value.deviceValue}</td>
-                                        <td>{value.room.roomCode}</td>
+                                        <td>{value.title}</td>
+                                        <td>{value.creator}</td>
                                         <td>
                                             <Link
                                                 to="detail"
@@ -135,8 +134,8 @@ function DeviceGetAll() {
                     </div>
 
                     <Pagiation
-                        page={deviceData.page}
-                        total_pages={deviceData.total_pages}
+                        page={newsData.page}
+                        total_pages={newsData.total_pages}
                         previousPage={peviousPage}
                         nextPage={nextPage}
                         enterPage={enterPage}
@@ -147,4 +146,4 @@ function DeviceGetAll() {
     </>);
 }
 
-export default DeviceGetAll;
+export default ReceptionistNews;

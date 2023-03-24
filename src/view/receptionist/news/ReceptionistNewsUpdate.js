@@ -3,14 +3,13 @@ import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
-import { getService } from "../../../services/admin/service/apiService";
 
 // Editor
 import Editor from 'ckeditor5-custom-build/build/ckeditor';
 import { CKEditor } from '@ckeditor/ckeditor5-react'
-import { updateNews } from "../../../services/admin/news/apiNew";
 import moment from "moment";
-function NewsUpdate() {
+import { getService, updateNews } from "../../../services/receptionist/apiReceptionistNews";
+function ReceptionistNewsUpdate() {
     let { state } = useLocation();
 
     const navigate = useNavigate()
@@ -115,7 +114,7 @@ function NewsUpdate() {
 
                     if (res.status === 200) {
                         toast.success("Update Service Success")
-                        navigate('/admin/news')
+                        navigate('/receptionist/news')
                     }
                     else {
                         toast.error("Update Service Fail !")
@@ -237,9 +236,9 @@ function NewsUpdate() {
                 </div>
                 <div className="row">
                     <h4 className="alert alert-secondary">Service Select</h4>
-                    <div className="row g-2">
+                    <div className="row mb-3">
                         {service.map((service) => (
-                            <div className="col-4 mb-2 " key={service.id}>
+                            <div className="col-4 mb-2" key={service.id}>
                                 <div
                                     className={`card h-100 ${newsData.ServiceId && newsData.ServiceId.includes(service.id) ? 'bg-primary text-white' : ''}`}
                                     onClick={() => handleService(service.id)}
@@ -253,12 +252,13 @@ function NewsUpdate() {
                         ))}
                     </div>
                 </div>
+                <button className="btn btn-primary" onClick={handleUpdateNews}>Update</button>
+
             </div>
 
-            <button className="btn btn-primary" onClick={handleUpdateNews}>Update</button>
 
         </div>
     </>);
 }
 
-export default NewsUpdate;
+export default ReceptionistNewsUpdate;

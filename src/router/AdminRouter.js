@@ -1,5 +1,6 @@
 import { Route, Routes } from "react-router";
 import AdminSidebar from "../components/admin/AdminSidebar";
+import AppointmentGetAll from "../view/admin/appointment/AppointmentGetAll";
 import ContactDetail from "../view/admin/contact/ContactDetail";
 import ContactGetAll from "../view/admin/contact/ContactGetAll";
 import DeviceCreate from "../view/admin/device/DeviceCreate";
@@ -29,12 +30,12 @@ import UserGetAll from "../view/admin/user/UserGetAll";
 function AdminRouter() {
   return (
     <>
-      <div className="row g-0 flex-nowrap p-5">
+      <div className="row g-0 flex-nowrap px-1">
         <div className="col-auto" >
           <AdminSidebar />
         </div>
         <div className="col ">
-          <div className="vh-100 overflow-auto p-2 border-top border-end border-bottom ">
+          <div style={{ height: '100vh' }} className=" overflow-auto p-2 border-top border-end border-bottom ">
             <Routes>
               {/* User */}
               <Route path="/user" element={<UserGetAll />}></Route>
@@ -48,6 +49,8 @@ function AdminRouter() {
               <Route path="/doctor" element={<DoctorGetAll />}></Route>
               <Route path="/doctor/create" element={<DoctorCreate />}></Route>
               <Route path="/doctor/detail" element={<DoctorDetail />}></Route>
+              {/* Appointment */}
+              <Route path="/appointment" element={<AppointmentGetAll />}></Route>
 
               {/* Service */}
               <Route path="/service" element={<ServiceGetAll />}></Route>

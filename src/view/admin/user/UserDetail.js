@@ -145,8 +145,8 @@ function UserDetail() {
                             <div className="row my-2">
                                 <div className="col-3 fw-bold">Role: </div>
                                 <div className="col-9 text-left">
-                                    <select className='form-select' aria-label="Default select example" onChange={handleSelectChange}>
-                                        <option disabled selected>{patientInfo.role}</option>
+                                    <select className='form-select' defaultChecked={patientInfo.role} aria-label="Default select example" onChange={handleSelectChange}>
+                                        <option disabled defaultValue={patientInfo.role}>{patientInfo.role}</option>
                                         {options.map(option => (
                                             <option
                                                 key={option.value}

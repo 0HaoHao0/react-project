@@ -30,69 +30,71 @@ function RoomDetail() {
     }
     return (<>
         <div className="room-detail">
-            <div className="row">
-                <h1>Room Detail</h1>
-            </div>
+            <h1>Room Detail</h1>
             <hr />
-            <div className="row">
-                <div className="col-lg-6 col-xs-12">
-                    <div className="mb-3">
-                        <label htmlFor="roomId" className="form-label">ID</label>
-                        <input type="text" className="form-control" id="roomId" value={state.id} readOnly />
-                    </div>
-                    <div className="mb-3">
-                        <label htmlFor="roomCode" className="form-label">Room Code</label>
-                        <input type="text" className="form-control" id="roomCode" value={state.roomCode} readOnly />
-                    </div>
-                    <div className="mb-3">
-                        <label htmlFor="description" className="form-label">Description</label>
-                        <textarea className="form-control" id="description" rows="3" value={state.description} readOnly></textarea>
-                    </div>
-                </div>
-                <div className="col-lg-6 col-xs-12">
+            <div className="container">
 
-                    <div className="mb-3">
-                        <label htmlFor="roomType" className="form-label">Room Type </label>
-                        <input type="text" className="form-control" id="roomType" value={state.roomType.name} readOnly />
+                <div className="row">
+                    <div className="col-lg-6 col-xs-12">
+                        <div className="mb-3">
+                            <label htmlFor="roomId" className="form-label">ID</label>
+                            <input type="text" className="form-control bg-white" id="roomId" value={state.id} disabled />
+                        </div>
+                        <div className="mb-3">
+                            <label htmlFor="roomCode" className="form-label">Room Code</label>
+                            <input type="text" className="form-control bg-white" id="roomCode" value={state.roomCode} disabled />
+                        </div>
+                        <div className="mb-3">
+                            <label htmlFor="description" className="form-label">Description</label>
+                            <textarea className="form-control bg-white" id="description" rows="3" value={state.description} disabled></textarea>
+                        </div>
                     </div>
-                    <div className="mb-3">
-                        <label htmlFor="timeCreated" className="form-label">Time Created</label>
-                        <input type="text" className="form-control" id="timeCreated" value={state.timeCreated} readOnly />
-                    </div>
-                    <div className="mb-3">
-                        <label htmlFor="lastTimeModified" className="form-label">Last Time Modified</label>
-                        <input type="text" className="form-control" id="lastTimeModified" value={state.lastTimeModified || "N/A"} readOnly />
-                    </div>
-                </div>
+                    <div className="col-lg-6 col-xs-12">
 
-
-
-            </div>
-            <div className="row">
-                <h4 className="alert alert-secondary">Device</h4>
-                {state.devices.map((device) =>
-                    <div className="col-4">
-                        <div class="card" >
-                            <div class="card-body">
-                                <h5 >Id: {device.id}</h5>
-                                <p class="card-text">Device Name: {device.deviceName}</p>
-                            </div>
+                        <div className="mb-3">
+                            <label htmlFor="roomType" className="form-label">Room Type </label>
+                            <input type="text" className="form-control bg-white" id="roomType" value={state.roomType.name} disabled />
+                        </div>
+                        <div className="mb-3">
+                            <label htmlFor="timeCreated" className="form-label">Time Created</label>
+                            <input type="text" className="form-control bg-white" id="timeCreated" value={state.timeCreated} disabled />
+                        </div>
+                        <div className="mb-3">
+                            <label htmlFor="lastTimeModified" className="form-label">Last Time Modified</label>
+                            <input type="text" className="form-control bg-white" id="lastTimeModified" value={state.lastTimeModified || "N/A"} disabled />
                         </div>
                     </div>
 
-                )}
 
-            </div>
-            <div className="row">
-                <div className="col-6">
-                    <Link to={'/admin/room/update'} state={state} className="btn btn-primary">Update</Link>
 
                 </div>
-                <div className="col-6">
-                    <button className="btn btn-danger ms-auto" onClick={handleDelete}>Delete</button>
+                <div className="row">
+                    <h4 className="alert alert-secondary">Device</h4>
+                    {state.devices.map((device) =>
+                        <div className="col-4 mb-2">
+                            <div class="card" >
+                                <div class="card-body">
+                                    <h5 >Id: {device.id}</h5>
+                                    <p class="card-text">Device Name: {device.deviceName}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                    )}
 
                 </div>
+                <div className="row">
+                    <div className="col-6">
+                        <Link to={'/admin/room/update'} state={state} className="btn btn-primary">Update</Link>
+
+                    </div>
+                    <div className="col-6">
+                        <button className="btn btn-danger ms-auto" onClick={handleDelete}>Delete</button>
+
+                    </div>
+                </div>
             </div>
+
         </div>
     </>);
 }

@@ -6,7 +6,7 @@ import DoctorAppointmentQueue from "../view/doctor/DoctorAppointmentQueue";
 
 function DoctorRouter() {
     return (
-        <div className="row g-0 flex-nowrap p-5">
+        <div className="row g-0 flex-nowrap   px-1">
             <div className="col-auto" >
                 <DoctorSidebar />
             </div>

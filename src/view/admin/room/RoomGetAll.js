@@ -75,7 +75,7 @@ function RoomGetAll() {
         <div className="doctor-getall">
             {!roomData ? (
                 <>
-                    <div className="row">
+                    <div className="row g-0">
                         <div className="col-6">
                             <h1>Room Management</h1>
 
@@ -90,7 +90,7 @@ function RoomGetAll() {
                 </>
             ) : (
                 <>
-                    <div className="row">
+                    <div className="row g-0">
                         <div className="col-6">
                             <h1>Room Management</h1>
 
@@ -104,7 +104,7 @@ function RoomGetAll() {
                     <div className="overflow-auto mb-4">
                         <table id="table" className="table table-hover">
                             <thead>
-                                <tr className="bg-dark">
+                                <tr className="table-dark">
                                     <th>Id</th>
                                     <th>Room Code</th>
                                     <th>Room Type</th>

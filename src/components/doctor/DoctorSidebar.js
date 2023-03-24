@@ -32,32 +32,38 @@ function DoctorSidebar() {
                 rootStyles={{
                     backgroundColor:
                         '#C9EEFF',
-                    [`.ps-menu-button:hover`]: {
-                        backgroundColor: "#335B8C ",
-                        color: "white",
-                        fontWeight: "bold "
-                    },
-                    [`.ps-menu-button.ps-active`]: {
-                        backgroundColor: '#335B8C',
-                        color: "white !important",
-                        fontWeight: "bold !important"
-                    },
+
                 }}>
-
-                <div  >
-                    <span className='text-center m-5'>
-                        <h5><i className="fa-solid fa-user-doctor" /> {!collapsed && 'Doctor Management'}</h5>
-                    </span>
-
-                    <div className='btn-collapse btn btn-dark btn-xs' onClick={() => collapseSidebar()}><i className='bx bx-left-arrow-alt bx-spin' ></i></div>
-                </div>
-                <Menu className='overflow-auto h-75' menuItemStyles={{
+                {/* Header */}
+                <Menu className='text-center' menuItemStyles={{
                     button: ({ level, active, disabled }) => {
                         return {
 
-                            color: disabled ? '#97DEFF' : '#146C94',
-                            backgroundColor:
+                            '&:hover': {
+                                backgroundColor: '#335B8C',
+                                fontWeight: 'bold'
+
+                            },
+                        }
+                    }
+                }}>
+                    <MenuItem icon={<i className="fa-solid fa-user-doctor" />}> Doctor Management</MenuItem>
+                    <div className='btn-collapse btn btn-dark btn-sm' onClick={() => collapseSidebar()}><i className='bx bx-left-arrow-alt bx-spin' ></i></div>
+                </Menu>
+
+                <Menu className='overflow-auto' style={{ height: '79vh' }} menuItemStyles={{
+                    button: ({ level, active, disabled }) => {
+                        return {
+                            backgroundColor: active ?
+                                '#335B8C'
+                                :
                                 '#C9EEFF',
+                            fontWeight: active ? 'bold' : null,
+                            '&:hover': {
+                                backgroundColor: '#335B8C',
+                                color: 'white',
+                                fontWeight: 'bold'
+                            },
                         }
                     },
                     icon: () => {
@@ -73,13 +79,27 @@ function DoctorSidebar() {
                     </div>
                     }
 
-                    <SubMenu label="Appointment" icon={<i className="fa-solid fa-calendar-check"></i>} >
+                    <SubMenu active={window.location.pathname.includes("/doctor/appointment")} label="Appointment" icon={<i className="fa-solid fa-calendar-check"></i>} >
                         <MenuItem component={<Link to={'/doctor/appointment-queue'}></Link>}> Queue </MenuItem>
                         <MenuItem component={<Link to={'/doctor/appointment-history'}></Link>}> History </MenuItem>
                     </SubMenu>
                 </Menu>
                 {/* Footer */}
-                <Menu >
+                <Menu menuItemStyles={{
+                    button: ({ level, active, disabled }) => {
+                        return {
+
+                            backgroundColor:
+                                '#C9EEFF',
+                            '&:hover': {
+                                backgroundColor: '#335B8C',
+                                color: 'white',
+                                fontWeight: 'bold'
+                            },
+                        }
+                    },
+
+                }}>
 
 
                     <MenuItem icon={<i className='bx bx-info-circle' ></i>} component={<Link to={'/profile'}></Link>}>
@@ -93,8 +113,6 @@ function DoctorSidebar() {
                                 backgroundColor: "red !important ",
                                 color: "white",
                                 fontWeight: "bold ",
-                                'borderBottomLeftRadius': "50px"
-
 
                             },
                         }}>

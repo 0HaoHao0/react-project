@@ -3,9 +3,10 @@ import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
-import { deleleContact, updateContact } from "../../../services/admin/contact/apiContact";
+import { updateContact } from "../../../services/receptionist/apiReceptionistContact";
 
-function ContactDetail() {
+
+function ReceptionistContactDetail() {
     const navigate = useNavigate();
     const { state } = useLocation();
     const { id, stateIndex } = state;
@@ -46,7 +47,7 @@ function ContactDetail() {
                 else {
                     await updateContact(contactUpdate);
                     toast.success("Update Successful!");
-                    navigate("/admin/contact");
+                    navigate("/receptionist/contact");
                 }
             } else {
                 // Xử lý khi người dùng bấm Cancel
@@ -55,37 +56,15 @@ function ContactDetail() {
         });
 
     }
+    return (<>
+        <div className="receptionist-contact-detail">
+            <div>
+                <h1>Contact Detail</h1>
+            </div>
+            <hr />
+            <div className="container">
 
-    const handleDelete = () => {
-        Swal.fire({
-            title: 'Are You Sure ?',
-            showCancelButton: true,
-            confirmButtonColor: '#d33',
-            cancelButtonColor: '#aaa',
-            confirmButtonText: 'OK',
-            focusCancel: true
-        }).then(async (result) => {
-            if (result.isConfirmed) {
-                // Xử lý khi người dùng bấm OK
-                await deleleContact(state.id);
-                toast.success("Delete Successful!");
-                navigate("/admin/contact");
-            } else {
-                // Xử lý khi người dùng bấm Cancel
-                toast.info("Delete cancelled");
-            }
-        });
-    }
-
-
-    return (
-        <>
-            <div className="contact-detail">
-                <div>
-                    <h1>Contact Detail</h1>
-                </div>
-                <hr />
-                <div className="container row">
+                <div className="row">
                     <div className="col-lg-6 col-sm-12">
                         <div className="row my-2">
                             <div className="col-3 fw-bold">Id: </div>
@@ -171,28 +150,21 @@ function ContactDetail() {
                                     <span className="input-group-text">
                                         <i className="fas fa-calendar-alt"></i>
                                     </span>
+
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div className="row">
-                        <div className="col-6">
-                            <button className="btn btn-primary"
-                                onClick={() => { handleUpdate() }}
-                            > Update</button>
-
-                        </div>
-                        <div className="col-6">
-                            <button className="btn btn-danger"
-                                onClick={() => { handleDelete() }}
-                            >Delete</button>
-
-                        </div>
-                    </div>
                 </div>
+
+
+                <button className="btn btn-primary"
+                    onClick={() => { handleUpdate() }}
+                > Update</button>
             </div>
-        </>
-    );
+
+        </div>
+    </>);
 }
 
-export default ContactDetail;
+export default ReceptionistContactDetail;

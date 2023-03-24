@@ -1,21 +1,18 @@
-import { useEffect } from "react";
-import { useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import Swal from "sweetalert2";
-import { getService } from "../../../services/admin/service/apiService";
 
 // Editor
 import Editor from 'ckeditor5-custom-build/build/ckeditor';
 import { CKEditor } from '@ckeditor/ckeditor5-react'
-import { updateNews } from "../../../services/admin/news/apiNew";
-import moment from "moment";
-function NewsUpdate() {
-    let { state } = useLocation();
+import Swal from "sweetalert2";
+import { createNews, getService } from "../../../services/receptionist/apiReceptionistNews";
 
+
+function ReceptionistNewsCreate() {
     const navigate = useNavigate()
 
-    const [newsData, setNewsData] = useState(state);
+    const [newsData, setNewsData] = useState('');
 
     const [service, setService] = useState([]);
 
@@ -24,25 +21,16 @@ function NewsUpdate() {
     const [isTouched, setIsTouched] = useState(''); // biến cờ
 
 
-
-
+    const loadDevice = async () => {
+        const res = await getService();
+        setService(res.data)
+    }
 
     useEffect(() => {
-        const load = async () => {
-            const resDevice = await getService();
-            setService(resDevice.data)
+        loadDevice();
+    }, [])
 
-            //Set RoomId and SerIdList
-            setNewsData((prevState) => ({
-                ...prevState,
-                ServiceId: state.services.map(service => service.id)
-            }))
-
-        }
-        load();
-    }, [state])
-
-    //Handle
+    //Hanlde
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -51,10 +39,6 @@ function NewsUpdate() {
             [name]: value
         }));
     };
-
-
-
-
 
     const handleService = (serviceId) => {
         const id = parseInt(serviceId);
@@ -75,56 +59,41 @@ function NewsUpdate() {
         })
     };
 
-    const handleUpdateNews = async () => {
+    const handleCreateNews = async () => {
 
-        if (!newsData.title || !newsData.publishDate || !newsData.content) {
+        if (!newsData.Title || !newsData.PublishDate || !newsData.Content) {
             toast.error("Please fill in all Input !")
         }
         else {
+            const fromData = new FormData();
+            fromData.append("Title", newsData.Title)
+            fromData.append("PublishDate", newsData.PublishDate)
+            fromData.append("Content", newsData.Content)
+
+            if (newsData.ServiceId) {
+                newsData.ServiceId.forEach(element => {
+                    fromData.append("ServicesId", element)
+                });
+            }
+            else {
+                fromData.append("ServicesId", 0)
+            }
+
             Swal.fire({
-                title: 'Are You Sure ?',
-                showCancelButton: true,
-                confirmButtonColor: '#007bff',
-                cancelButtonColor: '#aaa',
-                confirmButtonText: 'OK',
-                focusCancel: true
-            }).then(async (result) => {
-                if (result.isConfirmed) {
-                    // Xử lý khi người dùng bấm OK
-                    const fromData = new FormData();
-                    fromData.append("Title", newsData.title)
-                    fromData.append("PublishDate", newsData.publishDate)
-                    fromData.append("Content", newsData.content)
+                title: "Loading...",
+                html: "Please wait a moment"
+            })
+            Swal.showLoading()
+            const res = await createNews(fromData);
+            Swal.close()
 
-                    if (newsData.ServiceId) {
-                        newsData.ServiceId.forEach(element => {
-                            fromData.append("ServicesId", element)
-                        });
-                    }
-                    else {
-                        fromData.append("ServicesId", 0)
-                    }
-
-                    Swal.fire({
-                        title: "Loading...",
-                        html: "Please wait a moment"
-                    })
-                    Swal.showLoading()
-                    const res = await updateNews(fromData, state.id);
-                    Swal.close()
-
-                    if (res.status === 200) {
-                        toast.success("Update Service Success")
-                        navigate('/admin/news')
-                    }
-                    else {
-                        toast.error("Update Service Fail !")
-                    }
-                } else {
-                    // Xử lý khi người dùng bấm Cancel
-                    toast.info("Update cancelled");
-                }
-            });
+            if (res.status === 200) {
+                toast.success("Create Service Success")
+                navigate('/receptionist/news')
+            }
+            else {
+                toast.error("Create Service Fail !")
+            }
         }
     }
 
@@ -149,27 +118,21 @@ function NewsUpdate() {
 
         }
     }
-
-    const formartDate = (date) => {
-        const dateFormarted = moment(date).format('YYYY-MM-DD');
-        return dateFormarted;
-    }
-    return (<>
-        <div className="news-update">
-            <h1>News Update</h1>
-            <hr />
-            <div className="container">
-
-                <div className="row">
+    return (
+        <>
+            <div className="news-create">
+                <h1>News Create</h1>
+                <hr />
+                <div className="container row">
                     <h4 className="alert alert-secondary">News Infomation</h4>
                     <div className="col-lg-6 col-sm-12 ">
-                        <label htmlFor="title" className="form-label">Title: </label>
-                        <input type="text" className={`form-control  ${isTouched.title && (dataError.title ? "is-invalid" : "is-valid")}`}
-                            id="title" name="title" placeholder={newsData.title} defaultValue={newsData.title}
+                        <label htmlFor="Title" className="form-label">Title: </label>
+                        <input type="text" className={`form-control  ${isTouched.Title && (dataError.Title ? "is-invalid" : "is-valid")}`}
+                            id="Title" name="Title" placeholder="Nhổ Răng"
                             onBlur={validate} onChange={handleChange} />
-                        {dataError.title
+                        {dataError.Title
                             ? <div className="invalid-feedback">
-                                {dataError.title}
+                                {dataError.Title}
                             </div>
                             : null}
 
@@ -178,20 +141,20 @@ function NewsUpdate() {
                     </div>
                     <div className="col-lg-6 col-sm-12 ">
 
-                        <label htmlFor="publishDate" className="form-label">Publish Date: </label>
-                        <input type="date" className={`form-control  ${isTouched.publishDate && (dataError.publishDate ? "is-invalid" : "is-valid")}`}
-                            id="publishDate" name="publishDate" defaultValue={formartDate(newsData.publishDate)}
+                        <label htmlFor="PublishDate" className="form-label">Publish Date: </label>
+                        <input type="date" className={`form-control  ${isTouched.PublishDate && (dataError.PublishDate ? "is-invalid" : "is-valid")}`}
+                            id="PublishDate" name="PublishDate" placeholder="NR001 - (Nhổ Răng 001)"
                             onBlur={validate} onChange={handleChange} />
-                        {dataError.publishDate
+                        {dataError.PublishDate
                             ? <div className="invalid-feedback">
-                                {dataError.publishDate}
+                                {dataError.PublishDate}
                             </div>
                             : null}
                     </div>
 
                     <div className="col-12 mb-3">
 
-                        <label htmlFor="content" className="form-label">Content: </label>
+                        <label htmlFor="Content" className="form-label">Content: </label>
                         <div className="ckeditor">
                             <CKEditor
                                 editor={Editor}
@@ -201,14 +164,12 @@ function NewsUpdate() {
                                         uploadUrl: 'https://96022.cke-cs.com/easyimage/upload/'
                                     }
                                 }}
-                                data={newsData.content}
-
                                 onChange={(event, editor) => {
                                     const data = editor.getData();
                                     const e =
                                     {
                                         target: {
-                                            name: 'content',
+                                            name: 'Content',
                                             value: data,
                                         }
                                     }
@@ -219,7 +180,7 @@ function NewsUpdate() {
                                     const e =
                                     {
                                         target: {
-                                            name: 'content',
+                                            name: 'Content',
                                             value: data,
                                         }
                                     }
@@ -228,37 +189,36 @@ function NewsUpdate() {
                             />
                         </div>
                         <div>
-                            {dataError.content
+                            {dataError.Content
                                 && <span className="text-danger">
-                                    {dataError.content}
+                                    {dataError.Content}
                                 </span>}
                         </div>
                     </div>
-                </div>
-                <div className="row">
                     <h4 className="alert alert-secondary">Service Select</h4>
-                    <div className="row g-2">
+                    <div className=" row g-2 ">
                         {service.map((service) => (
-                            <div className="col-4 mb-2 " key={service.id}>
+                            <div className="col-4 mb-2" key={service.id}>
                                 <div
                                     className={`card h-100 ${newsData.ServiceId && newsData.ServiceId.includes(service.id) ? 'bg-primary text-white' : ''}`}
                                     onClick={() => handleService(service.id)}
                                 >
                                     <div className="card-body">
-                                        <h6 >{`Id: ${service.id}, ${service.code}`}</h6>
-                                        <h6 className="card-subtitle">{`${service.name}`}</h6>
+                                        <h6 className="card-title">{`Id: ${service.id}`}</h6>
+                                        <h6 className="card-title">{`${service.name}`}</h6>
+                                        <p className="card-text">{`Service Code: ${service.code}`}</p>
                                     </div>
                                 </div>
                             </div>
                         ))}
                     </div>
                 </div>
+
+                <button className="btn btn-success" onClick={handleCreateNews}>Create</button>
+
             </div>
-
-            <button className="btn btn-primary" onClick={handleUpdateNews}>Update</button>
-
-        </div>
-    </>);
+        </>
+    );
 }
 
-export default NewsUpdate;
+export default ReceptionistNewsCreate;
