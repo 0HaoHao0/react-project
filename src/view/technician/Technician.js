@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { getAppointmentQueueAPI } from '../../services/technician/apiTechnician';
 import { TechnicianSideBar } from './TechnicianSideBar';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { toast } from 'react-toastify';
 
@@ -58,6 +58,10 @@ function PagingBar({ pageIndex, pageCount, onPageChange }) {
 
 function Technician() {
 
+    const location = useLocation();
+    const params = new URLSearchParams(location.search);
+    const page = params.get("page");
+
     const navigate = useNavigate();
     const userInfo = useSelector((state) => state.user).userInfo;
     if (!userInfo) navigate("/login");
@@ -72,7 +76,7 @@ function Technician() {
     });
 
     const [paginated, setPaginated] = useState({
-        page: 0,
+        page: page || 1,
         pageSize: 0,
         pageTotals: 0,
     });
@@ -85,7 +89,10 @@ function Technician() {
         });
 
         Swal.showLoading();
-        getAppointmentQueueAPI(paramsFilter, (res) => {
+        getAppointmentQueueAPI({
+            ...paramsFilter,
+            page: page
+        }, (res) => {
             if (res && res.status === 200) {
                 console.log(res.data);
                 let queue = res.data.data;
@@ -103,7 +110,7 @@ function Technician() {
             Swal.close();
         });
 
-    }, [paramsFilter]);
+    }, [paramsFilter, page]);
 
     const fetchPage = (page, isAsync = false) => {
 
@@ -235,12 +242,7 @@ function Technician() {
                                 pageIndex={paginated.page}
                                 pageCount={paginated.pageTotals}
                                 onPageChange={(page) => {
-                                    setPaginated({
-                                        ...paginated,
-                                        page: page
-                                    });
-
-                                    fetchPage(page);
+                                    navigate("?page=" + page);
                                 }}
                             />
                         }
@@ -260,12 +262,16 @@ function Technician() {
                                                 <div className="row flex-column align-items-center" style={{ rowGap: "10px" }}>
                                                     {data.map((item, idx) => (
                                                         <div key={idx} className="col-md-6">
-                                                            <Link to={"."} style={{ color: 'inherit' }} className="text-decoration-none">
+                                                            <Link to={"./detail_views/" + item.id} style={{ color: 'inherit' }} className="text-decoration-none">
                                                                 <div className={`rounded border shadow card`}>
                                                                     <div className={`card-header text-white text-center bg-${cardColors[item.state]}`}>
                                                                         <h4>{item.patient.baseUser.fullName}</h4>
                                                                     </div>
                                                                     <div className="card-body">
+                                                                        <div className="row">
+                                                                            <span className="col-4 text-end">Id:</span>
+                                                                            <span className="col-8 text-start">{item.id}</span>
+                                                                        </div>
                                                                         <div className="row">
                                                                             <span className="col-4 text-end">Patient:</span>
                                                                             <span className="col-8 text-start">{item.patient.baseUser.userName}</span>

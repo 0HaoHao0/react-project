@@ -29,3 +29,52 @@ export const getAppointmentQueueAPI = (params = {}, callback = (res) => { consol
     });
 }
 
+export const getAppointmentDetailAPIs = ({id, params = {}, callback = (res) => console.log(res)}) => {
+    callAPI({
+        method: "GET",
+        endpoint: `/api/Appointment/Get/${id}`,
+        params: params,
+        callback: callback
+    });
+}
+
+export const getImageSegmentationResultAPIs = ({params = {}, callback = (res) => console.log(res)}) => {
+    callAPI({
+        method: "GET",
+        endpoint: `/api/Technician/GetSegmentationResults`,
+        params: params,
+        callback: callback
+    });
+}
+
+export const deleteImageSegmentationResultAPI = ({ resultId, callback }) => {
+    callAPI({
+        method: "DELETE",
+        endpoint: "/api/Technician/RemoveSegmentationResult",
+        params: {
+            id: resultId
+        },
+        callback: callback
+    });
+}
+
+export const updateStateForAppointmentAPI = ({ appointmentId, stateIndex, callback = (res) => console.log(res) }) => {
+    callAPI({
+      method: "PUT",
+      endpoint: `/api/Appointment/UpdateState/${appointmentId}`,
+      params: {
+        state: stateIndex
+      },
+      callback: callback
+    });
+}
+
+export const uploadXRayImageAPI = ({ formData, callback }) => {
+    callAPI({
+        method: "POST",
+        endpoint: "/api/Technician/UploadXRayImage",
+        formData: true,
+        data: formData,
+        callback: callback
+    });
+}
