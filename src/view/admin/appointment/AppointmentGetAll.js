@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { toast } from "react-toastify";
-import { getAllDevice } from "../../../services/admin/device/apiDevice";
 
 import DataLoading from "../../../components/admin/DataLoading";
 import Pagiation from "../../../components/admin/Pagination";
@@ -11,18 +10,20 @@ import "datatables.net-dt/css/jquery.dataTables.min.css";
 import $ from "jquery";
 import { Link } from "react-router-dom";
 import { useEffect } from "react";
+import { getAllAppointment } from "../../../services/admin/appointment/apiAppointment";
 
-function DeviceGetAll() {
+function AppointmentGetAll() {
 
-    const [deviceData, setDeviceData] = useState();
+    const [appointmentData, setAppointmentData] = useState();
 
-    const currentPage = deviceData ? deviceData.page : null;
-    const totalPage = deviceData ? deviceData.total_pages : null;
+
+    const currentPage = appointmentData ? appointmentData.page : null;
+    const totalPage = appointmentData ? appointmentData.total_pages : null;
 
     const loadData = async (page) => {
-        const res = await getAllDevice(page);
+        const res = await getAllAppointment(page);
 
-        setDeviceData(res.data);
+        setAppointmentData(res.data);
 
         $('#table').DataTable({
             destroy: true,
@@ -35,7 +36,6 @@ function DeviceGetAll() {
 
 
     useEffect(() => {
-        $('#table').DataTable().destroy();
 
         loadData();
 
@@ -43,6 +43,7 @@ function DeviceGetAll() {
 
         }
     }, []);
+
 
     // Pagination
     const peviousPage = () => {
@@ -73,52 +74,38 @@ function DeviceGetAll() {
     }
     return (<>
         <div className="doctor-getall">
-            {!deviceData ? (
+            {!appointmentData ? (
                 <>
-                    <div className="row g-0">
-                        <div className="col-6 ">
-                            <h1>Device Management</h1>
+                    <h1>Appointment Management</h1>
 
-                        </div>
-                        <div className="col-6 d-flex align-items-center justify-content-center">
-                            <Link to='create' className="btn  btn-success">Create</Link>
-                        </div>
-                    </div>
+
                     <hr />
                     <DataLoading></DataLoading>
                 </>
             ) : (
                 <>
-                    <div className="row g-0">
-                        <div className="col-6">
-                            <h1>Device Management</h1>
-
-                        </div>
-                        <div className="col-6 d-flex align-items-center justify-content-center">
-                            <Link to='create' className="btn  btn-success">Create</Link>
-
-                        </div>
-                    </div>
+                    <h1>Appointment Management</h1>
                     <hr />
                     <div className="overflow-auto mb-4">
                         <table id="table" className="table table-hover">
                             <thead>
                                 <tr className="table-dark">
-
-                                    <th>Device Id</th>
-                                    <th>Device Name</th>
-                                    <th>Device Value</th>
-                                    <th>Room Code</th>
+                                    <th>Doctor Name</th>
+                                    <th>Patient Name</th>
+                                    <th>Service Name</th>
+                                    <th>Date</th>
+                                    <th>From</th>
                                     <th>More</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {deviceData.data.map((value) => (
+                                {appointmentData.data.map((value) => (
                                     <tr key={value.id}>
-                                        <td>{value.id}</td>
-                                        <td>{value.deviceName}</td>
-                                        <td>{value.deviceValue}</td>
-                                        <td>{value.room.roomCode}</td>
+                                        <td>{value.doctor.baseUser.fullName}</td>
+                                        <td>{value.patient.baseUser.fullName}</td>
+                                        <td>{value.service.serviceName}</td>
+                                        <td>{value.date.split("T")[0]}</td>
+                                        <td>{value.from.split("T")[1]}</td>
                                         <td>
                                             <Link
                                                 to="detail"
@@ -135,8 +122,8 @@ function DeviceGetAll() {
                     </div>
 
                     <Pagiation
-                        page={deviceData.page}
-                        total_pages={deviceData.total_pages}
+                        page={appointmentData.page}
+                        total_pages={appointmentData.total_pages}
                         previousPage={peviousPage}
                         nextPage={nextPage}
                         enterPage={enterPage}
@@ -147,4 +134,4 @@ function DeviceGetAll() {
     </>);
 }
 
-export default DeviceGetAll;
+export default AppointmentGetAll;

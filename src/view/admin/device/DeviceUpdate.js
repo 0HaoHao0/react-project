@@ -133,7 +133,15 @@ function DeviceUpdate() {
                     fromData.append("Date", deviceData.date)
                     fromData.append("Status", deviceData.status)
                     fromData.append("RoomId", deviceData.RoomId)
-                    fromData.append("ServiceIdList", deviceData.ServiceIdList && deviceData.ServiceIdList.length ? deviceData.ServiceIdList : [0])
+
+                    if (deviceData.ServiceIdList) {
+                        deviceData.ServiceIdList.forEach(element => {
+                            fromData.append("ServiceIdList", element)
+                        });
+                    }
+                    else {
+                        fromData.append("ServiceIdList", 0)
+                    }
 
                     const res = await updateDevice(fromData);
                     if (res.status === 200) {
@@ -182,119 +190,119 @@ function DeviceUpdate() {
     return (<>
         <div className="device-update">
 
-            <div className="row">
-                <h1>Device Update</h1>
-            </div>
+            <h1>Device Update</h1>
             <hr />
-            <div className="row">
-                <h4 className="alert alert-secondary">Device Infomation</h4>
-                <div className="text-center">
-                    <img height='250px' width='250px' src={!deviceData.imageFile ? deviceData.imageURL : imageFileUrl} alt="" />
+            <div className="container">
+                <div className="row">
+                    <h4 className="alert alert-secondary">Device Infomation</h4>
+                    <div className="text-center">
+                        <img height='250px' width='250px' src={!deviceData.imageFile ? deviceData.imageURL : imageFileUrl} alt="" />
+                    </div>
+                    <div className="col-lg-6 col-sm-12 mb-3">
+
+                        <label htmlFor="deviceName" className="form-label">Device Name: </label>
+                        <input type="text" className={`form-control  ${isTouched.deviceName && (dataError.deviceName ? "is-invalid" : "is-valid")}`}
+                            id="deviceName" name="deviceName" placeholder={deviceData.deviceName} value={deviceData.deviceName}
+                            onBlur={validate} onChange={handleChange} />
+                        {dataError.deviceName
+                            ? <div className="invalid-feedback">
+                                {dataError.deviceName}
+                            </div>
+                            : null}
+
+                        <label htmlFor="deviceValue" className="form-label">Device Value: </label>
+                        <input type="number" className={`form-control  ${isTouched.deviceValue && (dataError.deviceValue ? "is-invalid" : "is-valid")}`}
+                            id="deviceValue" name="deviceValue" placeholder={deviceData.deviceValue} value={deviceData.deviceValue}
+                            onBlur={validate} onChange={handleChange} />
+                        {dataError.deviceValue
+                            ? <div className="invalid-feedback">
+                                {dataError.deviceValue}
+                            </div>
+                            : null}
+
+                        <label htmlFor="date" className="form-label">Date: </label>
+                        <input type="date" className={`form-control  ${isTouched.date && (dataError.date ? "is-invalid" : "is-valid")}`}
+                            id="date" name="date" defaultValue={formattedDate(deviceData.date)}
+                            onBlur={validate} onChange={handleChange} />
+                        {dataError.date
+                            ? <div className="invalid-feedback">
+                                {dataError.date}
+                            </div>
+                            : null}
+
+                        <label htmlFor="status" className="form-label">Status: </label>
+                        <select className={`form-control  ${isTouched.status && (dataError.status ? "is-invalid" : "is-valid")}`}
+                            id="status" name="status"
+                            onBlur={validate} onChange={handleChange}>
+                            <option hidden >{deviceData.status === true ? "Active" : "Non-Active"}</option>
+                            <option value={true}>Active</option>
+                            <option value={false}>Non-Active</option>
+                        </select>
+                        {dataError.status
+                            ? <div className="invalid-feedback">
+                                {dataError.status}
+                            </div>
+                            : null}
+
+                    </div>
+                    <div className="col-lg-6 col-sm-12 mb-3">
+                        <label htmlFor="imageFile" className="form-label">Image File: </label>
+                        <input type="file" className={`form-control`}
+                            id="imageFile" name="imageFile" accept="image/png, image/jpeg"
+                            onBlur={validate} onChange={handleImage} />
+
+
+
+                        <label htmlFor="description" className="form-label">Description: </label>
+                        <textarea className={`form-control  ${isTouched.description && (dataError.description ? "is-invalid" : "is-valid")}`}
+                            id="description" name="description" placeholder={deviceData.description} value={deviceData.description}
+                            onBlur={validate} onChange={handleChange}></textarea>
+                        {dataError.description
+                            ? <div className="invalid-feedback">
+                                {dataError.description}
+                            </div>
+                            : null}
+
+                    </div>
                 </div>
-                <div className="col-lg-6 col-sm-12 mb-3">
-
-                    <label htmlFor="deviceName" className="form-label">Device Name: </label>
-                    <input type="text" className={`form-control  ${isTouched.deviceName && (dataError.deviceName ? "is-invalid" : "is-valid")}`}
-                        id="deviceName" name="deviceName" placeholder={deviceData.deviceName} value={deviceData.deviceName}
-                        onBlur={validate} onChange={handleChange} />
-                    {dataError.deviceName
-                        ? <div className="invalid-feedback">
-                            {dataError.deviceName}
-                        </div>
-                        : null}
-
-                    <label htmlFor="deviceValue" className="form-label">Device Value: </label>
-                    <input type="number" className={`form-control  ${isTouched.deviceValue && (dataError.deviceValue ? "is-invalid" : "is-valid")}`}
-                        id="deviceValue" name="deviceValue" placeholder={deviceData.deviceValue} value={deviceData.deviceValue}
-                        onBlur={validate} onChange={handleChange} />
-                    {dataError.deviceValue
-                        ? <div className="invalid-feedback">
-                            {dataError.deviceValue}
-                        </div>
-                        : null}
-
-                    <label htmlFor="date" className="form-label">Date: </label>
-                    <input type="date" className={`form-control  ${isTouched.date && (dataError.date ? "is-invalid" : "is-valid")}`}
-                        id="date" name="date" defaultValue={formattedDate(deviceData.date)}
-                        onBlur={validate} onChange={handleChange} />
-                    {dataError.date
-                        ? <div className="invalid-feedback">
-                            {dataError.date}
-                        </div>
-                        : null}
-
-                    <label htmlFor="status" className="form-label">Status: </label>
-                    <select className={`form-control  ${isTouched.status && (dataError.status ? "is-invalid" : "is-valid")}`}
-                        id="status" name="status"
-                        onBlur={validate} onChange={handleChange}>
-                        <option hidden >{deviceData.status === true ? "Active" : "Non-Active"}</option>
-                        <option value={true}>Active</option>
-                        <option value={false}>Non-Active</option>
-                    </select>
-                    {dataError.status
-                        ? <div className="invalid-feedback">
-                            {dataError.status}
-                        </div>
-                        : null}
-
-                </div>
-                <div className="col-lg-6 col-sm-12 mb-3">
-                    <label htmlFor="imageFile" className="form-label">Image File: </label>
-                    <input type="file" className={`form-control`}
-                        id="imageFile" name="imageFile" accept="image/png, image/jpeg"
-                        onBlur={validate} onChange={handleImage} />
-
-
-
-                    <label htmlFor="description" className="form-label">Description: </label>
-                    <textarea className={`form-control  ${isTouched.description && (dataError.description ? "is-invalid" : "is-valid")}`}
-                        id="description" name="description" placeholder={deviceData.description} value={deviceData.description}
-                        onBlur={validate} onChange={handleChange}></textarea>
-                    {dataError.description
-                        ? <div className="invalid-feedback">
-                            {dataError.description}
-                        </div>
-                        : null}
-
-                </div>
-            </div>
-            <div className="row">
-                <h4 className="alert alert-secondary">Room </h4>
-                <div className="col-12 row mb-3">
-                    {room.map((room) => (
-                        <div className="col-4" key={room.id}>
-                            <div
-                                className={`card ${deviceData.RoomId === room.id ? 'bg-primary' : ''}`}
-                                onClick={() => handleRoom(room.id)}
-                            >
-                                <div className="card-body">
-                                    <h6 className="card-title">{`Room Code: ${room.code}`}</h6>
-                                    <p className="card-text">{`description: ${room.description}`}</p>
+                <div className="row">
+                    <h4 className="alert alert-secondary">Room </h4>
+                    <div className=" row mb-3">
+                        {room.map((room) => (
+                            <div className="col-4 mb-2" key={room.id}>
+                                <div
+                                    className={`card ${deviceData.RoomId === room.id ? 'bg-primary text-white' : ''}`}
+                                    onClick={() => handleRoom(room.id)}
+                                >
+                                    <div className="card-body">
+                                        <h6 className="card-title">{`Room Code: ${room.code}`}</h6>
+                                        <p className="card-text">{`description: ${room.description}`}</p>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    ))}
+                        ))}
+                    </div>
                 </div>
-            </div>
-            <div className="row">
-                <h4 className="alert alert-secondary">Services </h4>
-                <div className="col-12 row mb-3">
-                    {service.map((service) => (
-                        <div className="col-4" key={service.id}>
-                            <div
-                                className={`card ${deviceData.ServiceIdList && deviceData.ServiceIdList.includes(service.id) ? 'bg-primary' : ''}`}
-                                onClick={() => handleService(service.id)}
-                            >
-                                <div className="card-body">
-                                    <h6 >{`Id: ${service.id}`}</h6>
-                                    <h6 className="card-subtitle">{`Device Name: ${service.name}`}</h6>
+                <div className="row">
+                    <h4 className="alert alert-secondary">Services </h4>
+                    <div className="row mb-3">
+                        {service.map((service) => (
+                            <div className="col-4 mb-2" key={service.id}>
+                                <div
+                                    className={`card ${deviceData.ServiceIdList && deviceData.ServiceIdList.includes(service.id) ? 'bg-primary text-white' : ''}`}
+                                    onClick={() => handleService(service.id)}
+                                >
+                                    <div className="card-body">
+                                        <h6 >{`Id: ${service.id}`}</h6>
+                                        <h6 className="card-subtitle">{`Device Name: ${service.name}`}</h6>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    ))}
+                        ))}
+                    </div>
                 </div>
+                <button className="btn btn-primary" onClick={handleUpdateDevice}>Update</button>
             </div>
-            <button className="btn btn-primary" onClick={handleUpdateDevice}>Update</button>
         </div>
     </>);
 }

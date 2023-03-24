@@ -19,7 +19,7 @@ function ContactFilter({ filter, setFilter }) {
 
     return (
         <>
-            <div className="row">
+            <div className="row g-0">
                 <div className="col-12 form-group d-flex align-items-center gap-2">
                     <input
                         className="form-control"
@@ -46,7 +46,7 @@ function ContactFilter({ filter, setFilter }) {
                         Clear
                     </button>
                 </div>
-                <div className="col-lg-2 form-group d-flex align-items-center justify-content-between gap-2">
+                <div className="col-lg-2 form-group d-flex align-items-center justify-content-between g-2 my-2">
                     <select className="form-select" id="filter-contact-state" onChange={handleStateChange} defaultValue={filter.state} ref={selectStates}>
                         <option value={-1}>- Select State -</option>
                         {

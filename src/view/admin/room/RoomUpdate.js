@@ -101,11 +101,9 @@ function RoomUpdate() {
 
     return (<>
         <div className="room-update">
-            <div className="row">
-                <h1>Room Update</h1>
-            </div>
+            <h1>Room Update</h1>
             <hr />
-            <div className="row">
+            <div className="container row">
                 <div className="col-lg-6 col-sm-12 mb-3">
                     <label htmlFor="roomCode" className="form-label">Room Code: </label>
 
