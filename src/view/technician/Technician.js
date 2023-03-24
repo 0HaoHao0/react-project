@@ -1,13 +1,14 @@
 import { useEffect, useState } from 'react';
 import { getAppointmentQueueAPI } from '../../services/technician/apiTechnician';
 import { TechnicianSideBar } from './TechnicianSideBar';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { toast } from 'react-toastify';
 
 import "./Technician.scss";
+import { useSelector } from 'react-redux';
 
-
+import Pusher from 'pusher-js';
 
 function PagingBar({ pageIndex, pageCount, onPageChange }) {
     // calculate page numbers to display in the bar
@@ -57,6 +58,23 @@ function PagingBar({ pageIndex, pageCount, onPageChange }) {
 
 function Technician() {
 
+    const navigate = useNavigate();
+    const userInfo = useSelector((state) => state.user).userInfo;
+    if(!userInfo) navigate("/login");
+    const [channel, setChannel] = useState(null);
+
+    useEffect(() => {
+
+        const pusherClient = new Pusher('a5612d1b04f944b457a3', {
+            cluster: 'ap1',
+            encrypted: true,
+        });
+        
+        let pusherChannel = pusherClient.subscribe(userInfo.pusherChannel);
+        setChannel(pusherChannel);
+
+    }, [userInfo]);
+
     const [appointmentQueue, setAppointmentQueue] = useState([]);
     const [paramsFilter, setParamsFilter] = useState({
         startDate: null,
@@ -100,9 +118,51 @@ function Technician() {
 
     }, [paramsFilter]);
 
+    const fetchNewPage = (page) => {
+
+        Swal.fire({
+            icon: "info",
+            title: "Waiting to get data...",
+        });
+
+        Swal.showLoading();
+        getAppointmentQueueAPI({
+            ...paramsFilter,
+            page: page
+        }, (res) => {
+            if (res && res.status === 200) {
+                console.log(res.data);
+                let queue = res.data.data;
+                setAppointmentQueue(queue);
+            }
+            else {
+                toast.error("Something wrong!");
+            }
+
+            Swal.close();
+        });
+    }
+
+    useEffect(() => {
+        
+        if(channel) {
+
+            channel.bind_global((action, data) => {
+                if(action === "AppointmentUpdate") {
+                    let message = data;
+                    console.log(data);
+                    toast.warning(message);
+    
+                }
+            });
+        }
+
+    }, [channel]);
+
+
     const cardColors = {
         Transfer: "primary",
-        TransferDoing: "secondary",
+        TransferDoing: "warning",
         TransferCancal: "danger",
         TransferComplete: "success"
     }
@@ -147,9 +207,10 @@ function Technician() {
             <h2 className="text-center text-primary py-2 mt-4">Technician Pannel</h2>
             <hr />
             <div className="row">
-                <div className="col-9">
+                <div className="col-lg-9">
                     <div className="container-fluid">
                         {
+                            paginated.pageTotals > 1 &&
                             <PagingBar 
                                 pageIndex={paginated.page} 
                                 pageCount={paginated.pageTotals}
@@ -157,7 +218,9 @@ function Technician() {
                                     setPaginated({
                                         ...paginated,
                                         page: page
-                                    })
+                                    });
+                                    
+                                    fetchNewPage(page);
                                 }}
                             />
                         }
@@ -174,7 +237,7 @@ function Technician() {
                                                 </div>
                                             </div>
                                             <div className="col-lg-9">
-                                                <div className="row justify-content-center">
+                                                <div className="row justify-content-center" style={{ rowGap: "10px" }}>
                                                     {data.map((item, idx) => (
                                                         <div key={idx} className="col-md-6">
                                                             <Link to={"."} style={{ color: 'inherit' }} className="text-decoration-none">
@@ -224,7 +287,7 @@ function Technician() {
                     </div>
 
                 </div>
-                <div className="technican-sidebar-wrapper col-3 p-4 bg-light rounded shadow">
+                <div className="technican-sidebar-wrapper col-lg-3 p-4 bg-light rounded shadow">
                     <TechnicianSideBar initialValue={paramsFilter} handleSubmitFilter={(formData) => {
                         setParamsFilter({
                             ...paramsFilter,
@@ -238,7 +301,7 @@ function Technician() {
 
             {showScroll && (
                 <button className="btn btn-danger scroll-to-top" onClick={scrollToTop}>
-                    <i class="fa-solid fa-arrow-up"></i>
+                    <i className="fa-solid fa-arrow-up"></i>
                 </button>
             )}
 
