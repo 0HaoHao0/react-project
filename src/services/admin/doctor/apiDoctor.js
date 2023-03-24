@@ -50,7 +50,7 @@ export const updateDoctor = async (fromData) => {
         data = response;
     }).catch((error) => {
         // handle error
-        console.log(error);
+        data = error.response;
     })
 
     return data;
@@ -67,6 +67,25 @@ export const acceptDoctor = async (id) => {
         data = response;
     }).catch((error) => {
         // handle error
+        console.log(error);
+    })
+
+    return data;
+}
+
+export const getDoctorInfo = async (id) => {
+    let data;
+    await axios({
+        method: 'get',
+        url: `/api/Doctor/Get/${id}`,
+        params: {
+            id: id
+        },
+    }).then((response) => {
+        data = response;
+    }).catch((error) => {
+        // handle error
+        data = error.response;
         console.log(error);
     })
 
