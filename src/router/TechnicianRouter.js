@@ -5,7 +5,7 @@ function TechnicianRouter() {
     return (
         <div>
             <Routes>
-                <Route path="/" element={ <Technician/> }></Route>
+                <Route path="/*" element={ <Technician/> }></Route>
             </Routes>
         </div>
     );
