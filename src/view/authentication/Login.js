@@ -121,10 +121,9 @@ function Login() {
     });
     Swal.showLoading();
     const res = await login(userName, password);
-
     Swal.close();
 
-    if (res.status === 200) {
+    if (res && res.status === 200) {
       // Set header token
       localStorage.setItem("app_token", "Bearer " + res.data.token);
       axios.defaults.headers.common["Authorization"] =
@@ -151,8 +150,17 @@ function Login() {
         navigate("/expert");
         return;
       }
+      if (userInfo.role === "Receptionist") {
+        navigate("/receptionist");
+        return;
+      }
       if (userInfo.role === "Doctor") {
-        navigate("/doctor");
+        navigate("/doctor/appointment-queue");
+        return;
+      }
+
+      if (userInfo.role === "Technician") {
+        navigate("/technician");
         return;
       }
 
@@ -163,7 +171,7 @@ function Login() {
           navigate("/emailconfirm");
         }
       }
-    } else if (res.status !== 500) {
+    } else if (res && res.status !== 500) {
       let message = res.data;
       Swal.fire({
         icon: "error",
