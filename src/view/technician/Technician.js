@@ -29,29 +29,29 @@ function PagingBar({ pageIndex, pageCount, onPageChange }) {
 
     return (
         <div className="d-flex justify-content-end mb-2 gap-2">
+            <button
+                className="btn btn-outline-secondary"
+                disabled={pageIndex === 1}
+                onClick={() => onPageChange(pageIndex - 1)}
+            >
+                Previous
+            </button>
+            {pages.map((page) => (
                 <button
-                    className="btn btn-outline-secondary"
-                    disabled={pageIndex === 1}
-                    onClick={() => onPageChange(pageIndex - 1)}
+                    key={page}
+                    className={pageIndex === page ? 'btn btn-primary' : 'btn btn-outline-primary'}
+                    onClick={() => onPageChange(page)}
                 >
-                    Previous
+                    {page}
                 </button>
-                {pages.map((page) => (
-                    <button
-                        key={page}
-                        className={pageIndex === page ? 'btn btn-primary' : 'btn btn-outline-primary'}
-                        onClick={() => onPageChange(page)}
-                    >
-                        {page}
-                    </button>
-                ))}
-                <button
-                    className="btn btn-outline-secondary"
-                    disabled={pageIndex === pageCount}
-                    onClick={() => onPageChange(pageIndex + 1)}
-                >
-                    Next
-                </button>
+            ))}
+            <button
+                className="btn btn-outline-secondary"
+                disabled={pageIndex === pageCount}
+                onClick={() => onPageChange(pageIndex + 1)}
+            >
+                Next
+            </button>
         </div>
     );
 }
@@ -60,20 +60,7 @@ function Technician() {
 
     const navigate = useNavigate();
     const userInfo = useSelector((state) => state.user).userInfo;
-    if(!userInfo) navigate("/login");
-    const [channel, setChannel] = useState(null);
-
-    useEffect(() => {
-
-        const pusherClient = new Pusher('a5612d1b04f944b457a3', {
-            cluster: 'ap1',
-            encrypted: true,
-        });
-        
-        let pusherChannel = pusherClient.subscribe(userInfo.pusherChannel);
-        setChannel(pusherChannel);
-
-    }, [userInfo]);
+    if (!userInfo) navigate("/login");
 
     const [appointmentQueue, setAppointmentQueue] = useState([]);
     const [paramsFilter, setParamsFilter] = useState({
@@ -118,14 +105,17 @@ function Technician() {
 
     }, [paramsFilter]);
 
-    const fetchNewPage = (page) => {
+    const fetchPage = (page, isAsync = false) => {
 
-        Swal.fire({
-            icon: "info",
-            title: "Waiting to get data...",
-        });
+        if (!isAsync) {
+            Swal.fire({
+                icon: "info",
+                title: "Waiting to get data...",
+            });
 
-        Swal.showLoading();
+            Swal.showLoading();
+        }
+
         getAppointmentQueueAPI({
             ...paramsFilter,
             page: page
@@ -139,25 +129,55 @@ function Technician() {
                 toast.error("Something wrong!");
             }
 
-            Swal.close();
+            if (!isAsync) Swal.close();
         });
     }
 
     useEffect(() => {
-        
-        if(channel) {
 
-            channel.bind_global((action, data) => {
-                if(action === "AppointmentUpdate") {
-                    let message = data;
-                    console.log(data);
-                    toast.warning(message);
-    
+        const refreshPage = () => {
+            let currentPage = paginated.page;
+            getAppointmentQueueAPI({
+                ...paramsFilter,
+                page: currentPage
+            }, (res) => {
+                if (res && res.status === 200) {
+                    console.log(res.data);
+                    let queue = res.data.data;
+                    setAppointmentQueue(queue);
+                }
+                else {
+                    toast.error("Something wrong!");
                 }
             });
+        };
+
+        let pusherChanel = userInfo.pusherChannel ? (
+            new Pusher('a5612d1b04f944b457a3', {
+                cluster: 'ap1',
+                encrypted: true,
+            })
+                .subscribe(userInfo.pusherChannel)) : null;
+
+        const bindGlobalHandler = (action, data) => {
+            if (action === "AppointmentUpdate") {
+                console.log(data);
+                let message = data;
+                toast.warning(message);
+                refreshPage();
+            }
         }
 
-    }, [channel]);
+        if (pusherChanel) {
+            pusherChanel.bind_global(bindGlobalHandler);
+        }
+
+        return () => {
+            if (pusherChanel) {
+                pusherChanel.unbind_global(bindGlobalHandler);
+            }
+        }
+    }, [paramsFilter, userInfo.pusherChannel, paginated.page]);
 
 
     const cardColors = {
@@ -211,16 +231,16 @@ function Technician() {
                     <div className="container-fluid">
                         {
                             paginated.pageTotals > 1 &&
-                            <PagingBar 
-                                pageIndex={paginated.page} 
+                            <PagingBar
+                                pageIndex={paginated.page}
                                 pageCount={paginated.pageTotals}
                                 onPageChange={(page) => {
                                     setPaginated({
                                         ...paginated,
                                         page: page
                                     });
-                                    
-                                    fetchNewPage(page);
+
+                                    fetchPage(page);
                                 }}
                             />
                         }
@@ -237,7 +257,7 @@ function Technician() {
                                                 </div>
                                             </div>
                                             <div className="col-lg-9">
-                                                <div className="row justify-content-center" style={{ rowGap: "10px" }}>
+                                                <div className="row flex-column align-items-center" style={{ rowGap: "10px" }}>
                                                     {data.map((item, idx) => (
                                                         <div key={idx} className="col-md-6">
                                                             <Link to={"."} style={{ color: 'inherit' }} className="text-decoration-none">
