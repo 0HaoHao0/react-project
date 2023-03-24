@@ -1,16 +1,22 @@
-import axios from "axios";
-import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import {
+  Sidebar, Menu, MenuItem, SubMenu, useProSidebar
+
+} from 'react-pro-sidebar';
+import { Link, useNavigate } from 'react-router-dom';
+import './AdminSidebar.scss'
 import Cookies from "universal-cookie/cjs/Cookies";
-import { deleteUser } from "../../redux/features/userSlide";
+import axios from 'axios';
+import { useDispatch } from 'react-redux';
+import { deleteUser } from '../../redux/features/userSlide';
 
 function AdminSidebar() {
-  const nagivate = useNavigate()
+  const nagivate = useNavigate();
 
-  const userInfo = useSelector((state) => state.user.userInfo)
+  const { collapseSidebar, collapsed } = useProSidebar();
 
-  const dispatch = useDispatch()
-  const logOut = () => {
+  const dispatch = useDispatch();
+
+  const handleLogout = () => {
     axios.defaults.headers.common['Authorization'] = "";
     localStorage.clear();
     const cookie = new Cookies();
@@ -18,316 +24,93 @@ function AdminSidebar() {
     dispatch(deleteUser())
     nagivate('/login');
   }
+
   return (<>
 
-    {/* Main Sidebar Container */}
-    <aside className="main-sidebar sidebar-dark-primary elevation-4">
-      {/* Brand Logo */}
-      <div className="brand-link d-flex align-items-center justify-content-center">
-        <i className="fa-solid fa-screwdriver-wrench"></i>
-      </div>
-      {/* Sidebar */}
-      <div className="sidebar">
-        {/* Sidebar Menu */}
-        <nav className="mt-2">
-          <ul className="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-            <li className="nav-item menu">
-              <div className="nav-link active">
-                <i className="nav-icon fas fa-user" />
-                <p>
-                  Hi, {userInfo.fullName}
-                  <i className="right fas fa-angle-left" />
-                </p>
-              </div>
-              <ul className="nav nav-treeview ">
-                <li className="nav-item">
-                  <div className="nav-link text-white">
-                    <i className="far fa-info nav-icon" />
-                    <p>Profile</p>
-                  </div>
-                </li>
-                <li className="nav-item bg-danger ">
-                  <div className="nav-link text-white" onClick={() => { logOut() }}>
-                    <i className="fa-solid fa-right-from-bracket nav-icon"></i>
-                    <p>Log out</p>
-                  </div>
-                </li>
-              </ul>
-            </li>
-            <li className="nav-header">API User</li>
-            <li className="nav-item">
-              <div className="nav-link text-white ">
-                <i className="nav-icon fas fa-user" />
-                <p>
-                  User
-                  <i className="right fas fa-angle-left" />
-                </p>
-              </div>
-              <ul className="nav nav-treeview">
-                <li className="nav-item">
-                  <Link to='/admin/user' className="nav-link">
-                    <i className="far fa-circle nav-icon" />
-                    <p>Get All</p>
-                  </Link>
-                </li>
 
-              </ul>
-            </li>
-            <li className="nav-item">
-              <div className="nav-link text-white ">
-                <i className="nav-icon fas fa-user-doctor" />
-                <p>
-                  Dotor
-                  <i className="right fas fa-angle-left" />
-                </p>
-              </div>
-              <ul className="nav nav-treeview">
-                <li className="nav-item">
-                  <Link to='/admin/doctor' className="nav-link">
-                    <i className="far fa-circle nav-icon" />
-                    <p>Get All</p>
-                  </Link>
-                </li>
-                <li className="nav-item">
-                  <Link to='/admin/doctor/create' className="nav-link">
-                    <i className="far fa-circle nav-icon" />
-                    <p>Create</p>
-                    <span className="right badge badge-danger">New</span>
-                  </Link>
-                </li>
+    <div className="admin-sidebar vh-100">
 
-              </ul>
-            </li>
-            <li className="nav-item">
-              <div className="nav-link text-white ">
-                <i className="nav-icon fas fa-hospital-user" />
-                <p>
-                  Patient
-                  <i className="right fas fa-angle-left" />
-                </p>
-              </div>
-              <ul className="nav nav-treeview">
-                <li className="nav-item">
-                  <Link to='/admin/patient' className="nav-link">
-                    <i className="far fa-circle nav-icon" />
-                    <p>Get All</p>
-                  </Link>
-                </li>
+      <Sidebar transitionDuration={0} className='style h-100 text-white'
+        rootStyles={{
+          backgroundColor:
+            '#EAE7B1',
+          [`.ps-menu-button:hover`]: {
+            backgroundColor: "#1C6758 ",
+            color: "white",
+            fontWeight: "bold "
+          },
+          [`.ps-submenu-content:hover`]: {
+            backgroundColor: "#1C6758 ",
+            color: "white",
+            fontWeight: "bold "
+          },
+          [`.ps-menu-button.ps-active`]: {
+            backgroundColor: '#1C6758',
+            color: "white !important",
+            fontWeight: "bold !important"
+          },
+        }}>
+        <div  >
+          <span className='text-center m-5'>
+            <h5><i className="fa-solid fa-gear" /> {!collapsed && 'Admin Management'}</h5>
+          </span>
 
-              </ul>
-            </li>
-            <li className="nav-header">API</li>
-            <li className="nav-item">
-              <div className="nav-link text-white ">
-                <i className="nav-icon fas fa-syringe" />
-                <p>
-                  Service
-                  <i className="right fas fa-angle-left" />
-                </p>
-              </div>
-              <ul className="nav nav-treeview">
-                <li className="nav-item">
-                  <Link to='/admin/service' className="nav-link">
-                    <i className="far fa-circle nav-icon" />
-                    <p>Get All</p>
-                  </Link>
-                </li>
-                <li className="nav-item">
-                  <Link to='/admin/service/create' className="nav-link">
-                    <i className="far fa-circle nav-icon" />
-                    <p>Create</p>
-                    <span className="right badge badge-danger">New</span>
-                  </Link>
-                </li>
-              </ul>
-            </li>
-            <li className="nav-item">
-              <div className="nav-link text-white ">
-                <i className="nav-icon fas fa-hammer" />
-                <p>
-                  Device
-                  <i className="right fas fa-angle-left" />
-                </p>
-              </div>
-              <ul className="nav nav-treeview">
-                <li className="nav-item">
-                  <Link to='/admin/device' className="nav-link">
-                    <i className="far fa-circle nav-icon" />
-                    <p>Get All</p>
-                  </Link>
-                </li>
-                <li className="nav-item">
-                  <Link to='/admin/device/create' className="nav-link">
-                    <i className="far fa-circle nav-icon" />
-                    <p>Create</p>
-                    <span className="right badge badge-danger">New</span>
-                  </Link>
-                </li>
+          <div className='btn-collapse btn btn-dark btn-xs' onClick={() => collapseSidebar()}><i className='bx bx-left-arrow-alt bx-spin' ></i></div>
+        </div>
+        <Menu className='overflow-auto h-75' menuItemStyles={{
+          button: ({ level, active, disabled }) => {
+            return {
 
-              </ul>
-            </li>
-            <li className="nav-item">
-              <div className="nav-link text-white ">
-                <i className="nav-icon fas fa-door-open" />
-                <p>
-                  Room
-                  <i className="right fas fa-angle-left" />
+              backgroundColor:
+                '#7AA874',
+            }
+          },
+          icon: () => {
+            return {
+              backgroundColor: '#40513B',
+            }
+          }
 
-                </p>
-              </div>
-              <ul className="nav nav-treeview">
-                <li className="nav-item">
-                  <Link to='/admin/room' className="nav-link">
-                    <i className="far fa-circle nav-icon" />
-                    <p>Get All</p>
-                  </Link>
-                </li>
-                <li className="nav-item">
-                  <Link to='/admin/room/create' className="nav-link">
-                    <i className="far fa-circle nav-icon" />
-                    <p>Create</p>
-                    <span className="right badge badge-danger">New</span>
-                  </Link>
-                </li>
+        }}>
+          {!collapsed && <div className='w-100 text-center'>
+            <span>Main funtion</span>
+          </div>
+          }
 
-              </ul>
-            </li>
-            <li className="nav-item">
-              <div className="nav-link text-white ">
-                <i className="nav-icon fas fa-newspaper" />
-                <p>
-                  New
-                  <i className="right fas fa-angle-left" />
+          <SubMenu label="User" icon={<i class="fa-solid fa-user"></i>} >
+            <MenuItem component={<Link to={'/admin/user'}></Link>}> Get All </MenuItem>
+          </SubMenu>
 
-                </p>
-              </div>
-              <ul className="nav nav-treeview">
-                <li className="nav-item">
-                  <Link to='/admin/news' className="nav-link">
-                    <i className="far fa-circle nav-icon" />
-                    <p>Get All</p>
-                  </Link>
-                </li>
-                <li className="nav-item">
-                  <Link to='/admin/news/create' className="nav-link">
-                    <i className="far fa-circle nav-icon" />
-                    <p>Create</p>
-                    <span className="right badge badge-danger">New</span>
-                  </Link>
-                </li>
+          <SubMenu label="Patient" icon={<i class="fa-solid fa-hospital-user"></i>} >
+            <MenuItem component={<Link to={'/admin/patient'}></Link>}> Get All </MenuItem>
+          </SubMenu>
+        </Menu>
+        {/* Footer */}
+        <Menu >
 
-              </ul>
-            </li>
-            <li className="nav-item">
-              <div className="nav-link text-white ">
-                <i className="nav-icon fas fa-chart-pie" />
-                <p>
-                  Contact
-                  <i className="right fas fa-angle-left" />
-                </p>
-              </div>
-              <ul className="nav nav-treeview">
-                <li className="nav-item">
-                  <Link to='/admin/contact' className="nav-link">
-                    <i className="far fa-circle nav-icon" />
-                    <p>Get All</p>
-                  </Link>
-                </li>
-              </ul>
-            </li>
 
-            {/* <li className="nav-header">MULTI LEVEL EXAMPLE</li>
-                        <li className="nav-item">
-                            <a href="#" className="nav-link">
-                                <i className="fas fa-circle nav-icon" />
-                                <p>Level 1</p>
-                            </a>
-                        </li>
-                        <li className="nav-item">
-                            <a href="#" className="nav-link">
-                                <i className="nav-icon fas fa-circle" />
-                                <p>
-                                    Level 1
-                                    <i className="right fas fa-angle-left" />
-                                </p>
-                            </a>
-                            <ul className="nav nav-treeview">
-                                <li className="nav-item">
-                                    <a href="#" className="nav-link">
-                                        <i className="far fa-circle nav-icon" />
-                                        <p>Level 2</p>
-                                    </a>
-                                </li>
-                                <li className="nav-item">
-                                    <a href="#" className="nav-link">
-                                        <i className="far fa-circle nav-icon" />
-                                        <p>
-                                            Level 2
-                                            <i className="right fas fa-angle-left" />
-                                        </p>
-                                    </a>
-                                    <ul className="nav nav-treeview">
-                                        <li className="nav-item">
-                                            <a href="#" className="nav-link">
-                                                <i className="far fa-dot-circle nav-icon" />
-                                                <p>Level 3</p>
-                                            </a>
-                                        </li>
-                                        <li className="nav-item">
-                                            <a href="#" className="nav-link">
-                                                <i className="far fa-dot-circle nav-icon" />
-                                                <p>Level 3</p>
-                                            </a>
-                                        </li>
-                                        <li className="nav-item">
-                                            <a href="#" className="nav-link">
-                                                <i className="far fa-dot-circle nav-icon" />
-                                                <p>Level 3</p>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </li>
-                                <li className="nav-item">
-                                    <a href="#" className="nav-link">
-                                        <i className="far fa-circle nav-icon" />
-                                        <p>Level 2</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li className="nav-item">
-                            <a href="#" className="nav-link">
-                                <i className="fas fa-circle nav-icon" />
-                                <p>Level 1</p>
-                            </a>
-                        </li>
-                        <li className="nav-header">LABELS</li>
-                        <li className="nav-item">
-                            <a href="#" className="nav-link">
-                                <i className="nav-icon far fa-circle text-danger" />
-                                <p className="text">Important</p>
-                            </a>
-                        </li>
-                        <li className="nav-item">
-                            <a href="#" className="nav-link">
-                                <i className="nav-icon far fa-circle text-warning" />
-                                <p>Warning</p>
-                            </a>
-                        </li>
-                        <li className="nav-item">
-                            <a href="#" className="nav-link">
-                                <i className="nav-icon far fa-circle text-info" />
-                                <p>Informational</p>
-                            </a>
-                        </li> */}
-          </ul>
-        </nav>
-        {/* /.sidebar-menu */}
-      </div>
-      {/* /.sidebar */}
-    </aside>
-  </>
-  );
+          <MenuItem icon={<i className='bx bx-info-circle' ></i>} component={<Link to={'/profile'}></Link>}>
+            Profile
+          </MenuItem>
+
+
+          <MenuItem icon={<i className='bx bxs-log-out'></i>} onClick={() => { handleLogout() }}
+            rootStyles={{
+              [`.ps-menu-button:hover`]: {
+                backgroundColor: "red !important ",
+                color: "white",
+                fontWeight: "bold ",
+                'borderBottomLeftRadius': "50px"
+
+
+              },
+            }}>
+            Log Out
+          </MenuItem>
+        </Menu>
+      </Sidebar >
+    </div >
+  </>);
 }
 
 export default AdminSidebar;

@@ -1217,16 +1217,14 @@ function Profile() {
                         <div className="">
                           <div className="row">
                             <span className="col-4 text-left">Uploaded At</span>
-                            <span className="col">:</span>
-                            <i className="col-7">
-                              {new Date(
-                                medicalRecord.lastTimeModified
-                              ).toLocaleString()}
-                            </i>
+                            <span className="col-1">:</span>
+                            <span className="text-mute col-7">
+                              {new Date(medicalRecord.lastTimeModified).toLocaleString([], {year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute:'2-digit'})}
+                            </span>
                           </div>
                           <div className="row">
                             <span className="col-4 text-left">File</span>
-                            <span className="col">:</span>
+                            <span className="col-1">:</span>
                             <span className="col-7">
                               {medicalRecord.fileURL && (
                                 <Link
@@ -1234,7 +1232,7 @@ function Profile() {
                                   className="btn btn-primary"
                                   target="_blank"
                                 >
-                                  View Details
+                                    View Details
                                 </Link>
                               )}
                               <button

@@ -25,7 +25,8 @@ function PatientDetail() {
     const handleUpdate = () => {
         Swal.fire({
             title: "Select a file",
-            html: '<input type="file" id="custom-file" className="form-control">',
+            html: '<label htmlFor="DocumentFile" className="">Document File: </label> <span className="mx-2"> <a href={file} download>Sample</a></span>' +
+                '<input type="file" id="custom-file" className="form-control ">',
             showCancelButton: true,
             confirmButtonText: "Confirm",
             cancelButtonText: "Cancel",
@@ -73,66 +74,64 @@ function PatientDetail() {
             </div>
 
             <hr />
-            <div className="row">
-                <div className="col-lg-3 col-sm-12 my-2">
-                    <div>
-                        <button className="btn btn-primary mb-2 w-100 text-left" onClick={() => { setChangeView(0) }}>Doctor Profile</button>
-                    </div>
-                    <div>
-                        <button className="btn btn-primary mb-2 w-100 text-left" onClick={() => { setChangeView(1) }}>Certificate</button>
+            <div className="row g-0">
+                <div className="col-lg-3 col-sm-12 ">
+                    <div className="px-2">
+                        <button className="btn btn-primary mb-2 w-100 text-left" onClick={() => { setChangeView(0) }}>Patient Profile</button>
+                        <button className="btn btn-primary mb-2 w-100 text-left" onClick={() => { setChangeView(1) }}>Medical Record</button>
                     </div>
                 </div>
                 {changeView === 0 ?
-                    <div className="col-lg-9 col-sm-12 border">
-                        <h1 className="alert alert-dark my-2">Profile</h1>
-                        <div className="row my-2">
-                            <div className="text-center my-4">
+                    <div className="col-lg-9 col-sm-12 ">
+                        <h1 className="alert alert-dark ">Profile</h1>
+                        <div className="container row">
+                            <div className="col-12 text-center my-2">
                                 <img height='150px' width='150px' src={state.baseUser.imageURL} alt="avatar" />
                             </div>
                             <div className="col-lg-6 col-sm-12 ">
                                 {/*  */}
-                                <div className="row align-items-center mb-2">
+                                <div className="row g-0 align-items-center mb-2">
                                     <div className="col-md-4">
                                         <label htmlFor="full-name">User Name: </label>
                                     </div>
                                     <div className="col-md-8 ">
-                                        <input type="text" className="form-control" id="full-name" placeholder={state.baseUser.userName} readOnly />
+                                        <input type="text" className="form-control bg-white" id="full-name" placeholder={state.baseUser.userName} disabled />
                                     </div>
                                 </div>
                                 {/*  */}
-                                <div className="row align-items-center mb-2">
+                                <div className="row g-0 align-items-center mb-2">
                                     <div className="col-md-4">
                                         <label htmlFor="full-name">Full Name: </label>
                                     </div>
                                     <div className="col-md-8 ">
-                                        <input type="text" className="form-control" id="full-name" placeholder={state.baseUser.fullName} readOnly />
+                                        <input type="text" className="form-control bg-white" id="full-name" placeholder={state.baseUser.fullName} disabled />
                                     </div>
                                 </div>
                                 {/*  */}
-                                <div className="row align-items-center mb-2">
+                                <div className="row g-0 align-items-center mb-2">
                                     <div className="col-md-4">
                                         <label htmlFor="full-name">Gender: </label>
                                     </div>
                                     <div className="col-md-8 ">
-                                        <input type="text" className="form-control" id="full-name" placeholder={state.baseUser.gender} readOnly />
+                                        <input type="text" className="form-control bg-white" id="full-name" placeholder={state.baseUser.gender} disabled />
                                     </div>
                                 </div>
                                 {/*  */}
-                                <div className="row align-items-center mb-2">
+                                <div className="row g-0 align-items-center mb-2">
                                     <div className="col-md-4">
                                         <label htmlFor="full-name">Address: </label>
                                     </div>
                                     <div className="col-md-8 ">
-                                        <input type="text" className="form-control" id="full-name" placeholder={state.baseUser.address} readOnly />
+                                        <input type="text" className="form-control bg-white" id="full-name" placeholder={state.baseUser.address} disabled />
                                     </div>
                                 </div>
                                 {/*  */}
-                                <div className="row align-items-center mb-2">
+                                <div className="row g-0 align-items-center mb-2">
                                     <div className="col-md-4">
                                         <label htmlFor="full-name">Birth Date: </label>
                                     </div>
                                     <div className="col-md-8 ">
-                                        <input type="text" className="form-control" id="full-name" placeholder={convertDate(state.baseUser.birthDate)} readOnly />
+                                        <input type="text" className="form-control bg-white" id="full-name" placeholder={convertDate(state.baseUser.birthDate)} disabled />
                                     </div>
                                 </div>
                                 {/*  */}
@@ -140,25 +139,25 @@ function PatientDetail() {
                             </div>
                             <div className="col-lg-6 col-sm-12">
                                 {/*  */}
-                                <div className="row align-items-center mb-2">
+                                <div className="row g-0 align-items-center mb-2">
                                     <div className="col-md-4">
                                         <label htmlFor="full-name">Phone Number: </label>
                                     </div>
                                     <div className="col-md-8 ">
-                                        <input type="text" className="form-control" id="full-name" placeholder={state.baseUser.phoneNumber} readOnly />
+                                        <input type="text" className="form-control bg-white" id="full-name" placeholder={state.baseUser.phoneNumber} disabled />
                                     </div>
                                 </div>
                                 {/*  */}
-                                <div className="row align-items-center mb-2">
+                                <div className="row g-0 align-items-center mb-2">
                                     <div className="col-md-4">
                                         <label htmlFor="full-name">Email: </label>
                                     </div>
                                     <div className="col-md-8 ">
-                                        <input type="text" className="form-control" id="full-name" placeholder={state.baseUser.email} readOnly />
+                                        <input type="text" className="form-control bg-white" id="full-name" placeholder={state.baseUser.email} disabled />
                                     </div>
                                 </div>
                                 {/*  */}
-                                <div className="row align-items-center mb-2">
+                                <div className="row g-0 align-items-center mb-2">
                                     <div className="col-md-4">
                                         <label htmlFor="full-name">Email Validated: </label>
                                     </div>
@@ -167,7 +166,7 @@ function PatientDetail() {
                                     </div>
                                 </div>
                                 {/*  */}
-                                <div className="row align-items-center mb-2">
+                                <div className="row g-0 align-items-center mb-2">
                                     <div className="col-md-4">
                                         <label htmlFor="full-name">Lock: </label>
                                     </div>
@@ -179,16 +178,12 @@ function PatientDetail() {
                         </div>
                     </div>
                     :
-                    <div className="col-lg-9 col-sm-12 border">
-                        <h1 className="alert alert-dark my-2">Certificate</h1>
-                        <div className="row my-2">
-                            <div className="row align-items-center mb-2">
-                                <div className="col-md-4">
-                                    <label htmlFor="full-name">Certificate: </label>
-                                </div>
-                                <div className="col-md-8 ">
-                                    <a className="btn btn-primary" href={patientInfo.medicalRecordFile.fileURL} rel="noreferrer" target='_blank'>View</a>
-                                </div>
+                    <div className="col-lg-9 col-sm-12 ">
+                        <h1 className="alert alert-dark ">Medical Record</h1>
+                        <div className="container row">
+                            <div className="form-group">
+                                <label htmlFor="file">File:</label>
+                                <a className="text-decoration-none mx-2" href={patientInfo.medicalRecordFile.fileURL} rel="noreferrer" target='_blank'>View</a>
                             </div>
                         </div>
                         <button className="btn btn-primary my-2" onClick={() => { handleUpdate() }}>

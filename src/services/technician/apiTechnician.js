@@ -23,7 +23,7 @@ export const getAppointmentQueueAPI = (params = {}, callback = (res) => { consol
     
     callAPI({
         method: "GET",
-        endpoint: "/api/Appointment/GetAll",
+        endpoint: "/api/Technician/GetAppointmentQueue",
         params: params,
         callback: callback
     });
