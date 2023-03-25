@@ -209,25 +209,6 @@ function Technician() {
 
     const appointmentQueueGroupByDate = groupBy(appointmentQueue, "date");
 
-    const [showScroll, setShowScroll] = useState(false);
-
-    useEffect(() => {
-        const handleScroll = () => {
-            if (window.pageYOffset > 200) {
-                setShowScroll(true);
-            } else {
-                setShowScroll(false);
-            }
-        };
-        window.addEventListener("scroll", handleScroll);
-        return () => {
-            window.removeEventListener("scroll", handleScroll);
-        };
-    }, []);
-
-    const scrollToTop = () => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    };
 
     return (
         <div className="technician">
@@ -253,7 +234,7 @@ function Technician() {
                                     <div className={`card-body ${(new Date(label).toLocaleDateString() === (new Date()).toLocaleDateString() ? "bg-light shadow" : "")}`}>
                                         <div className={`row`}>
                                             <div className="col-lg-3 px-2 mb-2">
-                                                <div className="bg-dark text-white">
+                                                <div className="bg-info text-white">
                                                     <h3 className="text-center">{new Date(label).toLocaleDateString()}</h3>
                                                     <hr className="w-100" />
                                                 </div>
@@ -325,11 +306,7 @@ function Technician() {
                 </div>
             </div>
 
-            {showScroll && (
-                <button className="btn btn-danger scroll-to-top" onClick={scrollToTop}>
-                    <i className="fa-solid fa-arrow-up"></i>
-                </button>
-            )}
+            
 
         </div>
     );
