@@ -11,7 +11,7 @@ export const ImageViewer = ({ images=[{ url: "...", title: "..." }], initSelecte
     }
 
     const checkCloseViewClicked = (e) => {
-        if(e.target == e.currentTarget) {
+        if(e.target === e.currentTarget) {
             console.log("close...");
             onBlur();
         }
