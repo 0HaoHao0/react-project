@@ -1,26 +1,22 @@
-import file from '../../assets/file/HospitalDocument.docx'
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
-import { addDocument, deleteDocument, getAppointment, updateAppointmentState } from "../../services/doctor/DoctorApi";
+import { getAppointment, updateAppointmentState } from '../../../services/receptionist/apiReceptionistAppointment';
 
 
 function UpdateState({ currentState, handleChangeState }) {
     const appointmentState = [
         {
-            id: 4,
-            name: "Transfer"
+            id: 1,
+            name: "Accept"
         },
         {
-            id: 3,
-            name: "Doing"
+            id: 2,
+            name: "Cancel"
         },
-        {
-            id: 8,
-            name: "Complete"
-        }
+
     ];
 
     return (
@@ -44,22 +40,10 @@ function UpdateState({ currentState, handleChangeState }) {
     );
 }
 
-function UploadFile({ handleFile, handleTitle }) {
-    return (
-        <div>
-            <div className="form-group">
-                <label htmlFor="Title">Tile: </label>
-                <input id="Title" className="form-control mb-3" type="text" name="Title" onChange={(e) => { handleTitle(e.target.value) }} />
-                <label htmlFor="DocumentFile ">Document File: </label> <span className='mx-2'><a href={file} download>Sample</a></span>
-                <input id="DocumentFile " className="form-control" type="file" name="DocumentFile" accept='.docx' onChange={(e) => { handleFile(e.target.files[0]) }} />
-            </div>
-        </div>
-    );
-}
 
 
 
-function DoctorAppointmentDetail() {
+function ReceptionistAppointmentDetail() {
     const { id } = useParams();
     const [appointmentInfo, setAppointmentInfo] = useState();
     const [loading, setLoading] = useState(0);
@@ -126,80 +110,7 @@ function DoctorAppointmentDetail() {
         })
     }
 
-    const handleUploadFile = () => {
-        let data;
 
-
-        const handleFile = (value) => {
-            data = { ...data, DocumentFile: value }
-        }
-
-        const handleTitle = (value) => {
-            data = { ...data, Title: value }
-        }
-
-
-        MySwal.fire({
-            html: <UploadFile handleFile={handleFile} handleTitle={handleTitle} ></UploadFile>,
-            allowOutsideClick: false,
-            showCancelButton: true,
-            confirmButtonText: "Update",
-            icon: 'question',
-        }).then(async (result) => {
-
-            if (result.isConfirmed) {
-                const fromData = new FormData();
-                fromData.append('AppointmentId', appointmentInfo.id)
-                fromData.append('DocumentFile', data.DocumentFile)
-                fromData.append('Title', data.Title)
-                MySwal.fire({
-                    title: "Upload file...",
-                    html: "Please wait a moment"
-                })
-                MySwal.showLoading()
-                const res = await addDocument(fromData)
-                if (res.status === 200) {
-                    setLoading(loading + 1);
-                }
-                else {
-                    toast.error("Upload file failed, please contact to Admin !")
-                }
-                MySwal.close()
-            } else if (result.isDismissed) {
-                toast.info('Upload file has been cancelled')
-            }
-        })
-    }
-
-    const handleDetele = (id) => {
-        MySwal.fire({
-            title: 'Are you sure to delete this document ?',
-            allowOutsideClick: false,
-            showCancelButton: true,
-            confirmButtonText: "Delete",
-            confirmButtonColor: 'red',
-            icon: 'warning',
-        }).then(async (result) => {
-            if (result.isConfirmed) {
-                MySwal.fire({
-                    title: "Update Document...",
-                    html: "Please wait a moment"
-                })
-                MySwal.showLoading()
-                const res = await deleteDocument(id);
-
-                if (res.status === 200) {
-                    setLoading(loading + 1);
-                }
-                else {
-                    toast.error("Update document failed, please contact to Admin !")
-                }
-                MySwal.close()
-            } else if (result.isDismissed) {
-                toast.info('Delete document has been cancelled')
-            }
-        })
-    }
     return (<>
         <div className="doctor-appointment-detail">
             <h1>Appointment Detail</h1>
@@ -245,7 +156,6 @@ function DoctorAppointmentDetail() {
                         <div className="form-group text-primary">
 
                             <label htmlFor="state">Document:</label >
-                            <button className="btn btn-sm btn-primary mx-2" type="button" onClick={(e) => { handleUploadFile() }}>Add</button>
                             <br />
 
                             <table className='table border sha-sm dow table-hover my-2 text-dark'>
@@ -254,7 +164,6 @@ function DoctorAppointmentDetail() {
                                         <th scope="col">Tag</th>
                                         <th scope="col">Title</th>
                                         <th scope="col">View</th>
-                                        <th scope="col">Delete</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -263,7 +172,6 @@ function DoctorAppointmentDetail() {
                                             <th scope="row">{value.tag}</th>
                                             <td>{value.title}</td>
                                             <td><a href={value.file.fileURL} target='_blank' rel="noreferrer">View</a></td>
-                                            <td><button className='btn btn-sm btn-danger' onClick={() => handleDetele(value.id)}>Delete</button></td>
                                         </tr>
                                     )}
                                 </tbody>
@@ -332,4 +240,4 @@ function DoctorAppointmentDetail() {
     </>);
 }
 
-export default DoctorAppointmentDetail;
+export default ReceptionistAppointmentDetail;

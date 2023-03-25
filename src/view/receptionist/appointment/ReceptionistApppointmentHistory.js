@@ -1,18 +1,18 @@
 import { useEffect } from "react";
 import { useState } from "react";
 import { toast } from "react-toastify";
-import Pagiation from "../../components/admin/Pagination";
+import Pagiation from "../../../components/admin/Pagination";
 
 //Datatable Modules
 import "datatables.net-dt/js/dataTables.dataTables.min.mjs";
 import "datatables.net-dt/css/jquery.dataTables.min.css";
 import $ from "jquery";
 import { Link } from "react-router-dom";
-import { getAllAppointment } from "../../services/doctor/DoctorApi";
 import { useSelector } from "react-redux";
 import Swal from "sweetalert2";
+import { getAllAppointment } from "../../../services/receptionist/apiReceptionistAppointment";
 
-function DoctorAppointmentHistory() {
+function ReceptionistAppointmentHistory() {
     const [appointmentData, setAppointmentData] = useState();
     const user = useSelector((state) => state.user);
 
@@ -32,7 +32,6 @@ function DoctorAppointmentHistory() {
     useEffect(() => {
         const loadData = async () => {
 
-
             const res = await getAllAppointment(filter);
 
             setAppointmentData(res.data)
@@ -42,6 +41,7 @@ function DoctorAppointmentHistory() {
                 retrieve: true,
                 paging: false,
             });
+
 
         };
 
@@ -124,7 +124,7 @@ function DoctorAppointmentHistory() {
                                         <td >{value.service.serviceName}</td>
                                         <td >
                                             <Link
-                                                to={`/doctor/appointment-detail/${value.id}`}
+                                                to={`/receptionist/appointment-detail/${value.id}`}
                                                 className="btn btn-success"
                                             >
                                                 <i className="fa-solid fa-circle-info"></i>
@@ -150,4 +150,4 @@ function DoctorAppointmentHistory() {
     </>);
 }
 
-export default DoctorAppointmentHistory;
+export default ReceptionistAppointmentHistory;

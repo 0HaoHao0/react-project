@@ -1,5 +1,7 @@
 import { Route, Routes } from "react-router-dom";
 import ReceptionistSidebar from "../components/receptionist/ReceptionistSidebar";
+import ReceptionistAppointmentDetail from "../view/receptionist/appointment/ReceptionistAppointmentDetail";
+import ReceptionistAppointmentHistory from "../view/receptionist/appointment/ReceptionistApppointmentHistory";
 import ReceptionistContact from "../view/receptionist/contact/ReceptionistContact";
 import ReceptionistContactDetail from "../view/receptionist/contact/ReceptionistContactDetail";
 import ReceptionistNews from "../view/receptionist/news/ReceptionistNews";
@@ -17,6 +19,9 @@ function ReceptionistRouter() {
             <div className="col ">
                 <div className="vh-100 overflow-auto p-2 border-top border-end border-bottom ">
                     <Routes>
+                        {/* Appointment */}
+                        <Route path="/appointment-history" element={<ReceptionistAppointmentHistory />}></Route>
+                        <Route path="/appointment-detail/:id" element={<ReceptionistAppointmentDetail />}></Route>
                         {/* News */}
                         <Route path="/news" element={<ReceptionistNews />}></Route>
                         <Route path="/news/create" element={<ReceptionistNewsCreate />}></Route>
@@ -25,6 +30,7 @@ function ReceptionistRouter() {
                         {/* Contact */}
                         <Route path="/contact" element={<ReceptionistContact />}></Route>
                         <Route path="/contact/detail" element={<ReceptionistContactDetail />}></Route>
+                        {/* Patient */}
                         <Route path="/patient" element={<ReceptionistPatient />}></Route>
 
 

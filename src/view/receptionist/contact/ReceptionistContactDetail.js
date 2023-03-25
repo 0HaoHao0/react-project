@@ -90,8 +90,8 @@ function ReceptionistContactDetail() {
                         <div className="row my-2">
                             <div className="col-3 fw-bold">State: </div>
                             <div className="col-9 text-left">
-                                <select className='form-select' aria-label="Default select example" onChange={handleSelectChange}>
-                                    <option disabled selected>{state.state}</option>
+                                <select className='form-select' defaultValue={state.state} aria-label="Default select example" onChange={handleSelectChange}>
+                                    <option disabled defaultValue={state.state}>{state.state}</option>
                                     {options.map(option => (
                                         <option
                                             key={option.value}

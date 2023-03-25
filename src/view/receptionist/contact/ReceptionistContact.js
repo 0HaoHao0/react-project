@@ -2,10 +2,10 @@ import { useEffect } from "react";
 import { useState } from "react";
 import Pagiation from "../../../components/admin/Pagination";
 
-
 //Datatable Modules
-import "datatables.net-dt/js/dataTables.dataTables.min.mjs"
-import "datatables.net-dt/css/jquery.dataTables.min.css"
+import "datatables.net-dt/js/dataTables.dataTables.min.mjs";
+import "datatables.net-dt/css/jquery.dataTables.min.css";
+import $ from "jquery";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 import { getAllContact } from "../../../services/receptionist/apiReceptionistContact";
@@ -38,6 +38,12 @@ function ReceptionistContact() {
             else {
                 toast.error("Something went wrong!");
             }
+
+            $('#table').DataTable({
+                destroy: true,
+                retrieve: true,
+                paging: false,
+            });
 
         }
 
