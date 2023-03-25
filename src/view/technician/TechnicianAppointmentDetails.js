@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
+import { toast } from "react-toastify";
 import Swal from "sweetalert2";
-import { getAppointmentDetailAPIs, getImageSegmentationResults, updateStateForAppointmentAPI, uploadXRayImageAPI } from "../../services/technician/apiTechnician";
+import { getAppointmentDetailAPIs, updateStateForAppointmentAPI, uploadXRayImageAPI } from "../../services/technician/apiTechnician";
 import ImageSegmentationResults from "./ImageSegmentationResults";
-
 
 
 function TechnicianAppointmentDetails() {
@@ -26,9 +26,13 @@ function TechnicianAppointmentDetails() {
                 if(res.status === 200) {
                     setAppointment(res.data);
                 }
-                else {
-                    console.log(res);
+                else if(res.status < 500) {
+                    toast.error(res.data);
                 }
+                else {
+                    toast.error("The system is busy!");
+                }
+
                 Swal.close();
             }
         });
@@ -78,8 +82,11 @@ function TechnicianAppointmentDetails() {
                         state: stateObject.text,
                     });
                 }
+                else if(res.status < 500) {
+                    toast.error(res.data);
+                }
                 else {
-                    console.log(res);
+                    toast.error("The system is busy!");
                 }
 
                 setIsChangingState(false);
@@ -106,10 +113,10 @@ function TechnicianAppointmentDetails() {
                     setRefreshResult(true);
                 }
                 else if(res.status < 500) {
-
+                    toast.error(res.data);
                 }
                 else {
-
+                    toast.error("The system is busy!");
                 }
 
                 setIsUploadingImage(false);
@@ -212,7 +219,6 @@ function TechnicianAppointmentDetails() {
                         
                     </div>
                 )}
-                
                 
 
 

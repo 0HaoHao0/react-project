@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 import Swal from "sweetalert2";
 import { deleteImageSegmentationResultAPI, getImageSegmentationResultAPIs } from "../../services/technician/apiTechnician";
-
-
+import { ImageViewer } from "../extensions/ImageViewer";
 
 export function ImageSegmentationResults({ appointmentId, showLoading, completeFn = () => { }}) {
 
@@ -28,8 +28,11 @@ export function ImageSegmentationResults({ appointmentId, showLoading, completeF
                 if(res.status === 200) {
                     setSegmentResults(res.data);
                 }
+                else if(res.status < 500) {
+                    toast.error(res.data);
+                }
                 else {
-                    console.log(res);
+                    toast.error("The system is busy!");
                 }
 
                 if(showLoading) Swal.close();
@@ -39,15 +42,27 @@ export function ImageSegmentationResults({ appointmentId, showLoading, completeF
 
     }, [appointmentId, showLoading]);
 
-    const removeImageSegmentationResult = (resultId) => {
+    const removeImageSegmentationResult = async (resultId) => {
         
         console.log(resultId);
+        let isConfirmed = true;
+        await Swal.fire({
+            icon: "warning",
+            title: "This action will delete this result!",
+            showCancelButton: true,
+            showConfirmButton: true
+        })
+        .then(res => {
+            isConfirmed = res.isConfirmed;
+        });
+        
+        if(!isConfirmed) return;
+
         Swal.fire({
             icon: "info",
             title: "Waiting for response..."
         });
         Swal.showLoading();
-
         deleteImageSegmentationResultAPI({
             resultId: resultId,
             callback: (res) => {
@@ -57,16 +72,41 @@ export function ImageSegmentationResults({ appointmentId, showLoading, completeF
                     console.log(removedList);
                     setSegmentResults(removedList);
                 }
+                else if(res.status < 500) {
+                    toast.error(res.data);
+                }
                 else {
-                    console.log(res);
+                    toast.error("The system is busy!");
                 }
                 Swal.close();
             }
         });
     }
 
+    const [imageViewer, setImageViewer] = useState({
+        isShow: false,
+        data: [],
+        selected: null
+    });
+
+    const showImageViewer = (result, idx=0) => {
+        setImageViewer({
+            isShow: true,
+            data: [({ url: result.inputImageURL, title: "input_image"}), ...result.imageResultSet.map(image => ({ url: image.imageURL, title: image.title }))],
+            selected: idx
+        });
+    }
+
     return (
         <>
+            {
+                imageViewer.isShow && <ImageViewer images={imageViewer.data} initSelected={imageViewer.selected} onBlur={() => {
+                    setImageViewer({
+                        ...imageViewer,
+                        isShow: false,
+                    });
+                }}/>
+            }
             {
                 (segmentResults.length > 0) && 
                 <div className="card my-3">
@@ -82,16 +122,18 @@ export function ImageSegmentationResults({ appointmentId, showLoading, completeF
                                 <div className="row mb-3">
                                     <div className="col-md-6">
                                         <h6>Input_image</h6>
-                                        <img src={result.inputImageURL} alt="input_image" className="img-fluid" />
+                                        <img src={result.inputImageURL} alt="input_image" className="img-fluid" onClick={() => showImageViewer(result, 0)} />
                                     </div>
-                                    {result.imageResultSet.map((image) => (
+                                    {result.imageResultSet.map((image, idx) => (
                                         <div key={image.id} className="col-md-6">
                                             <h6>{image.title}</h6>
-                                            <img src={image.imageURL} alt={image.title} className="img-fluid" />
+                                            <img src={image.imageURL} alt={image.title} className="img-fluid" onClick={() => showImageViewer(result, idx + 1)} />
                                         </div>
                                     ))}
                                 </div>
-                                <button className="btn btn-danger w-100" onClick={(e) => removeImageSegmentationResult(result.id)}>Remove</button>
+                                <button className="btn btn-danger w-100" onClick={(e) => removeImageSegmentationResult(result.id)}>
+                                    <i className="fa fa-trash" aria-hidden="true"></i>
+                                </button>
                                 <hr />
                             </div>
                         ))}
