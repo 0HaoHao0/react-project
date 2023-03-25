@@ -62,13 +62,13 @@ function SegmentationRequestForm({setPreviewUrl, setResultSuccess = (item) => {}
         <>
             <form method="post" encType="mutipart/formdata" onSubmit={handleSubmitForm} className="d-flex flex-column gap-1 p-4 border rounded shadow mx-auto">
                 <h5 className="mb-2">Choose an image to test system</h5>
-                <div className="form-group">
+                <div className="mb-2">
                     <input type="file" className="form-control" placeholder="Choose a x-ray image" onChange={handleFileSelected}/>
                 </div>
-                <div className="form-group">
+                <div className="mb-2">
                     <input type="text" className="form-control" placeholder="Note..." onChange={(e) => setNote(e.target.value)}/>
                 </div>
-                <div className="form-group">
+                <div className="mb-2">
                     <button type="submit" className="btn btn-success">Submit</button>
                 </div>
             </form>

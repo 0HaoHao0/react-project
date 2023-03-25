@@ -54,25 +54,25 @@ function CreateModelForm({ handleCreateSuccess = (result) => {} }) {
         <>
             <form action="."
                 method="post" 
-                className="px-4 pt-5 pb-2 bg-white rounded rounded-3 border border-5 border-dark w-50 h-50"
+                className="px-4 pt-5 pb-2 bg-white rounded rounded-3 border border-1 border-primary w-50 h-50"
                 encType="multipart" 
                 onSubmit={OnCreateFormSubmit}
             >
                 <h2 className="text-success text-center">Upload AI Model</h2>
                 <hr/>
-                <div className="form-group">
+                <div className="mb-3">
                     <input type="text" required className="form-control" placeholder="Enter model name" onChange={OnChangeModuleName} />
                 </div>
 
-                <div className="form-group">
+                <div className="mb-3">
                     <input type="file" required className="form-control" placeholder="Choose file h5..." onChange={OnChangeFile} />
                 </div>
 
-                <div className="form-group">
+                <div className="mb-3">
                     <input type="number" required className="form-control" placeholder="Model accuracy" onChange={OnChangeAcc} />
                 </div>
 
-                <div className="form-group text-end">
+                <div className="mb-3 text-end">
                     <button type="reset" className="btn btn-danger mx-2">Clear Data</button>
                     <button type="submit" className="btn btn-primary">
                         Submit

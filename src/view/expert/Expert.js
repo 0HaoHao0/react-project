@@ -6,6 +6,9 @@ import ListRequestResult from "./ListRequestResult";
 import Swal from "sweetalert2";
 import { toast } from "react-toastify";
 
+import ImageViewer from "../extensions/ImageViewer";
+import "../extensions/ImageViewer.scss";
+
 function Expert() {
 
     const [isCreate, setIsCreate] = useState(false);
@@ -130,7 +133,7 @@ function Expert() {
     useEffect(() => {
         callAPI({
             method: "GET",
-            endpoint: "http://127.0.0.1:8000/api/predict",
+            endpoint: "http://127.0.0.1:8000/api/predict/private/",
             callback: (response) => {
                 setListResult(response.data);
             }
@@ -158,8 +161,31 @@ function Expert() {
         });
     }
 
+    const [imageViewer, setImageViewer] = useState({
+        isShow: false,
+        data: [],
+        selected: null
+    });
+
+    const showImageViewer = (result, idx = 0) => {
+        setImageViewer({
+            isShow: true,
+            data: [...result.map(item => ({ url: item.image, title: item.title }))],
+            selected: idx
+        });
+    }
+
     return (
         <>
+            {
+                imageViewer.isShow && 
+                <ImageViewer images={imageViewer.data} initSelected={imageViewer.selected} onBlur={() => {
+                    setImageViewer({
+                        ...imageViewer,
+                        isShow: false
+                    });
+                }} />
+            }
             <div className="expert">
 
                 {isCreate && (
@@ -311,7 +337,7 @@ function Expert() {
                                                 imageResultSet ?
                                                     imageResultSet.map((item, index) => (
                                                         <img key={index} className="img-fill" src={item.image}
-                                                            alt={item.title} />
+                                                            alt={item.title} onClick={() => showImageViewer(imageResultSet, index)} />
                                                     )) :
                                                     <img className="img-fill" src="https://fakeimg.pl/350x200/?text=Result&font=lobster" alt="example" />
                                             }
