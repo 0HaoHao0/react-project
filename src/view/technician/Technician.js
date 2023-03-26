@@ -190,7 +190,7 @@ function Technician() {
     const cardColors = {
         Transfer: "primary",
         TransferDoing: "warning",
-        TransferCancal: "danger",
+        TransferCancel: "danger",
         TransferComplete: "success"
     }
 
@@ -228,7 +228,7 @@ function Technician() {
                             />
                         }
                         {
-                            appointmentQueueGroupByDate &&
+                            appointmentQueueGroupByDate.length > 0 ?
                             appointmentQueueGroupByDate.map(({ label, data }) => (
                                 <div key={label} className="card mb-2">
                                     <div className={`card-body ${(new Date(label).toLocaleDateString() === (new Date()).toLocaleDateString() ? "bg-light shadow" : "")}`}>
@@ -289,7 +289,14 @@ function Technician() {
                                         </div>
                                     </div>
                                 </div>
-                            ))
+                            )) : 
+                            <>
+                                <div className="container mt-4">
+                                    <h2 className='text-center text-danger'>
+                                        No have any appointment data.
+                                    </h2>
+                                </div>
+                            </>
                         }
                     </div>
 
