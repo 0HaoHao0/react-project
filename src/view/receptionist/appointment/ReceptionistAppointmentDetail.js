@@ -116,7 +116,7 @@ function ReceptionistAppointmentDetail() {
             <h1>Appointment Detail</h1>
             <hr />
             {appointmentInfo && <>
-                <div className="alert alert-primary" role="alert">
+                <div className="alert alert-primary mb-2" role="alert">
                     Main Information
                 </div>
                 <div className="row g-2 ">
@@ -198,7 +198,7 @@ function ReceptionistAppointmentDetail() {
                     </div>
 
                 </div>
-                <div className="alert alert-secondary" role="alert">
+                <div className="alert alert-secondary my-2" role="alert">
                     Patient
                 </div>
                 <div className="row g-0">
@@ -218,7 +218,7 @@ function ReceptionistAppointmentDetail() {
                         </div>
                     </div>
                 </div>
-                <div className="alert alert-secondary" role="alert">
+                <div className="alert alert-secondary my-2" role="alert">
                     Service
                 </div>
                 <div className="row g-0">

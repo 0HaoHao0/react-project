@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router";
+import { Route, Routes, useNavigate } from "react-router";
 import AdminSidebar from "../components/admin/AdminSidebar";
 import AppointmentGetAll from "../view/admin/appointment/AppointmentGetAll";
 import ContactDetail from "../view/admin/contact/ContactDetail";
@@ -27,10 +27,57 @@ import ServiceUpdate from "../view/admin/service/ServiceUpdate";
 import UserDetail from "../view/admin/user/UserDetail";
 import UserGetAll from "../view/admin/user/UserGetAll";
 
+import { SpeedDial } from "primereact/speeddial";
+
+
+//theme
+import "primereact/resources/themes/lara-light-indigo/theme.css";
+
+//core
+import "primereact/resources/primereact.min.css";
+
+//icons
+import "primeicons/primeicons.css";
+
+
 function AdminRouter() {
+  const navigate = useNavigate()
+
+  const items = [
+    {
+      label: 'Back',
+      icon: 'pi pi-angle-double-left',
+      className: 'my-2',
+      command: () => {
+        navigate(-1)
+      }
+    },
+
+    {
+      label: 'Reload',
+      icon: 'pi pi-refresh',
+      className: 'my-2',
+      command: () => {
+        navigate(0)
+      }
+    },
+    {
+      label: 'Next',
+      icon: 'pi pi-angle-double-right',
+      className: 'my-2',
+      command: () => {
+        navigate(1)
+      }
+    },
+
+  ];
+
   return (
     <>
       <div className="row g-0 flex-nowrap px-1">
+        <div style={{ position: 'absolute', bottom: '15px', right: '15px' }}>
+          <SpeedDial model={items} direction="up" style={{ bottom: '0', right: '0' }} buttonClassName="p-button-danger" />
+        </div>
         <div className="col-auto" >
           <AdminSidebar />
         </div>

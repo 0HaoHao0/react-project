@@ -79,7 +79,9 @@ function ReceptionistSidebar() {
                     </div>
                     }
 
-                    <MenuItem active={window.location.pathname.includes("/receptionist/chat")} icon={<i className="fa-solid fa-comments"></i>}> Chat Box </MenuItem>
+                    <MenuItem active={window.location.pathname.includes("/receptionist/chat")}
+                        component={<Link to={'/receptionist/chat'}></Link>}
+                        icon={<i className="fa-solid fa-comments"></i>}> Chat Box </MenuItem>
                     <SubMenu active={window.location.pathname.includes("/receptionist/appointment")} label="Appointment" icon={<i className="fa-solid fa-calendar-check"></i>} >
                         <MenuItem component={<Link to={'/receptionist/appointment-queue'}></Link>}> Queue </MenuItem>
                         <MenuItem component={<Link to={'/receptionist/appointment-history'}></Link>}> History </MenuItem>
