@@ -826,7 +826,7 @@ function Profile() {
                                   className="btn btn-danger mx-2"
                                   onClick={(e) => setIsUpdatePage(false)}
                                 >
-                                  Close
+                                  <i class="fa fa-times" aria-hidden="true"></i>
                                 </button>
                                 <button
                                   className="btn btn-primary mx-2"
@@ -842,41 +842,6 @@ function Profile() {
                     </div>
                   </div>
 
-                  <h2 className="mt-2">SOCIAL MEDIA</h2>
-                  <div className="card">
-                    <div className="card-body">
-                      <div className="social-media">
-                        <span className="fa-stack fa-sm">
-                          <i className="fas fa-circle fa-stack-2x"></i>
-                          <i className="fab fa-facebook fa-stack-1x fa-inverse"></i>
-                        </span>
-                        <span className="fa-stack fa-sm">
-                          <i className="fas fa-circle fa-stack-2x"></i>
-                          <i className="fab fa-twitter fa-stack-1x fa-inverse"></i>
-                        </span>
-                        <span className="fa-stack fa-sm">
-                          <i className="fas fa-circle fa-stack-2x"></i>
-                          <i className="fab fa-instagram fa-stack-1x fa-inverse"></i>
-                        </span>
-                        <span className="fa-stack fa-sm">
-                          <i className="fas fa-circle fa-stack-2x"></i>
-                          <i className="fab fa-invision fa-stack-1x fa-inverse"></i>
-                        </span>
-                        <span className="fa-stack fa-sm">
-                          <i className="fas fa-circle fa-stack-2x"></i>
-                          <i className="fab fa-github fa-stack-1x fa-inverse"></i>
-                        </span>
-                        <span className="fa-stack fa-sm">
-                          <i className="fas fa-circle fa-stack-2x"></i>
-                          <i className="fab fa-whatsapp fa-stack-1x fa-inverse"></i>
-                        </span>
-                        <span className="fa-stack fa-sm">
-                          <i className="fas fa-circle fa-stack-2x"></i>
-                          <i className="fab fa-snapchat fa-stack-1x fa-inverse"></i>
-                        </span>
-                      </div>
-                    </div>
-                  </div>
                 </div>
               </div>
             </>
