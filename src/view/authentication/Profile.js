@@ -662,15 +662,16 @@ function Profile() {
                 <div className="main" style={{ marginTop: "5%" }}>
                   <div className="d-flex align-items-center gap-2">
                     <h2 className="pt-4">USER INFORMATION</h2>
-                    <div
-                      className="ml-3 pt-3"
+                    <button
+                      className="ml-3 mt-3 btn btn-success"
                       onClick={(e) => {
                         console.log("Clicked Edit...");
                         setIsUpdatePage(true);
                       }}
                     >
-                      <i className="fa-solid fa-pen-to-square"></i>
-                    </div>
+                      Update User
+                      <i className="fa-solid fa-user-pen profile-update-user"></i>
+                    </button>
                   </div>
                   <hr />
                   <div className="card">
@@ -841,7 +842,7 @@ function Profile() {
                     </div>
                   </div>
 
-                  <h2>SOCIAL MEDIA</h2>
+                  <h2 className="mt-2">SOCIAL MEDIA</h2>
                   <div className="card">
                     <div className="card-body">
                       <div className="social-media">
