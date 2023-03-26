@@ -9,7 +9,6 @@ import "datatables.net-dt/css/jquery.dataTables.min.css";
 import $ from "jquery";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
-import Swal from "sweetalert2";
 import { getAllAppointment } from "../../../services/receptionist/apiReceptionistAppointment";
 
 function ReceptionistAppointmentHistory() {

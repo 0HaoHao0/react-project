@@ -10,7 +10,6 @@ import $ from "jquery";
 import { Link } from "react-router-dom";
 import { getAllAppointment } from "../../services/doctor/DoctorApi";
 import { useSelector } from "react-redux";
-import Swal from "sweetalert2";
 
 function DoctorAppointmentHistory() {
     const [appointmentData, setAppointmentData] = useState();
