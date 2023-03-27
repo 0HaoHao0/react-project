@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import { addDocument, deleteDocument, getAppointment, updateAppointmentState } from "../../services/doctor/DoctorApi";
+import ImageSegmentationResults from '../technician/ImageSegmentationResults';
 
 
 function UpdateState({ currentState, handleChangeState }) {
@@ -79,8 +80,11 @@ function DoctorAppointmentDetail() {
             if (res.status === 200) {
                 setAppointmentInfo(res.data)
             }
+            else if(res.status < 500) {
+                toast.error(res.data);
+            }
             else {
-                toast.error('Something was wrong, please contact to admin !')
+                toast.error("The system is busy!");
             }
             Swal.close()
         }
@@ -116,8 +120,11 @@ function DoctorAppointmentDetail() {
                 if (res.status === 200) {
                     setLoading(loading + 1);
                 }
+                else if(res.status < 500) {
+                    toast.error(res.data);
+                }
                 else {
-                    toast.error("Update failed, please contact to Admin !")
+                    toast.error("The system is busy!");
                 }
                 MySwal.close()
             } else if (result.isDismissed) {
@@ -161,8 +168,11 @@ function DoctorAppointmentDetail() {
                 if (res.status === 200) {
                     setLoading(loading + 1);
                 }
+                else if(res.status < 500) {
+                    toast.error(res.data);
+                }
                 else {
-                    toast.error("Upload file failed, please contact to Admin !")
+                    toast.error("The system is busy!");
                 }
                 MySwal.close()
             } else if (result.isDismissed) {
@@ -191,8 +201,11 @@ function DoctorAppointmentDetail() {
                 if (res.status === 200) {
                     setLoading(loading + 1);
                 }
+                else if(res.status < 500) {
+                    toast.error(res.data);
+                }
                 else {
-                    toast.error("Update document failed, please contact to Admin !")
+                    toast.error("The system is busy!");
                 }
                 MySwal.close()
             } else if (result.isDismissed) {
@@ -281,6 +294,9 @@ function DoctorAppointmentDetail() {
                                 :
                                 <span className="text-dark mx-2">Null</span>}
                         </div>
+                    </div>
+                    <div className="col-12">
+                        <ImageSegmentationResults appointmentId={appointmentInfo.id} showLoading={true} canDelete={false}/>
                     </div>
                     <div className="col-12">
                         <div className="form-group">

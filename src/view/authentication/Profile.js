@@ -83,24 +83,27 @@ function Profile() {
   };
 
   const navigate = useNavigate();
-  //get userinfo
-  const getData = async () => {
-    let res = await getUserInfo();
-    if (res.status === 200) {
-      // Set Userinfo
-      let userInfo = res.data;
-      dispatch(createUser(userInfo));
-      setUserInfo(userInfo);
-      setVerifiedEmail(userInfo.email);
-    } else if (res.status < 500) {
-      toast.error(res.data);
-    } else {
-      toast.error("Something went wrong!!");
-    }
-  };
+
   useEffect(() => {
+
+    const getData = async () => {
+      let res = await getUserInfo();
+      if (res.status === 200) {
+        // Set Userinfo
+        let userInfo = res.data;
+        dispatch(createUser(userInfo));
+        setUserInfo(userInfo);
+        setVerifiedEmail(userInfo.email);
+      } else if (res.status < 500) {
+        toast.error(res.data);
+      } else {
+        toast.error("Something went wrong!!");
+      }
+    };
+
     getData();
-  }, []);
+      
+  }, [dispatch]);
 
   //get Patient
   useEffect(() => {

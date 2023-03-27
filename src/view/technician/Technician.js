@@ -112,34 +112,6 @@ function Technician() {
 
     }, [paramsFilter, page]);
 
-    const fetchPage = (page, isAsync = false) => {
-
-        if (!isAsync) {
-            Swal.fire({
-                icon: "info",
-                title: "Waiting to get data...",
-            });
-
-            Swal.showLoading();
-        }
-
-        getAppointmentQueueAPI({
-            ...paramsFilter,
-            page: page
-        }, (res) => {
-            if (res && res.status === 200) {
-                console.log(res.data);
-                let queue = res.data.data;
-                setAppointmentQueue(queue);
-            }
-            else {
-                toast.error("Something wrong!");
-            }
-
-            if (!isAsync) Swal.close();
-        });
-    }
-
     useEffect(() => {
 
         const refreshPage = () => {
@@ -240,7 +212,7 @@ function Technician() {
                                                 </div>
                                             </div>
                                             <div className="col-lg-9">
-                                                <div className="row flex-column align-items-center" style={{ rowGap: "10px" }}>
+                                                <div className="row" style={{ rowGap: "10px" }}>
                                                     {data.map((item, idx) => (
                                                         <div key={idx} className="col-md-6">
                                                             <Link to={"./detail_views/" + item.id} style={{ color: 'inherit' }} className="text-decoration-none">

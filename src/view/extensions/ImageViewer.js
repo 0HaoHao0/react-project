@@ -20,7 +20,7 @@ export const ImageViewer = ({ images=[{ url: "...", title: "..." }], initSelecte
     return (
         <div className="image-viewer" onClick={checkCloseViewClicked}>
             <button className="btn btn-primary left-arrow" onClick={() => handleChangeImage(-1)}>
-                <i class="fa fa-arrow-left" aria-hidden="true"></i>
+                <i className="fa fa-arrow-left" aria-hidden="true"></i>
             </button>
             <div className="img-shower">
                 <img className="rounded mb-2" src={imageSelected.url} alt={imageSelected.title} />
@@ -42,7 +42,7 @@ export const ImageViewer = ({ images=[{ url: "...", title: "..." }], initSelecte
                 }
             </div>
             <button className="btn btn-primary right-arrow" onClick={() => handleChangeImage(1)}>
-                <i class="fa fa-arrow-right" aria-hidden="true"></i>
+                <i className="fa fa-arrow-right" aria-hidden="true"></i>
             </button>
         </div>
     );

@@ -4,7 +4,7 @@ import Swal from "sweetalert2";
 import { deleteImageSegmentationResultAPI, getImageSegmentationResultAPIs } from "../../services/technician/apiTechnician";
 import { ImageViewer } from "../extensions/ImageViewer";
 
-export function ImageSegmentationResults({ appointmentId, showLoading, completeFn = () => { }}) {
+export function ImageSegmentationResults({ appointmentId, showLoading, completeFn = () => { }, canDelete=true}) {
 
     const [segmentResults, setSegmentResults] = useState([]);
 
@@ -131,10 +131,17 @@ export function ImageSegmentationResults({ appointmentId, showLoading, completeF
                                         </div>
                                     ))}
                                 </div>
-                                <button className="btn btn-danger w-100" onClick={(e) => removeImageSegmentationResult(result.id)}>
-                                    <i className="fa fa-trash" aria-hidden="true"></i>
-                                </button>
-                                <hr />
+                                {
+                                    canDelete && 
+                                    <button className="btn btn-danger w-100" onClick={(e) => removeImageSegmentationResult(result.id)}>
+                                        <i className="fa fa-trash" aria-hidden="true"></i>
+                                    </button>
+                                }
+                                {
+                                    segmentResults.length > 1 ?
+                                    <hr />
+                                    : null
+                                }
                             </div>
                         ))}
                     </div>
