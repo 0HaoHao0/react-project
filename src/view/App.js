@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useNavigate } from "react-router-dom";
 import "./App.scss";
 
 import AdminRouter from "../router/AdminRouter";
@@ -18,94 +18,87 @@ import { deleteUser } from "../redux/features/userSlide";
 import DoctorRouter from "../router/DoctorRouter";
 import ReceptionistRouter from "../router/ReceptionistRouter";
 import TechnicianRouter from "../router/TechnicianRouter";
+import { useEffect } from "react";
+import EmailConfirm from "./authentication/EmailConfirm";
 import Header from "../components/public/Header";
+import Footer from "../components/public/Footer";
 
 const cookie = new Cookies();
 
 function App() {
-  const dispatch = useDispatch();
 
-  if (!cookie.get("_to")) {
-    axios.defaults.headers.common["Authorization"] = "";
-    localStorage.clear();
-    dispatch(deleteUser());
-  }
+	const dispatch = useDispatch();
 
-  axios.defaults.baseURL = "https://localhost:44355/";
+	if (!cookie.get("_to")) {
+		axios.defaults.headers.common["Authorization"] = "";
+		localStorage.clear();
+		dispatch(deleteUser());
+	}
 
-  axios.defaults.headers.common["Authorization"] =
-    localStorage.getItem("app_token");
+	axios.defaults.baseURL = "https://localhost:44355/";
+	axios.defaults.headers.common["Authorization"] = localStorage.getItem("app_token");
 
-  const user = useSelector((state) => state.user); // user return {} or { userInfo: {...} }
+	const user = useSelector((state) => state.user); // user return {} or { userInfo: {...} }
+	const forceConfirmEmail = (user.userInfo && (user.userInfo.emailConfirmed === false)) && user.userInfo.role === "Patient";
 
-  return (
-    <Routes>
-      {/* Home Router */}
+	const navigate = useNavigate();
 
-      <Route path="*" element={<PublicRouter />}></Route>
+	useEffect(() => {
 
-      {user.userInfo === undefined ? (
-        <>
-          <Route path="login" element={<Login />}></Route>
-          <Route path="register" element={<Register />}></Route>
-          <Route path="resetpassword" element={<ResetPassword />}></Route>
-        </>
-      ) : null}
-      {/* Authencation Router */}
-      {user.userInfo !== undefined ? (
-        <>
-          <Route
-            path="/profile"
-            element={
-              <>
-                <Header />
-                <Profile />
-              </>
-            }
-          ></Route>
-        </>
-      ) : null}
-      {/* User Router */}
-      {user.userInfo && user.userInfo.role === "Patient" ? (
-        <>
-          <Route path="/user/*" element={<UserRouter />}></Route>
-        </>
-      ) : null}
-      {/* Doctor Router */}
-      {user.userInfo && user.userInfo.role === "Doctor" ? (
-        <>
-          <Route path="/doctor/*" element={<DoctorRouter />}></Route>
-        </>
-      ) : null}
-      {/* Receptionist Router */}
-      {user.userInfo && user.userInfo.role === "Receptionist" ? (
-        <>
-          <Route
-            path="/receptionist/*"
-            element={<ReceptionistRouter />}
-          ></Route>
-        </>
-      ) : null}
-      {/* Technician Router */}
-      {user.userInfo && user.userInfo.role === "Technician" ? (
-        <>
-          <Route path="/technician/*" element={<TechnicianRouter />}></Route>
-        </>
-      ) : null}
-      {/* Admin Router */}
-      {user.userInfo && user.userInfo.role === "Administrator" ? (
-        <>
-          <Route path="/admin/*" element={<AdminRouter />}></Route>
-        </>
-      ) : null}
-      {/* Expert Router */}
-      {user.userInfo && user.userInfo.role === "Expert" ? (
-        <>
-          <Route path="/expert" element={<Expert />}></Route>
-        </>
-      ) : null}
-    </Routes>
-  );
+		if (forceConfirmEmail && window.location.href.endsWith("email-confirm") === false) {
+			navigate("/email-confirm");
+		}
+
+	}, [forceConfirmEmail, navigate]);
+
+	return (
+		<>
+			<Routes>
+				{
+					forceConfirmEmail &&
+					<Route path="/email-confirm" element={<EmailConfirm />}></Route>
+				}
+
+				{/* Home Router */}
+				<Route path="*" element={<PublicRouter />}></Route>
+
+				{user.userInfo === undefined ? (
+					<>
+						<Route path="login" element={<Login />}></Route>
+						<Route path="register" element={<Register />}></Route>
+						<Route path="resetpassword" element={<ResetPassword />}></Route>
+					</>
+				) : (
+					<>
+						<Route path="/user/*" element={<UserRouter />}></Route>
+						{
+							user.userInfo && user.userInfo.role === "Doctor" && 
+							<Route path="/doctor/*" element={<DoctorRouter />}></Route>
+						}
+						{
+							user.userInfo && user.userInfo.role === "Receptionist" && 
+							<Route path="/receptionist/*" element={<ReceptionistRouter />}></Route>
+						}
+						{
+							user.userInfo && user.userInfo.role === "Technician" && 
+							<Route path="/technician/*" element={<TechnicianRouter />}></Route>
+						}
+						{
+							user.userInfo && user.userInfo.role === "Expert" && 
+							<Route path="/expert/*" element={<Expert />}></Route>
+						}
+						{
+							user.userInfo && user.userInfo.role === "Administrator" && 
+							<Route path="/admin/*" element={<AdminRouter />}></Route>
+						}
+
+					</>
+				)}
+
+			</Routes>
+		</>
+
+	);
 }
 
 export default App;
