@@ -11,7 +11,6 @@ import Register from "./authentication/Register";
 import PublicRouter from "../router/PublicRouter";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
-import Profile from "./authentication/Profile";
 import Expert from "./expert/Expert";
 import Cookies from "universal-cookie/cjs/Cookies";
 import { deleteUser } from "../redux/features/userSlide";
@@ -20,8 +19,6 @@ import ReceptionistRouter from "../router/ReceptionistRouter";
 import TechnicianRouter from "../router/TechnicianRouter";
 import { useEffect } from "react";
 import EmailConfirm from "./authentication/EmailConfirm";
-import Header from "../components/public/Header";
-import Footer from "../components/public/Footer";
 
 const cookie = new Cookies();
 
