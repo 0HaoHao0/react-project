@@ -4,7 +4,7 @@ import Swal from "sweetalert2";
 import { deleteImageSegmentationResultAPI, getImageSegmentationResultAPIs } from "../../services/technician/apiTechnician";
 import { ImageViewer } from "../extensions/ImageViewer";
 
-export function ImageSegmentationResults({ appointmentId, showLoading, completeFn = () => { }}) {
+export function ImageSegmentationResults({ appointmentId, showLoading, canDelete=true}) {
 
     const [segmentResults, setSegmentResults] = useState([]);
 
@@ -23,9 +23,10 @@ export function ImageSegmentationResults({ appointmentId, showLoading, completeF
             params: {
                 appointmentId: appointmentId
             },
-            callback: (res) => {
 
+            callback: (res) => {
                 if(res.status === 200) {
+                    console.log(res.data);
                     setSegmentResults(res.data);
                 }
                 else if(res.status < 500) {
@@ -34,9 +35,7 @@ export function ImageSegmentationResults({ appointmentId, showLoading, completeF
                 else {
                     toast.error("The system is busy!");
                 }
-
                 if(showLoading) Swal.close();
-                completeFn();
             }
         });
 
@@ -90,9 +89,15 @@ export function ImageSegmentationResults({ appointmentId, showLoading, completeF
     });
 
     const showImageViewer = (result, idx=0) => {
+
+        let originalImage = {
+            url: result.inputImageURL,
+            title: "original_image"
+        }
+
         setImageViewer({
             isShow: true,
-            data: [({ url: result.inputImageURL, title: "input_image"}), ...result.imageResultSet.map(image => ({ url: image.imageURL, title: image.title }))],
+            data: [ originalImage, ...result.imageResultSet.map(image => ({ url: image.imageURL, title: image.title }))],
             selected: idx
         });
     }
@@ -109,32 +114,54 @@ export function ImageSegmentationResults({ appointmentId, showLoading, completeF
             }
             {
                 (segmentResults.length > 0) && 
-                <div className="card my-3">
+                <div className="card mb-3">
                     <div className="card-header bg-light">
                         <h4>Segmentation Results</h4>
                     </div>
                     <div className="card-body">
                         {segmentResults.map((result) => (
                             <div key={result.id} className="my-3">
-                                <h5>Image {result.id}</h5>
-                                <p><strong>Model Name:</strong> {result.modelName}</p>
-                                <p><strong>Teeth Count:</strong> {result.teethCount}</p>
-                                <div className="row mb-3">
-                                    <div className="col-md-6">
-                                        <h6>Input_image</h6>
-                                        <img src={result.inputImageURL} alt="input_image" className="img-fluid" onClick={() => showImageViewer(result, 0)} />
-                                    </div>
-                                    {result.imageResultSet.map((image, idx) => (
-                                        <div key={image.id} className="col-md-6">
-                                            <h6>{image.title}</h6>
-                                            <img src={image.imageURL} alt={image.title} className="img-fluid" onClick={() => showImageViewer(result, idx + 1)} />
-                                        </div>
-                                    ))}
+                                <div className="row">
+                                    <h5 className="col-md-6">Result ID: {result.id}</h5>
+                                    <p className="col-md-6"><strong>Upload By:</strong> {result.technician}</p>
+                                    <p className="col-md-6"><strong>Model Name:</strong> {result.modelName}</p>
+                                    <p className="col-md-6"><strong>Teeth Count:</strong> {result.teethCount}</p>
+                                    <p className="col-12 text-end py-2 border-bottom">
+                                    {
+                                        canDelete && 
+                                        <button className="btn btn-danger w-100" onClick={(e) => removeImageSegmentationResult(result.id)}>
+                                            <i className="fa fa-trash" aria-hidden="true"></i>
+                                        </button>
+                                    }
+                                    </p>
                                 </div>
-                                <button className="btn btn-danger w-100" onClick={(e) => removeImageSegmentationResult(result.id)}>
-                                    <i className="fa fa-trash" aria-hidden="true"></i>
-                                </button>
-                                <hr />
+                                <div className="row">
+                                    <div className="col-lg-3 col-md-6">
+                                        <div className="h-100 d-flex flex-column">
+                                            <h6><strong>Type:</strong> original_image</h6>
+                                            <div className="mt-auto">
+                                                <img src={result.inputImageURL} alt="original_image" className="img-fluid" onClick={() => showImageViewer(result, 0)} />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {
+                                        result.imageResultSet.map((image, idx) => 
+                                            <div key={image.id} className="col-lg-3 col-md-6">
+                                                <div className="h-100 d-flex flex-column">
+                                                    <h6><strong>Type:</strong> { image.title }</h6>
+                                                    <div className="mt-auto">
+                                                        <img src={image.imageURL} alt={image.title} className="img-fluid" onClick={() => showImageViewer(result, idx + 1)} />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        )
+                                    }
+                                </div>
+                                {
+                                    segmentResults.length > 1 ?
+                                    <hr />
+                                    : null
+                                }
                             </div>
                         ))}
                     </div>

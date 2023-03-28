@@ -6,9 +6,13 @@ import Swal from 'sweetalert2';
 import { toast } from 'react-toastify';
 
 import "./Technician.scss";
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 import Pusher from 'pusher-js';
+import axios from 'axios';
+
+import Cookies from "universal-cookie/cjs/Cookies";
+import { deleteUser } from '../../redux/features/userSlide';
 
 function PagingBar({ pageIndex, pageCount, onPageChange }) {
     // calculate page numbers to display in the bar
@@ -112,34 +116,6 @@ function Technician() {
 
     }, [paramsFilter, page]);
 
-    const fetchPage = (page, isAsync = false) => {
-
-        if (!isAsync) {
-            Swal.fire({
-                icon: "info",
-                title: "Waiting to get data...",
-            });
-
-            Swal.showLoading();
-        }
-
-        getAppointmentQueueAPI({
-            ...paramsFilter,
-            page: page
-        }, (res) => {
-            if (res && res.status === 200) {
-                console.log(res.data);
-                let queue = res.data.data;
-                setAppointmentQueue(queue);
-            }
-            else {
-                toast.error("Something wrong!");
-            }
-
-            if (!isAsync) Swal.close();
-        });
-    }
-
     useEffect(() => {
 
         const refreshPage = () => {
@@ -163,8 +139,7 @@ function Technician() {
             new Pusher('a5612d1b04f944b457a3', {
                 cluster: 'ap1',
                 encrypted: true,
-            })
-                .subscribe(userInfo.pusherChannel)) : null;
+            }).subscribe(userInfo.pusherChannel)) : null;
 
         const bindGlobalHandler = (action, data) => {
             if (action === "AppointmentUpdate") {
@@ -209,24 +184,36 @@ function Technician() {
 
     const appointmentQueueGroupByDate = groupBy(appointmentQueue, "date");
 
+    const dispatch = useDispatch();
+    const handleLogout = () => {
+        axios.defaults.headers.common['Authorization'] = "";
+        localStorage.clear();
+        const cookie = new Cookies();
+        cookie.remove('_to');
+        dispatch(deleteUser())
+        navigate('/login');
+    }
 
     return (
         <div className="technician">
-            <h2 className="text-center text-primary py-2 mt-4">Technician Pannel</h2>
+            <h2 className="text-center text-primary py-2 mt-4">Technician Panel</h2>
             <hr />
             <div className="row">
                 <div className="col-lg-9">
                     <div className="container-fluid">
-                        {
-                            paginated.pageTotals > 1 &&
-                            <PagingBar
-                                pageIndex={paginated.page}
-                                pageCount={paginated.pageTotals}
-                                onPageChange={(page) => {
-                                    navigate("?page=" + page);
-                                }}
-                            />
-                        }
+                        <div className="d-flex justify-content-between align-items-center mb-2">
+                            <button className="btn btn-danger" onClick={handleLogout}>Logout</button>
+                            {
+                                paginated.pageTotals > 1 &&
+                                <PagingBar
+                                    pageIndex={paginated.page}
+                                    pageCount={paginated.pageTotals}
+                                    onPageChange={(page) => {
+                                        navigate("?page=" + page);
+                                    }}
+                                />
+                            }
+                        </div>
                         {
                             appointmentQueueGroupByDate.length > 0 ?
                             appointmentQueueGroupByDate.map(({ label, data }) => (
@@ -240,7 +227,7 @@ function Technician() {
                                                 </div>
                                             </div>
                                             <div className="col-lg-9">
-                                                <div className="row flex-column align-items-center" style={{ rowGap: "10px" }}>
+                                                <div className="row" style={{ rowGap: "10px" }}>
                                                     {data.map((item, idx) => (
                                                         <div key={idx} className="col-md-6">
                                                             <Link to={"./detail_views/" + item.id} style={{ color: 'inherit' }} className="text-decoration-none">

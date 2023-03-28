@@ -3,13 +3,10 @@ import "./Login.scss";
 import logo from "../../assets/images/logo/Logo-lg.png";
 // Phone input
 import "react-phone-number-input/style.css";
-import PhoneInput from "react-phone-number-input";
 //toast
 import { toast } from "react-toastify";
 //Router
 import { Link, useNavigate } from "react-router-dom";
-//Facebooklogin
-// None
 //API
 import {
   login,
@@ -24,6 +21,7 @@ import { useDispatch } from "react-redux";
 import Swal from "sweetalert2";
 import Cookies from "universal-cookie";
 function Login() {
+
   const [loginStyle, setLoginStyle] = useState(1);
 
   const dispatch = useDispatch();
@@ -33,8 +31,7 @@ function Login() {
   const [password, setPassWord] = useState("");
   const [dataError, setDataError] = useState("");
 
-  const [forgotPasswordClickedTime, setForgotPasswordClickedTime] =
-    useState(null);
+  const [forgotPasswordClickedTime, setForgotPasswordClickedTime] = useState(null);
 
   //Validate UserName
   const validateUserName = () => {
@@ -245,34 +242,6 @@ function Login() {
                         }}
                       />
                     </div>
-                    {/* Change Style Login  */}
-                    <div className="px-4 mb-2 text-center">
-                      <hr />
-                      <div className="text-muted"> or using </div>
-                      <div className="">
-                        <div className="d-flex align-items-center justify-content-center">
-                          <div
-                            key="phone"
-                            className="mx-5 mouse"
-                            onClick={() => {
-                              setLoginStyle(2);
-                            }}
-                          >
-                            <i className="fa-solid fa-2x fa-phone"></i>
-                          </div>
-
-                          <div
-                            key="facebook"
-                            className="mx-5 mouse"
-                            onClick={() => {
-                              setLoginStyle(3);
-                            }}
-                          >
-                            <i className="fa-brands fa-2x fa-facebook"></i>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
                     <div className="signin">
                       <span>
                         Not a member?{" "}
@@ -295,125 +264,21 @@ function Login() {
               </>
             ) : loginStyle === 2 ? (
               <>
-                {/* Login Phone */}
-
-                <div className="col-md-6 right">
-                  <div className="input-box">
-                    <header>Sign In</header>
-                    <div className="px-4">
-                      <label htmlFor="InputPhone" className="form-label">
-                        Phone Number:
-                      </label>
-
-                      <PhoneInput
-                        placeholder="Enter phone number"
-                        defaultCountry="VN"
-                        onChange={() => {}}
-                      />
-
-                      <div id="emailHelp" className="form-text">
-                        We'll never share your phone with anyone else.
-                      </div>
-
-                      <button className="btn btn-primary text-center mt-4">
-                        Submit
-                      </button>
-                    </div>
-                    {/* ChangeLogin */}
-                    <div className="px-4 mb-2 text-center">
-                      <hr />
-                      <div className="text-muted"> or using </div>
-                      <div className="">
-                        <div className="d-flex align-items-center justify-content-center">
-                          <div
-                            key="user"
-                            className="mx-5 mouse"
-                            onClick={() => {
-                              setLoginStyle(1);
-                            }}
-                          >
-                            <i className="fa fa-2x fa-user"></i>
-                          </div>
-
-                          <div
-                            key="facebook"
-                            className="mx-5 mouse"
-                            onClick={() => {
-                              setLoginStyle(3);
-                            }}
-                          >
-                            <i className="fa-brands fa-2x fa-facebook"></i>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                
               </>
             ) : loginStyle === 3 ? (
               <>
-                {/* Login Facebook */}
-
-                <div className="col-md-6 right">
-                  <div className="input-box">
-                    <header>Sign In</header>
-                    <div className="input-field">
-                      <div className=" text-center">
-                        FaceBook
-                        {/* <FacebookLogin
-                        className="rounded-pill"
-                        appId="505300141422455"
-                        autoLoad={true}
-                        fields="name,email,picture"
-                        render={(renderProps) => (
-                          <button className="btn btn-primary">
-                            <i className="fab fa-facebook"></i> Facebook Login
-                          </button>
-                        )}
-                      /> */}
-                      </div>
-                    </div>
-                    {/* ChangeLogin of Facebook */}
-                    <div className="px-4 mb-2 text-center">
-                      <hr />
-                      <div className="text-muted"> or using </div>
-                      <div className="">
-                        <div className="d-flex align-items-center justify-content-center">
-                          <div
-                            key="phone"
-                            className="mx-5 mouse"
-                            onClick={() => {
-                              setLoginStyle(2);
-                            }}
-                          >
-                            <i className="fa fa-2x fa-phone "></i>
-                          </div>
-                          <div
-                            key="user"
-                            className="mx-5 mouse"
-                            onClick={() => {
-                              setLoginStyle(1);
-                            }}
-                          >
-                            <i className="fa fa-2x fa-user "></i>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                
               </>
             ) : (
               <>
                 <div className="col-md-6 right">
                   <div className="input-box">
                     <header>Forget Password</header>
-                    <div className="px-4">
-                      <label htmlFor="InputPhone" className="form-label">
-                        UserName:
-                      </label>
+                    <div className="">
                       <input
                         type="text"
+                        placeholder="Enter username or email..."
                         onBlur={validateUserName}
                         defaultValue={userName}
                         onChange={(e) => {

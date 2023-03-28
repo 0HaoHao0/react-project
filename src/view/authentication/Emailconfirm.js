@@ -1,17 +1,22 @@
-import "./Emailconfirm.scss";
+import "./EmailConfirm.scss";
 import {
   SendCodeToEmail,
   VerifyUserByCode,
 } from "../../services/authorization/apIRegister";
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import Swal from "sweetalert2";
 //toast
 import { toast } from "react-toastify";
-import { createUser } from "../../redux/features/userSlide";
+import { createUser, deleteUser } from "../../redux/features/userSlide";
 import { getUserInfo } from "../../services/authorization/apILogin";
-function Emailconfirm() {
+import axios from "axios";
+import Cookies from "universal-cookie";
+
+
+function EmailConfirm() {
+
   const [changleStyle, setChangleStyle] = useState(1);
   const [isTouched, setIsTouched] = useState({});
 
@@ -119,6 +124,7 @@ function Emailconfirm() {
   };
 
   const handleConfirmCodeUser = async (e) => {
+    
     if (validateInsertCode() === false) return;
     let canClick =
       CodeClickedTime === null ||
@@ -131,6 +137,7 @@ function Emailconfirm() {
       toast.warning("Waiting in " + diff + "s");
       return;
     }
+    
     const res = await VerifyUserByCode(user.userInfo.id, code);
     if (res.status === 200) {
       let newUserInfoRes = await getUserInfo();
@@ -154,12 +161,18 @@ function Emailconfirm() {
     }
   };
 
+  const handleLogout = () => {
+    axios.defaults.headers.common['Authorization'] = "";
+    localStorage.clear();
+    const cookie = new Cookies();
+    cookie.remove('_to');
+    dispatch(deleteUser())
+    navigate('/login');
+  }
+
   return (
     <>
       <section className="emailconfirm">
-        <Link to="/login" className="btn btn-danger ml-4 mt-2">
-          Back To Login
-        </Link>
         <div className="container">
           <div className="row justify-content-center">
             {changleStyle === 1 ? (
@@ -169,7 +182,7 @@ function Emailconfirm() {
                     Email verification
                   </h1>
                   <div className="form">
-                    <div className="form-group">
+                    <div className="mb-3">
                       <label className="form-label">Email</label>
                       <input
                         type="email"
@@ -187,14 +200,10 @@ function Emailconfirm() {
                         </p>
                       ) : null}
                     </div>
-                    <input
-                      variant="primary"
-                      type="submit"
-                      className="btn btn-primary w-25"
-                      onClick={(e) => {
-                        handleSendCodeToEmail(e);
-                      }}
-                    />
+                    <div className="d-flex justify-content-between">
+                      <button className="btn btn-danger" onClick={handleLogout}>Logout</button>
+                      <button className="btn btn-primary" onClick={handleSendCodeToEmail}>Submit</button>
+                    </div>
                   </div>
                 </div>
               </>
@@ -205,7 +214,7 @@ function Emailconfirm() {
                     Enter the code to verify the email
                   </h2>
                   <div className="form">
-                    <div className="form-group">
+                    <div className="mb-3">
                       <label className="form-label">Code</label>
                       <input
                         type="email"
@@ -223,23 +232,12 @@ function Emailconfirm() {
                         <p className="invalid-feedback">{dataError.code}</p>
                       ) : null}
                     </div>
-                    <input
-                      variant="primary"
-                      type="submit"
-                      value="Confirm"
-                      className="btn btn-primary w-25"
-                      onClick={(e) => {
-                        handleConfirmCodeUser(e);
-                      }}
-                    />
-                    <input
-                      type="submit"
-                      className="btn btn-primary mx-2 w-25"
-                      value="Resend"
-                      onClick={(e) => {
-                        handleSendCodeToEmail(e);
-                      }}
-                    />
+          
+                    <div className="d-flex justify-content-start gap-2">
+                      <button className="btn btn-danger" onClick={handleLogout}>Logout</button>
+                      <button className="btn btn-primary ms-auto" onClick={handleSendCodeToEmail}>Resend({15})</button>
+                      <button className="btn btn-primary" onClick={handleConfirmCodeUser}>Confirm</button>
+                    </div>
                   </div>
                 </div>
               </>
@@ -251,4 +249,4 @@ function Emailconfirm() {
   );
 }
 
-export default Emailconfirm;
+export default EmailConfirm;

@@ -83,24 +83,27 @@ function Profile() {
   };
 
   const navigate = useNavigate();
-  //get userinfo
-  const getData = async () => {
-    let res = await getUserInfo();
-    if (res.status === 200) {
-      // Set Userinfo
-      let userInfo = res.data;
-      dispatch(createUser(userInfo));
-      setUserInfo(userInfo);
-      setVerifiedEmail(userInfo.email);
-    } else if (res.status < 500) {
-      toast.error(res.data);
-    } else {
-      toast.error("Something went wrong!!");
-    }
-  };
+
   useEffect(() => {
+
+    const getData = async () => {
+      let res = await getUserInfo();
+      if (res.status === 200) {
+        // Set Userinfo
+        let userInfo = res.data;
+        dispatch(createUser(userInfo));
+        setUserInfo(userInfo);
+        setVerifiedEmail(userInfo.email);
+      } else if (res.status < 500) {
+        toast.error(res.data);
+      } else {
+        toast.error("Something went wrong!!");
+      }
+    };
+
     getData();
-  }, []);
+      
+  }, [dispatch]);
 
   //get Patient
   useEffect(() => {
@@ -561,7 +564,7 @@ function Profile() {
                 <div className="url">
                   <button className="btn btn-success w-50" onClick={hanldeUpdateAvatar}>
                     Update Avatar
-                    <i class="fa-solid fa-camera profile-icon"></i>
+                    <i className="fa-solid fa-camera profile-icon"></i>
                   </button>
                   <hr align="center" />
                 </div>
@@ -613,7 +616,7 @@ function Profile() {
                       }}
                     >
                       Medical Record
-                      <i class="fa-solid fa-notes-medical profile-icon"></i>
+                      <i className="fa-solid fa-notes-medical profile-icon"></i>
                     </button>
                     <hr align="center" />
                   </div>
@@ -669,7 +672,7 @@ function Profile() {
                         setIsUpdatePage(true);
                       }}
                     >
-                      Update User
+                      Edit User
                       <i className="fa-solid fa-user-pen profile-update-user"></i>
                     </button>
                   </div>
@@ -826,7 +829,7 @@ function Profile() {
                                   className="btn btn-danger mx-2"
                                   onClick={(e) => setIsUpdatePage(false)}
                                 >
-                                  <i class="fa fa-times" aria-hidden="true"></i>
+                                  <i className="fa fa-times" aria-hidden="true"></i>
                                 </button>
                                 <button
                                   className="btn btn-primary mx-2"
