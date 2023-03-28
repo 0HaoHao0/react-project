@@ -48,7 +48,7 @@ function DoctorSidebar() {
                     }
                 }}>
                     <MenuItem icon={<i className="fa-solid fa-user-doctor" />}> Doctor Management</MenuItem>
-                    <div className='btn-collapse btn btn-dark btn-sm' onClick={() => collapseSidebar()}><i className='bx bx-left-arrow-alt bx-spin' ></i></div>
+                    <div className='btn-collapse btn btn-dark btn-sm' onClick={() => collapseSidebar()}><i className="fa-solid fa-bars"></i></div>
                 </Menu>
 
                 <Menu className='overflow-auto' style={{ height: '79vh' }} menuItemStyles={{

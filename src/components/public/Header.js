@@ -83,6 +83,16 @@ function Header() {
                         Appointment
                       </NavLink>
                     </li>
+                    <li className="nav-item">
+                      <NavLink
+                        to="/user/chat"
+                        className={({ isActive }) =>
+                          isActive ? "nav-link active" : "nav-link"
+                        }
+                      >
+                        Chat
+                      </NavLink>
+                    </li>
                   </>
                   : null}
 

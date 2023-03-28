@@ -49,7 +49,7 @@ function AdminSidebar() {
           }
         }}>
           <MenuItem icon={<i className="fa-solid fa-gear" />}>Admin Management</MenuItem>
-          <div className='btn-collapse btn btn-dark btn-sm' onClick={() => collapseSidebar()}><i className='bx bx-left-arrow-alt bx-spin' ></i></div>
+          <div className='btn-collapse btn btn-dark btn-sm' onClick={() => collapseSidebar()}><i className="fa-solid fa-bars"></i></div>
         </Menu>
 
         <Menu style={{ height: '79vh' }} className='overflow-auto styleScroll' menuItemStyles={{
