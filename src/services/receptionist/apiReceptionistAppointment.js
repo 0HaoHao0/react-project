@@ -6,7 +6,7 @@ export const getAllAppointment = async (filter) => {
         method: 'get',
         url: '/api/Appointment/GetAll',
         params: {
-            Page: filter.currentPage,
+            Page: filter.page,
             PageSize: filter.pageSize,
             startDate: filter.startDate,
             endDate: filter.endDate,

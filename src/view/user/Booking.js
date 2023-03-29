@@ -6,6 +6,7 @@ import { useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import { createAppointment, getFreeDoctors, getSlots } from "../../services/user/ApiAppointment";
 import { toast } from 'react-toastify';
+import Swal from 'sweetalert2';
 
 function Booking() {
     const { state } = useLocation();
@@ -131,10 +132,16 @@ function Booking() {
             formData.append('Date', appointment.Date)
             formData.append('Document', appointmentOther.Document);
             formData.append('Content', appointmentOther.Content);
-            const res = await createAppointment(formData);
 
+            Swal.fire({
+                title: "Loading...",
+                html: "Please wait a moment"
+            })
+            Swal.showLoading()
+            const res = await createAppointment(formData);
+            Swal.close()
             if (res.status === 200) {
-                console.log(res);
+                navigate('/user/appointment')
             }
             else {
                 toast.error('Something was wrong, Please contact to Admin !!!')
@@ -191,7 +198,7 @@ function Booking() {
                             <div className="row justify-content-center ">
                                 {slots && slots.map((value, index) =>
                                     <div className="col " onClick={() => handleCard(value.id)} key={value.id}>
-                                        <div className={`card overflow-auto m-1 ${appointment && (appointment.Slot === value.id ? 'bg-primary' : null)} `}>
+                                        <div className={`card overflow-auto m-1 ${appointment && (appointment.Slot === value.id ? 'bg-primary text-white' : null)} `}>
                                             <div className="card-body">
                                                 <h5 className="card-title">Slot: {value.id + 1}</h5>
                                                 <p className="card-text">Time: {value.short_description}</p>

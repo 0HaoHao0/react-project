@@ -37,15 +37,6 @@ function ReceptionistRouter() {
                 navigate(-1)
             }
         },
-
-        {
-            label: 'Reload',
-            icon: 'pi pi-refresh',
-            className: 'my-2',
-            command: () => {
-                navigate(0)
-            }
-        },
         {
             label: 'Next',
             icon: 'pi pi-angle-double-right',
@@ -61,8 +52,8 @@ function ReceptionistRouter() {
 
 
         <div className="row g-0 flex-nowrap px-2">
-            <div style={{ position: 'absolute', bottom: '15px', right: '15px' }}>
-                <SpeedDial model={items} direction="up" style={{ bottom: '0', right: '0' }} buttonClassName="p-button-danger" />
+            <div style={{ position: 'absolute', top: '5px', right: '15px' }}>
+                <SpeedDial model={items} direction="down" style={{ top: '0', right: '0', zIndex: '1' }} buttonClassName="p-button-danger" />
             </div>
             <div className="col-auto" >
                 <ReceptionistSidebar />

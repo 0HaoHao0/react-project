@@ -1,4 +1,11 @@
 .user-chat {
+    .btn-back {
+        z-index: 99;
+        position: fixed;
+        top: 40px;
+        right: 10px;
+    }
+
     .meassage-container {
         display: flex;
         flex-direction: column;
