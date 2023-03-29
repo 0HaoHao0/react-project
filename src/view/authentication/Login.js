@@ -31,8 +31,20 @@ function Login() {
   const [password, setPassWord] = useState("");
   const [dataError, setDataError] = useState("");
 
-  const [forgotPasswordClickedTime, setForgotPasswordClickedTime] = useState(null);
-
+  const [forgotpasswordWaiting, setForgotpasswordWaiting] = useState(0);
+  const handleForgotpasswordWaiting = () => {
+    setForgotpasswordWaiting(30);
+    const interval = setInterval(() => {
+      setForgotpasswordWaiting((prev) => {
+        let countdown = prev - 1;
+        if(countdown === 0) {
+          clearInterval(interval);
+        }
+        return countdown;
+      });
+    }, 1000);
+  };
+  
   //Validate UserName
   const validateUserName = () => {
     let result = true;
@@ -82,20 +94,20 @@ function Login() {
   };
 
   const handleSubmitForgetPassword = async (event) => {
-    let canClick =
-      forgotPasswordClickedTime === null ||
-      new Date().getTime() - forgotPasswordClickedTime > 15000;
-    if (canClick) {
-      setForgotPasswordClickedTime(new Date().getTime());
-    } else {
-      let diff =
-        15 -
-        Math.floor((new Date().getTime() - forgotPasswordClickedTime) / 1000);
-      toast.warning("Waiting in " + diff + "s");
+
+    let validated = validateUserName();
+    if(validated === false) {
       return;
     }
+    else {
+      handleForgotpasswordWaiting();
+    }
 
-    validateUserName();
+    Swal.fire({
+      icon: "info",
+      title: "Waiting for response..."
+    });
+    Swal.showLoading();
     const res = await forgotpassword(userName);
     if (res.status === 200) {
       toast.success(res.data);
@@ -104,6 +116,7 @@ function Login() {
     } else {
       toast.error("Something went wrong!");
     }
+    Swal.close();
   };
 
   const loginNormal = async (e) => {
@@ -138,37 +151,34 @@ function Login() {
       let userInfo = resonse.data;
       dispatch(createUser(userInfo));
 
-      if (userInfo.role === "Administrator") {
-        navigate("/admin");
-        return;
+      switch (userInfo.role) {
+        case "Administrator":
+          navigate("/admin");
+          break;
+        case "Expert":
+          navigate("/expert");
+          break;
+        case "Receptionist":
+          navigate("/receptionist");
+          break;
+        case "Doctor":
+          navigate("/doctor/appointment-queue");
+          break;
+        case "Technician":
+          navigate("/technician");
+          break;
+        case "Patient":
+          if (userInfo.emailConfirmed) {
+            navigate("/home");
+          } else {
+            navigate("/email-confirm");
+          }
+          break;
+        default:
+          break;
       }
-
-      if (userInfo.role === "Expert") {
-        navigate("/expert");
-        return;
-      }
-      if (userInfo.role === "Receptionist") {
-        navigate("/receptionist/appointment-queue");
-        return;
-      }
-      if (userInfo.role === "Doctor") {
-        navigate("/doctor/appointment-queue");
-        return;
-      }
-
-      if (userInfo.role === "Technician") {
-        navigate("/technician");
-        return;
-      }
-
-      if (userInfo.role === "Patient") {
-        if (userInfo.emailConfirmed) {
-          navigate("/home");
-        } else {
-          navigate("/emailconfirm");
-        }
-      }
-    } else if (res && res.status !== 500) {
+      
+   } else if (res && res.status < 500) {
       let message = res.data;
       Swal.fire({
         icon: "error",
@@ -179,7 +189,7 @@ function Login() {
       Swal.fire({
         icon: "error",
         title: "Failed!",
-        text: "Something went wrong!",
+        text: "System is busy!",
       });
     }
   };
@@ -279,7 +289,6 @@ function Login() {
                       <input
                         type="text"
                         placeholder="Enter username or email..."
-                        onBlur={validateUserName}
                         defaultValue={userName}
                         onChange={(e) => {
                           setUserName(e.target.value);
@@ -293,14 +302,21 @@ function Login() {
                         We'll never share your username with anyone else.
                       </div>
 
-                      <button
-                        className="btn btn-primary text-center mt-4"
-                        onClick={() => {
-                          handleSubmitForgetPassword();
-                        }}
-                      >
-                        Send
-                      </button>
+                      <div className="mt-4 d-flex align-items-center justify-content-between gap-2">
+                        <button className="btn btn-danger" onClick={() => {
+                          setLoginStyle(1);
+                        }}>Back</button>
+                        <button
+                          disabled={forgotpasswordWaiting > 0}
+                          className="btn btn-primary"
+                          onClick={() => {
+                            handleSubmitForgetPassword();
+                          }}
+                        >
+                          Submit
+                          {forgotpasswordWaiting > 0 ? `(${forgotpasswordWaiting})` : null}
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>

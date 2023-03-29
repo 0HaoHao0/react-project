@@ -8,7 +8,6 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import Swal from "sweetalert2";
 //toast
-import { toast } from "react-toastify";
 import { createUser, deleteUser } from "../../redux/features/userSlide";
 import { getUserInfo } from "../../services/authorization/apILogin";
 import axios from "axios";
@@ -27,7 +26,49 @@ function EmailConfirm() {
   const [verifiedEmail, setVerifiedEmail] = useState(user.userInfo.email);
   const [code, setCode] = useState("");
   const [dataError, setDataError] = useState({});
-  const [CodeClickedTime, setCodeClickedTime] = useState(null);
+
+  const [waiting, setWaiting] = useState({
+    sendCode: 0,
+    confirmCode: 0
+  });
+
+  const handleSendCodeWaiting = (t) => {
+    setWaiting({
+      ...waiting,
+      sendCode: t
+    });
+    const interval = setInterval(() => {
+      setWaiting((prev) => {
+        let countdown = prev.sendCode - 1;
+        if(countdown === 0) {
+          clearInterval(interval);
+        }
+        return {
+          ...waiting,
+          sendCode: countdown
+        };
+      });
+    }, 1000);
+  };
+
+  const handleConfirmCodeWaiting = (t) => {
+    setWaiting({
+      ...waiting,
+      confirmCode: t
+    });
+    const interval = setInterval(() => {
+      setWaiting((prev) => {
+        let countdown = prev.confirmCode - 1;
+        if(countdown === 0) {
+          clearInterval(interval);
+        }
+        return {
+          ...waiting,
+          confirmCode: countdown
+        };
+      });
+    }, 1000);
+  };
 
   // validateVerifiedEmail
   const validateVerifiedEmail = (e) => {
@@ -89,18 +130,9 @@ function EmailConfirm() {
   };
 
   const handleSendCodeToEmail = async (e) => {
-    let canClick =
-      CodeClickedTime === null ||
-      new Date().getTime() - CodeClickedTime > 15000;
-    if (canClick) {
-      setCodeClickedTime(new Date().getTime());
-    } else {
-      let diff =
-        15 - Math.floor((new Date().getTime() - CodeClickedTime) / 1000);
-      toast.warning("Waiting in " + diff + "s");
-      return;
-    }
+    
     const res = await SendCodeToEmail(verifiedEmail);
+
     if (res.status === 200) {
       Swal.fire({
         icon: "success",
@@ -108,6 +140,7 @@ function EmailConfirm() {
         text: res.data,
       });
       setChangleStyle(2);
+      handleSendCodeWaiting(30);
     } else if (res.status !== 500) {
       Swal.fire({
         icon: "error",
@@ -124,21 +157,17 @@ function EmailConfirm() {
   };
 
   const handleConfirmCodeUser = async (e) => {
-
-    if (validateInsertCode() === false) return;
-    let canClick =
-      CodeClickedTime === null ||
-      new Date().getTime() - CodeClickedTime > 15000;
-    if (canClick) {
-      setCodeClickedTime(new Date().getTime());
-    } else {
-      let diff =
-        15 - Math.floor((new Date().getTime() - CodeClickedTime) / 1000);
-      toast.warning("Waiting in " + diff + "s");
+    
+    let codeValidated = validateInsertCode();
+    if (codeValidated) {
+      handleConfirmCodeWaiting(3);
+    }
+    else {
       return;
     }
 
     const res = await VerifyUserByCode(user.userInfo.id, code);
+    
     if (res.status === 200) {
       let newUserInfoRes = await getUserInfo();
       if (newUserInfoRes.status === 200) {
@@ -234,8 +263,14 @@ function EmailConfirm() {
 
                     <div className="d-flex justify-content-start gap-2">
                       <button className="btn btn-danger" onClick={handleLogout}>Logout</button>
-                      <button className="btn btn-primary ms-auto" onClick={handleSendCodeToEmail}>Resend({15})</button>
-                      <button className="btn btn-primary" onClick={handleConfirmCodeUser}>Confirm</button>
+                      <button className="btn btn-primary ms-auto" onClick={handleSendCodeToEmail} disabled={waiting.sendCode > 0}>
+                        Resend
+                        {waiting.sendCode > 0 ? `(${waiting.sendCode})` : null}
+                      </button>
+                      <button className="btn btn-primary" onClick={handleConfirmCodeUser} disabled={waiting.confirmCode > 0}>
+                        Confirm
+                        {waiting.confirmCode > 0 ? `(${waiting.confirmCode})` : null}
+                      </button>
                     </div>
                   </div>
                 </div>

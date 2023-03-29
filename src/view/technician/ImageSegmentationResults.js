@@ -140,7 +140,7 @@ export function ImageSegmentationResults({ appointmentId, showLoading, canDelete
                                         <div className="h-100 d-flex flex-column">
                                             <h6><strong>Type:</strong> original_image</h6>
                                             <div className="mt-auto">
-                                                <img src={result.inputImageURL} alt="original_image" className="img-fluid" onClick={() => showImageViewer(result, 0)} />
+                                                <img src={result.inputImageURL} alt="original_image" className="img-cover" onClick={() => showImageViewer(result, 0)} />
                                             </div>
                                         </div>
                                     </div>
@@ -150,7 +150,7 @@ export function ImageSegmentationResults({ appointmentId, showLoading, canDelete
                                                 <div className="h-100 d-flex flex-column">
                                                     <h6><strong>Type:</strong> { image.title }</h6>
                                                     <div className="mt-auto">
-                                                        <img src={image.imageURL} alt={image.title} className="img-fluid" onClick={() => showImageViewer(result, idx + 1)} />
+                                                        <img src={image.imageURL} alt={image.title} className="img-cover" onClick={() => showImageViewer(result, idx + 1)} />
                                                     </div>
                                                 </div>
                                             </div>
