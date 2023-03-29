@@ -71,7 +71,7 @@ function NewsGetAll() {
         }
     }
     return (<>
-        <div className="news-get-all">
+        <div className="news-get-all m-5">
             {!newsData ? (
                 <>
                     <div className="row g-0">

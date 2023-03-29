@@ -4,10 +4,10 @@ import { toast } from "react-toastify";
 
 // Editor
 import { Editor } from 'primereact/editor';
+import { MultiSelect } from 'primereact/multiselect';
 
 import Swal from "sweetalert2";
 import { createNews, getService } from "../../../services/receptionist/apiReceptionistNews";
-import { MultiSelect } from 'primereact/multiselect';
 
 
 function ReceptionistNewsCreate() {

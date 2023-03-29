@@ -75,8 +75,8 @@ function AdminRouter() {
   return (
     <>
       <div className="row g-0 flex-nowrap px-1">
-        <div style={{ position: 'absolute', bottom: '15px', right: '15px' }}>
-          <SpeedDial model={items} direction="up" style={{ bottom: '0', right: '0' }} buttonClassName="p-button-danger" />
+        <div style={{ position: 'absolute', top: '5px', right: '15px' }}>
+          <SpeedDial model={items} direction="down" style={{ top: '0', right: '0' }} buttonClassName="p-button-danger" />
         </div>
         <div className="col-auto" >
           <AdminSidebar />

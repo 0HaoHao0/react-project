@@ -3,9 +3,6 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { deleteNews } from "../../../services/admin/news/apiNew";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
-// CkEditor
-import Editor from 'ckeditor5-custom-build/build/ckeditor';
-import { CKEditor } from '@ckeditor/ckeditor5-react'
 
 function NewsDetail() {
     let { state } = useLocation();
@@ -45,10 +42,10 @@ function NewsDetail() {
     };
 
     return (<>
-        <div className="news-detail">
+        <div className="news-detail m-5">
             <h1>News Detail</h1>
             <hr />
-            <div className="container">
+            <div className="container-fluid">
 
                 <div className="row">
                     <div className="col-lg-6 col-xs-12">
@@ -87,16 +84,7 @@ function NewsDetail() {
                         <label htmlFor="content" className="form-label">Content</label>
                         <div className="bg-white p-4 shadow-sm border">
                             <div className="ckeditor">
-                                <CKEditor
-                                    editor={Editor}
-                                    config={
-                                        {
-                                            toolbar: []
-                                        }
-                                    }
-                                    data={state.content}
-                                    disabled={true}
-                                />
+                                <div className="ql-editor" dangerouslySetInnerHTML={{ __html: state.content }}></div>
                             </div>
 
 
@@ -118,15 +106,16 @@ function NewsDetail() {
 
                     )}
                 </div>
-                <div className="row ">
-                    <div className="col-6">
-                        <Link to={'/admin/news/update'} state={state} className="btn btn-primary">Update</Link>
 
-                    </div>
-                    <div className="col-6">
-                        <button className="btn btn-danger ms-auto" onClick={handleDelete}>Delete</button>
+            </div>
+            <div className="row">
+                <div className="col-6">
+                    <Link to={'/admin/news/update'} state={state} className="btn btn-primary">Update</Link>
 
-                    </div>
+                </div>
+                <div className="col-6">
+                    <button className="btn btn-danger ms-auto" onClick={handleDelete}>Delete</button>
+
                 </div>
             </div>
 

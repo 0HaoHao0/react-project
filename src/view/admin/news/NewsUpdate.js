@@ -6,8 +6,8 @@ import Swal from "sweetalert2";
 import { getService } from "../../../services/admin/service/apiService";
 
 // Editor
-import Editor from 'ckeditor5-custom-build/build/ckeditor';
-import { CKEditor } from '@ckeditor/ckeditor5-react'
+import { Editor } from 'primereact/editor';
+import { MultiSelect } from 'primereact/multiselect';
 import { updateNews } from "../../../services/admin/news/apiNew";
 import moment from "moment";
 function NewsUpdate() {
@@ -29,13 +29,16 @@ function NewsUpdate() {
 
     useEffect(() => {
         const load = async () => {
-            const resDevice = await getService();
-            setService(resDevice.data)
+            const resService = await getService();
+            setService(resService.data)
 
             //Set RoomId and SerIdList
             setNewsData((prevState) => ({
                 ...prevState,
-                ServiceId: state.services.map(service => service.id)
+                ServiceId: state.services.map((service) => {
+                    const matchingService = resService.data.find((element) => element.id === service.id);
+                    return matchingService
+                })
             }))
 
         }
@@ -52,27 +55,21 @@ function NewsUpdate() {
         }));
     };
 
+    const handleEditor = (name, value) => {
+        setNewsData((prevState) => ({
+            ...prevState,
+            [name]: value
+        }));
+        validateEditor(name, value);
+    }
 
 
 
-
-    const handleService = (serviceId) => {
-        const id = parseInt(serviceId);
-        const name = "ServiceId"
-        setNewsData((prevState) => {
-            const list = prevState[name] || [];
-            if (list.includes(id)) {
-                return {
-                    ...prevState,
-                    [name]: list.filter((serviceId) => serviceId !== id)
-                };
-            } else {
-                return {
-                    ...prevState,
-                    [name]: [...list, id]
-                };
-            }
-        })
+    const handleService = (service) => {
+        setNewsData((prevState) => ({
+            ...prevState,
+            ServiceId: service
+        }))
     };
 
     const handleUpdateNews = async () => {
@@ -98,7 +95,7 @@ function NewsUpdate() {
 
                     if (newsData.ServiceId) {
                         newsData.ServiceId.forEach(element => {
-                            fromData.append("ServicesId", element)
+                            fromData.append("ServicesId", element.id)
                         });
                     }
                     else {
@@ -114,11 +111,11 @@ function NewsUpdate() {
                     Swal.close()
 
                     if (res.status === 200) {
-                        toast.success("Update Service Success")
+                        toast.success("Update News Success")
                         navigate('/admin/news')
                     }
                     else {
-                        toast.error("Update Service Fail !")
+                        toast.error("Update News Fail !")
                     }
                 } else {
                     // Xử lý khi người dùng bấm Cancel
@@ -150,15 +147,37 @@ function NewsUpdate() {
         }
     }
 
+    const validateEditor = (name, value) => {
+        setIsTouched((prevState) => ({
+            ...prevState,
+            [name]: "Touch"
+        }));
+        console.log(value);
+        if (!value) {
+            setDataError((prevState) => ({
+                ...prevState,
+                [name]: "Input Empty !"
+            }));
+        }
+        else {
+
+
+            setDataError((prevState) => ({
+                ...prevState,
+                [name]: ''
+            }));
+        }
+    }
+
     const formartDate = (date) => {
         const dateFormarted = moment(date).format('YYYY-MM-DD');
         return dateFormarted;
     }
     return (<>
-        <div className="news-update">
+        <div className="news-update m-5">
             <h1>News Update</h1>
             <hr />
-            <div className="container">
+            <div className="container-fluid">
 
                 <div className="row">
                     <h4 className="alert alert-secondary">News Infomation</h4>
@@ -191,71 +210,25 @@ function NewsUpdate() {
 
                     <div className="col-12 mb-3">
 
-                        <label htmlFor="content" className="form-label">Content: </label>
-                        <div className="ckeditor">
-                            <CKEditor
-                                editor={Editor}
-                                config={{
-                                    cloudServices: {
-                                        tokenUrl: 'https://96022.cke-cs.com/token/dev/4f421aeddafb7c431e79a6743fefd3a8fc56e68d043e13455ccf262b10c4?limit=10',
-                                        uploadUrl: 'https://96022.cke-cs.com/easyimage/upload/'
-                                    }
-                                }}
-                                data={newsData.content}
+                        <label htmlFor="Content" className="form-label">Content: </label>
+                        <Editor value={newsData.content} type='editor' name='Content' style={{ minHeight: '250px' }}
+                            onTextChange={(e) => { handleEditor('content', e.htmlValue) }}
+                        />
+                        {dataError.Content
+                            && <span className="invalid-feedback d-inline">
+                                {dataError.Content}
+                            </span>}
 
-                                onChange={(event, editor) => {
-                                    const data = editor.getData();
-                                    const e =
-                                    {
-                                        target: {
-                                            name: 'content',
-                                            value: data,
-                                        }
-                                    }
-                                    handleChange(e);
-                                }}
-                                onBlur={(event, editor) => {
-                                    const data = editor.getData();
-                                    const e =
-                                    {
-                                        target: {
-                                            name: 'content',
-                                            value: data,
-                                        }
-                                    }
-                                    validate(e)
-                                }}
-                            />
-                        </div>
-                        <div>
-                            {dataError.content
-                                && <span className="text-danger">
-                                    {dataError.content}
-                                </span>}
-                        </div>
                     </div>
                 </div>
-                <div className="row">
-                    <h4 className="alert alert-secondary">Service Select</h4>
-                    <div className="row g-2">
-                        {service.map((service) => (
-                            <div className="col-4 mb-2 " key={service.id}>
-                                <div
-                                    className={`card h-100 ${newsData.ServiceId && newsData.ServiceId.includes(service.id) ? 'bg-primary text-white' : ''}`}
-                                    onClick={() => handleService(service.id)}
-                                >
-                                    <div className="card-body">
-                                        <h6 >{`Id: ${service.id}, ${service.code}`}</h6>
-                                        <h6 className="card-subtitle">{`${service.name}`}</h6>
-                                    </div>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
+                <div className="col-12">
+                    <MultiSelect value={newsData.ServiceId} onChange={(e) => handleService(e.value)} options={service} optionLabel='name' filter
+                        placeholder="Select Service" className="w-100 " />
                 </div>
+                <button className="btn btn-primary my-2" onClick={handleUpdateNews}>Update</button>
+
             </div>
 
-            <button className="btn btn-primary" onClick={handleUpdateNews}>Update</button>
 
         </div>
     </>);

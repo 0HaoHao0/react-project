@@ -112,11 +112,11 @@ function ReceptionistNewsUpdate() {
                     Swal.close()
 
                     if (res.status === 200) {
-                        toast.success("Update Service Success")
+                        toast.success("Update News Success")
                         navigate('/receptionist/news')
                     }
                     else {
-                        toast.error("Update Service Fail !")
+                        toast.error("Update News Fail !")
                     }
                 } else {
                     // Xử lý khi người dùng bấm Cancel
