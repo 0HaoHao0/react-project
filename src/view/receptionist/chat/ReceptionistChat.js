@@ -30,18 +30,18 @@ const Message = (props) => {
             {props.position === 'left'
                 ?
                 <>
-                    <div class=' left'>
-                        <div class='avatar'></div>
-                        <p class='text'>This is a left-aligned message.</p>
-                        <p class='time'>9:00 AM</p>
+                    <div className=' left'>
+                        <div className='avatar'></div>
+                        <p className='text'>This is a left-aligned message.</p>
+                        <p className='time'>9:00 AM</p>
                     </div>
                 </>
                 :
                 <>
-                    <div class=' right'>
-                        <p class='time text-start'>9:05 AM</p>
-                        <p class='text'>This is a right-aligned message. This is a right-aligned messageThis is a right-aligned messageThis is a right-aligned messageThis is a right-aligned messageThis is a right-aligned messageThis is a right-aligned messageThis is a right-aligned messageThis is a right-aligned message   </p>
-                        <div class='avatar mx-2'></div>
+                    <div className=' right'>
+                        <p className='time text-start'>9:05 AM</p>
+                        <p className='text'>This is a right-aligned message. This is a right-aligned messageThis is a right-aligned messageThis is a right-aligned messageThis is a right-aligned messageThis is a right-aligned messageThis is a right-aligned messageThis is a right-aligned messageThis is a right-aligned message   </p>
+                        <div className='avatar mx-2'></div>
                     </div>
 
                 </>
@@ -76,7 +76,7 @@ function ReceptionistChat() {
                         </div>
                         <div className="col-8 p-2 border meassage-container">
                             <div className='meassage-container'>
-                                <div class='message-box p-4'>
+                                <div className='message-box p-4'>
                                     <Message position='left'></Message>
                                     <Message position='left'></Message>
                                     <Message position='left'></Message>

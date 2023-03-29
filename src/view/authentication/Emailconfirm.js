@@ -1,4 +1,4 @@
-import "./EmailConfirm.scss";
+import "./Emailconfirm.scss";
 import {
   SendCodeToEmail,
   VerifyUserByCode,
@@ -124,7 +124,7 @@ function EmailConfirm() {
   };
 
   const handleConfirmCodeUser = async (e) => {
-    
+
     if (validateInsertCode() === false) return;
     let canClick =
       CodeClickedTime === null ||
@@ -137,7 +137,7 @@ function EmailConfirm() {
       toast.warning("Waiting in " + diff + "s");
       return;
     }
-    
+
     const res = await VerifyUserByCode(user.userInfo.id, code);
     if (res.status === 200) {
       let newUserInfoRes = await getUserInfo();
@@ -221,10 +221,9 @@ function EmailConfirm() {
                         onBlur={validateInsertCode}
                         value={code}
                         placeholder="Enter Code"
-                        className={`form-control text-center ${
-                          isTouched.code &&
+                        className={`form-control text-center ${isTouched.code &&
                           (dataError.code ? "is-invalid" : "is-valid")
-                        }`}
+                          }`}
                         onChange={(e) => setCode(e.target.value)}
                         required
                       />
@@ -232,7 +231,7 @@ function EmailConfirm() {
                         <p className="invalid-feedback">{dataError.code}</p>
                       ) : null}
                     </div>
-          
+
                     <div className="d-flex justify-content-start gap-2">
                       <button className="btn btn-danger" onClick={handleLogout}>Logout</button>
                       <button className="btn btn-primary ms-auto" onClick={handleSendCodeToEmail}>Resend({15})</button>

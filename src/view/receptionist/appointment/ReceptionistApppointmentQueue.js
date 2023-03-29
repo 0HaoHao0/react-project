@@ -15,6 +15,7 @@ function ReceptionistAppointmentQueue() {
 
     const [fillter, setFillter] = useState(
         {
+            page: -1,
             startDate: moment().weekday(0).format(),
             endDate: moment().weekday(6).format(),
         }
@@ -29,9 +30,9 @@ function ReceptionistAppointmentQueue() {
     }
     const cardHeader =
     {
-        'NotYet': 'bg-warning ',
-        'Accept': 'bg-success',
-        'Cancel': 'bg-danger',
+        'NotYet': 'bg-warning text-white',
+        'Accept': 'bg-success  text-white',
+        'Cancel': 'bg-danger  text-white',
     }
 
     const cardBtn =
@@ -73,7 +74,7 @@ function ReceptionistAppointmentQueue() {
 
 
     return (<>
-        <div className="receptionist-appointment-queue">
+        <div className="receptionist-appointment-queue  p-4">
             <h1>Appointment Queue</h1>
             <hr />
             <div className="container">
@@ -83,7 +84,7 @@ function ReceptionistAppointmentQueue() {
                             <div className="row g-2 row-cols-lg-3 row-cols-md-2   row-cols-sm-1">
                                 {
                                     appointmentData && (appointmentData.data.length !== 0
-                                        ? appointmentData.data.map((value, index) =>
+                                        ? appointmentData.data.slice().reverse().map((value, index) =>
                                             <div className="col " key={value.id}>
                                                 <div className={`card card-appointment h-100 ${cardBorder[value.state] || 'border-dark'}`}
                                                     onClick={() => navigate(`/receptionist/appointment-detail/${value.id}`)}

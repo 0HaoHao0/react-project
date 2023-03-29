@@ -18,7 +18,7 @@ import DoctorRouter from "../router/DoctorRouter";
 import ReceptionistRouter from "../router/ReceptionistRouter";
 import TechnicianRouter from "../router/TechnicianRouter";
 import { useEffect } from "react";
-import EmailConfirm from "./authentication/EmailConfirm";
+import EmailConfirm from "./authentication/Emailconfirm";
 
 const cookie = new Cookies();
 
@@ -69,23 +69,23 @@ function App() {
 					<>
 						<Route path="/user/*" element={<UserRouter />}></Route>
 						{
-							user.userInfo && user.userInfo.role === "Doctor" && 
+							user.userInfo && user.userInfo.role === "Doctor" &&
 							<Route path="/doctor/*" element={<DoctorRouter />}></Route>
 						}
 						{
-							user.userInfo && user.userInfo.role === "Receptionist" && 
+							user.userInfo && user.userInfo.role === "Receptionist" &&
 							<Route path="/receptionist/*" element={<ReceptionistRouter />}></Route>
 						}
 						{
-							user.userInfo && user.userInfo.role === "Technician" && 
+							user.userInfo && user.userInfo.role === "Technician" &&
 							<Route path="/technician/*" element={<TechnicianRouter />}></Route>
 						}
 						{
-							user.userInfo && user.userInfo.role === "Expert" && 
+							user.userInfo && user.userInfo.role === "Expert" &&
 							<Route path="/expert/*" element={<Expert />}></Route>
 						}
 						{
-							user.userInfo && user.userInfo.role === "Administrator" && 
+							user.userInfo && user.userInfo.role === "Administrator" &&
 							<Route path="/admin/*" element={<AdminRouter />}></Route>
 						}
 

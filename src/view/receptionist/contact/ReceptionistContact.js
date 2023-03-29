@@ -15,13 +15,16 @@ function ReceptionistContact() {
 
     const currentPage = contactData ? contactData.page : null;
     const totalPage = contactData ? contactData.total_pages : null;
+    console.log(
+        currentPage
+    );
 
     const [filter, setFilter] = useState({
         from: null,
         to: null,
         state: null,
         keyword: null,
-        page: currentPage,
+        page: null,
     });
 
 
@@ -120,7 +123,7 @@ function ReceptionistContact() {
                                             <td>{value.name}</td>
                                             <td>{value.phoneNumber}</td>
                                             <td>{value.timeCreated.slice(0, 10)}</td>
-                                            <td><button className={`btn ${value.state === "Pending" ? "btn-danger" : value.state === "Done" ? "btn-primary" : "btn-warning"}`} disabled>{value.state}</button> </td>
+                                            <td className="text-center fst-normal"><div className={` ${value.state === "Pending" ? "badge rounded-pill bg-danger " : value.state === "Done" ? "badge rounded-pill bg-primary" : "badge rounded-pill bg-warning"}`} >{value.state}</div> </td>
                                             <td><Link to='detail' state={value} className="btn btn-success"><i className="fa-solid fa-circle-info"></i></Link></td>
                                         </tr>
                                     )

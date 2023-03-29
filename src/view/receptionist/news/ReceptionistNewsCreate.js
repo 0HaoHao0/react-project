@@ -3,10 +3,11 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 // Editor
-import Editor from 'ckeditor5-custom-build/build/ckeditor';
-import { CKEditor } from '@ckeditor/ckeditor5-react'
+import { Editor } from 'primereact/editor';
+
 import Swal from "sweetalert2";
 import { createNews, getService } from "../../../services/receptionist/apiReceptionistNews";
+import { MultiSelect } from 'primereact/multiselect';
 
 
 function ReceptionistNewsCreate() {
@@ -21,6 +22,7 @@ function ReceptionistNewsCreate() {
     const [isTouched, setIsTouched] = useState(''); // biến cờ
 
 
+
     const loadDevice = async () => {
         const res = await getService();
         setService(res.data)
@@ -33,6 +35,7 @@ function ReceptionistNewsCreate() {
     //Hanlde
 
     const handleChange = (e) => {
+
         const { name, value } = e.target;
         setNewsData((prevState) => ({
             ...prevState,
@@ -40,23 +43,19 @@ function ReceptionistNewsCreate() {
         }));
     };
 
-    const handleService = (serviceId) => {
-        const id = parseInt(serviceId);
-        const name = "ServiceId"
-        setNewsData((prevState) => {
-            const list = prevState[name] || [];
-            if (list.includes(id)) {
-                return {
-                    ...prevState,
-                    [name]: list.filter((serviceId) => serviceId !== id)
-                };
-            } else {
-                return {
-                    ...prevState,
-                    [name]: [...list, id]
-                };
-            }
-        })
+    const handleEditor = (name, value) => {
+        setNewsData((prevState) => ({
+            ...prevState,
+            [name]: value
+        }));
+        validateEditor(name, value);
+    }
+
+    const handleService = (service) => {
+        setNewsData((prevState) => ({
+            ...prevState,
+            service
+        }))
     };
 
     const handleCreateNews = async () => {
@@ -70,9 +69,9 @@ function ReceptionistNewsCreate() {
             fromData.append("PublishDate", newsData.PublishDate)
             fromData.append("Content", newsData.Content)
 
-            if (newsData.ServiceId) {
-                newsData.ServiceId.forEach(element => {
-                    fromData.append("ServicesId", element)
+            if (newsData.service) {
+                newsData.service.forEach(element => {
+                    fromData.append("ServicesId", element.id)
                 });
             }
             else {
@@ -118,6 +117,28 @@ function ReceptionistNewsCreate() {
 
         }
     }
+
+    const validateEditor = (name, value) => {
+        setIsTouched((prevState) => ({
+            ...prevState,
+            [name]: "Touch"
+        }));
+        console.log(value);
+        if (!value) {
+            setDataError((prevState) => ({
+                ...prevState,
+                [name]: "Input Empty !"
+            }));
+        }
+        else {
+
+
+            setDataError((prevState) => ({
+                ...prevState,
+                [name]: ''
+            }));
+        }
+    }
     return (
         <>
             <div className="news-create">
@@ -137,7 +158,6 @@ function ReceptionistNewsCreate() {
                             : null}
 
 
-
                     </div>
                     <div className="col-lg-6 col-sm-12 ">
 
@@ -155,66 +175,24 @@ function ReceptionistNewsCreate() {
                     <div className="col-12 mb-3">
 
                         <label htmlFor="Content" className="form-label">Content: </label>
-                        <div className="ckeditor">
-                            <CKEditor
-                                editor={Editor}
-                                config={{
-                                    cloudServices: {
-                                        tokenUrl: 'https://96022.cke-cs.com/token/dev/4f421aeddafb7c431e79a6743fefd3a8fc56e68d043e13455ccf262b10c4?limit=10',
-                                        uploadUrl: 'https://96022.cke-cs.com/easyimage/upload/'
-                                    }
-                                }}
-                                onChange={(event, editor) => {
-                                    const data = editor.getData();
-                                    const e =
-                                    {
-                                        target: {
-                                            name: 'Content',
-                                            value: data,
-                                        }
-                                    }
-                                    handleChange(e);
-                                }}
-                                onBlur={(event, editor) => {
-                                    const data = editor.getData();
-                                    const e =
-                                    {
-                                        target: {
-                                            name: 'Content',
-                                            value: data,
-                                        }
-                                    }
-                                    validate(e)
-                                }}
-                            />
-                        </div>
-                        <div>
-                            {dataError.Content
-                                && <span className="text-danger">
-                                    {dataError.Content}
-                                </span>}
-                        </div>
+                        <Editor value={'Please enter text here.'} type='editor' name='Content' style={{ minHeight: '250px' }}
+                            onTextChange={(e) => { handleEditor('Content', e.htmlValue) }}
+                        />
+                        {dataError.Content
+                            && <span className="invalid-feedback d-inline">
+                                {dataError.Content}
+                            </span>}
+
                     </div>
                     <h4 className="alert alert-secondary">Service Select</h4>
-                    <div className=" row g-2 ">
-                        {service.map((service) => (
-                            <div className="col-4 mb-2" key={service.id}>
-                                <div
-                                    className={`card h-100 ${newsData.ServiceId && newsData.ServiceId.includes(service.id) ? 'bg-primary text-white' : ''}`}
-                                    onClick={() => handleService(service.id)}
-                                >
-                                    <div className="card-body">
-                                        <h6 className="card-title">{`Id: ${service.id}`}</h6>
-                                        <h6 className="card-title">{`${service.name}`}</h6>
-                                        <p className="card-text">{`Service Code: ${service.code}`}</p>
-                                    </div>
-                                </div>
-                            </div>
-                        ))}
+                    <div className="col-12">
+                        <MultiSelect value={newsData.service} onChange={(e) => handleService(e.value)} options={service} optionLabel='name' filter
+                            placeholder="Select Service" className="w-100 " />
                     </div>
+
                 </div>
 
-                <button className="btn btn-success" onClick={handleCreateNews}>Create</button>
+                <button className="btn btn-success my-2" onClick={handleCreateNews}>Create</button>
 
             </div>
         </>
