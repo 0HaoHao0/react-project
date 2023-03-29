@@ -69,7 +69,7 @@ function ReceptionistNews() {
         }
     }
     return (<>
-        <div className="news-get-all">
+        <div className="news-get-all p-5">
             {!newsData ? (
                 <>
                     <div className="row g-0">

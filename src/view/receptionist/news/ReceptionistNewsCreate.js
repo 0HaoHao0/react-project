@@ -141,53 +141,56 @@ function ReceptionistNewsCreate() {
     }
     return (
         <>
-            <div className="news-create">
+            <div className="news-create p-5">
                 <h1>News Create</h1>
                 <hr />
-                <div className="container row">
-                    <h4 className="alert alert-secondary">News Infomation</h4>
-                    <div className="col-lg-6 col-sm-12 ">
-                        <label htmlFor="Title" className="form-label">Title: </label>
-                        <input type="text" className={`form-control  ${isTouched.Title && (dataError.Title ? "is-invalid" : "is-valid")}`}
-                            id="Title" name="Title" placeholder="Nhổ Răng"
-                            onBlur={validate} onChange={handleChange} />
-                        {dataError.Title
-                            ? <div className="invalid-feedback">
-                                {dataError.Title}
-                            </div>
-                            : null}
+                <div className="container-fluid">
+                    <div className="row">
+
+                        <h4 className="alert alert-secondary">News Infomation</h4>
+                        <div className="col-lg-6 col-sm-12 ">
+                            <label htmlFor="Title" className="form-label">Title: </label>
+                            <input type="text" className={`form-control  ${isTouched.Title && (dataError.Title ? "is-invalid" : "is-valid")}`}
+                                id="Title" name="Title" placeholder="Nhổ Răng"
+                                onBlur={validate} onChange={handleChange} />
+                            {dataError.Title
+                                ? <div className="invalid-feedback">
+                                    {dataError.Title}
+                                </div>
+                                : null}
 
 
-                    </div>
-                    <div className="col-lg-6 col-sm-12 ">
+                        </div>
+                        <div className="col-lg-6 col-sm-12 ">
 
-                        <label htmlFor="PublishDate" className="form-label">Publish Date: </label>
-                        <input type="date" className={`form-control  ${isTouched.PublishDate && (dataError.PublishDate ? "is-invalid" : "is-valid")}`}
-                            id="PublishDate" name="PublishDate" placeholder="NR001 - (Nhổ Răng 001)"
-                            onBlur={validate} onChange={handleChange} />
-                        {dataError.PublishDate
-                            ? <div className="invalid-feedback">
-                                {dataError.PublishDate}
-                            </div>
-                            : null}
-                    </div>
+                            <label htmlFor="PublishDate" className="form-label">Publish Date: </label>
+                            <input type="date" className={`form-control  ${isTouched.PublishDate && (dataError.PublishDate ? "is-invalid" : "is-valid")}`}
+                                id="PublishDate" name="PublishDate" placeholder="NR001 - (Nhổ Răng 001)"
+                                onBlur={validate} onChange={handleChange} />
+                            {dataError.PublishDate
+                                ? <div className="invalid-feedback">
+                                    {dataError.PublishDate}
+                                </div>
+                                : null}
+                        </div>
 
-                    <div className="col-12 mb-3">
+                        <div className="col-12 mb-3">
 
-                        <label htmlFor="Content" className="form-label">Content: </label>
-                        <Editor value={'Please enter text here.'} type='editor' name='Content' style={{ minHeight: '250px' }}
-                            onTextChange={(e) => { handleEditor('Content', e.htmlValue) }}
-                        />
-                        {dataError.Content
-                            && <span className="invalid-feedback d-inline">
-                                {dataError.Content}
-                            </span>}
+                            <label htmlFor="Content" className="form-label">Content: </label>
+                            <Editor value={'Please enter text here.'} type='editor' name='Content' style={{ minHeight: '250px' }}
+                                onTextChange={(e) => { handleEditor('Content', e.htmlValue) }}
+                            />
+                            {dataError.Content
+                                && <span className="invalid-feedback d-inline">
+                                    {dataError.Content}
+                                </span>}
 
-                    </div>
-                    <h4 className="alert alert-secondary">Service Select</h4>
-                    <div className="col-12">
-                        <MultiSelect value={newsData.service} onChange={(e) => handleService(e.value)} options={service} optionLabel='name' filter
-                            placeholder="Select Service" className="w-100 " />
+                        </div>
+                        <h4 className="alert alert-secondary">Service Select</h4>
+                        <div className="col-12">
+                            <MultiSelect value={newsData.service} onChange={(e) => handleService(e.value)} options={service} optionLabel='name' filter
+                                placeholder="Select Service" className="w-100 " />
+                        </div>
                     </div>
 
                 </div>

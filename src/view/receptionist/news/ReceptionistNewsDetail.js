@@ -49,10 +49,10 @@ function ReceptionistNewsDetail() {
     };
 
     return (<>
-        <div className="news-detail">
+        <div className="news-detail p-5">
             <h1>News Detail</h1>
             <hr />
-            <div className="container">
+            <div className="container-fluid">
 
                 <div className="row">
                     <div className="col-lg-6 col-xs-12">
@@ -111,18 +111,18 @@ function ReceptionistNewsDetail() {
 
                     )}
                 </div>
-                <div className="row ">
-                    <div className="col-6">
-                        <Link to={'/receptionist/news/update'} state={state} className="btn btn-primary">Update</Link>
 
-                    </div>
-                    <div className="col-6">
-                        <button className="btn btn-danger ms-auto" onClick={handleDelete}>Delete</button>
+            </div>
+            <div className="row ">
+                <div className="col-6">
+                    <Link to={'/receptionist/news/update'} state={state} className="btn btn-primary">Update</Link>
 
-                    </div>
+                </div>
+                <div className="col-6">
+                    <button className="btn btn-danger ms-auto" onClick={handleDelete}>Delete</button>
+
                 </div>
             </div>
-
         </div>
     </>);
 }

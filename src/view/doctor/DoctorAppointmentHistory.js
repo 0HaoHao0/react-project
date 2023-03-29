@@ -89,7 +89,7 @@ function DoctorAppointmentHistory() {
         }
     }
     return (<>
-        <div className="doctor-appointment-history">
+        <div className="doctor-appointment-history p-5">
             <h1>Appointment History</h1>
             <hr />
             {!appointmentData

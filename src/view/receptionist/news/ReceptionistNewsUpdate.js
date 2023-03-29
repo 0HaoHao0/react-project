@@ -175,10 +175,10 @@ function ReceptionistNewsUpdate() {
         return dateFormarted;
     }
     return (<>
-        <div className="news-update">
+        <div className="news-update p-5">
             <h1>News Update</h1>
             <hr />
-            <div className="container">
+            <div className="container-fluid">
 
                 <div className="row">
                     <h4 className="alert alert-secondary">News Infomation</h4>
@@ -226,9 +226,9 @@ function ReceptionistNewsUpdate() {
                     <MultiSelect value={newsData.ServiceId} onChange={(e) => handleService(e.value)} options={service} optionLabel='name' filter
                         placeholder="Select Service" className="w-100 " />
                 </div>
-                <button className="btn btn-primary my-2" onClick={handleUpdateNews}>Update</button>
 
             </div>
+            <button className="btn btn-primary my-2" onClick={handleUpdateNews}>Update</button>
 
 
         </div>

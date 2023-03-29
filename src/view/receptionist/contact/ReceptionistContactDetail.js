@@ -57,12 +57,12 @@ function ReceptionistContactDetail() {
 
     }
     return (<>
-        <div className="receptionist-contact-detail">
+        <div className="receptionist-contact-detail p-5">
             <div>
                 <h1>Contact Detail</h1>
             </div>
             <hr />
-            <div className="container">
+            <div className="container-fluid">
 
                 <div className="row">
                     <div className="col-lg-6 col-sm-12">

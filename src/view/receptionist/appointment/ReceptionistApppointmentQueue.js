@@ -74,7 +74,7 @@ function ReceptionistAppointmentQueue() {
 
 
     return (<>
-        <div className="receptionist-appointment-queue  p-4">
+        <div className="receptionist-appointment-queue  p-5">
             <h1>Appointment Queue</h1>
             <hr />
             <div className="container">

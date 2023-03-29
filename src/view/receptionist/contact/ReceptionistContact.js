@@ -94,7 +94,7 @@ function ReceptionistContact() {
         }
     }
     return (<>
-        <div className=" receptionist-contact">
+        <div className=" receptionist-contact p-5">
             <h1>Contact Management</h1>
             <hr />
 

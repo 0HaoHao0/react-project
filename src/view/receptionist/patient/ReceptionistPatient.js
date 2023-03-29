@@ -131,10 +131,10 @@ function ReceptionistPatient() {
     }
 
     return (<>
-        <div className="receptionist-patient">
+        <div className="receptionist-patient p-5">
             <h1>Create Patient</h1>
             <hr />
-            <div className="container">
+            <div className="container-fluid">
                 <div className=" row ">
                     <div className="col">
                         <div className=" form-group">
