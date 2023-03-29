@@ -31,8 +31,20 @@ function Login() {
   const [password, setPassWord] = useState("");
   const [dataError, setDataError] = useState("");
 
-  const [forgotPasswordClickedTime, setForgotPasswordClickedTime] = useState(null);
-
+  const [forgotpasswordWaiting, setForgotpasswordWaiting] = useState(0);
+  const handleForgotpasswordWaiting = () => {
+    setForgotpasswordWaiting(30);
+    const interval = setInterval(() => {
+      setForgotpasswordWaiting((prev) => {
+        let countdown = prev - 1;
+        if(countdown === 0) {
+          clearInterval(interval);
+        }
+        return countdown;
+      });
+    }, 1000);
+  };
+  
   //Validate UserName
   const validateUserName = () => {
     let result = true;
@@ -82,20 +94,20 @@ function Login() {
   };
 
   const handleSubmitForgetPassword = async (event) => {
-    let canClick =
-      forgotPasswordClickedTime === null ||
-      new Date().getTime() - forgotPasswordClickedTime > 15000;
-    if (canClick) {
-      setForgotPasswordClickedTime(new Date().getTime());
-    } else {
-      let diff =
-        15 -
-        Math.floor((new Date().getTime() - forgotPasswordClickedTime) / 1000);
-      toast.warning("Waiting in " + diff + "s");
+
+    let validated = validateUserName();
+    if(validated === false) {
       return;
     }
+    else {
+      handleForgotpasswordWaiting();
+    }
 
-    validateUserName();
+    Swal.fire({
+      icon: "info",
+      title: "Waiting for response..."
+    });
+    Swal.showLoading();
     const res = await forgotpassword(userName);
     if (res.status === 200) {
       toast.success(res.data);
@@ -104,6 +116,7 @@ function Login() {
     } else {
       toast.error("Something went wrong!");
     }
+    Swal.close();
   };
 
   const loginNormal = async (e) => {
@@ -276,7 +289,6 @@ function Login() {
                       <input
                         type="text"
                         placeholder="Enter username or email..."
-                        onBlur={validateUserName}
                         defaultValue={userName}
                         onChange={(e) => {
                           setUserName(e.target.value);
@@ -295,13 +307,14 @@ function Login() {
                           setLoginStyle(1);
                         }}>Back</button>
                         <button
-                        
+                          disabled={forgotpasswordWaiting > 0}
                           className="btn btn-primary"
                           onClick={() => {
                             handleSubmitForgetPassword();
                           }}
                         >
-                          Send
+                          Submit
+                          {forgotpasswordWaiting > 0 ? `(${forgotpasswordWaiting})` : null}
                         </button>
                       </div>
                     </div>
