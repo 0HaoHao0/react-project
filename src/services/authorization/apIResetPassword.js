@@ -1,5 +1,4 @@
 import axios from "axios";
-import { toast } from "react-toastify";
 export const resetpassword = async (userName, newPassword, secret) => {
   console.log(userName, newPassword, secret);
   let data;
@@ -16,9 +15,7 @@ export const resetpassword = async (userName, newPassword, secret) => {
       data = response;
     })
     .catch((error) => {
-      // handle error
-      toast.error("Password error, Please try again?");
-      console.log(error);
+      data = error.response;
     });
 
   return data;

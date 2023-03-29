@@ -24,13 +24,6 @@ function ResetPassword() {
         ...prevState,
         newPassword: "Password cannot be empty!",
       }));
-    } else if (newPassword !== confirmPassword) {
-      result = false;
-      setDataError((prevState) => ({
-        ...prevState,
-        newPassword: "dont match",
-        confirmPassword: "dont match",
-      }));
     } else if (newPassword.length < 6) {
       result = false;
       setDataError((prevState) => ({
@@ -59,14 +52,13 @@ function ResetPassword() {
       result = false;
       setDataError((prevState) => ({
         ...prevState,
-        confirmPassword: "dont match",
-        newPassword: "dont match",
+        confirmPassword: "Confirm password is not matched.",
       }));
     } else if (confirmPassword.length < 6) {
       result = false;
       setDataError((prevState) => ({
         ...prevState,
-        confirmPassword: "Password must be at least 6 characters long",
+        confirmPassword: "Password must be at least 6 characters long.",
       }));
     } else {
       setDataError((prevState) => ({
@@ -85,6 +77,12 @@ function ResetPassword() {
       if (res.status === 200) {
         toast.success("Reset Password Success");
       }
+      else if (res.status < 500) {
+        toast.error(res.data);
+      }
+      else {
+        toast.error("System is busy!");
+      }
     }
   };
 
@@ -97,8 +95,8 @@ function ResetPassword() {
             <div className="col-md-6 rs-col">
               <h1 className="text-center mt-5 text-primary">Reset Password</h1>
               <div className="form">
-                <div className="form-group">
-                  <label className="form-label">New Password</label>
+                <div className="mb-3">
+                  <label className="form-label fw-bold">New Password</label>
                   <input
                     type="password"
                     placeholder="Enter new password"
@@ -109,11 +107,11 @@ function ResetPassword() {
                     }}
                   />
                   {dataError.newPassword && (
-                    <p className="error ml-2">{dataError.newPassword}</p>
+                    <p className="error ml-2 mt-2">{dataError.newPassword}</p>
                   )}
                 </div>
-                <div className="form-group">
-                  <label className="form-label">Confirm Password</label>
+                <div className="mb-3">
+                  <label className="form-label fw-bold">Confirm Password</label>
                   <input
                     type="password"
                     placeholder="Enter new password"
@@ -124,7 +122,7 @@ function ResetPassword() {
                     }}
                   />
                   {dataError.confirmPassword && (
-                    <p className="error ml-2">{dataError.confirmPassword}</p>
+                    <p className="error ml-2 mt-2">{dataError.confirmPassword}</p>
                   )}
                 </div>
                 <input
