@@ -80,7 +80,7 @@ function DoctorAppointmentDetail() {
             if (res.status === 200) {
                 setAppointmentInfo(res.data)
             }
-            else if(res.status < 500) {
+            else if (res.status < 500) {
                 toast.error(res.data);
             }
             else {
@@ -120,7 +120,7 @@ function DoctorAppointmentDetail() {
                 if (res.status === 200) {
                     setLoading(loading + 1);
                 }
-                else if(res.status < 500) {
+                else if (res.status < 500) {
                     toast.error(res.data);
                 }
                 else {
@@ -168,7 +168,7 @@ function DoctorAppointmentDetail() {
                 if (res.status === 200) {
                     setLoading(loading + 1);
                 }
-                else if(res.status < 500) {
+                else if (res.status < 500) {
                     toast.error(res.data);
                 }
                 else {
@@ -201,7 +201,7 @@ function DoctorAppointmentDetail() {
                 if (res.status === 200) {
                     setLoading(loading + 1);
                 }
-                else if(res.status < 500) {
+                else if (res.status < 500) {
                     toast.error(res.data);
                 }
                 else {
@@ -260,28 +260,33 @@ function DoctorAppointmentDetail() {
                             <label htmlFor="state">Document:</label >
                             <button className="btn btn-sm btn-primary mx-2" type="button" onClick={(e) => { handleUploadFile() }}>Add</button>
                             <br />
+                            {appointmentInfo.documents.length !== 0 ?
+                                (
+                                    <table className='table border sha-sm dow table-hover my-2 text-dark'>
+                                        <thead className='table-dark'>
+                                            <tr>
+                                                <th scope="col">Tag</th>
+                                                <th scope="col">Title</th>
+                                                <th scope="col">View</th>
+                                                <th scope="col">Delete</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {appointmentInfo.documents.map((value, index) =>
+                                                <tr key={value.id} >
+                                                    <th scope="row">{value.tag}</th>
+                                                    <td>{value.title}</td>
+                                                    <td><a href={value.file.fileURL} target='_blank' rel="noreferrer">View</a></td>
+                                                    <td><button className='btn btn-sm btn-danger' onClick={() => handleDetele(value.id)}>Delete</button></td>
+                                                </tr>
+                                            )}
+                                        </tbody>
 
-                            <table className='table border sha-sm dow table-hover my-2 text-dark'>
-                                <thead className='table-dark'>
-                                    <tr>
-                                        <th scope="col">Tag</th>
-                                        <th scope="col">Title</th>
-                                        <th scope="col">View</th>
-                                        <th scope="col">Delete</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {appointmentInfo.documents.map((value, index) =>
-                                        <tr key={value.id} >
-                                            <th scope="row">{value.tag}</th>
-                                            <td>{value.title}</td>
-                                            <td><a href={value.file.fileURL} target='_blank' rel="noreferrer">View</a></td>
-                                            <td><button className='btn btn-sm btn-danger' onClick={() => handleDetele(value.id)}>Delete</button></td>
-                                        </tr>
-                                    )}
-                                </tbody>
 
-                            </table>
+                                    </table>)
+                                :
+                                null
+                            }
 
                         </div>
                         <div className="form-group text-primary">
@@ -296,7 +301,7 @@ function DoctorAppointmentDetail() {
                         </div>
                     </div>
                     <div className="col-12">
-                        <ImageSegmentationResults appointmentId={appointmentInfo.id} showLoading={true} canDelete={false}/>
+                        <ImageSegmentationResults appointmentId={appointmentInfo.id} showLoading={true} canDelete={false} />
                     </div>
                     <div className="col-12">
                         <div className="form-group">
@@ -326,7 +331,7 @@ function DoctorAppointmentDetail() {
                         </div>
                     </div>
                 </div>
-                <div className="alert alert-secondary" role="alert">
+                <div className="alert alert-secondary my-2" role="alert">
                     Service
                 </div>
                 <div className="row g-0">

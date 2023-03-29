@@ -111,7 +111,7 @@ function ReceptionistSidebar() {
                 }}>
 
 
-                    <MenuItem icon={<i className="fa-solid fa-address-card"></i>} component={<Link to={'/profile'}></Link>}>
+                    <MenuItem icon={<i className="fa-solid fa-address-card"></i>} component={<Link to={'/user/profile'}></Link>}>
                         Profile
                     </MenuItem>
 

@@ -30,14 +30,6 @@ function DoctorRouter() {
         },
 
         {
-            label: 'Reload',
-            icon: 'pi pi-refresh',
-            className: 'my-2',
-            command: () => {
-                navigate(0)
-            }
-        },
-        {
             label: 'Next',
             icon: 'pi pi-angle-double-right',
             className: 'my-2',
@@ -49,9 +41,9 @@ function DoctorRouter() {
     ];
 
     return (
-        <div className="row g-0 flex-nowrap   px-1">
-            <div style={{ position: 'absolute', bottom: '15px', right: '15px' }}>
-                <SpeedDial model={items} direction="up" style={{ bottom: '0', right: '0' }} buttonClassName="p-button-danger" />
+        <div className="row g-0 flex-nowrap   px-2">
+            <div style={{ position: 'absolute', top: '5px', right: '15px' }}>
+                <SpeedDial model={items} direction="down" style={{ top: '0', right: '0', zIndex: '1' }} buttonClassName="p-button-danger" />
             </div>
             <div className="col-auto" >
                 <DoctorSidebar />

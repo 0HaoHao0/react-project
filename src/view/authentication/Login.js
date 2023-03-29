@@ -148,7 +148,7 @@ function Login() {
         return;
       }
       if (userInfo.role === "Receptionist") {
-        navigate("/receptionist");
+        navigate("/receptionist/appointment-queue");
         return;
       }
       if (userInfo.role === "Doctor") {
@@ -264,11 +264,11 @@ function Login() {
               </>
             ) : loginStyle === 2 ? (
               <>
-                
+
               </>
             ) : loginStyle === 3 ? (
               <>
-                
+
               </>
             ) : (
               <>

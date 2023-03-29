@@ -102,12 +102,12 @@ function DoctorSidebar() {
                 }}>
 
 
-                    <MenuItem icon={<i className='bx bx-info-circle' ></i>} component={<Link to={'/profile'}></Link>}>
+                    <MenuItem icon={<i className="fa-solid fa-address-card"></i>} component={<Link to={'/user/profile'}></Link>}>
                         Profile
                     </MenuItem>
 
 
-                    <MenuItem icon={<i className='bx bxs-log-out'></i>} onClick={() => { handleLogout() }}
+                    <MenuItem icon={<i className="fa-solid fa-power-off"></i>} onClick={() => { handleLogout() }}
                         rootStyles={{
                             [`.ps-menu-button:hover`]: {
                                 backgroundColor: "red !important ",
