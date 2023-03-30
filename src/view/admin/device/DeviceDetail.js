@@ -39,10 +39,10 @@ function DeviceDetail() {
 
 
     return (<>
-        <div className="device-detail">
+        <div className="device-detail p-5">
             <h1>Device Detail</h1>
             <hr />
-            <div className="container">
+            <div className="container-fluid">
                 <div className="row text-center">
                     <div>
                         <img height='200px' width='200px' src={state.imageURL} alt="DeviceImage" />
