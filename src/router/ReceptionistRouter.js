@@ -63,6 +63,7 @@ function ReceptionistRouter() {
                     <Routes>
                         {/* Chat */}
                         <Route path="/chat" element={<ReceptionistChat />}></Route>
+                        <Route path="/chat/:patientId" element={<ReceptionistChat />}></Route>
                         {/* Appointment */}
                         <Route path="/appointment-history" element={<ReceptionistAppointmentHistory />}></Route>
                         <Route path="/appointment-detail/:id" element={<ReceptionistAppointmentDetail />}></Route>
