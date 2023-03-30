@@ -3,9 +3,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
 import { deleteService } from "../../../services/admin/service/apiService";
-// CkEditor
-import Editor from 'ckeditor5-custom-build/build/ckeditor';
-import { CKEditor } from '@ckeditor/ckeditor5-react'
+
 
 function ServiceDetail() {
     let { state } = useLocation();
@@ -98,19 +96,8 @@ function ServiceDetail() {
                         <label htmlFor="description" className="form-label">Description</label>
                         <div className="bg-white p-4 shadow-sm border">
                             <div className="ckeditor">
-                                <CKEditor
-                                    editor={Editor}
-                                    config={
-                                        {
-                                            toolbar: []
-                                        }
-                                    }
-                                    data={state.description}
-                                    disabled={true}
-                                />
+                                <div className="ql-editor" dangerouslySetInnerHTML={{ __html: state.description }}></div>
                             </div>
-
-
                         </div>
                     </div>
                 </div>
