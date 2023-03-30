@@ -72,7 +72,7 @@ function DeviceGetAll() {
         }
     }
     return (<>
-        <div className="doctor-getall">
+        <div className="doctor-getall p-5">
             {!deviceData ? (
                 <>
                     <div className="row g-0">

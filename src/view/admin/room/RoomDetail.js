@@ -29,10 +29,10 @@ function RoomDetail() {
         });
     }
     return (<>
-        <div className="room-detail">
+        <div className="room-detail p-5">
             <h1>Room Detail</h1>
             <hr />
-            <div className="container">
+            <div className="container-fluid">
 
                 <div className="row">
                     <div className="col-lg-6 col-xs-12">
@@ -83,15 +83,16 @@ function RoomDetail() {
                     )}
 
                 </div>
-                <div className="row">
-                    <div className="col-6">
-                        <Link to={'/admin/room/update'} state={state} className="btn btn-primary">Update</Link>
 
-                    </div>
-                    <div className="col-6">
-                        <button className="btn btn-danger ms-auto" onClick={handleDelete}>Delete</button>
+            </div>
+            <div className="row">
+                <div className="col-6">
+                    <Link to={'/admin/room/update'} state={state} className="btn btn-primary">Update</Link>
 
-                    </div>
+                </div>
+                <div className="col-6">
+                    <button className="btn btn-danger ms-auto" onClick={handleDelete}>Delete</button>
+
                 </div>
             </div>
 

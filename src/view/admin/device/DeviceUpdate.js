@@ -7,6 +7,8 @@ import Swal from "sweetalert2";
 import { updateDevice } from "../../../services/admin/device/apiDevice";
 import { getRoom } from "../../../services/admin/room/apiRoom";
 import { getService } from "../../../services/admin/service/apiService";
+import { MultiSelect } from 'primereact/multiselect';
+import { Dropdown } from 'primereact/dropdown';
 
 function DeviceUpdate() {
     let { state } = useLocation();
@@ -77,34 +79,7 @@ function DeviceUpdate() {
         }));
     };
 
-    const handleRoom = (roomId) => {
-        const id = parseInt(roomId);
-        const name = "RoomId"
-        setDeviceData((prevState) => ({
-            ...prevState,
-            [name]: name === id ? null : id
-        }));
-    };
 
-    const handleService = (serviceId) => {
-        const id = parseInt(serviceId);
-        const name = "ServiceIdList"
-        setDeviceData((prevState) => {
-
-            const list = prevState[name] || [];
-            if (list.includes(id)) {
-                return {
-                    ...prevState,
-                    [name]: list.filter((serviceId) => serviceId !== id)
-                };
-            } else {
-                return {
-                    ...prevState,
-                    [name]: [...list, id]
-                };
-            }
-        })
-    };
 
     const handleUpdateDevice = async () => {
         if (!deviceData.RoomId) {
@@ -188,11 +163,11 @@ function DeviceUpdate() {
         return moment(date, "YYYY-MM-DDTHH:mm:ss").format("yyyy-MM-DD");
     }
     return (<>
-        <div className="device-update">
+        <div className="device-update p-5">
 
             <h1>Device Update</h1>
             <hr />
-            <div className="container">
+            <div className="container-fluid">
                 <div className="row">
                     <h4 className="alert alert-secondary">Device Infomation</h4>
                     <div className="text-center">
@@ -265,44 +240,24 @@ function DeviceUpdate() {
 
                     </div>
                 </div>
-                <div className="row">
-                    <h4 className="alert alert-secondary">Room </h4>
-                    <div className=" row mb-3">
-                        {room.map((room) => (
-                            <div className="col-4 mb-2" key={room.id}>
-                                <div
-                                    className={`card ${deviceData.RoomId === room.id ? 'bg-primary text-white' : ''}`}
-                                    onClick={() => handleRoom(room.id)}
-                                >
-                                    <div className="card-body">
-                                        <h6 className="card-title">{`Room Code: ${room.code}`}</h6>
-                                        <p className="card-text">{`description: ${room.description}`}</p>
-                                    </div>
-                                </div>
-                            </div>
-                        ))}
+                <h4 className="alert alert-secondary">Room </h4>
+                <div className="mb-2">
+                    <div className="col-12">
+                        <Dropdown value={deviceData.RoomId} onChange={(e) => setDeviceData((prevState) => ({ ...prevState, RoomId: e.value }))} options={room} optionLabel={'code'} optionValue="id" filter
+                            placeholder="Select Room" className="w-100 " />
                     </div>
                 </div>
-                <div className="row">
-                    <h4 className="alert alert-secondary">Services </h4>
-                    <div className="row mb-3">
-                        {service.map((service) => (
-                            <div className="col-4 mb-2" key={service.id}>
-                                <div
-                                    className={`card ${deviceData.ServiceIdList && deviceData.ServiceIdList.includes(service.id) ? 'bg-primary text-white' : ''}`}
-                                    onClick={() => handleService(service.id)}
-                                >
-                                    <div className="card-body">
-                                        <h6 >{`Id: ${service.id}`}</h6>
-                                        <h6 className="card-subtitle">{`Device Name: ${service.name}`}</h6>
-                                    </div>
-                                </div>
-                            </div>
-                        ))}
+
+                <h4 className="alert alert-secondary">Services </h4>
+                <div className="mb-2">
+                    <div className="col-12">
+                        <MultiSelect value={deviceData.ServiceIdList} onChange={(e) => setDeviceData((prevState) => ({ ...prevState, ServiceIdList: e.value }))} options={service} optionValue="id" optionLabel='name' filter
+                            placeholder="Select Service" className="w-100 " />
                     </div>
                 </div>
-                <button className="btn btn-primary" onClick={handleUpdateDevice}>Update</button>
+
             </div>
+            <button className="btn btn-primary" onClick={handleUpdateDevice}>Update</button>
         </div>
     </>);
 }
