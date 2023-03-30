@@ -39,3 +39,15 @@ export const fetchUserMessages = ({patientId, page, pageSize, callback}) => {
         callback: callback
     })
 }
+
+export const postMessage = ({ patientId, content, callback }) => {
+    callAPI({
+        method: "POST",
+        endpoint: "/api/Messages/RecToPat",
+        data: {
+            patientId,
+            content
+        },
+        callback: callback
+    });
+}

@@ -3,69 +3,79 @@ import { useParams } from 'react-router';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import logo from '../../../assets/images/logo/Logo.png'
-import { fetchUserList, fetchUserMessages } from '../../../services/receptionist/apiReceptionChat';
+import { fetchUserList, fetchUserMessages, postMessage } from '../../../services/receptionist/apiReceptionChat';
 import './ReceptionistChat.scss'
 
 const ChatListItem = ({item}) => {
 
     const { patientId } = useParams();
-    const isActive = patientId === item?.user?.id;
 
     return (
-        <Link to={`/receptionist/chat/${item?.user?.id}`} className="user-chatbox text-decoration-none">
-            <div className={"card p-2 d-flex flex-row flex-wrap align-items-center mb-2" + (item?.seen ? null : " fw-bold") + (isActive ? " bg-info text-white" : null)}>
+        <Link to={`/receptionist/chat/${item.user.id}`}
+            className="user-chatbox text-decoration-none">
+            <div className={"card px-2 d-flex flex-row align-items-center mb-2" + (item?.seen ? null : " fw-bold") + (patientId === item.user.id ? " bg-info text-white" : null)}>
                 <img className="avatar card-img-top border border-1 border-primary rounded-circle" src={item?.user?.imageURL} alt="avatar" />
                 <div className="card-body">
                     <div className='row'>
-                    <div className='col-10'>
+                        <div className='col-12'>
                             <h5 className="card-title">{item?.user?.userName}</h5>
                             <small className="card-text text-secondary">{item?.previewContent} | {item?.timeFormatted}</small>
                         </div>
-                        <div className="col-2">
+                    </div>
+                    {
+                        item.seen || 
+                        <div className="new-tag">
                             <span className="badge bg-primary">new</span>
                         </div>
-                    </div>
+                    }
                 </div>
             </div>
         </Link>
     );
 }
 
-const Message = (props) => {
-
-    let item = props.item || {
-
-    };
+const Message = ({ item }) => {
 
     return (
         <>
-            {props.position === 'left'
+            {item.position === 'left'
                 ?
-                <>
-                    <div className='left'>
-                        <div className='avatar'>
-                            <img src={item?.fromUser?.imageURL} alt="patient"/>
-                        </div>
-                        <div className="">
-                            <div className='text'>{item.content}</div>
-                            <div className='time'>{new Date(item?.timeCreated).toLocaleTimeString()}</div>
-                        </div>
+                <div className='left'>
+                    <div className='avatar'>
+                        <img src={item.imageURL} alt="patient"/>
                     </div>
-                </>
+                    <div className="msg-info">
+                        <div className='text'>{item.content}</div>
+                        <div className='time'>{new Date(item.time).toLocaleTimeString()}</div>
+                    </div>
+                </div>
                 :
-                <>
-                    <div className="d-flex justify-content-end">
-                        <div className='right'>
-                            <div className="">
-                                <div className='text'>{item.content}</div>
-                                <div className='time'>{new Date(item?.timeCreated).toLocaleTimeString()}</div>
-                            </div>
-                            <div className='avatar'>
-                                <img src={item?.fromUser?.imageURL} alt="patient"/>
-                            </div>
+                <div className='right'>
+                    <div className="msg-info">
+                        <div className='text'>{item.content}</div>
+                        <div className='time'>
+                            {
+                                item.status === 0 ? (
+                                    <>
+                                        <span className="text-mute">Sending...</span>
+                                    </>
+                                ) :
+                                item.status === 1 ? (
+                                    <>
+                                        <span>{new Date(item.time).toLocaleTimeString()}</span>
+                                    </>
+                                ) : (
+                                    <>
+                                        <i class="fa fa-exclamation-circle" aria-hidden="true"></i>
+                                    </>
+                                )
+                            }
                         </div>
                     </div>
-                </>
+                    <div className='avatar'>
+                        <img src={logo} alt="reception"/>
+                    </div>
+                </div>
             }
 
         </>
@@ -77,12 +87,16 @@ function ReceptionistChat() {
 
     const [userList, setUserList] = useState([]);
     const [messageList, setMessageList] = useState([]);
+    const { patientId } = useParams();
+    const [currentConversation, setCurrentConversation] = useState(null);
 
-    const getUserList = () => {
+    const initUserList = () => {
         fetchUserList((res) => {
             if(res.status === 200) {
-                console.log(res);
-                setUserList(res.data)
+                if(patientId) {
+                    setCurrentConversation(res.data.find(item => item.user.id === patientId));
+                }
+                setUserList(res.data);
             }
             else if(res.status < 500) {
                 toast.error(res.data);
@@ -93,33 +107,52 @@ function ReceptionistChat() {
         });
     }
 
-    useEffect(getUserList, []);
-    const { patientId } = useParams();
-    const currentUser = userList.find(item => item.user.id === patientId)?.user;
-    console.log("currentUser: ", currentUser);
+    const reloadUserList = () => {
+        fetchUserList((res) => {
+            if(res.status === 200) {
+                setUserList(res.data);
+            }
+            else if(res.status < 500) {
+                toast.error(res.data);
+            }
+            else {
+                toast.error("System is busy!");
+            }
+        });
+    }
 
+    useEffect(initUserList, [patientId]);
+    
     const [isLoadingMessages, setIsLoadingMessages] = useState(false);
     const [paginated, setPaginated] = useState({
         page: 1,
         pageSize: 10,
-        totalPages: 0
     });
     const [totalPages, setTotalPages] = useState(0);
 
     useEffect(() => {
 
-        if(currentUser) {
+        console.log("Fetch messages of conversation...", currentConversation?.id);
+        if(currentConversation) {
             setIsLoadingMessages(true);
             setMessageList([]);
+            setTotalPages(0);
             fetchUserMessages({
-                patientId: currentUser.id,
+                patientId: currentConversation.user.id,
                 page: 1,
                 pageSize: 10,
                 callback: (res) => {
-                    console.log(res);
                     if(res.status === 200) {
                         let messages = res.data.data.reverse();
-                        setMessageList(messages);
+                        let formattedMessages = messages.map((item, idx) => ({
+                            id: item.id,
+                            position: item.fromUser.userRole === "Patient" ? 'left' : 'right',
+                            imageURL: item.fromUser.imageURL,
+                            content: item.content,
+                            time: item.timeCreated,
+                            status: 1
+                        }));
+                        setMessageList(formattedMessages);
                         setTotalPages(res.data.total_pages);
                         setPaginated({
                             page: res.data.page,
@@ -140,12 +173,42 @@ function ReceptionistChat() {
             });
         }
 
-    }, [currentUser]);
+    }, [currentConversation]);
 
-    
     const handleSendMessage = (e) => {
         e.preventDefault();
+        let content = e.target.content.value;
+        
+        if(currentConversation) {
+            let message = {
+                id: 0,
+                position: 'right',
+                imageURL: logo,
+                content: content,
+                time: new Date().toISOString(),
+                status: 0
+            }
 
+            let messages = [...messageList.slice(1), message]
+            setMessageList(messages);
+            postMessage({
+                patientId: currentConversation.user.id,
+                content: content,
+                callback: (res) => {
+                    if(res.status === 200) {
+                        message.id = res.data.id;
+                        message.status = 1;
+                        message.time = res.data.timeCreated;
+                    }
+                    else {
+                        message.status = -1;  
+                    }
+                    setMessageList([...messages]);
+                    reloadUserList();
+                }
+            });
+            e.target.content.value = "";
+        }
 
     }
     
@@ -157,24 +220,21 @@ function ReceptionistChat() {
                 <hr />
                 <div className="container-fluid chat-box border shadow-sm">
                     <div className="row h-100">
-                        <div className="col-4 p-2 h-100 d-flex flex-column overflow-auto">
+                        <div className="col-lg-3 p-2 h-100 d-flex flex-column overflow-auto">
                             <div className="user-list-container">
                                 <input className="form-control mb-2" type="text" name="search" placeholder="Search..." />
-                                <div className="row row-cols-1 g-0">
-                                    <div className="col ">
-                                        {
-                                            userList.map(item => (
-                                                <ChatListItem key={item.id} item={item} />
-                                            ))
-                                        }
-                                        
-                                    </div>
+                                <div className="user-list-box">
+                                    {
+                                        userList.map(item => (
+                                            <ChatListItem key={item.id} item={item}/>
+                                        ))
+                                    }
                                 </div>
                             </div>
                         </div>
-                        <div className="col-8 p-2 h-100 d-flex flex-column">
+                        <div className="col-lg-9 p-2 h-100 d-flex flex-column">
                             <div className='meassage-container'>
-                                <div className='message-box p-4 bg-info rounded'>
+                                <div className='message-box p-4 rounded border'>
                                     {
                                         isLoadingMessages && (
                                             <div className="d-flex justify-content-center">
@@ -183,21 +243,27 @@ function ReceptionistChat() {
                                         )
                                     }
                                     {
-                                        currentUser ? (
-                                            messageList.map(msg => (
-                                                <Message position={msg.fromUser.userRole === "Patient" ? "left" : "right"} item={msg}/>
+                                        currentConversation ? (
+                                            messageList.map((msg, idx) => (
+                                                <Message key={idx} item={msg}/>
                                             ))
                                         ) : (
                                             <h2 className="text-center text-danger">Please select conversation!</h2>
                                         )
                                     }
+                                    {
+                                        paginated.page < totalPages &&
+                                        <div className="text-center">
+                                            <button className="btn text-primary">Load more</button>
+                                        </div>
+                                    }
                                 </div>
                                 {
-                                    currentUser &&
+                                    currentConversation &&
                                     <div className="input-group">
                                         <form onSubmit={handleSendMessage} className="d-flex w-100 gap-2">
-                                            <input className="form-control" type="text" name="" placeholder="Recipient's text" aria-label="Recipient's text" aria-describedby="my-addon" />
-                                            <butotn type="submit" className="btn btn-primary input-group-text" id="my-addon">Send</butotn>
+                                            <input autoComplete="off" className="form-control" type="text" name="content" placeholder="Recipient's text" aria-label="Recipient's text" aria-describedby="my-addon" />
+                                            <button type="submit" className="btn btn-primary input-group-text" id="my-addon">Send</button>
                                         </form>
                                     </div>
                                 }

@@ -6,11 +6,15 @@
 
     .user-chatbox {
 
-        display: block;
-
         .avatar {
             width: 60px;
             height: 60px;
+        }
+
+        .new-tag {
+            position: absolute;
+            top: 10px;
+            right: 10px;
         }
     }
 
@@ -24,6 +28,20 @@
         display: flex;
         flex-direction: column;
         gap: 8px;
+
+        .user-list-box {
+            height: 0;
+            flex-grow: 1;
+            overflow: auto;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-bottom: 1px solid lightblue;
+
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
     }
 
     .meassage-container {
@@ -40,8 +58,13 @@
             .left {
                 display: flex;
                 align-items: flex-start;
+                gap: 10px;
                 margin-bottom: 10px;
-                max-width: 60%;
+
+                .msg-info {
+                    width: fit-content;
+                    max-width: 60%;
+                }
 
                 .time {
                     font-size: 12px;
@@ -50,11 +73,8 @@
 
                 .avatar {
                     width: 40px;
-                    height: 40px;
                     overflow: hidden;
                     border-radius: 50%;
-                    background-color: gray;
-                    margin-right: 10px;
                     
                     img {
                         width: 100%;
@@ -74,8 +94,14 @@
             .right {
                 display: flex;
                 align-items: flex-start;
+                justify-content: flex-end;
+                gap: 10px;
                 margin-bottom: 10px;
-                max-width: 60%;
+
+                .msg-info {
+                    width: fit-content;
+                    max-width: 60%;
+                }
 
                 .time {
                     font-size: 12px;
@@ -88,7 +114,6 @@
                     height: 40px;
                     border-radius: 50%;
                     background-color: lightblue;
-                    margin-left: 10px;
                     overflow: hidden;
 
                     img {
