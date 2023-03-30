@@ -26,8 +26,6 @@ function UserGetAll() {
             destroy: true,
             retrieve: true,
             paging: false,
-            ordering: false,
-
         });
     };
 

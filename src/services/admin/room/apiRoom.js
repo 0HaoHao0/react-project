@@ -12,7 +12,7 @@ export const getAllRoom = async (page) => {
         data = response;
     }).catch((error) => {
         // handle error
-        console.log(error);
+        data = error.response;
     })
 
     return data;
@@ -27,11 +27,27 @@ export const getRoomTypes = async () => {
         data = response;
     }).catch((error) => {
         // handle error
-        console.log(error);
+        data = error.response;
     })
 
     return data;
 }
+
+export const getDevices = async () => {
+    let data;
+    await axios({
+        method: 'get',
+        url: '/api/SelectBoxItems/GetDevices',
+    }).then((response) => {
+        data = response;
+    }).catch((error) => {
+        // handle error
+        data = error.response;
+    })
+
+    return data;
+}
+
 
 export const getRoom = async () => {
     let data;
@@ -42,7 +58,7 @@ export const getRoom = async () => {
         data = response;
     }).catch((error) => {
         // handle error
-        console.log(error);
+        data = error.response;
     })
 
     return data;

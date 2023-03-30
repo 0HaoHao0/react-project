@@ -28,7 +28,6 @@ function RoomGetAll() {
             destroy: true,
             retrieve: true,
             paging: false,
-            ordering: false,
         });
     };
 
@@ -72,7 +71,7 @@ function RoomGetAll() {
         }
     }
     return (<>
-        <div className="doctor-getall">
+        <div className="doctor-getall p-5">
             {!roomData ? (
                 <>
                     <div className="row g-0">

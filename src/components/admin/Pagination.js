@@ -7,7 +7,7 @@ function Pagiation(props) {
                         className={props.page === 1 ? "page-item disabled" : "page-item"}
                         onClick={props.page > 1 ? () => { props.previousPage() } : undefined}
                     >
-                        <div className="page-link" tabIndex="-1" aria-disabled="true">Previous</div>
+                        <div className="page-link btn" tabIndex="-1" aria-disabled="true">Previous</div>
                     </li>
                     <input
                         onKeyDown={(e) => props.enterPage(e)}
@@ -16,7 +16,7 @@ function Pagiation(props) {
                         className={props.page === props.total_pages ? "page-item disabled" : "page-item"}
                         onClick={props.page === props.total_pages ? undefined : () => { props.nextPage() }}
                     >
-                        <div className="page-link" >Next</div>
+                        <div className="page-link btn " >Next</div>
                     </li>
                 </ul>
             </nav>

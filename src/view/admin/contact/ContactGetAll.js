@@ -87,7 +87,7 @@ function ContactGetAll() {
     }
 
     return (<>
-        <div className="contact-getall">
+        <div className="contact-getall p-5">
             {!contactData
                 ?
                 <>
@@ -110,12 +110,12 @@ function ContactGetAll() {
 
                         <table id="table" className="table table-hover" >
                             <thead>
-                                <tr className="bg-dark">
+                                <tr className="table-dark">
                                     <th>Id</th>
                                     <th>Full Name</th>
                                     <th>Phone Number</th>
                                     <th>Date</th>
-                                    <th>State</th>
+                                    <th className="text-center">State</th>
                                     <th>Content</th>
                                 </tr>
                             </thead>
@@ -127,7 +127,7 @@ function ContactGetAll() {
                                             <td>{value.name}</td>
                                             <td>{value.phoneNumber}</td>
                                             <td>{value.timeCreated.slice(0, 10)}</td>
-                                            <td><button className={`btn ${value.state === "Pending" ? "btn-danger" : value.state === "Done" ? "btn-primary" : "btn-warning"}`}>{value.state}</button> </td>
+                                            <td className="text-center"><div className={` ${value.state === "Pending" ? "badge bg-danger" : value.state === "Done" ? "badge bg-primary" : "badge bg-warning text-dark"}`}>{value.state}</div> </td>
                                             <td><Link to='detail' state={value} className="btn btn-success"><i className="fa-solid fa-circle-info"></i></Link></td>
                                         </tr>
                                     )
