@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
-import { createRoom, getDevices, getRoomTypes } from "../../../services/admin/room/apiRoom";
+import { createRoom, getRoomTypes } from "../../../services/admin/room/apiRoom";
 
 
 function RoomCreate() {

@@ -26,7 +26,6 @@ function PatientGetAll() {
       destroy: true,
       retrieve: true,
       paging: false,
-      ordering: false,
     });
   };
 
@@ -65,7 +64,7 @@ function PatientGetAll() {
   }
   return (
     <>
-      <div>
+      <div className="patient-get-all p-5">
         {!patientData ? (
           <>
             <div>

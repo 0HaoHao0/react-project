@@ -72,7 +72,7 @@ function DoctorGetAll() {
         }
     }
     return (<>
-        <div className="doctor-getall">
+        <div className="doctor-getall p-5">
             {!doctorData ? (
                 <>
                     <div>
