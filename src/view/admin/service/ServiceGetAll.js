@@ -136,7 +136,7 @@ function ServiceGetAll() {
         }
     }
     return (<>
-        <div className="doctor-getall">
+        <div className="doctor-getall p-5">
             {!serviceData ? (
                 <>
                     <div className="row g-0">

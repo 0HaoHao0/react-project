@@ -1,8 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
 import "./ServiceInfo.scss"
-// CkEditor
-import Editor from 'ckeditor5-custom-build/build/ckeditor';
-import { CKEditor } from '@ckeditor/ckeditor5-react'
 
 
 
@@ -18,16 +15,7 @@ function ServiceInfo() {
                 <p ><strong> Service Code: </strong>  {state.serviceCode} <strong>Price:</strong> {state.price} VNĐ</p>
             </div>
             <div className="ckeditor ">
-                <CKEditor
-                    editor={Editor}
-                    config={
-                        {
-                            toolbar: [undefined]
-                        }
-                    }
-                    data={state.description}
-                    disabled={true}
-                />
+                <div className="ql-editor" dangerouslySetInnerHTML={{ __html: state.description }}></div>
             </div>
         </div>
     </>);
