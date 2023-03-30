@@ -105,22 +105,22 @@ function DoctorAppointmentHistory() {
                         <table id="table" className="table table-hover">
                             <thead>
                                 <tr className="table-dark">
-                                    <th>Id</th>
+                                    <th className="text-nowrap">Patient Name</th>
+                                    <th>Phone Number</th>
                                     <th>Date</th>
                                     <th>Time</th>
                                     <th>State</th>
-                                    <th>Service</th>
                                     <th>More</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {appointmentData.data.map((value) => (
                                     <tr key={value.id}>
-                                        <td>{value.id}</td>
+                                        <td className="text-nowrap " >{value.patient.baseUser.fullName}</td>
+                                        <td>{value.patient.baseUser.phoneNumber}</td>
                                         <td>{value.date.split("T")[0]}</td>
-                                        <td>{value.time}</td>
+                                        <td >{value.time}</td>
                                         <td>{value.state}</td>
-                                        <td >{value.service.serviceName}</td>
                                         <td >
                                             <Link
                                                 to={`/doctor/appointment-detail/${value.id}`}

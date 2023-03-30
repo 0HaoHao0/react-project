@@ -123,7 +123,7 @@ function UserGetAll() {
 
     return (
         <>
-            <div className="user-getall">
+            <div className="user-getall p-5">
                 {!userData ? (
                     <>
                         <div>
