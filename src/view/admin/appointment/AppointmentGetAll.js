@@ -73,7 +73,7 @@ function AppointmentGetAll() {
         }
     }
     return (<>
-        <div className="doctor-getall">
+        <div className="doctor-getall p-5">
             {!appointmentData ? (
                 <>
                     <h1>Appointment Management</h1>

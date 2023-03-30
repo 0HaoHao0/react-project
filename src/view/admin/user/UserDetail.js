@@ -103,111 +103,116 @@ function UserDetail() {
     }
     return (
         <>
-            <div className="user-detail">
+            <div className="user-detail p-5">
                 <div>
                     <h1>User Detail</h1>
                 </div>
                 <hr />
                 <h1 className="alert alert-dark" role="alert" >Profile </h1>
-                <div className="row g-0">
+                <div className="container-fluid">
 
-                    <div className="col-12 text-center my-4">
-                        <img height="150px" width="150px" src={state.imageURL} alt="..." />
-                    </div>
-                    <div className="col-12 row">
-                        <div className="col-lg-6 col-sm-12">
-                            <div className="row my-2">
-                                <div className="col-md-3">
-                                    <label htmlFor="UserName">User Name: </label>
-                                </div>
-                                <div className="col-md-9 ">
-                                    <input type="text" className="form-control bg-white" id="UserName" placeholder={state.fullName} disabled />
-                                </div>
-                            </div>
 
-                            <div className="row my-2">
-                                <div className="col-md-3">
-                                    <label htmlFor="FullName">Full Name: </label>
-                                </div>
-                                <div className="col-md-9 ">
-                                    <input type="text" className="form-control bg-white" id="FullName" placeholder={state.fullName} disabled />
-                                </div>
-                            </div>
+                    <div className="row g-0">
 
-                            <div className="row my-2">
-                                <div className="col-md-3">
-                                    <label htmlFor="PhoneNumber">Phone Number: </label>
-                                </div>
-                                <div className="col-md-9 ">
-                                    <input type="text" className="form-control bg-white" id="PhoneNumber" placeholder={state.phoneNumber} disabled />
-                                </div>
-                            </div>
-                            <div className="row my-2">
-                                <div className="col-3 fw-bold">Role: </div>
-                                <div className="col-9 text-left">
-                                    <select className='form-select' defaultChecked={patientInfo.role} aria-label="Default select example" onChange={handleSelectChange}>
-                                        <option disabled defaultValue={patientInfo.role}>{patientInfo.role}</option>
-                                        {options.map(option => (
-                                            <option
-                                                key={option.value}
-                                                value={option.value}
-                                                hidden={option.label === patientInfo.role}
-                                            >
-                                                {option.label}
-                                            </option>
-                                        ))}
-                                    </select>
-                                </div>
-                            </div>
-
+                        <div className="col-12 text-center my-4">
+                            <img height="150px" width="150px" src={state.imageURL} alt="..." />
                         </div>
-                        <div className="col-lg-6 col-sm-12">
-                            <div className="row my-2">
-                                <div className="col-md-3">
-                                    <label htmlFor="BirthDate">Birth Date: </label>
+                        <div className="col-12 row">
+                            <div className="col-lg-6 col-sm-12">
+                                <div className="row my-2">
+                                    <div className="col-md-3">
+                                        <label htmlFor="UserName">User Name: </label>
+                                    </div>
+                                    <div className="col-md-9 ">
+                                        <input type="text" className="form-control bg-white" id="UserName" placeholder={state.fullName} disabled />
+                                    </div>
                                 </div>
-                                <div className="col-md-9 ">
-                                    <input type="text" className="form-control bg-white" id="BirthDate" placeholder={state.birthDate.split('T')[[0]]} disabled />
-                                </div>
-                            </div>
-                            <div className="row my-2">
-                                <div className="col-md-3">
-                                    <label htmlFor="Gender">Gender: </label>
-                                </div>
-                                <div className="col-md-9 ">
-                                    <input type="text" className="form-control bg-white" id="Gender" placeholder={state.gender} disabled />
-                                </div>
-                            </div>
-                            <div className="row my-2">
-                                <div className="col-md-3">
-                                    <label htmlFor="Address">Address: </label>
-                                </div>
-                                <div className="col-md-9 ">
-                                    <input type="text" className="form-control bg-white" id="Address" placeholder={state.address} disabled />
-                                </div>
-                            </div>
-                            <div className="row my-2">
-                                <div className="col-md-3">
-                                    <label htmlFor="Email">Email: </label>
-                                </div>
-                                <div className="col-md-9 ">
-                                    <input type="text" className="form-control bg-white" id="Email" placeholder={state.email} disabled />
-                                </div>
-                            </div>
-                            <div className="row my-2">
-                                <div className="col-md-3">
-                                    <label htmlFor="EmailValidated">Email Validated: </label>
-                                </div>
-                                <div className="col-md-9 ">
-                                    {state.emailConfirmed ?
-                                        <button className="btn btn-success" disabled><i className="fa-solid fa-check"></i></button>
-                                        :
-                                        <button className="btn btn-danger" disabled><i className="fa-solid fa-x"></i></button>
-                                    }
-                                </div>
-                            </div>
 
+                                <div className="row my-2">
+                                    <div className="col-md-3">
+                                        <label htmlFor="FullName">Full Name: </label>
+                                    </div>
+                                    <div className="col-md-9 ">
+                                        <input type="text" className="form-control bg-white" id="FullName" placeholder={state.fullName} disabled />
+                                    </div>
+                                </div>
+
+                                <div className="row my-2">
+                                    <div className="col-md-3">
+                                        <label htmlFor="PhoneNumber">Phone Number: </label>
+                                    </div>
+                                    <div className="col-md-9 ">
+                                        <input type="text" className="form-control bg-white" id="PhoneNumber" placeholder={state.phoneNumber} disabled />
+                                    </div>
+                                </div>
+                                <div className="row my-2">
+                                    <div className="col-3 fw-bold">Role: </div>
+                                    <div className="col-9 text-left">
+                                        <select className='form-select' defaultChecked={patientInfo.role} aria-label="Default select example" onChange={handleSelectChange}>
+                                            <option disabled defaultValue={patientInfo.role}>{patientInfo.role}</option>
+                                            {options.map(option => (
+                                                <option
+                                                    key={option.value}
+                                                    value={option.value}
+                                                    hidden={option.label === patientInfo.role}
+                                                >
+                                                    {option.label}
+                                                </option>
+                                            ))}
+                                        </select>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div className="col-lg-6 col-sm-12">
+                                <div className="row my-2">
+                                    <div className="col-md-3">
+                                        <label htmlFor="BirthDate">Birth Date: </label>
+                                    </div>
+                                    <div className="col-md-9 ">
+                                        <input type="text" className="form-control bg-white" id="BirthDate" placeholder={state.birthDate.split('T')[[0]]} disabled />
+                                    </div>
+                                </div>
+                                <div className="row my-2">
+                                    <div className="col-md-3">
+                                        <label htmlFor="Gender">Gender: </label>
+                                    </div>
+                                    <div className="col-md-9 ">
+                                        <input type="text" className="form-control bg-white" id="Gender" placeholder={state.gender} disabled />
+                                    </div>
+                                </div>
+                                <div className="row my-2">
+                                    <div className="col-md-3">
+                                        <label htmlFor="Address">Address: </label>
+                                    </div>
+                                    <div className="col-md-9 ">
+                                        <input type="text" className="form-control bg-white" id="Address" placeholder={state.address} disabled />
+                                    </div>
+                                </div>
+                                <div className="row my-2">
+                                    <div className="col-md-3">
+                                        <label htmlFor="Email">Email: </label>
+                                    </div>
+                                    <div className="col-md-9 ">
+                                        <input type="text" className="form-control bg-white" id="Email" placeholder={state.email} disabled />
+                                    </div>
+                                </div>
+                                <div className="row my-2">
+                                    <div className="col-md-3">
+                                        <label htmlFor="EmailValidated">Email Validated: </label>
+                                    </div>
+                                    <div className="col-md-9 ">
+                                        {state.emailConfirmed ?
+                                            <button className="btn btn-success" disabled><i className="fa-solid fa-check"></i></button>
+                                            :
+                                            <button className="btn btn-danger" disabled><i className="fa-solid fa-x"></i></button>
+                                        }
+                                    </div>
+                                </div>
+
+                            </div>
                         </div>
+
                     </div>
                     <div className="row my-2">
                         <div className="col-6">
@@ -224,6 +229,7 @@ function UserDetail() {
                         </div>
                     </div>
                 </div>
+
             </div>
         </>
     );
