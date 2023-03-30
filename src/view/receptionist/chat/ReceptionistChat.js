@@ -280,8 +280,25 @@ function ReceptionistChat() {
     }, [patientId]);
 
     const [loadMoreDelay, setLoadMoreDelay] = useState(0);
-    
+    const [startedCountDown, setStartCountDown] = useState(false);
+    const [delayCountDownInterval, setDelayCountDownInterval] = useState(null);
 
+    useEffect(() => {
+
+        if(loadMoreDelay > 0 && !startedCountDown) {
+            let _i = setInterval(() => {
+                setLoadMoreDelay(prev => prev - 1);
+            }, 1000);
+            setStartCountDown(true);
+            setDelayCountDownInterval(_i);
+        }
+        else if(loadMoreDelay === 0) {
+            if(delayCountDownInterval) clearInterval(delayCountDownInterval);
+            setDelayCountDownInterval(null);
+            setStartCountDown(false);
+        }
+    }, [loadMoreDelay, delayCountDownInterval, startedCountDown]);
+    
     const handleOnScroll = (e) => {
         if(e.target.scrollTop === 0 && !isLoadingMessages && loadMoreDelay === 0) {
             setIsLoadingMessages(true);
