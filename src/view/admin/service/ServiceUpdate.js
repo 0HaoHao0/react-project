@@ -7,8 +7,8 @@ import { getDevice } from "../../../services/admin/device/apiDevice";
 import { updateService } from "../../../services/admin/service/apiService";
 
 // Editor
-import Editor from 'ckeditor5-custom-build/build/ckeditor';
-import { CKEditor } from '@ckeditor/ckeditor5-react'
+import { Editor } from 'primereact/editor';
+import { MultiSelect } from 'primereact/multiselect';
 
 
 
@@ -59,6 +59,16 @@ function ServiceUpdate() {
         }));
     };
 
+    const handleEditor = (name, value) => {
+        setServiceData((prevState) => ({
+            ...prevState,
+            [name]: value
+        }));
+        validateEditor(name, value);
+    }
+
+
+
 
     const handleImage = (e) => {
         const { name, files } = e.target;
@@ -77,28 +87,6 @@ function ServiceUpdate() {
             ...prevState,
             [name]: files[0]
         }));
-    };
-
-
-
-    const handleDevice = (serviceId) => {
-        const id = parseInt(serviceId);
-        const name = "DeviceIdList"
-        setServiceData((prevState) => {
-
-            const list = prevState[name] || [];
-            if (list.includes(id)) {
-                return {
-                    ...prevState,
-                    [name]: list.filter((serviceId) => serviceId !== id)
-                };
-            } else {
-                return {
-                    ...prevState,
-                    [name]: [...list, id]
-                };
-            }
-        })
     };
 
     const handleUpdateService = async () => {
@@ -180,6 +168,28 @@ function ServiceUpdate() {
         }
     }
 
+
+    const validateEditor = (name, value) => {
+        setIsTouched((prevState) => ({
+            ...prevState,
+            [name]: "Touch"
+        }));
+        console.log(value);
+        if (!value) {
+            setDataError((prevState) => ({
+                ...prevState,
+                [name]: "Input Empty !"
+            }));
+        }
+        else {
+
+
+            setDataError((prevState) => ({
+                ...prevState,
+                [name]: ''
+            }));
+        }
+    }
     return (<>
         <div className="service-update">
             <h1>Service Update</h1>
@@ -235,65 +245,24 @@ function ServiceUpdate() {
 
                 </div>
                 <div className="col-12 mb-3">
-                    <label htmlFor="description" className="form-label">Description: </label>
-                    <div className="ckeditor">
-                        <CKEditor
-                            editor={Editor}
-                            config={{
-                                cloudServices: {
-                                    tokenUrl: 'https://96022.cke-cs.com/token/dev/4f421aeddafb7c431e79a6743fefd3a8fc56e68d043e13455ccf262b10c4?limit=10',
-                                    uploadUrl: 'https://96022.cke-cs.com/easyimage/upload/'
-                                }
-                            }}
-                            data={serviceData.description}
-                            onChange={(event, editor) => {
-                                const data = editor.getData();
-                                const e =
-                                {
-                                    target: {
-                                        name: 'description',
-                                        value: data,
-                                    }
-                                }
-                                handleChange(e);
-                            }}
-                            onBlur={(event, editor) => {
-                                const data = editor.getData();
-                                const e =
-                                {
-                                    target: {
-                                        name: 'description',
-                                        value: data,
-                                    }
-                                }
-                                validate(e)
-                            }}
-                        />
-                    </div>
-                    <div>
-                        {dataError.description
-                            && <span className="text-danger">
-                                {dataError.description}
-                            </span>}
-                    </div>
+
+                    <label htmlFor="Description" className="form-label">Description: </label>
+                    <Editor value={serviceData.description} type='editor' name='Description' style={{ minHeight: '250px' }}
+                        onTextChange={(e) => { handleEditor('description', e.htmlValue) }}
+                    />
+                    {dataError.Description
+                        && <span className="invalid-feedback d-inline">
+                            {dataError.Description}
+                        </span>}
 
                 </div>
 
                 <h4 className="alert alert-secondary">Devices </h4>
-                <div className=" row mb-3">
-                    {device.map((device) => (
-                        <div className="col-4 mb-2" key={device.id}>
-                            <div className={`card h-100 ${serviceData.DeviceIdList && serviceData.DeviceIdList.includes(device.id) ? 'bg-primary text-white' : ''}`}
-                                onClick={() => handleDevice(device.id)}>
-                                <div className="card-body">
-                                    <h4 className="card-title">{`Id: ${device.id}`}</h4>
-                                    <p className="card-text">{`Service Name: ${device.name}`}</p>
-                                </div>
-                            </div>
-
-
-                        </div>
-                    ))}
+                <div className="mb-2">
+                    <div className="col-12">
+                        <MultiSelect value={serviceData.DeviceIdList} onChange={(e) => setServiceData((prevState) => ({ ...prevState, DeviceIdList: e.value }))} options={device} optionValue="id" optionLabel='name' filter
+                            placeholder="Select Device" className="w-100 " />
+                    </div>
                 </div>
             </div>
             <button className="btn btn-primary" onClick={handleUpdateService}>Update</button>

@@ -1,8 +1,5 @@
 import { useLocation } from 'react-router-dom';
 import './News.scss'
-// CkEditor
-import Editor from 'ckeditor5-custom-build/build/ckeditor';
-import { CKEditor } from '@ckeditor/ckeditor5-react'
 
 function News() {
     const { state } = useLocation();
@@ -43,16 +40,8 @@ function News() {
                 </div>
                 <div className='row my-5'>
                     <div className="ckeditor ">
-                        <CKEditor
-                            editor={Editor}
-                            config={
-                                {
-                                    toolbar: [undefined]
-                                }
-                            }
-                            data={state.content}
-                            disabled={true}
-                        />
+                        <div className="ql-editor" dangerouslySetInnerHTML={{ __html: state.content }}></div>
+
                     </div>
                 </div>
 
