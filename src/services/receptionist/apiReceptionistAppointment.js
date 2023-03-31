@@ -10,6 +10,8 @@ export const getAllAppointment = async (filter) => {
             PageSize: filter.pageSize,
             startDate: filter.startDate,
             endDate: filter.endDate,
+            PhoneNumber: filter.phoneNumber,
+            UserName: filter.userName
         }
     }).then((response) => {
         data = response;
