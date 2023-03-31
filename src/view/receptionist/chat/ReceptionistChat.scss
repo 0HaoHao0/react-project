@@ -16,6 +16,19 @@
             top: 10px;
             right: 10px;
         }
+
+        .preview {
+            flex: 1;
+            width: 0;
+            white-space: nowrap;
+            overflow-x: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .preview-time {
+            width: fit-content;
+            font-weight: bold;
+        }
     }
 
     .chat-box {
