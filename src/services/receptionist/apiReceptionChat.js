@@ -51,3 +51,11 @@ export const postMessage = ({ patientId, content, callback }) => {
         callback: callback
     });
 }
+
+export const markSeenChatBox = ({chatboxId, callback}) => {
+    callAPI({
+        method: "PUT",
+        endpoint: "/api/Messages/MarkAsSeenChatBox/" + chatboxId,
+        callback: callback
+    });
+}

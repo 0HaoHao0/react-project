@@ -1,31 +1,54 @@
 import Pusher from 'pusher-js';
 import { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import logo from '../../../assets/images/logo/Logo.png'
-import { fetchUserList, fetchUserMessages, postMessage } from '../../../services/receptionist/apiReceptionChat';
+import { fetchUserList, fetchUserMessages, markSeenChatBox, postMessage } from '../../../services/receptionist/apiReceptionChat';
 import './ReceptionistChat.scss'
 
 const ChatListItem = ({ item }) => {
 
     const { patientId } = useParams();
+    const [hasNewMessage, setHasNewMessage] = useState(!item.seen);
+
+    useEffect(() => {
+        console.log("hihi!");
+        setHasNewMessage(!item.seen);
+    }, [item.seen]);
+
+    const handleChatListItemClicked = () => {
+        if(hasNewMessage) {
+            markSeenChatBox({
+                chatboxId: item.id,
+                callback: (res) => {
+                    if(res.status === 200) {
+                        setHasNewMessage(false);
+                    }
+                }
+            });
+        }
+    }
 
     return (
         <Link to={`/receptionist/chat/${item.user.id}`}
+            onClick={handleChatListItemClicked}
             className="user-chatbox text-decoration-none">
-            <div className={"card px-2 d-flex flex-row align-items-center mb-2" + (item?.seen ? null : " fw-bold") + (patientId === item.user.id ? " bg-info text-white" : null)}>
-                <img className="avatar card-img-top border border-1 border-primary rounded-circle" src={item?.user?.imageURL} alt="avatar" />
+            <div className={"card px-2 d-flex flex-row align-items-center mb-2" + (item.seen ? null : " fw-bold") + (patientId === item.user.id ? " bg-info text-white" : null)}>
+                <img className="avatar card-img-top border border-1 border-primary rounded-circle" src={item.user.imageURL} alt="avatar" />
                 <div className="card-body">
                     <div className='row'>
                         <div className='col-12'>
-                            <h5 className="card-title">{item?.user?.userName}</h5>
-                            <small className="card-text text-secondary">{item?.previewContent} | {item?.timeFormatted}</small>
+                            <h5 className="card-title">{item.user.userName}</h5>
+                            <div className="d-flex justify-content-between">
+                                <small className="card-text text-secondary preview">{item.previewContent}</small>
+                                <small className="card-text text-primary preview-time">{item.timeFormatted}</small>
+                            </div>
                         </div>
                     </div>
                     {
-                        item.seen ||
+                        hasNewMessage &&
                         <div className="new-tag">
                             <span className="badge bg-primary">new</span>
                         </div>
@@ -91,14 +114,23 @@ function ReceptionistChat() {
     const [messageList, setMessageList] = useState([]);
     const { patientId } = useParams();
     const [currentConversation, setCurrentConversation] = useState(null);
-
+    const navigate = useNavigate();
+    
     const initUserList = () => {
+        setMessageList([]);
         fetchUserList((res) => {
             if (res.status === 200) {
-                if (patientId) {
-                    setCurrentConversation(res.data.find(item => item.user.id === patientId));
-                }
                 setUserList(res.data);
+                if (patientId) {
+                    let conv = res.data.find(item => item.user.id === patientId);
+                    if(conv != null) {
+                        setCurrentConversation(conv);
+                    }
+                }
+                else {
+                    let conv = res.data.length ? res.data[0] : null;
+                    if(conv != null) navigate("/receptionist/chat/" + conv.user.id);
+                }
             }
             else if (res.status < 500) {
                 toast.error(res.data);
@@ -110,6 +142,7 @@ function ReceptionistChat() {
     }
 
     const reloadUserList = () => {
+        console.log("reload...");
         fetchUserList((res) => {
             if (res.status === 200) {
                 setUserList(res.data);
@@ -123,26 +156,26 @@ function ReceptionistChat() {
         });
     }
 
-    useEffect(initUserList, [patientId]);
+    useEffect(initUserList, [patientId, navigate]);
 
     const [isLoadingMessages, setIsLoadingMessages] = useState(false);
     const [paginated, setPaginated] = useState({
         page: 1,
-        pageSize: 30,
+        pageSize: 20,
     });
     const [totalPages, setTotalPages] = useState(0);
 
     useEffect(() => {
 
-        console.log("Fetch messages of conversation...", currentConversation?.id);
         if (currentConversation) {
-            setIsLoadingMessages(true);
-            setMessageList([]);
+            
+            console.log("Fetch messages of conversation...");
             setTotalPages(0);
+            setIsLoadingMessages(true);
             fetchUserMessages({
                 patientId: currentConversation.user.id,
                 page: 1,
-                pageSize: 30,
+                pageSize: 20,
                 callback: (res) => {
                     if (res.status === 200) {
                         let messages = res.data.data.reverse();
@@ -173,6 +206,9 @@ function ReceptionistChat() {
                     setIsLoadingMessages(false);
                 }
             });
+        }
+        else {
+            
         }
 
     }, [currentConversation]);
@@ -225,7 +261,7 @@ function ReceptionistChat() {
             })
                 .subscribe(receptionInfo.pusherChannel)) : null;
 
-        const bindGlobalHandler = (action, data) => {
+        const messageReceiveHandler = (action, data) => {
             if (action === "Chat-PatToRec") {
                 let message = JSON.parse(data);
                 console.log(message.fromUser.id === patientId);
@@ -241,19 +277,18 @@ function ReceptionistChat() {
                     let messages = [...messageList.slice(1), formattedMessage]
                     setMessageList(messages);
                 }
-                else {
-                    reloadUserList();
-                }
+                
+                reloadUserList();
             }
         }
 
         if (pusherChanel) {
-            pusherChanel.bind_global(bindGlobalHandler);
+            pusherChanel.bind_global(messageReceiveHandler);
         }
 
         return () => {
             if (pusherChanel) {
-                pusherChanel.unbind_global(bindGlobalHandler);
+                pusherChanel.unbind_global(messageReceiveHandler);
             }
         }
 
@@ -261,7 +296,12 @@ function ReceptionistChat() {
 
     const scroller = useRef(null);
     const scrollToEnd = () => {
-        scroller.current.scrollTop = scroller.current.scrollHeight;
+        setTimeout(() => {
+            scroller.current.scrollTo({
+                top: scroller.current.scrollHeight,
+                behavior: "smooth"
+            });
+        }, 200);
     }
 
     const [initScroll, setInitScroll] = useState(false);
@@ -357,7 +397,7 @@ function ReceptionistChat() {
                         </div>
                         <div className="col-lg-9 p-2 h-100 d-flex flex-column">
                             <div className='meassage-container'>
-                                <div className='message-box p-4 rounded border' ref={scroller} onScroll={handleOnScroll}>
+                                <div className='message-box p-4 rounded border bg-light' ref={scroller} onScroll={handleOnScroll}>
                                     {
                                         isLoadingMessages && (
                                             <div className="d-flex justify-content-center">
