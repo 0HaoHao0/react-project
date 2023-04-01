@@ -108,6 +108,17 @@ const Message = ({ item }) => {
 }
 
 
+const seenAsync = ({ chatboxId, succeed }) => {
+    markSeenChatBox({
+        chatboxId: chatboxId,
+        callback: (res) => {
+            if(res.status === 200) {
+                succeed();
+            }
+        }
+    });
+}
+
 function ReceptionistChat() {
 
     const [userList, setUserList] = useState([]);
@@ -125,6 +136,10 @@ function ReceptionistChat() {
                     let conv = res.data.find(item => item.user.id === patientId);
                     if(conv != null) {
                         setCurrentConversation(conv);
+
+                        if(conv.seen === false) {
+                            seenAsync({ chatboxId: conv.id, succeed: () => reloadUserList() });
+                        }
                     }
                 }
                 else {
@@ -142,9 +157,9 @@ function ReceptionistChat() {
     }
 
     const reloadUserList = () => {
-        console.log("reload...");
         fetchUserList((res) => {
             if (res.status === 200) {
+                console.log(res.data);
                 setUserList(res.data);
             }
             else if (res.status < 500) {
@@ -264,7 +279,6 @@ function ReceptionistChat() {
         const messageReceiveHandler = (action, data) => {
             if (action === "Chat-PatToRec") {
                 let message = JSON.parse(data);
-                console.log(message.fromUser.id === patientId);
                 if (message.fromUser.id === patientId) {
                     let formattedMessage = {
                         id: message.id,
@@ -276,9 +290,15 @@ function ReceptionistChat() {
                     }
                     let messages = [...messageList.slice(1), formattedMessage]
                     setMessageList(messages);
+                    markSeenChatBox({
+                        chatboxId: currentConversation.id,
+                        callback: () => reloadUserList()
+                    });
                 }
-                
-                reloadUserList();
+                else { 
+                    reloadUserList();
+                }
+                    
             }
         }
 
@@ -292,7 +312,7 @@ function ReceptionistChat() {
             }
         }
 
-    }, [receptionInfo, patientId, messageList]);
+    }, [receptionInfo, patientId, messageList, currentConversation]);
 
     const scroller = useRef(null);
     const scrollToEnd = () => {
