@@ -1,30 +1,73 @@
 import { useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import logo from '../../assets/images/logo/Logo.png';
 import './Chat.scss'
-import { fetchUserMessages, postUserMessage } from '../../services/user/ApiChat';
+import { fetchUserMessages, postUserMessage, removeMessageAPI } from '../../services/user/ApiChat';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
+import Pusher from 'pusher-js';
+import Swal from 'sweetalert2';
 
 const Message = ({ item }) => {
 
+    const [msg, setMsg] = useState(item);
+
+    const removeMessage = () => {
+
+        Swal.fire({
+            icon: "warning",
+            title: "Remove Message?",
+            text: "This action will remove this message completely!",
+            showConfirmButton: true,
+            showCancelButton: true
+        })
+        .then(option => {
+            if(option.isConfirmed) {
+                removeMessageAPI({
+                    messageId: msg.id,
+                    callback: (res) => {
+                        if(res.status === 200) {
+                            let message = res.data;
+                            setMsg({
+                                ...msg,
+                                removed: true,
+                                content: message.content
+                            });
+
+                        }
+                    }
+                })
+            }
+
+            Swal.close();
+        });
+
+    }
+
     return (
         <>
-            {item.position === 'left'
+            {msg.position === 'left'
                 ?
                 <div className='left'>
                     <div className='avatar'>
                         <img src={logo} alt="reception" />
                     </div>
                     <div className="msg-info">
-                        <div className='text'>{item.content}</div>
-                        <div className='time'>{new Date(item.time).toLocaleTimeString()}</div>
+                        <div className='text'>{msg.content}</div>
+                        <div className='time'>{new Date(msg.time).toLocaleTimeString()}</div>
                     </div>
                 </div>
                 :
                 <div className='right'>
+                    <div className="options-group">
+                        {
+                            msg.removed ||
+                            <button className="btn btn-danger btn-removed" onClick={removeMessage}>
+                                <i className="fa fa-times" aria-hidden="true"></i>
+                            </button>
+                        }
+                    </div>
                     <div className="msg-info">
-                        <div className='text'>{item.content}</div>
+                        <div className={`text ${msg.removed ? "text-secondary" : ""}`}>{msg.content}</div>
                         <div className='time'>
                             {
                                 item.status === 0 ? (
@@ -35,7 +78,7 @@ const Message = ({ item }) => {
 
                                 item.status === 1 ? (
                                     <>
-                                        <span>{new Date(item.time).toLocaleTimeString()}</span>
+                                        <span>{new Date(msg.time).toLocaleTimeString()}</span>
                                     </>
                                 ) : (
                                     <>
@@ -46,7 +89,7 @@ const Message = ({ item }) => {
                         </div>
                     </div>
                     <div className='avatar'>
-                        <img src={item.imageURL} alt="patient" />
+                        <img src={msg.imageURL} alt="patient" />
                     </div>
                 </div>
             }
@@ -59,20 +102,22 @@ function Chat() {
 
     const [messageList, setMessageList] = useState([]);
     const [isInitLoadingMessages, setIsInitLoadingMessages] = useState(false);
-    const [paginated, setPaginated] = useState({
-        page: 1,
-        pageSize: 20,
+    const [filtered, setFiltered] = useState({
+        skip: 0,
+        take: 20,
+        text: "",
     });
 
-    const [totalPages, setTotalPages] = useState(0);
+    const [total, setTotal] = useState(0);
 
     useEffect(() => {
 
         setIsInitLoadingMessages(true);
         fetchUserMessages({
             params: {
-                page: 1,
-                pageSize: 20
+                skip: 0,
+                take: 20,
+                text: "",
             },
             callback: (res) => {
                 if(res.status === 200) {
@@ -84,15 +129,12 @@ function Chat() {
                         imageURL: item.fromUser.imageURL,
                         content: item.content,
                         time: item.timeCreated,
-                        status: 1
+                        status: 1,
+                        removed: item.isRemoved
                     }));
 
                     setMessageList(formattedMessages);
-                    setTotalPages(res.data.total_pages);
-                    setPaginated({
-                        page: res.data.page,
-                        pageSize: res.data.per_page
-                    });
+                    setTotal(res.data.total);
                 }
                 else if (res.status < 500) {
                     toast.error(res.data);
@@ -153,33 +195,33 @@ function Chat() {
 
     const [isLoadMoreMessages, setIsLoadMoreMessages] = useState(false);
     const handleOnScroll = (e) => {
-        if(e.target.scrollTop === 0 && !isInitLoadingMessages && loadMoreDelay === 0) {
+        if(e.target.scrollTop === 0 && !isLoadMoreMessages && loadMoreDelay === 0 && filtered.skip < total) {
             setIsLoadMoreMessages(true);
-            let nextPage = paginated.page + 1;
+            let nextFiltered = {
+                take: filtered.take,
+                skip: filtered.skip + filtered.take,
+                text: filtered.text,
+            }
+
             fetchUserMessages({
-                params: {
-                    page: nextPage,
-                    pageSize: 20
-                },
+                params: nextFiltered,
                 callback: (res) => {
                     if(res.status === 200) {
                         let messages = res.data.data.reverse();
+                        console.log(messages);
                         let formattedMessages = messages.map((item, idx) => ({
                             id: item.id,
                             position: item.fromUser.userRole === "Patient" ? 'right' : 'left',
                             imageURL: item.fromUser.imageURL,
                             content: item.content,
                             time: item.timeCreated,
-                            status: 1
+                            status: 1,
+                            removed: item.isRemoved,
                         }));
                         
-                        messages = [...formattedMessages, ...messageList];
-                        setMessageList(messages);
-                        setTotalPages(res.data.total_pages);
-                        setPaginated({
-                            page: res.data.page,
-                            pageSize: res.data.per_page
-                        });
+                        setMessageList([...formattedMessages, ...messageList]);
+                        setTotal(res.data.total);
+                        setFiltered(nextFiltered);
                     }
                     else if (res.status < 500) {
                         toast.error(res.data);
@@ -197,20 +239,21 @@ function Chat() {
         }
     }
 
+    const userInfo = useSelector(state => state.user).userInfo;
     const content = useRef(null);
     const handleSendMessage = (e) => {
         e.preventDefault();
-        console.log(content.current.value);
         let message = {
             id: 0,
             position: 'right',
-            imageURL: logo,
+            imageURL: userInfo?.imageURL || logo,
             content: content.current.value,
             time: new Date().toISOString(),
-            status: 0
+            status: 0,
+            removed: false,
         }
 
-        let messages = [...messageList.slice(1), message]
+        let messages = [...messageList, message]
         setMessageList(messages);
 
         postUserMessage({
@@ -219,8 +262,11 @@ function Chat() {
                 if (res.status === 200) {
                     message.id = res.data.id;
                     message.status = 1;
-                    message.imageURL = res.data.fromUser.imageURL;
                     message.time = res.data.timeCreated;
+                    setFiltered({
+                        ...filtered,
+                        skip: filtered.skip + 1,
+                    });
                 }
                 else {
                     message.status = -1;
@@ -233,14 +279,56 @@ function Chat() {
         
     }
 
+    useEffect(() => {
+
+        const pusherChanel = userInfo?.pusherChannel ? (
+            new Pusher('a5612d1b04f944b457a3', {
+                cluster: 'ap1',
+                encrypted: true,
+            })
+                .subscribe(userInfo.pusherChannel)) : null;
+
+        const messageReceiveHandler = (action, data) => {
+            if (action === "Chat-RecToPat") {
+                let message = JSON.parse(data);
+                let formattedMessage = {
+                    id: message.id,
+                    position: 'left',
+                    imageURL: logo,
+                    content: message.content,
+                    time: message.timeCreated,
+                    status: 1,
+                    removed: false,
+                }
+                let messages = [...messageList, formattedMessage]
+                setMessageList(messages);
+                setFiltered(prev => ({
+                    ...prev,
+                    skip: prev.skip + 1,
+                }));
+            }
+        }
+
+        if (pusherChanel) {
+            pusherChanel.bind_global(messageReceiveHandler);
+        }
+
+        return () => {
+            if (pusherChanel) {
+                pusherChanel.unbind_global(messageReceiveHandler);
+            }
+        }
+
+    }, [userInfo, messageList]);
+
 
     return (
         <>
             <div className="user-chat">
                 <div className="row layout">
                     
-                    <div className="col-lg-7 h-100 d-flex flex-column justify-content-start align-items-center">
-                        <h2 className="text-primary mb-2 mt-4">ShinyTeeth</h2>
+                    <div className="col-lg-7 h-100 d-flex flex-column justify-content-start align-items-end">
+                        <h2 className="text-primary mb-2 mt-4">ChatBox</h2>
                         <div className="message-container bg-primary rounded border">
                             <div className="messages-list bg-light rounded" ref={scroller} onScroll={handleOnScroll}>
                                 {
@@ -257,7 +345,7 @@ function Chat() {
                                     ) : (
                                         messageList.length > 0 ?
                                         messageList.map((item, idx) => (
-                                            <Message key={idx} item={item}/>
+                                            <Message key={item.id} item={item}/>
                                         )) : (
                                             <h3 className="text-center text-danger p-3">No have any message.</h3>
                                         )

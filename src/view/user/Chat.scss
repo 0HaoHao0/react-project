@@ -68,6 +68,9 @@
                     width: fit-content;
                     max-width: 60%;
                     overflow-wrap: anywhere;
+
+                    position: relative;
+
                 }
 
                 .time {
@@ -102,12 +105,38 @@
                 gap: 10px;
                 margin-bottom: 10px;
 
+                .options-group {
+                    margin-top: 8px;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: flex-end;
+                    align-items: flex-end;
+
+                    position: relative;
+                    visibility: hidden;
+
+                    .btn-removed {
+                        width: 25px;
+                        height: 25px;
+                        border-radius: 50%;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                    }
+
+                }
+
+                &:hover .options-group {
+                    visibility: visible;
+                }
+
                 .msg-info {
                     width: fit-content;
                     max-width: 60%;
                     overflow-wrap: anywhere;
                 }
 
+                
                 .time {
                     font-size: 12px;
                     text-align: end;

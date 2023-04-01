@@ -61,33 +61,39 @@ const ChatListItem = ({ item }) => {
 
 const Message = ({ item }) => {
 
+    const [msg, setMsg] = useState(item);
+
+    useEffect(() => {
+        setMsg(item);
+    }, [item]);
+
     return (
         <>
             {item.position === 'left'
                 ?
                 <div className='left'>
                     <div className='avatar'>
-                        <img src={item.imageURL} alt="patient" />
+                        <img src={msg.imageURL} alt="patient" />
                     </div>
                     <div className="msg-info">
-                        <div className='text'>{item.content}</div>
-                        <div className='time'>{new Date(item.time).toLocaleTimeString()}</div>
+                        <div className={`text ${msg.removed ? "text-info" : ""}`}>{msg.content}</div>
+                        <div className='time'>{new Date(msg.time).toLocaleTimeString()}</div>
                     </div>
                 </div>
                 :
                 <div className='right'>
                     <div className="msg-info">
-                        <div className='text'>{item.content}</div>
+                        <div className='text'>{msg.content}</div>
                         <div className='time'>
                             {
-                                item.status === 0 ? (
+                                msg.status === 0 ? (
                                     <>
                                         <span className="text-mute">Sending...</span>
                                     </>
                                 ) :
-                                    item.status === 1 ? (
+                                    msg.status === 1 ? (
                                         <>
-                                            <span>{new Date(item.time).toLocaleTimeString()}</span>
+                                            <span>{new Date(msg.time).toLocaleTimeString()}</span>
                                         </>
                                     ) : (
                                         <>
@@ -129,6 +135,11 @@ function ReceptionistChat() {
     
     const initUserList = () => {
         setMessageList([]);
+        setFiltered({
+            skip: 0,
+            take: 20,
+            text: "",
+        });
         fetchUserList((res) => {
             if (res.status === 200) {
                 setUserList(res.data);
@@ -174,23 +185,28 @@ function ReceptionistChat() {
     useEffect(initUserList, [patientId, navigate]);
 
     const [isLoadingMessages, setIsLoadingMessages] = useState(false);
-    const [paginated, setPaginated] = useState({
-        page: 1,
-        pageSize: 20,
+    const [filtered, setFiltered] = useState({
+        skip: 0,
+        take: 20,
+        text: "",
     });
-    const [totalPages, setTotalPages] = useState(0);
+
+    const [total, setTotal] = useState(0);
 
     useEffect(() => {
 
         if (currentConversation) {
             
             console.log("Fetch messages of conversation...");
-            setTotalPages(0);
+            setTotal(0);
             setIsLoadingMessages(true);
             fetchUserMessages({
                 patientId: currentConversation.user.id,
-                page: 1,
-                pageSize: 20,
+                params: {
+                    skip: 0,
+                    take: 20,
+                    text: "",
+                },
                 callback: (res) => {
                     if (res.status === 200) {
                         let messages = res.data.data.reverse();
@@ -200,14 +216,11 @@ function ReceptionistChat() {
                             imageURL: item.fromUser.imageURL,
                             content: item.content,
                             time: item.timeCreated,
-                            status: 1
+                            status: 1,
+                            removed: item.isRemoved,
                         }));
                         setMessageList(formattedMessages);
-                        setTotalPages(res.data.total_pages);
-                        setPaginated({
-                            page: res.data.page,
-                            pageSize: res.data.per_page
-                        });
+                        setTotal(res.data.total);
                     }
                     else if (res.status < 500) {
                         toast.error(res.data);
@@ -239,10 +252,11 @@ function ReceptionistChat() {
                 imageURL: logo,
                 content: content,
                 time: new Date().toISOString(),
-                status: 0
+                status: 0,
+                removed: false,
             }
 
-            let messages = [...messageList.slice(1), message]
+            let messages = [...messageList, message]
             setMessageList(messages);
             postMessage({
                 patientId: currentConversation.user.id,
@@ -252,6 +266,10 @@ function ReceptionistChat() {
                         message.id = res.data.id;
                         message.status = 1;
                         message.time = res.data.timeCreated;
+                        setFiltered({
+                            ...filtered,
+                            skip: filtered.skip + 1
+                        });
                     }
                     else {
                         message.status = -1;
@@ -286,10 +304,15 @@ function ReceptionistChat() {
                         imageURL: message.fromUser.imageURL,
                         content: message.content,
                         time: message.timeCreated,
-                        status: 1
+                        status: 1,
+                        removed: false,
                     }
-                    let messages = [...messageList.slice(1), formattedMessage]
+                    let messages = [...messageList, formattedMessage]
                     setMessageList(messages);
+                    setFiltered(prev => ({
+                        ...prev,
+                        skip: prev.skip + 1,
+                    }));
                     markSeenChatBox({
                         chatboxId: currentConversation.id,
                         callback: () => reloadUserList()
@@ -300,7 +323,27 @@ function ReceptionistChat() {
                 }
                     
             }
+
+            if(action === "Chat-RemoveMessage") {
+                let message = JSON.parse(data);
+                console.log("Removed: ", message);
+
+                let formattedMessage = {
+                    id: message.id,
+                    position: 'left',
+                    imageURL: message.fromUser.imageURL,
+                    content: message.content,
+                    time: message.timeCreated,
+                    status: 1,
+                    removed: true,
+                }
+
+                let messages = messageList.map(item => item.id === message.id ? formattedMessage : item);
+                setMessageList(messages);
+                
+            }
         }
+
 
         if (pusherChanel) {
             pusherChanel.bind_global(messageReceiveHandler);
@@ -360,13 +403,18 @@ function ReceptionistChat() {
     }, [loadMoreDelay, delayCountDownInterval, startedCountDown]);
     
     const handleOnScroll = (e) => {
-        if(e.target.scrollTop === 0 && !isLoadingMessages && loadMoreDelay === 0) {
+        if(e.target.scrollTop === 0 && !isLoadingMessages && loadMoreDelay === 0 && filtered.skip < total) {
+
             setIsLoadingMessages(true);
-            let nextPage = paginated.page + 1;
+            
+            let nextFiltered = {
+                take: filtered.take,
+                skip: filtered.skip + filtered.take,
+                text: filtered.text,
+            }
             fetchUserMessages({
                 patientId: currentConversation.user.id,
-                page: nextPage,
-                pageSize: paginated.pageSize,
+                params: nextFiltered,
                 callback: (res) => {
                     if(res.status === 200) {
                         let messages = res.data.data.reverse();
@@ -376,15 +424,14 @@ function ReceptionistChat() {
                             imageURL: item.fromUser.imageURL,
                             content: item.content,
                             time: item.timeCreated,
-                            status: 1
+                            status: 1,
+                            removed: item.isRemoved,
                         }));
 
                         messages = [...formattedMessages, ...messageList];
                         setMessageList(messages);
-                        setTotalPages(res.data.total_pages);
-                        setPaginated({
-                            page: res.data.page
-                        });
+                        setTotal(res.data.total);
+                        setFiltered(nextFiltered);
                     }
                     else {
                         toast.error("System is busy!");
@@ -428,7 +475,7 @@ function ReceptionistChat() {
                                     {
                                         currentConversation ? (
                                             messageList.map((msg, idx) => (
-                                                <Message key={idx} item={msg} />
+                                                <Message key={msg.id} item={msg} />
                                             ))
                                         ) : (
                                             <h2 className="text-center text-danger">Please select conversation!</h2>

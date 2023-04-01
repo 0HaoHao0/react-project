@@ -38,3 +38,11 @@ export const postUserMessage = ({ content, callback }) => {
         callback: callback
     });
 }
+
+export const removeMessageAPI = ({messageId, callback}) => {
+    callAPI({
+        method: "DELETE",
+        endpoint: `/api/Messages/RemoveMessage/${messageId}`,
+        callback: callback
+    });
+}

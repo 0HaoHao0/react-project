@@ -27,15 +27,11 @@ export const fetchUserList = (callback = (res) => console.log(res)) => {
     });
 }
 
-export const fetchUserMessages = ({patientId, page, pageSize, callback}) => {
+export const fetchUserMessages = ({patientId, params, callback}) => {
     callAPI({
         method: "GET",
         endpoint: "/api/Messages/ListMessagesInConversationOfReception/" + patientId,
-        params: {
-            patientId,
-            page,
-            pageSize
-        },
+        params: params,
         callback: callback
     })
 }
