@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
-import { getAllAppointment } from "../../../services/receptionist/apiReceptionistAppointment";
+import { getAllAppointment, getAppointmentStates } from "../../../services/receptionist/apiReceptionistAppointment";
 import { useNavigate } from "react-router-dom";
 
 
@@ -19,9 +19,26 @@ function ReceptionistAppointmentQueue() {
             page: -1,
             startDate: moment().weekday(0).format(),
             endDate: moment().weekday(6).format(),
+            phoneNumber: null,
+            userName: null,
+            state: null,
         }
     )
 
+    const [appointmentStateList, setAppointmentStateList] = useState([]);
+
+    useEffect(() => {
+
+        const doEffect = async () => {
+            let res = await getAppointmentStates();
+            if(res.status === 200) {
+                setAppointmentStateList(res.data);
+            }
+        }
+
+        doEffect();
+
+    }, []);
 
     const cardBorder =
     {
@@ -117,6 +134,8 @@ function ReceptionistAppointmentQueue() {
                                                                         onClick={() => navigate(`/receptionist/appointment-detail/${item.id}`)}>Detail</button>
                                                                 </div>
                                                                 <div className='card-body overflow-auto'>
+                                                                    <h6 className="card-title">Id: {item.id}</h6>
+                                                                    <h6 className="card-title">User: {item.patient.baseUser.userName}</h6>
                                                                     <h6 className="card-title">Doctor: {item.doctor.baseUser.fullName}</h6>
                                                                     <h6 className="card-title">Service:  {item.service.serviceName}</h6>
                                                                     <h6 className="card-title">Phone Number: <strong> {item.patient.baseUser.phoneNumber} </strong>  </h6>
@@ -142,14 +161,42 @@ function ReceptionistAppointmentQueue() {
                         <div className="h-100">
                             <div className="mb-2">
                                 <label className="form-label" id="my-addon">Phone Number: </label>
-                                <input className="form-control" type="text" name="phoneNumber"
-                                    onChange={(e) => { setFillter((preState) => ({ ...preState, [e.target.name]: e.target.value })) }} />
+                                <input className="form-control" type="text" placeholder="Search by PhoneNumber"
+                                    onKeyDown={(e) => {
+                                        if(e.key === "Enter") {
+                                            setFillter({
+                                                ...fillter,
+                                                phoneNumber: e.target.value
+                                            });
+                                        }
+                                    }}
+                                />
                             </div>
                             <div className="mb-2">
                                 <label className="form-label" id="my-addon">Patient User Name: </label>
-                                <input className="form-control" type="text" name="userName"
-                                    onChange={(e) => { setFillter((preState) => ({ ...preState, [e.target.name]: e.target.value })) }} />
+                                <input className="form-control" type="text" placeholder="Search by UserName"
+                                    onKeyDown={(e) => {
+                                        if(e.key === "Enter") {
+                                            setFillter({
+                                                ...fillter,
+                                                userName: e.target.value
+                                            });
+                                        }
+                                    }}
+                                />
                             </div>
+                            <div className="mb-2">
+                                <label className="form-label" id="">Filter by State:</label>
+                                <select className="text-secondary form-control">
+                                    <option>Choose State</option>
+                                    {
+                                        appointmentStateList.map(item => 
+                                            <option key={item.id} value={item.id}>{item.name}</option>
+                                        )
+                                    }
+                                </select>
+                            </div>
+                            <hr />
                             <div className="mb-2">
                                 <label className="form-label" id="my-addon">Start Date: </label>
                                 <input className="form-control" type="date" name="startDate" defaultValue={moment().weekday(0).format('YYYY-MM-DD')}

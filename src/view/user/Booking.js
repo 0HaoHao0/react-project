@@ -126,7 +126,7 @@ function Booking() {
         else {
             let formData = new FormData();
             formData.append("PatientId", user.userInfo.id);
-            formData.append("DoctorId", appointmentOther.Doctor);
+            if(appointmentOther.Doctor) formData.append("DoctorId", appointmentOther.Doctor);
             formData.append("ServiceId", state.id);
             formData.append('Slot', appointment.Slot)
             formData.append('Date', appointment.Date)
