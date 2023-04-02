@@ -152,9 +152,8 @@ function Booking() {
     }
     return (<>
         <div className="booking m-5">
-            <button className="btn btn-danger btn-back" type="button" onClick={() => { navigate(-1) }}><i className="fa-solid fa-backward"></i> Back</button>
 
-            <div className="row g-5 ">
+            <div className="row g-5 pt-5 px-5">
                 <div className="col-lg-6 col-sm-12 ">
                     <div className="border shadow h-100 p-5 row align-content-center">
                         <div className="row  justify-content-center mb-5">

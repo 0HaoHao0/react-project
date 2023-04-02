@@ -20,26 +20,26 @@ const Message = ({ item }) => {
             showConfirmButton: true,
             showCancelButton: true
         })
-        .then(option => {
-            if(option.isConfirmed) {
-                removeMessageAPI({
-                    messageId: msg.id,
-                    callback: (res) => {
-                        if(res.status === 200) {
-                            let message = res.data;
-                            setMsg({
-                                ...msg,
-                                removed: true,
-                                content: message.content
-                            });
+            .then(option => {
+                if (option.isConfirmed) {
+                    removeMessageAPI({
+                        messageId: msg.id,
+                        callback: (res) => {
+                            if (res.status === 200) {
+                                let message = res.data;
+                                setMsg({
+                                    ...msg,
+                                    removed: true,
+                                    content: message.content
+                                });
 
+                            }
                         }
-                    }
-                })
-            }
+                    })
+                }
 
-            Swal.close();
-        });
+                Swal.close();
+            });
 
     }
 
@@ -76,15 +76,15 @@ const Message = ({ item }) => {
                                     </>
                                 ) :
 
-                                item.status === 1 ? (
-                                    <>
-                                        <span>{new Date(msg.time).toLocaleTimeString()}</span>
-                                    </>
-                                ) : (
-                                    <>
-                                        <i class="fa fa-exclamation-circle" aria-hidden="true"></i>
-                                    </>
-                                )
+                                    item.status === 1 ? (
+                                        <>
+                                            <span>{new Date(msg.time).toLocaleTimeString()}</span>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <i class="fa fa-exclamation-circle" aria-hidden="true"></i>
+                                        </>
+                                    )
                             }
                         </div>
                     </div>
@@ -120,7 +120,7 @@ function Chat() {
                 text: "",
             },
             callback: (res) => {
-                if(res.status === 200) {
+                if (res.status === 200) {
                     console.log(res);
                     let messages = res.data.data.reverse();
                     let formattedMessages = messages.map((item, idx) => ({
@@ -149,7 +149,7 @@ function Chat() {
             }
         });
 
-    }, []); 
+    }, []);
 
     const scroller = useRef(null);
     const scrollToEnd = () => {
@@ -163,10 +163,10 @@ function Chat() {
 
     const [initScroll, setInitScroll] = useState(false);
     useEffect(() => {
-        if((scroller.current.scrollTop + scroller.current.offsetHeight) / scroller.current.scrollHeight > 0.9) {
+        if ((scroller.current.scrollTop + scroller.current.offsetHeight) / scroller.current.scrollHeight > 0.9) {
             scrollToEnd();
         }
-        else if(!initScroll) {
+        else if (!initScroll) {
             scrollToEnd();
             setInitScroll(true);
         }
@@ -179,15 +179,15 @@ function Chat() {
 
     useEffect(() => {
 
-        if(loadMoreDelay > 0 && !startedCountDown) {
+        if (loadMoreDelay > 0 && !startedCountDown) {
             let _i = setInterval(() => {
                 setLoadMoreDelay(prev => prev - 1);
             }, 1000);
             setStartCountDown(true);
             setDelayCountDownInterval(_i);
         }
-        else if(loadMoreDelay === 0) {
-            if(delayCountDownInterval) clearInterval(delayCountDownInterval);
+        else if (loadMoreDelay === 0) {
+            if (delayCountDownInterval) clearInterval(delayCountDownInterval);
             setDelayCountDownInterval(null);
             setStartCountDown(false);
         }
@@ -195,7 +195,7 @@ function Chat() {
 
     const [isLoadMoreMessages, setIsLoadMoreMessages] = useState(false);
     const handleOnScroll = (e) => {
-        if(e.target.scrollTop === 0 && !isLoadMoreMessages && loadMoreDelay === 0 && filtered.skip < total) {
+        if (e.target.scrollTop === 0 && !isLoadMoreMessages && loadMoreDelay === 0 && filtered.skip < total) {
             setIsLoadMoreMessages(true);
             let nextFiltered = {
                 take: filtered.take,
@@ -206,7 +206,7 @@ function Chat() {
             fetchUserMessages({
                 params: nextFiltered,
                 callback: (res) => {
-                    if(res.status === 200) {
+                    if (res.status === 200) {
                         let messages = res.data.data.reverse();
                         console.log(messages);
                         let formattedMessages = messages.map((item, idx) => ({
@@ -218,7 +218,7 @@ function Chat() {
                             status: 1,
                             removed: item.isRemoved,
                         }));
-                        
+
                         setMessageList([...formattedMessages, ...messageList]);
                         setTotal(res.data.total);
                         setFiltered(nextFiltered);
@@ -274,9 +274,9 @@ function Chat() {
                 setMessageList([...messages]);
             }
         });
-        
+
         content.current.value = "";
-        
+
     }
 
     useEffect(() => {
@@ -324,12 +324,11 @@ function Chat() {
 
     return (
         <>
-            <div className="user-chat">
-                <div className="row layout">
-                    
-                    <div className="col-lg-7 h-100 d-flex flex-column justify-content-start align-items-end">
-                        <h2 className="text-primary mb-2 mt-4">ChatBox</h2>
-                        <div className="message-container bg-primary rounded border">
+            <div className="user-chat my-5 pt-5 px-5">
+                <div className="container-fluid border shadow-sm p-4">
+                    <div className="">
+                        <h2 className="text-primary ">Chat With Us</h2>
+                        <div className="message-container ">
                             <div className="messages-list bg-light rounded" ref={scroller} onScroll={handleOnScroll}>
                                 {
                                     isLoadMoreMessages &&
@@ -344,41 +343,31 @@ function Chat() {
                                         </div>
                                     ) : (
                                         messageList.length > 0 ?
-                                        messageList.map((item, idx) => (
-                                            <Message key={item.id} item={item}/>
-                                        )) : (
-                                            <h3 className="text-center text-danger p-3">No have any message.</h3>
-                                        )
+                                            messageList.map((item, idx) => (
+                                                <Message key={item.id} item={item} />
+                                            )) : (
+                                                <h3 className="text-center text-danger p-3">No have any message.</h3>
+                                            )
                                     )
                                 }
                             </div>
                         </div>
-                    </div>
-
-                    <div className="col-lg-5 h-100 d-flex flex-column justify-content-center align-items-center">
-                        <form className="message-form" onSubmit={handleSendMessage}>
-                            <div className="p-3 bg-info rounded">
-                                <div className="mb-3">
-                                    <label htmlFor="content" className="text-label mb-2">Message: </label>
-                                    <textarea ref={content} className="form-control bg-light" cols="30" rows="10" placeholder="Enter your message..."
-                                        onKeyDown={(e) => {
-                                            if (e.key === 'Enter') {
-                                                handleSendMessage(e);
-                                            }
-                                        }}
-                                    >
-                                    </textarea>
-                                </div>
-                                <div className="text-end">
-                                    <button type="submit" className="btn btn-primary">Send</button>
-                                </div>
+                        <form className="message-form w-100" onSubmit={handleSendMessage}>
+                            <div className="input-group">
+                                <textarea ref={content} className="form-control" rows={1} placeholder="Enter your message..."
+                                    onKeyDown={(e) => {
+                                        if (e.key === 'Enter') {
+                                            handleSendMessage(e);
+                                        }
+                                    }} />
+                                <button type="submit" className="btn btn-primary input-group-text" id="my-addon">Send</button>
                             </div>
+
                         </form>
                     </div>
-                    
                 </div>
 
-                
+
             </div>
         </>
     );

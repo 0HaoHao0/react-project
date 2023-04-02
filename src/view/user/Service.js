@@ -2,8 +2,11 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { getAllService } from '../../services/admin/service/apiService';
 import './Service.scss'
+import { useRef } from 'react';
 function Service() {
     const [services, setServices] = useState()
+
+    const ref = useRef(null);
 
     const loadServices = async () => {
         const res = await getAllService(-1);
@@ -28,7 +31,7 @@ function Service() {
                 <div className="w-75 text-box p-5">
                     <h1 className='fw-bold'>“Your Great Smile Begins With A Great Dentist”</h1>
                     <br />
-                    <h5 className='btn btn-warning fw-bold'>Discover Now</h5>
+                    <h5 className='btn btn-warning fw-bold' onClick={() => { ref.current?.scrollIntoView({ behavior: 'smooth', block: 'start', top: '-20px' }); }}>Discover Now</h5>
                 </div>
             </div>
 
@@ -51,12 +54,12 @@ function Service() {
                         </div>
                         <div className='row row-cols-sm-2 g-5 '>
                             {services && services.data.slice(0, 2).map((service, index) =>
-                                <div className='col '>
+                                <div className='col ' key={service.id}>
                                     <div className="card shadow  h-100 " >
                                         <img className="card-img-top" src={service.imageURL} alt="..." />
                                         <div className="card-body d-flex flex-column justify-content-between">
                                             <h5 className="card-title fw-bold  my-3"> {service.serviceName}</h5>
-                                            <Link to={'/services/info'} state={service} className='btn btn-primary '>Detail <i className="fa-solid fa-circle-info"></i></Link>
+                                            <Link to={'/services/info'} state={service} className='btn btn-primary mb-2'>Detail <i className="fa-solid fa-circle-info"></i></Link>
                                             <Link to={`/user/booking`} state={service} className='btn btn-warning '>Book Now <i className="fa-solid fa-calendar-days"></i></Link>
                                         </div>
                                     </div>
@@ -86,13 +89,13 @@ function Service() {
                 </div>
             </div>
             {/*  */}
-            <div className='four-page'>
+            <div className='four-page ' ref={ref}>
                 <div className='row g-0 mx-5 overflow-hidden'>
                     <div className="alert alert-light d-inline-flex flex-lg-row flex-column   align-items-center justify-content-between" role="alert">
                         <h1 className="alert-heading none   text-nowrap w-100">Our Services</h1>
                         <div className="input-group ">
-                            <select class="form-select" aria-label="Default select example">
-                                <option selected >All</option>
+                            <select className="form-select" aria-label="Default select example">
+                                <option  >All</option>
                                 <option value="1">One</option>
                                 <option value="2">Two</option>
                                 <option value="3">Three</option>
@@ -110,16 +113,16 @@ function Service() {
                         </div>
                     </div>
                 </div>
-                <div className="container">
-                    <div className='services-box row overflow-auto border rounded-3  '>
+                <div className="container" >
+                    <div className='services-box row  overflow-auto border rounded-3  ' >
                         {services && services.data.map((service, index) =>
-                            <div className='col-lg-4  col-md-12  p-5'>
+                            <div className='col-lg-4 col-md-12 d-flex align-items-center justify-content-center p-5' key={service.id}>
                                 <div className="card shadow  h-100 " style={{ width: '15rem' }} >
                                     <img className="card-img-top" src={service.imageURL} alt="..." />
                                     <div className="card-body d-flex flex-column justify-content-between">
                                         <h5 className="card-title fw-bold  my-3"> {service.serviceName}</h5>
-                                        <Link to={'/services/info'} state={service} className='btn btn-primary '>Detail <i className="fa-solid fa-circle-info"></i></Link>
-                                        <Link to={`/user/booking`} state={service} className='btn btn-warning '>Book Now <i className="fa-solid fa-calendar-days"></i></Link>
+                                        <Link to={'/services/info'} state={service} className='btn btn-primary mb-2'>Detail <i className="fa-solid fa-circle-info"></i></Link>
+                                        <Link to={`/user/booking`} state={service} className='btn btn-warning'>Book Now <i className="fa-solid fa-calendar-days"></i></Link>
                                     </div>
                                 </div>
                             </div>
@@ -131,11 +134,11 @@ function Service() {
 
             {/*  */}
             <div className='five-page'>
-                <div className='row g-0 m-5 bg-dark '>
+                <div className='row g-0 m-5 bg-dark  text-white'>
                     <h1 className='fw-bold text-center my-5'>It’s all in the details</h1>
                     <div className='row text-center p-5'>
                         <div className="col-lg-3 col-sm-12">
-                            <i class="fa-solid fa-5x fa-money-check-dollar"></i>
+                            <i className="fa-solid fa-5x fa-money-check-dollar"></i>
                             <h3>
 
                                 Transparent pricing
@@ -143,7 +146,7 @@ function Service() {
                             At Village Dental, the cost of general dentistry treatment is transparent and affordable.
                         </div>
                         <div className="col-lg-3 col-sm-12">
-                            <i class="fa-solid fa-5x fa-mug-hot"></i>
+                            <i className="fa-solid fa-5x fa-mug-hot"></i>
                             <h3>
 
                                 A Dental Spa

@@ -4,9 +4,12 @@ import { useState } from 'react';
 import { useEffect } from 'react';
 import { getAllNews } from '../../services/admin/news/apiNew';
 import { toast } from 'react-toastify';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 function Home() {
+    const navigate = useNavigate()
+
     const [news, setNews] = useState();
+
 
     const loadNews = async () => {
 
@@ -43,7 +46,8 @@ function Home() {
                                 for all ages
                             </h1>
                             <br />
-                            <button className='btn btn-warning fw-bold'>Book Online</button>
+                            <button className='btn btn-warning fw-bold' onClick={() => { navigate('/services') }}>Book Online</button>
+
                         </div>
                     </div>
                 </div>

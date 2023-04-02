@@ -51,16 +51,7 @@ function Header() {
                     Home
                   </NavLink>
                 </li>
-                <li className="nav-item">
-                  <NavLink
-                    to="/aboutus"
-                    className={({ isActive }) =>
-                      isActive ? "nav-link active" : "nav-link"
-                    }
-                  >
-                    About
-                  </NavLink>
-                </li>
+
                 <li className="nav-item">
                   <NavLink
                     to="/services"
@@ -90,12 +81,11 @@ function Header() {
                           isActive ? "nav-link active" : "nav-link"
                         }
                       >
-                        Chat
+                        Chat Box
                       </NavLink>
                     </li>
                   </>
                   : null}
-
                 <li className="nav-item">
                   <NavLink
                     to="/contact"
@@ -103,9 +93,20 @@ function Header() {
                       isActive ? "nav-link active" : "nav-link"
                     }
                   >
-                    Contact Us
+                    Contact
                   </NavLink>
                 </li>
+                <li className="nav-item">
+                  <NavLink
+                    to="/aboutus"
+                    className={({ isActive }) =>
+                      isActive ? "nav-link active" : "nav-link"
+                    }
+                  >
+                    About Us
+                  </NavLink>
+                </li>
+
               </ul>
             </div>
             <div className="collapse navbar-collapse" id="navbarResponsive">
@@ -125,18 +126,27 @@ function Header() {
                 </>
               ) : (
                 <ul className="navbar-nav ms-auto">
-                  <div className="d-flex align-items-center justify-content-center">
-                    Hi, {user.userInfo.fullName}
-                  </div>
-                  <Link
-                    to="/user/profile"
-                    className="btn btn-primary mx-lg-2 my-lg-0 my-sm-2"
-                  >
-                    Profile
-                  </Link>
-                  <button className="btn btn-success " onClick={() => logOut()}>
-                    Log out
-                  </button>
+                  <li className="nav-item dropdown">
+                    <a className="nav-link dropdown-toggle  text-dark" href="..." data-bs-toggle="dropdown" role="button" aria-expanded="false">Hi, {user.userInfo.fullName}</a>
+                    <ul className="dropdown-menu">
+                      <li className="mx-2 mb-2">
+                        <Link
+                          to="/user/profile"
+                          className="btn btn-primary w-100 "
+                        >
+                          <i className="fa-solid fa-user"></i> Profile
+                        </Link>
+                      </li>
+                      <li className="mx-2 mb-2">
+                        <button className="btn btn-danger btn  w-100" onClick={() => logOut()}>
+                          <i className="fa-solid fa-right-to-bracket"></i> Log out
+                        </button>
+                      </li>
+
+                    </ul>
+                  </li>
+
+
                 </ul>
               )}
             </div>
