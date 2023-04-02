@@ -3,7 +3,6 @@ import './News.scss'
 
 function News() {
     const { state } = useLocation();
-    console.log(state);
     return (<>
         <div className="news p-5">
             <div className='row py-5'>
@@ -16,11 +15,9 @@ function News() {
                                     ?
                                     <>
                                         {state.services.map((value, index) =>
-                                            <>
-                                                <span className='mx-1 p-1 border'>
-                                                    {value.serviceCode}
-                                                </span>
-                                            </>
+                                            <span className='mx-1 p-1 border' key={value.id}>
+                                                {value.serviceCode}
+                                            </span>
                                         )}
                                     </>
                                     :
