@@ -6,42 +6,63 @@ import Pagiation from "../../../components/admin/Pagination";
 //Datatable Modules
 import "datatables.net-dt/js/dataTables.dataTables.min.mjs";
 import "datatables.net-dt/css/jquery.dataTables.min.css";
-import $ from "jquery";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { getAllAppointment } from "../../../services/receptionist/apiReceptionistAppointment";
+import { getAllAppointment, getAppointmentStates } from "../../../services/receptionist/apiReceptionistAppointment";
+import Swal from "sweetalert2";
 
 function ReceptionistAppointmentHistory() {
     const [appointmentData, setAppointmentData] = useState();
     const user = useSelector((state) => state.user);
 
-    const currentPage = appointmentData ? appointmentData.page : null;
-    const totalPage = appointmentData ? appointmentData.total_pages : null;
+    const currentPage = appointmentData ? appointmentData.page : 1;
+    const totalPage = appointmentData ? appointmentData.total_pages : 0;
 
 
     const [filter, setFilter] = useState({
-        pageSize: 5,
+        page: currentPage,
+        pageSize: 10,
         id: user.userInfo.id,
-        currentPage: currentPage,
+        userName: null,
+        phoneNumber: null,
+        state: null,
     });
 
+    const [appointmentStateList, setAppointmentStateList] = useState([]);
 
+    useEffect(() => {
 
+        const doEffect = async () => {
+            let res = await getAppointmentStates();
+            if(res.status === 200) {
+                setAppointmentStateList(res.data);
+            }
+        }
 
+        doEffect();
+
+    }, []);
+    
     useEffect(() => {
         const loadData = async () => {
 
-            const res = await getAllAppointment(filter);
-
-            setAppointmentData(res.data)
-
-            $('#table').DataTable({
-                destroy: true,
-                retrieve: true,
-                paging: false,
+            Swal.fire({
+                icon: "info",
+                title: "",
+                text: "Waiting for get data..."
             });
-
-
+            Swal.showLoading();
+            const res = await getAllAppointment(filter);
+            if(res.status === 200) {
+                setAppointmentData(res.data);
+            }
+            else if(res.status < 500) {
+                toast.error(res.data);
+            }
+            else {
+                toast.error("System is busy!");
+            }
+            Swal.close();
         };
 
         loadData();
@@ -55,13 +76,13 @@ function ReceptionistAppointmentHistory() {
     const peviousPage = () => {
         setFilter((peviousPage) => ({
             ...peviousPage,
-            currentPage: currentPage - 1
+            page: peviousPage.page - 1
         }));
     }
     const nextPage = (e) => {
         setFilter((peviousPage) => ({
             ...peviousPage,
-            currentPage: currentPage + 1
+            page: peviousPage.page + 1
         }));
     }
     const enterPage = (e) => {
@@ -77,7 +98,7 @@ function ReceptionistAppointmentHistory() {
                     const page = e.target.value
                     setFilter((peviousPage) => ({
                         ...peviousPage,
-                        currentPage: page,
+                        page: page,
                     }));
                     e.target.value = "";
                     e.target.blur();
@@ -100,16 +121,59 @@ function ReceptionistAppointmentHistory() {
                 </div>
                 :
                 <>
-                    <div className="overflow-auto mb-4">
-
+                    <div className="mb-4">
+                        <form className="d-flex justify-content-end gap-2">
+                            <div className="mb-3 w-25">
+                                <input type="text" placeholder="Search by UserName" className="form-control w-fit" 
+                                    onKeyDown={(e) => {
+                                        if(e.key === "Enter") {
+                                            setFilter({
+                                                ...filter,
+                                                userName: e.target.value
+                                            });
+                                        }
+                                    }}
+                                />
+                            </div>
+                            <div className="mb-3 w-25">
+                                <input type="text" placeholder="Search by PhoneNumber" className="form-control w-fit" 
+                                    onKeyDown={(e) => {
+                                        if(e.key === "Enter") {
+                                            setFilter({
+                                                ...filter,
+                                                phoneNumber: e.target.value
+                                            });
+                                        }
+                                    }}
+                                />
+                            </div>
+                            <div className="mb-3">
+                                <select className="p-2 rounded" onChange={(e) => {
+                                    setFilter({
+                                        ...filter,
+                                        state: e.target.value
+                                    });
+                                }}>
+                                    <option>Choose State</option>
+                                    {
+                                        appointmentStateList.map(item => 
+                                            <option key={item.id} value={item.id}>{item.name}</option>
+                                        )
+                                    }
+                                </select>
+                            </div>
+                        </form>
                         <table id="table" className="table table-hover">
                             <thead>
                                 <tr className="table-dark">
                                     <th>Id</th>
+                                    <th>User</th>
+                                    <th>FullName</th>
                                     <th>Date</th>
                                     <th>Time</th>
                                     <th>State</th>
                                     <th>Service</th>
+                                    <th>Phone</th>
                                     <th>More</th>
                                 </tr>
                             </thead>
@@ -117,10 +181,13 @@ function ReceptionistAppointmentHistory() {
                                 {appointmentData.data.map((value) => (
                                     <tr key={value.id}>
                                         <td>{value.id}</td>
+                                        <td>{value.patient.baseUser.userName}</td>
+                                        <td>{value.patient.baseUser.fullName}</td>
                                         <td>{value.date.split("T")[0]}</td>
                                         <td>{value.time}</td>
                                         <td>{value.state}</td>
                                         <td >{value.service.serviceName}</td>
+                                        <td >{value.patient.baseUser.phoneNumber}</td>
                                         <td >
                                             <Link
                                                 to={`/receptionist/appointment-detail/${value.id}`}
@@ -135,16 +202,13 @@ function ReceptionistAppointmentHistory() {
                         </table>
                     </div>
                     <Pagiation
-                        page={appointmentData.page}
+                        page={currentPage}
                         total_pages={appointmentData.total_pages}
                         previousPage={peviousPage}
                         nextPage={nextPage}
                         enterPage={enterPage}
                     />
                 </>}
-
-
-
         </div>
     </>);
 }

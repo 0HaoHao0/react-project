@@ -1,18 +1,26 @@
 import axios from "axios";
 
-export const getAllAppointment = async (filter) => {
+export const getAllAppointment = async (params) => {
     let data;
     await axios({
         method: 'get',
         url: '/api/Appointment/GetAll',
-        params: {
-            Page: filter.page,
-            PageSize: filter.pageSize,
-            startDate: filter.startDate,
-            endDate: filter.endDate,
-            PhoneNumber: filter.phoneNumber,
-            UserName: filter.userName
-        }
+        params: params,
+    }).then((response) => {
+        data = response;
+    }).catch((error) => {
+        // handle error
+        data = error.response;
+    })
+
+    return data;
+}
+
+export const getAppointmentStates = async () => {
+    let data;
+    await axios({
+        method: 'get',
+        url: '/api/SelectBoxItems/GetAppointmentStates',
     }).then((response) => {
         data = response;
     }).catch((error) => {
