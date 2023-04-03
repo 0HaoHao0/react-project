@@ -80,10 +80,12 @@ function ReceptionistAppointmentHistory() {
         }));
     }
     const nextPage = (e) => {
-        setFilter((peviousPage) => ({
-            ...peviousPage,
-            page: peviousPage.page + 1
-        }));
+        if(filter.page + 1 <= totalPage) {
+            setFilter((peviousPage) => ({
+                ...peviousPage,
+                page: peviousPage.page + 1
+            }));
+        }
     }
     const enterPage = (e) => {
         if (e.keyCode === 13) {
@@ -129,7 +131,8 @@ function ReceptionistAppointmentHistory() {
                                         if(e.key === "Enter") {
                                             setFilter({
                                                 ...filter,
-                                                userName: e.target.value
+                                                userName: e.target.value,
+                                                page: 1,
                                             });
                                         }
                                     }}
@@ -141,7 +144,8 @@ function ReceptionistAppointmentHistory() {
                                         if(e.key === "Enter") {
                                             setFilter({
                                                 ...filter,
-                                                phoneNumber: e.target.value
+                                                phoneNumber: e.target.value,
+                                                page: 1,
                                             });
                                         }
                                     }}
@@ -149,12 +153,20 @@ function ReceptionistAppointmentHistory() {
                             </div>
                             <div className="mb-3">
                                 <select className="p-2 rounded" onChange={(e) => {
-                                    setFilter({
-                                        ...filter,
-                                        state: e.target.value
-                                    });
+                                    if(e.target.value === "default") {
+                                        setFilter({
+                                            ...filter,
+                                            state: null
+                                        });
+                                    }
+                                    else {
+                                        setFilter({
+                                            ...filter,
+                                            state: e.target.value
+                                        });
+                                    }
                                 }}>
-                                    <option>Choose State</option>
+                                    <option value="default">Choose State</option>
                                     {
                                         appointmentStateList.map(item => 
                                             <option key={item.id} value={item.id}>{item.name}</option>
