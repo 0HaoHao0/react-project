@@ -1,17 +1,35 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
-import { updateMedicalRecord } from "../../../services/admin/patient/apiPatient";
+import { getPatientInfo, updateMedicalRecord } from "../../../services/admin/patient/apiPatient";
 
 function PatientDetail() {
     let { state } = useLocation();
 
-    const [patientInfo, setPatientInfo] = useState(state);
+    const [patientInfo, setPatientInfo] = useState({});
 
+    useEffect(() => {
+
+        const doEffect = async () => {
+            let res = await getPatientInfo(state.id);
+
+            if(res.status === 200) {
+                console.log(res.data);
+                setPatientInfo(res.data);
+            }
+            else {
+                toast.error("Cannot get patientInfo. System is busy!");
+            }
+        }
+
+        doEffect();
+
+    }, [state]);
+
+    
+    
     const [changeView, setChangeView] = useState(0)
-
-
     //Convert Date
     const convertDate = (obj) => {
         if (obj == null) {
@@ -72,7 +90,6 @@ function PatientDetail() {
             <div>
                 <h1>Patient Profile</h1>
             </div>
-
             <hr />
             <div className="row g-0">
                 <div className="col-lg-3 col-sm-12 ">
@@ -181,14 +198,22 @@ function PatientDetail() {
                     <div className="col-lg-9 col-sm-12 ">
                         <h1 className="alert alert-dark ">Medical Record</h1>
                         <div className="container row">
-                            <div className="form-group">
+                            <div className="mb-3">
                                 <label htmlFor="file">File:</label>
-                                <a className="text-decoration-none mx-2" href={patientInfo.medicalRecordFile.fileURL} rel="noreferrer" target='_blank'>View</a>
+                                {
+                                    patientInfo.medicalRecordFile?.fileURL ? (
+                                        <a className="text-decoration-none mx-2" href={patientInfo.medicalRecordFile.fileURL} rel="noreferrer" target='_blank'>View</a>
+                                    ) : (
+                                        <div className="text-secondary">No File Upload.</div>
+                                    )
+                                }
+                            </div>
+                            <div className="">
+                                <button className="btn btn-primary my-2" onClick={() => { handleUpdate() }}>
+                                    Update File
+                                </button>
                             </div>
                         </div>
-                        <button className="btn btn-primary my-2" onClick={() => { handleUpdate() }}>
-                            Update File
-                        </button>
                     </div>
                 }
 
