@@ -7,7 +7,6 @@ import Pagiation from "../../../components/admin/Pagination";
 //Datatable Modules
 import "datatables.net-dt/js/dataTables.dataTables.min.mjs";
 import "datatables.net-dt/css/jquery.dataTables.min.css";
-import $ from "jquery";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
@@ -15,33 +14,46 @@ function UserGetAll() {
     const [userData, setUserData] = useState();
     const [isReset, setIsReset] = useState(1);
 
-    const currentPage = userData ? userData.page : null;
-    const totalPage = userData ? userData.total_pages : null;
+    const currentPage = userData ? userData.page : 1;
+    const totalPage = userData ? userData.total_pages : 0;
 
-    const loadData = async (page) => {
-        const res = await getAllUser(page);
-        setUserData(res.data);
+    const defaultFilter = {
+        page: currentPage,
+        pageSize: 10,
+        userName: null,
+        email: null,
+        emailVerified: null,
+        phoneNumber: null,
+        isLock: null
+    }
 
-        $('#table').DataTable({
-            destroy: true,
-            retrieve: true,
-            paging: false,
-        });
-    };
-
-
+    const [filter, setFilter] = useState(defaultFilter);
 
     useEffect(() => {
 
+        Swal.fire({
+            icon: "info",
+            title: "Waiting for response..."
+        });
+        Swal.showLoading();
+        const loadData = async () => {
+            let res = await getAllUser({
+                params: filter
+            });
+    
+            if(res.status === 200) {
+                setUserData(res.data);
+            } else {
+                toast.error("System is busy!");
+            }
+            Swal.close();
+        }
+
         loadData();
 
-        return () => {
-
-        }
-    }, [isReset]);
+    }, [filter, isReset]);
 
     //handle
-
     const handleAccess = (isLock, id) => {
         if (isLock === false) {
             Swal.fire({
@@ -68,9 +80,20 @@ function UserGetAll() {
                     const expired = htmlContainer.querySelector('#expired').value;
 
                     //Call api
-                    const res = await lock(reason, expired, id)
-                    toast.success(res.data)
-                    setIsReset(isReset + 1);
+                    Swal.fire({
+                        icon: "info",
+                        title: "Waiting for locking user!"
+                    });
+                    Swal.showLoading();
+                    const res = await lock(reason, expired, id);
+                    if(res.status === 200) {
+                        toast.success(res.data);
+                        setIsReset(isReset + 1);
+                    }
+                    else {
+                        toast.error("System is busy!");
+                    }
+                    Swal.close();
                 }
             })
         }
@@ -84,21 +107,42 @@ function UserGetAll() {
                 confirmButtonText: 'Ok'
             }).then(async (result) => {
                 if (result.isConfirmed) {
+
                     //Call api
-                    const res = await unlock(id)
-                    toast.success(res.data)
-                    setIsReset(isReset - 1);
+                    Swal.fire({
+                        icon: "info",
+                        title: "Waiting for unlocking user!"
+                    });
+                    Swal.showLoading();
+                    const res = await unlock(id);
+                    if(res.status === 200) {
+                        toast.success(res.data)
+                        setIsReset(isReset - 1);
+                    }
+                    else {
+                        toast.error("System is busy!");
+                    }
+                    Swal.close();
+                    
                 }
             })
         }
     }
 
     // Pagination
-    const peviousPage = () => {
-        loadData(currentPage - 1);
+    const peviousPage = (e) => {
+        setFilter({
+            ...filter,
+            page: filter.page - 1
+        });
     }
     const nextPage = (e) => {
-        loadData(currentPage + 1);
+        if(filter.page + 1 <= totalPage) {
+            setFilter({
+                ...filter,
+                page: filter.page + 1
+            });
+        }
     }
     const enterPage = (e) => {
         if (e.keyCode === 13) {
@@ -110,7 +154,10 @@ function UserGetAll() {
                     toast.error("Max Page is " + totalPage)
                 }
                 else {
-                    loadData(e.target.value);
+                    setFilter({
+                        ...filter,
+                        page: e.target.value
+                    })
                     e.target.value = "";
                     e.target.blur();
                 }
@@ -138,6 +185,134 @@ function UserGetAll() {
                             <h1>User Management</h1>
                         </div>
                         <hr />
+                        <div className="filter row mb-4">
+                            <div className="col-lg-3">
+                                <input type="text" placeholder="Search by UserName" className="form-control" 
+                                    onKeyDown={(e) => {
+                                        if(e.key === "Enter") {
+                                            setFilter({
+                                                ...filter,
+                                                userName: e.target.value,
+                                                page: 1
+                                            });
+                                        }
+                                    }}
+                                />
+                            </div>
+                            <div className="col-lg-3">
+                                <input type="text" placeholder="Search by Email" className="form-control" 
+                                    onKeyDown={(e) => {
+                                        if(e.key === "Enter") {
+                                            setFilter({
+                                                ...filter,
+                                                email: e.target.value,
+                                                page: 1
+                                            });
+                                        }
+                                    }}
+                                />
+                            </div>
+                            <div className="col-lg-3">
+                                <input type="text" placeholder="Search by PhoneNumber" className="form-control" 
+                                    onKeyDown={(e) => {
+                                        if(e.key === "Enter") {
+                                            setFilter({
+                                                ...filter,
+                                                phoneNumber: e.target.value,
+                                                page: 1
+                                            });
+                                        }
+                                    }}
+                                />
+                            </div>
+                            <div className="col-lg-3">
+                                <div className="row">
+                                    <div className="col-lg-6">
+                                        <div className="d-flex gap-2">
+                                            <strong>Verified</strong>
+                                        </div>
+                                        <div className="d-flex gap-2">
+                                            <input type="radio" name="filterVerified" id="filterVerifiedTrue"
+                                                onChange={(e) => {
+                                                    setFilter({
+                                                        ...filter,
+                                                        emailVerified: true,
+                                                        page: 1
+                                                    });
+                                                }}
+                                            />
+                                            <label htmlFor="filterVerifiedTrue">Only Verified</label>
+                                        </div>
+                                        <div className="d-flex gap-2">
+                                            <input type="radio" name="filterVerified" id="filterVerifiedFalse"
+                                                onChange={(e) => {
+                                                    setFilter({
+                                                        ...filter,
+                                                        emailVerified: false,
+                                                        page: 1
+                                                    });
+                                                }}
+                                            />
+                                            <label htmlFor="filterVerifiedFalse">No Verified</label>
+                                        </div>
+                                        <div className="d-flex gap-2">
+                                            <input type="radio" name="filterVerified" id="filterVerified"
+                                                onChange={(e) => {
+                                                    setFilter({
+                                                        ...filter,
+                                                        emailVerified: null,
+                                                        page: 1
+                                                    });
+                                                }}
+                                            />
+                                            <label htmlFor="filterVerified">Both</label>
+                                        </div>
+                                    </div>
+                                    <div className="col-lg-6">
+                                    <div className="d-flex gap-2">
+                                            <strong>Lock</strong>
+                                        </div>
+                                        <div className="d-flex gap-2">
+                                            <input type="radio" name="filterLocked" id="filterLockedTrue"
+                                                onChange={(e) => {
+                                                    setFilter({
+                                                        ...filter,
+                                                        isLock: true,
+                                                        page: 1
+                                                    });
+                                                }}
+                                            />
+                                            <label htmlFor="filterLockedTrue">Only Locked</label>
+                                        </div>
+                                        <div className="d-flex gap-2">
+                                            <input type="radio" name="filterLocked" id="filterLockedFalse"
+                                                onChange={(e) => {
+                                                    setFilter({
+                                                        ...filter,
+                                                        isLock: false,
+                                                        page: 1
+                                                    });
+                                                }}
+                                            />
+                                            <label htmlFor="filterLockedFalse">No Locked</label>
+                                        </div>
+                                        <div className="d-flex gap-2">
+                                            <input type="radio" name="filterLocked" id="filterLocked"
+                                                onChange={(e) => {
+                                                    setFilter({
+                                                        ...filter,
+                                                        isLock: null,
+                                                        page: 1
+                                                    });
+                                                }}
+                                            />
+                                            <label htmlFor="filterLocked">Both</label>
+                                        </div>
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <div className="overflow-auto mb-4 ">
                             <table id="table" className="table table-hover">
                                 <thead>
@@ -147,6 +322,7 @@ function UserGetAll() {
                                         <th>Email</th>
                                         <th>Phone Number</th>
                                         <th>Role</th>
+                                        <th>Verified</th>
                                         <th>Access</th>
                                         <th>More</th>
 
@@ -160,6 +336,15 @@ function UserGetAll() {
                                             <td>{value.email}</td>
                                             <td>{value.phoneNumber}</td>
                                             <td>{value.role}</td>
+                                            <td>{value.emailConfirmed ?
+                                                    <div className="btn btn-success">
+                                                        <i className="fa-solid fa-check"></i>
+                                                    </div>
+                                                :
+                                                    <div className="btn btn-outline-danger disabled">
+                                                        <i className="fa-solid fa-x"></i>
+                                                    </div>
+                                            }</td>
                                             <td>{value.isLock
                                                 ?
                                                 <button className="btn btn-danger" key={"danger"} onClick={() => handleAccess(value.isLock, value.id)}><i className="fa-solid fa-lock"></i></button>
