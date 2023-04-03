@@ -1,18 +1,17 @@
 import axios from "axios";
 
-export const getAllDoctor = async (page) => {
+export const getAllDoctor = async ({ params }) => {
     let data;
     await axios({
         method: 'get',
         url: '/api/Doctor/GetAll',
-        params: {
-            page: page
-        },
+        params: params,
     }).then((response) => {
         data = response;
     }).catch((error) => {
         // handle error
         console.log(error);
+        data = error.response;
     })
 
     return data;

@@ -8,49 +8,70 @@ import Pagiation from "../../../components/admin/Pagination";
 //Datatable Modules
 import "datatables.net-dt/js/dataTables.dataTables.min.mjs";
 import "datatables.net-dt/css/jquery.dataTables.min.css";
-import $ from "jquery";
 import { Link } from "react-router-dom";
 import { useEffect } from "react";
+import Swal from "sweetalert2";
 
 function DoctorGetAll() {
 
     const [doctorData, setDoctorData] = useState();
 
-    const currentPage = doctorData ? doctorData.page : null;
-    const totalPage = doctorData ? doctorData.total_pages : null;
+    const currentPage = doctorData ? doctorData.page : 1;
+    const totalPage = doctorData ? doctorData.total_pages : 0;
 
-    const loadData = async (page) => {
-        const res = await getAllDoctor(page);
+    const defaultFilter = {
+        page: currentPage,
+        pageSize: 10,
+        userName: null,
+        email: null,
+        phoneNumber: null,
+    }
 
-        setDoctorData(res.data);
-
-        $('#table').DataTable({
-            destroy: true,
-            retrieve: true,
-            paging: false,
-            ordering: false,
-        });
-    };
-
-
+    const [filter, setFilter] = useState(defaultFilter);
 
     useEffect(() => {
-        $('#table').DataTable().destroy();
+
+        Swal.fire({
+            icon: "info",
+            title: "Waiting for response..."
+        });
+        Swal.showLoading();
+        const loadData = async () => {
+            let res = await getAllDoctor({
+                params: filter
+            });
+
+            if (res.status === 200) {
+                setDoctorData(res.data);
+            } else {
+                toast.error("System is busy!");
+            }
+            Swal.close();
+        }
 
         loadData();
 
-        return () => {
+    }, [filter]);
 
-        }
-    }, []);
 
     // Pagination
-    const peviousPage = () => {
-        loadData(currentPage - 1);
+    const peviousPage = (e) => {
+        if (filter.page - 1 > 0) {
+            setFilter({
+                ...filter,
+                page: filter.page - 1
+            })
+        }
     }
     const nextPage = (e) => {
-        loadData(currentPage + 1);
+        if (filter.page + 1 <= totalPage) {
+            setFilter({
+                ...filter,
+                page: filter.page + 1
+            })
+        }
     }
+
     const enterPage = (e) => {
         if (e.keyCode === 13) {
             if (e.target.value >= -9999999 && e.target.value <= 9999999) {
@@ -61,7 +82,10 @@ function DoctorGetAll() {
                     toast.error("Max Page is " + totalPage)
                 }
                 else {
-                    loadData(e.target.value);
+                    setFilter({
+                        ...filter,
+                        page: e.target.value
+                    });
                     e.target.value = "";
                     e.target.blur();
                 }
@@ -87,15 +111,58 @@ function DoctorGetAll() {
                         <h1>Doctor Management</h1>
                     </div>
                     <hr />
+                    <div className="filter row mb-4 justify-content-end">
+                        <div className="col-lg-3">
+                            <input type="text" placeholder="Search by UserName" className="form-control"
+                                onKeyDown={(e) => {
+                                    if (e.key === "Enter") {
+                                        setFilter({
+                                            ...filter,
+                                            userName: e.target.value,
+                                            page: 1
+                                        });
+                                    }
+                                }}
+                            />
+                        </div>
+                        <div className="col-lg-3">
+                            <input type="text" placeholder="Search by Email" className="form-control"
+                                onKeyDown={(e) => {
+                                    if (e.key === "Enter") {
+                                        setFilter({
+                                            ...filter,
+                                            email: e.target.value,
+                                            page: 1
+                                        });
+                                    }
+                                }}
+                            />
+                        </div>
+                        <div className="col-lg-3">
+                            <input type="text" placeholder="Search by PhoneNumber" className="form-control"
+                                onKeyDown={(e) => {
+                                    if (e.key === "Enter") {
+                                        setFilter({
+                                            ...filter,
+                                            phoneNumber: e.target.value,
+                                            page: 1
+                                        });
+                                    }
+                                }}
+                            />
+                        </div>
+                        
+                    </div>
                     <div className="overflow-auto mb-4">
-                        <table id="table" className="table table-hover">
+                        <table id="table" className="table table-hover text-center">
                             <thead>
                                 <tr className="table-dark">
                                     <th>UserName</th>
                                     <th>Full Name</th>
                                     <th>Email</th>
                                     <th>Phone Number</th>
-                                    <th>Major</th>
+                                    <th>Gender</th>
+                                    <th>Address</th>
                                     <th>More</th>
                                 </tr>
                             </thead>
@@ -104,9 +171,10 @@ function DoctorGetAll() {
                                     <tr key={value.id}>
                                         <td>{value.baseUser.userName}</td>
                                         <td>{value.baseUser.fullName}</td>
-                                        <td>{value.baseUser.email}</td>
+                                        <td>{value.baseUser.email || "-- Not Set --"}</td>
                                         <td>{value.baseUser.phoneNumber}</td>
-                                        <td>{value.major}</td>
+                                        <td>{value.baseUser.gender}</td>
+                                        <td>{value.baseUser.address}</td>
                                         <td>
                                             <Link
                                                 to="detail"
