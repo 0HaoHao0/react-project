@@ -105,7 +105,7 @@ function AppointmentDetail() {
                                                 <div className=" badge rounded-pill bg-secondary"
                                                     onClick={() => handleStatusInfo(appointmentInfo.state)}
                                                 >
-                                                    <i class="fa fa-question" aria-hidden="true"></i>
+                                                    <i className="fa fa-question" aria-hidden="true"></i>
                                                 </div>
                                             </div>
                                             <input id="state" className="form-control mb-2 bg-white" type="text" name="state" placeholder={appointmentInfo.state} disabled />

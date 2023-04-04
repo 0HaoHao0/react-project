@@ -19,14 +19,12 @@ export const createAppointment = async (fromData) => {
     return data;
 }
 
-export const getAllAppointment = async (filter) => {
+export const getAllAppointment = async ({params}) => {
     let data;
     await axios({
         method: 'get',
         url: '/api/Appointment/GetAll',
-        params: {
-
-        }
+        params: params
     }).then((response) => {
         data = response;
     }).catch((error) => {

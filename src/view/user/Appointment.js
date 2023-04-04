@@ -13,59 +13,62 @@ import { getAllAppointment } from '../../services/user/ApiAppointment';
 import { useEffect } from 'react';
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 
 
 function Appointment() {
     const navigate = useNavigate();
-
     const [appointment, setAppointment] = useState();
-
-
     const currentDate = moment().format();
-
-
-
-    const loadAppointment = async () => {
-        Swal.fire({
-            title: "Loading...",
-            html: "Please wait a moment"
-        })
-        Swal.showLoading()
-
-        const res = await getAllAppointment();
-
-        Swal.close()
-
-        const updatedAppointments = res.data.data.map((appointment) => {
-            return {
-                ...appointment,
-                title: appointment.doctor.baseUser.fullName,
-                startDate: appointment.from,
-                endDate: appointment.to
-            };
-        });
-        setAppointment(updatedAppointments);
-    }
-
-
     useEffect(() => {
-        loadAppointment();
-        return () => {
 
+        const loadAppointment = async () => {
+            Swal.fire({
+                title: "Loading...",
+                html: "Please wait a moment"
+            })
+            Swal.showLoading();
+            let nowDate = new Date();
+            let startOfWeek = new Date(nowDate.setDate(nowDate.getDate() - nowDate.getDay()));
+            let endOfWeek = new Date(nowDate.setDate(nowDate.getDate() - nowDate.getDay() + 6));
+            let filter = {
+                startDate: startOfWeek.toISOString().split("T")[0],
+                endDate: endOfWeek.toISOString().split("T")[0],
+            }
+            const res = await getAllAppointment({
+                params: filter
+            });
+            if(res.status === 200) {
+                console.log(res.data);
+                const updatedAppointments = res.data.data.map((appointment) => ({
+                        ...appointment,
+                        title: appointment.doctor.baseUser.fullName,
+                        startDate: appointment.from,
+                        endDate: appointment.to
+                    }));
+    
+                setAppointment(updatedAppointments);
+            }
+            else {
+                toast.error("Something wrong!");
+            }
+    
+            Swal.close();
+            
         }
-    }, [])
+
+        loadAppointment();
+    }, []);
 
 
     const myAppointment = (props) => {
         return (
             <Appointments.Appointment
                 {...props}
-
                 onClick={() => {
                     navigate(`/user/appointmentdetail/${props.data.id}`);
                 }}>
-
             </Appointments.Appointment>
         );
 
