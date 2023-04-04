@@ -38,6 +38,7 @@ import "primereact/resources/primereact.min.css";
 
 //icons
 import "primeicons/primeicons.css";
+import AdminAppointmentDetail from "../view/admin/appointment/AdminAppointmentDetail";
 
 
 function AdminRouter() {
@@ -98,6 +99,7 @@ function AdminRouter() {
               <Route path="/doctor/detail" element={<DoctorDetail />}></Route>
               {/* Appointment */}
               <Route path="/appointment" element={<AppointmentGetAll />}></Route>
+              <Route path="/appointment/:id/detail" element={<AdminAppointmentDetail />}></Route>
 
               {/* Service */}
               <Route path="/service" element={<ServiceGetAll />}></Route>

@@ -7,51 +7,88 @@ import Pagiation from "../../../components/admin/Pagination";
 //Datatable Modules
 import "datatables.net-dt/js/dataTables.dataTables.min.mjs";
 import "datatables.net-dt/css/jquery.dataTables.min.css";
-import $ from "jquery";
 import { Link } from "react-router-dom";
 import { useEffect } from "react";
 import { getAllAppointment } from "../../../services/admin/appointment/apiAppointment";
+import Swal from "sweetalert2";
+import { getAppointmentStates } from "../../../services/receptionist/apiReceptionistAppointment";
 
 function AppointmentGetAll() {
 
     const [appointmentData, setAppointmentData] = useState();
+    const currentPage = appointmentData ? appointmentData.page : 1;
+    const totalPage = appointmentData ? appointmentData.total_pages : 0;
 
+    const [appointmentStateList, setAppointmentStateList] = useState([]);
 
-    const currentPage = appointmentData ? appointmentData.page : null;
-    const totalPage = appointmentData ? appointmentData.total_pages : null;
+    const defaultFilter = {
+        page: currentPage,
+        pageSize: 5,
+        userName: null,
+        phoneNumber: null,
+        state: null,
+    }
 
-    const loadData = async (page) => {
-        const res = await getAllAppointment(page);
-
-        setAppointmentData(res.data);
-
-        $('#table').DataTable({
-            destroy: true,
-            retrieve: true,
-            paging: false,
-            ordering: false,
-        });
-    };
-
-
+    const [filter, setFilter] = useState(defaultFilter);
 
     useEffect(() => {
 
+        const doEffect = async () => {
+            let res = await getAppointmentStates();
+            if (res.status === 200) {
+                setAppointmentStateList(res.data);
+            }
+        }
+
+        doEffect();
+
+    }, []);
+
+    useEffect(() => {
+
+        Swal.fire({
+            icon: "info",
+            title: "Waiting for response..."
+        });
+        Swal.showLoading();
+        const loadData = async () => {
+            let res = await getAllAppointment({
+                params: filter
+            });
+
+            if (res.status === 200) {
+                console.log(res.data);
+                setAppointmentData(res.data);
+            } else {
+                toast.error("System is busy!");
+            }
+            Swal.close();
+        }
+
         loadData();
 
-        return () => {
+    }, [filter]);
 
-        }
-    }, []);
 
 
     // Pagination
-    const peviousPage = () => {
-        loadData(currentPage - 1);
+    const peviousPage = (e) => {
+        if (filter.page - 1 > 0) {
+            setFilter({
+                ...filter,
+                page: filter.page - 1
+            })
+        }
     }
     const nextPage = (e) => {
-        loadData(currentPage + 1);
+        if (filter.page + 1 <= totalPage) {
+            setFilter({
+                ...filter,
+                page: filter.page + 1
+            })
+        }
     }
+
     const enterPage = (e) => {
         if (e.keyCode === 13) {
             if (e.target.value >= -9999999 && e.target.value <= 9999999) {
@@ -62,7 +99,10 @@ function AppointmentGetAll() {
                     toast.error("Max Page is " + totalPage)
                 }
                 else {
-                    loadData(e.target.value);
+                    setFilter({
+                        ...filter,
+                        page: e.target.value
+                    });
                     e.target.value = "";
                     e.target.blur();
                 }
@@ -77,8 +117,6 @@ function AppointmentGetAll() {
             {!appointmentData ? (
                 <>
                     <h1>Appointment Management</h1>
-
-
                     <hr />
                     <DataLoading></DataLoading>
                 </>
@@ -86,30 +124,83 @@ function AppointmentGetAll() {
                 <>
                     <h1>Appointment Management</h1>
                     <hr />
+                    <form className="d-flex justify-content-end gap-2">
+                        <div className="mb-3 w-25">
+                            <input type="text" placeholder="Search by UserName" className="form-control w-fit"
+                                onKeyDown={(e) => {
+                                    if (e.key === "Enter") {
+                                        setFilter({
+                                            ...filter,
+                                            userName: e.target.value,
+                                            page: 1,
+                                        });
+                                    }
+                                }}
+                            />
+                        </div>
+                        <div className="mb-3 w-25">
+                            <input type="text" placeholder="Search by PhoneNumber" className="form-control w-fit"
+                                onKeyDown={(e) => {
+                                    if (e.key === "Enter") {
+                                        setFilter({
+                                            ...filter,
+                                            phoneNumber: e.target.value,
+                                            page: 1,
+                                        });
+                                    }
+                                }}
+                            />
+                        </div>
+                        <div className="mb-3">
+                            <select className="p-2 rounded" onChange={(e) => {
+                                if (e.target.value === "default") {
+                                    setFilter({
+                                        ...filter,
+                                        state: null
+                                    });
+                                }
+                                else {
+                                    setFilter({
+                                        ...filter,
+                                        state: e.target.value,
+                                        page: 1,
+                                    });
+                                }
+                            }}>
+                                <option value="default">Choose State</option>
+                                {
+                                    appointmentStateList.map(item =>
+                                        <option key={item.id} value={item.id}>{item.name}</option>
+                                    )
+                                }
+                            </select>
+                        </div>
+                    </form>
                     <div className="overflow-auto mb-4">
-                        <table id="table" className="table table-hover">
+                        <table id="table" className="table table-hover text-center">
                             <thead>
                                 <tr className="table-dark">
+                                    <th>UserName</th>
                                     <th>Doctor Name</th>
-                                    <th>Patient Name</th>
                                     <th>Service Name</th>
-                                    <th>Date</th>
-                                    <th>From</th>
+                                    <th>Required Time</th>
+                                    <th>Phone</th>
+                                    <th>Status</th>
                                     <th>More</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {appointmentData.data.map((value) => (
                                     <tr key={value.id}>
-                                        <td>{value.doctor.baseUser.fullName}</td>
-                                        <td>{value.patient.baseUser.fullName}</td>
+                                        <td>{value.patient.baseUser.userName}</td>
+                                        <td>{value.doctor.baseUser.userName}</td>
                                         <td>{value.service.serviceName}</td>
-                                        <td>{value.date.split("T")[0]}</td>
-                                        <td>{value.from.split("T")[1]}</td>
+                                        <td>{value.date.split("T")[0]} {value.time}</td>
+                                        <td>{value.patient.baseUser.phoneNumber}</td>
+                                        <td>{value.state}</td>
                                         <td>
                                             <Link
-                                                to="detail"
-                                                state={value}
+                                                to={`${value.id}/detail`}
                                                 className="btn btn-success"
                                             >
                                                 <i className="fa-solid fa-circle-info"></i>

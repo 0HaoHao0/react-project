@@ -154,26 +154,26 @@ function Login() {
       switch (userInfo.role) {
         case "Administrator":
           navigate("/admin");
-          break;
+          return;
         case "Expert":
           navigate("/expert");
-          break;
+          return;
         case "Receptionist":
           navigate("/receptionist");
-          break;
+          return;
         case "Doctor":
           navigate("/doctor/appointment-queue");
-          break;
+          return;
         case "Technician":
           navigate("/technician");
-          break;
+          return;
         case "Patient":
           if (userInfo.emailConfirmed) {
             navigate("/home");
           } else {
             navigate("/email-confirm");
           }
-          break;
+          return;
         default:
           break;
       }

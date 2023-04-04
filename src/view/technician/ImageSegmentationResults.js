@@ -116,7 +116,7 @@ export function ImageSegmentationResults({ appointmentId, showLoading, canDelete
                 (segmentResults.length > 0) && 
                 <div className="card mb-3">
                     <div className="card-header bg-light">
-                        <h4>Segmentation Results</h4>
+                        <h2>Segmentation Results</h2>
                     </div>
                     <div className="card-body">
                         {segmentResults.map((result) => (

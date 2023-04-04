@@ -7,13 +7,12 @@ import Pagiation from "../../../components/admin/Pagination";
 import "datatables.net-dt/js/dataTables.dataTables.min.mjs";
 import "datatables.net-dt/css/jquery.dataTables.min.css";
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
 import { getAllAppointment, getAppointmentStates } from "../../../services/receptionist/apiReceptionistAppointment";
 import Swal from "sweetalert2";
 
 function ReceptionistAppointmentHistory() {
     const [appointmentData, setAppointmentData] = useState();
-    const user = useSelector((state) => state.user);
+    // const user = useSelector((state) => state.user);
 
     const currentPage = appointmentData ? appointmentData.page : 1;
     const totalPage = appointmentData ? appointmentData.total_pages : 0;
@@ -22,7 +21,6 @@ function ReceptionistAppointmentHistory() {
     const [filter, setFilter] = useState({
         page: currentPage,
         pageSize: 10,
-        id: user.userInfo.id,
         userName: null,
         phoneNumber: null,
         state: null,
