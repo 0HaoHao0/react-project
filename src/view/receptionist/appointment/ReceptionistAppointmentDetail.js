@@ -299,10 +299,10 @@ function ReceptionistAppointmentDetail() {
                         </div>
 
                     </div>
+                    {/* Doctor */}
                     <h2 className="alert alert-secondary my-2" role="alert">
                         Doctor Profile
                     </h2>
-                    {/* Doctor */}
                     <div className="row g-0 py-4">
                         <div className="col d-flex justify-content-center align-items-center">
                             <img className="w-50 rounded border" src={appointmentInfo.service.imageURL} alt="..." />

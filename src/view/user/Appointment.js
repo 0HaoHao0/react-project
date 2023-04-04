@@ -63,7 +63,7 @@ function Appointment() {
                 {...props}
 
                 onClick={() => {
-                    navigate('/user/appointmentdetail', { state: props.data })
+                    navigate(`/user/appointmentdetail/${props.data.id}`);
                 }}>
 
             </Appointments.Appointment>
