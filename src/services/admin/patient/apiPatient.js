@@ -1,13 +1,11 @@
 import axios from "axios";
 
-export const getAllPatient = async (page) => {
+export const getAllPatient = async ({ params }) => {
     let data;
     await axios({
         method: 'get',
         url: '/api/Patient/GetAll',
-        params: {
-            page: page
-        },
+        params: params,
     }).then((response) => {
         data = response;
     }).catch((error) => {

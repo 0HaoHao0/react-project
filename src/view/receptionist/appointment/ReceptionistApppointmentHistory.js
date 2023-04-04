@@ -7,13 +7,12 @@ import Pagiation from "../../../components/admin/Pagination";
 import "datatables.net-dt/js/dataTables.dataTables.min.mjs";
 import "datatables.net-dt/css/jquery.dataTables.min.css";
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
 import { getAllAppointment, getAppointmentStates } from "../../../services/receptionist/apiReceptionistAppointment";
 import Swal from "sweetalert2";
 
 function ReceptionistAppointmentHistory() {
     const [appointmentData, setAppointmentData] = useState();
-    const user = useSelector((state) => state.user);
+    // const user = useSelector((state) => state.user);
 
     const currentPage = appointmentData ? appointmentData.page : 1;
     const totalPage = appointmentData ? appointmentData.total_pages : 0;
@@ -22,7 +21,6 @@ function ReceptionistAppointmentHistory() {
     const [filter, setFilter] = useState({
         page: currentPage,
         pageSize: 10,
-        id: user.userInfo.id,
         userName: null,
         phoneNumber: null,
         state: null,
@@ -80,10 +78,12 @@ function ReceptionistAppointmentHistory() {
         }));
     }
     const nextPage = (e) => {
-        setFilter((peviousPage) => ({
-            ...peviousPage,
-            page: peviousPage.page + 1
-        }));
+        if(filter.page + 1 <= totalPage) {
+            setFilter((peviousPage) => ({
+                ...peviousPage,
+                page: peviousPage.page + 1
+            }));
+        }
     }
     const enterPage = (e) => {
         if (e.keyCode === 13) {
@@ -129,7 +129,8 @@ function ReceptionistAppointmentHistory() {
                                         if(e.key === "Enter") {
                                             setFilter({
                                                 ...filter,
-                                                userName: e.target.value
+                                                userName: e.target.value,
+                                                page: 1,
                                             });
                                         }
                                     }}
@@ -141,7 +142,8 @@ function ReceptionistAppointmentHistory() {
                                         if(e.key === "Enter") {
                                             setFilter({
                                                 ...filter,
-                                                phoneNumber: e.target.value
+                                                phoneNumber: e.target.value,
+                                                page: 1,
                                             });
                                         }
                                     }}
@@ -149,12 +151,20 @@ function ReceptionistAppointmentHistory() {
                             </div>
                             <div className="mb-3">
                                 <select className="p-2 rounded" onChange={(e) => {
-                                    setFilter({
-                                        ...filter,
-                                        state: e.target.value
-                                    });
+                                    if(e.target.value === "default") {
+                                        setFilter({
+                                            ...filter,
+                                            state: null
+                                        });
+                                    }
+                                    else {
+                                        setFilter({
+                                            ...filter,
+                                            state: e.target.value
+                                        });
+                                    }
                                 }}>
-                                    <option>Choose State</option>
+                                    <option value="default">Choose State</option>
                                     {
                                         appointmentStateList.map(item => 
                                             <option key={item.id} value={item.id}>{item.name}</option>

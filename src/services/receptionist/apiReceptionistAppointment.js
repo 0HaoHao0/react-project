@@ -67,3 +67,18 @@ export const updateAppointmentState = async (id, state) => {
 
     return data;
 }
+
+export const removeDocument = async (id) => {
+    let data;
+    await axios({
+        method: 'delete',
+        url: `/api/Appointment/RemoveDocument/${id}`
+    }).then((response) => {
+        data = response;
+    }).catch((error) => {
+        // handle error
+        data = error.response;
+    })
+
+    return data;
+}

@@ -6,21 +6,15 @@ import { createDoctor } from "../../../services/admin/doctor/apiDoctor";
 function DoctorCreate() {
     const navigate = useNavigate()
 
-    const [deviceData, setDeviceData] = useState('');
-
-
-
+    const [doctorData, setDoctorData] = useState('');
     const [dataError, setDataError] = useState('');
-
     const [isTouched, setIsTouched] = useState(''); // biến cờ
 
 
-
     //Handle
-
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setDeviceData((prevState) => ({
+        setDoctorData((prevState) => ({
             ...prevState,
             [name]: value
         }));
@@ -28,32 +22,31 @@ function DoctorCreate() {
 
     const handleImage = (e) => {
         const { name, files } = e.target;
-        setDeviceData((prevState) => ({
+        setDoctorData((prevState) => ({
             ...prevState,
             [name]: files[0]
         }));
     };
 
     const handleCreateDoctor = async () => {
-        if (!deviceData.UserName || !deviceData.FullName || !deviceData.Major || !deviceData.CertificateFile || !deviceData.Gender || !deviceData.Password) {
-            toast.error("Please fill in all Input !")
+        if (!doctorData.UserName || !doctorData.FullName || !doctorData.Major || !doctorData.CertificateFile || !doctorData.Gender || !doctorData.Password) {
+            toast.error("Please fill in all Input !");
         }
         else {
             const fromData = new FormData();
-            fromData.append("UserName", deviceData.UserName)
-            fromData.append("FullName", deviceData.FullName)
-            fromData.append("Major", deviceData.Major)
-            fromData.append("CertificateFile", deviceData.CertificateFile)
-            fromData.append("Password", deviceData.Password)
-            fromData.append("Gender", deviceData.Gender)
+            fromData.append("UserName", doctorData.UserName);
+            fromData.append("FullName", doctorData.FullName);
+            fromData.append("CertificateFile", doctorData.CertificateFile);
+            fromData.append("Password", doctorData.Password);
+            fromData.append("Gender", doctorData.Gender);
 
             const res = await createDoctor(fromData);
             if (res.status === 200) {
                 toast.success("Create Doctor Success")
-                navigate('/admin/doctor')
+                navigate('/admin/doctor');
             }
             else {
-                toast.error("Create Doctor Fail !")
+                toast.error("Create Doctor Fail!");
             }
         }
     }

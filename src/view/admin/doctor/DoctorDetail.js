@@ -2,15 +2,33 @@ import { useState } from "react";
 import { useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
-import { updateDoctor } from "../../../services/admin/doctor/apiDoctor";
+import { getDoctorInfo, updateDoctor } from "../../../services/admin/doctor/apiDoctor";
+import { useEffect } from "react";
 
 function DoctorDetail() {
     const { state } = useLocation()
 
-    const [doctorInfo, setDoctorInfo] = useState(state)
+    const [doctorInfo, setDoctorInfo] = useState(state);
+
+    useEffect(() => {
+
+        const doEffect = async () => {
+            let res = await getDoctorInfo(state.id);
+
+            if(res.status === 200) {
+                console.log(res.data);
+                setDoctorInfo(res.data);
+            }
+            else {
+                toast.error("Cannot get patientInfo. System is busy!");
+            }
+        }
+
+        doEffect();
+
+    }, [state]);
 
     const [changeView, setChangeView] = useState(0)
-
 
     const handleUpdate = () => {
         Swal.fire({
@@ -117,15 +135,6 @@ function DoctorDetail() {
                                             <input type="text" className="form-control bg-white" id="full-name" placeholder={state.baseUser.birthDate} disabled />
                                         </div>
                                     </div>
-                                    {/*  */}
-                                    <div className="row align-items-center mb-2">
-                                        <div className="col-md-4">
-                                            <label htmlFor="full-name">Major: </label>
-                                        </div>
-                                        <div className="col-md-8 ">
-                                            <input type="text" className="form-control bg-white" id="full-name" placeholder={state.major} disabled />
-                                        </div>
-                                    </div>
                                 </div>
                                 <div className="col-lg-6 col-sm-12">
                                     {/*  */}
@@ -174,13 +183,21 @@ function DoctorDetail() {
                                 <div className="row align-items-center mb-2">
                                     <div className="form-group">
                                         <label htmlFor="file">File:</label>
-                                        <a className="text-decoration-none mx-2" href={doctorInfo.certificate.fileURL} rel="noreferrer" target='_blank'>View</a>
+                                        {
+                                            doctorInfo.certificate?.fileURL ? (
+                                                <a className="text-decoration-none mx-2" href={doctorInfo.certificate?.fileURL} rel="noreferrer" target='_blank'>View</a>
+                                            ) : (
+                                                <div className="text-secondary">No File Upload.</div>
+                                            )
+                                        }
+                                    </div>
+                                    <div className="mt-2">
+                                        <button className="btn btn-primary my-2" onClick={() => { handleUpdate() }}>
+                                            Update File
+                                        </button>
                                     </div>
                                 </div>
                             </div>
-                            <button className="btn btn-primary my-2" onClick={() => { handleUpdate() }}>
-                                Update File
-                            </button>
                         </div>
                     }
 
