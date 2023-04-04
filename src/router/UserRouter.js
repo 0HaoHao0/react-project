@@ -15,7 +15,7 @@ function UserRouter() {
                 <Route path="/profile" element={<Profile />}></Route>
                 <Route path="/booking" element={<Booking />}></Route>
                 <Route path="/appointment" element={<Appointment />}></Route>
-                <Route path="/appointmentdetail" element={<AppointmentDetail />}></Route>
+                <Route path="/appointmentdetail/:id" element={<AppointmentDetail />}></Route>
                 <Route path="/chat" element={<Chat />}></Route>
             </Routes>
             <Footer />
