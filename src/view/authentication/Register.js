@@ -122,7 +122,7 @@ function Register() {
       result = false;
       setDataError((prevState) => ({
         ...prevState,
-        confirmpassword: "password cannot be empty!",
+        confirmpassword: "Confirm password cannot be empty!",
       }));
     } else if (userData.password !== userData.confirmpassword) {
       result = false;
@@ -271,6 +271,13 @@ function Register() {
         "Bearer " + res.data.token;
 
       setChangeConfirmRegister(2);
+    }
+    else if (res.status < 500)
+    {
+      toast.error(res.data);
+    }
+    else {
+      toast.error("Something went wrong !!")
     }
   };
 

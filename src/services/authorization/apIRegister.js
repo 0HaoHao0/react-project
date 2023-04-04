@@ -18,22 +18,9 @@ export const register = async (userData) => {
   })
     .then((response) => {
       data = response;
-      Swal.fire({
-        icon: "success",
-        title: "Registered successfully",
-      });
     })
     .catch((error) => {
-      // handle error
-      let res = error.response;
-      let errors = res.data.errors;
-
-      Swal.fire({
-        icon: "error",
-        title: "Registration failed",
-        text: errors.join("\n"),
-      });
-      console.log(error);
+      data = error.response;
     });
 
     Swal.close();
