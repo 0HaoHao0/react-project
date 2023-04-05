@@ -122,7 +122,7 @@ function Register() {
       result = false;
       setDataError((prevState) => ({
         ...prevState,
-        confirmpassword: "password cannot be empty!",
+        confirmpassword: "Confirm password cannot be empty!",
       }));
     } else if (userData.password !== userData.confirmpassword) {
       result = false;
@@ -271,6 +271,14 @@ function Register() {
         "Bearer " + res.data.token;
 
       setChangeConfirmRegister(2);
+    }
+    else if (res.status < 500)
+    {
+      console.log(res.data);
+      toast.error("This email have already account");
+    }
+    else {
+      toast.error("Something went wrong !!")
     }
   };
 
@@ -548,7 +556,7 @@ function Register() {
                         />
                         <div className="input-group-append">
                           <span className="input-group-text">
-                            <i className="fa fa-envelope"></i>
+                            <i className="fa fa-envelope icon-email mt-2"></i>
                           </span>
                         </div>
                       </div>
@@ -561,7 +569,7 @@ function Register() {
                         Please provide a valid email address.
                       </div>
                     </div>
-                    <div className="">
+                    <div className="mt-3">
                       <input
                         type="submit"
                         className="btn btn-primary w-25"
@@ -570,7 +578,7 @@ function Register() {
                       />
                       <input
                         type="submit"
-                        className="btn btn-primary w-25 ml-3"
+                        className="btn btn-primary w-25 regis-resend"
                         value="Resend"
                         onClick={(e) => handleSendCodeToEmail(e)}
                       />
