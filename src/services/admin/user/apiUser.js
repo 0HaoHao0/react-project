@@ -7,13 +7,13 @@ export const getAllUser = async ({ params }) => {
 		url: "/api/User/GetUsers",
 		params: params,
 	})
-	.then((response) => {
-		data = response;
-	})
-	.catch((error) => {
-		// handle error
-		data = error.response;
-	});
+		.then((response) => {
+			data = response;
+		})
+		.catch((error) => {
+			// handle error
+			data = error.response;
+		});
 
 	return data;
 };
@@ -113,6 +113,29 @@ export const updateAvatar = async (fromData) => {
 		.catch((error) => {
 			// handle error
 			console.log(error);
+			data = error.response;
+		});
+
+	return data;
+};
+
+
+export const feedbackAppointment = async (id, feedback) => {
+	let data;
+	await axios({
+		method: "Post",
+		url: `/api/FeedBack/Create`,
+		body: {
+			appointmentId: id,
+			ratingPoint: feedback.ratingPoint,
+			content: feedback.content
+		}
+	})
+		.then((response) => {
+			data = response;
+		})
+		.catch((error) => {
+			// handle error
 			data = error.response;
 		});
 

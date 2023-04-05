@@ -860,9 +860,10 @@ function AppointmentHistory(props) {
         Appointment History
       </div>
       {appointments ?
-        <DataTable value={appointments.data} selectionMode="single" paginator rows={10} rowsPerPageOptions={[10, 25]} tableStyle={{ minWidth: '50rem' }}
+        <DataTable value={appointments.data} filter selectionMode="single" paginator rows={10} rowsPerPageOptions={[10, 25]} tableStyle={{ minWidth: '50rem' }}
           paginatorTemplate="RowsPerPageDropdown FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"
           currentPageReportTemplate="{first} to {last} of {totalRecords}">
+
           <Column field="service.serviceName" header="Service Name" style={{ width: '25%' }}></Column>
           <Column field="doctor.baseUser.fullName" header="Doctor" style={{ width: '25%' }}></Column>
           <Column field="state" header="State" body={statusBodyTemplate} style={{ width: '25%' }}></Column>
