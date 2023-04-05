@@ -203,4 +203,14 @@
     .regis-resend{
         margin-left: 1.2em;
     }
+
+    .PhoneInput {
+        padding-block: 4px;
+        border-bottom: 1px solid lightblue;
+
+        .PhoneInputInput {
+            outline: none;
+            border: none;
+        }
+    }
 }

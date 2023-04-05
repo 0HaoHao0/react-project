@@ -275,7 +275,8 @@ function Register() {
     else if (res.status < 500)
     {
       console.log(res.data);
-      toast.error("This email have already account");
+      let msg = res.data.errors.join("\n");
+      toast.error(msg);
     }
     else {
       toast.error("Something went wrong !!")
@@ -436,8 +437,8 @@ function Register() {
                       )}
                     </div>
                     {/* Phone number */}
-                    <div className=" mx-2">
-                      <label htmlFor="email">Phone Number</label>
+                    <div className="ms-2 me-4">
+                      <label htmlFor="registerPhoneNumber">Phone Number</label>
                       <PhoneInput
                         placeholder="Enter phone number"
                         id="registerPhoneNumber"
