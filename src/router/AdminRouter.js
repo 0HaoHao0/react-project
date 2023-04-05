@@ -114,8 +114,8 @@ function AdminRouter() {
               {/* Room */}
               <Route path="/room" element={<RoomGetAll />}></Route>
               <Route path="/room/create" element={<RoomCreate />}></Route>
-              <Route path="/room/detail" element={<RoomDetail />}></Route>
-              <Route path="/room/update" element={<RoomUpdate />}></Route>
+              <Route path="/room/detail/:id" element={<RoomDetail />}></Route>
+              <Route path="/room/update/:id" element={<RoomUpdate />}></Route>
               {/* News */}
               <Route path="/news" element={<NewsGetAll />}></Route>
               <Route path="/news/create" element={<NewsCreate />}></Route>
