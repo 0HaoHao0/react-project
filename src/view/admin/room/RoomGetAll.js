@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { toast } from "react-toastify";
-import { getAllRoom } from "../../../services/admin/room/apiRoom";
+import { getAllRoom, getRoomCategories, getRoomTypes } from "../../../services/admin/room/apiRoom";
 
 import DataLoading from "../../../components/admin/DataLoading";
 import Pagiation from "../../../components/admin/Pagination";
@@ -10,6 +10,7 @@ import "datatables.net-dt/js/dataTables.dataTables.min.mjs";
 import "datatables.net-dt/css/jquery.dataTables.min.css";
 import { Link } from "react-router-dom";
 import { useEffect } from "react";
+import Swal from "sweetalert2";
 
 function RoomGetAll() {
 
@@ -20,20 +21,70 @@ function RoomGetAll() {
     const [filter, setFilter] = useState({
         page: currentPage,
         pageSize: 10,
+
+        roomId: null,
+        code: null,
+        roomTypeId: null,
+        categoryId: null,
+
     });
 
+    const [categories, setCategories] = useState([]);
+    const [roomStates, setRoomStates] = useState([]);
 
     useEffect(() => {
-
         const loadData = async () => {
+
+            Swal.fire({
+                icon: "info",
+                title: "Waiting for load data..."
+            });
+            Swal.showLoading();
             const res = await getAllRoom({
                 params: filter
             });
-            setRoomData(res.data);
-    
+
+            if(res.status === 200) {
+                setRoomData(res.data);
+            }
+            else {
+                toast.error("Cannot get room data!");
+            }
+            Swal.close();
         };
+
         loadData();
+
     }, [filter]);
+
+    useEffect(() => {
+
+        getRoomCategories(res => {
+            if(res.status === 200) {
+                setCategories(res.data);
+            }
+            else if(res.status < 500) {
+                toast.error(res.data);
+            }
+            else {
+                toast.error("Somedata wrong!");
+            }
+        });
+
+    }, []);
+
+    useEffect(() => {
+
+        const loadRoomStates = async () => {
+            let res = await getRoomTypes();
+            if(res.status === 200) {
+                setRoomStates(res.data);
+            }
+        }
+
+        loadRoomStates();
+
+    }, []);
 
     // Pagination
     const peviousPage = (e) => {
@@ -98,10 +149,90 @@ function RoomGetAll() {
                             <h1>Room Management</h1>
                         </div>
                         <div className="col-6 d-flex align-items-center justify-content-center">
-                            <Link to='create' className="btn  btn-success">Create</Link>
+                            <Link to={"create"} className="btn btn-success">Create</Link>
                         </div>
                     </div>
                     <hr />
+                    <div className="filter mb-4 row justify-content-end">
+                        <div className="col-lg-3">
+                            <input type="number" placeholder="Search by Id" className="form-control"
+                                onKeyDown={(e) => {
+                                    if (e.key === "Enter") {
+                                        setFilter({
+                                            ...filter,
+                                            roomId: e.target.value,
+                                            page: 1
+                                        });
+                                    }
+                                }}
+                            />
+                        </div>
+                        <div className="col-lg-3">
+                            <input type="text" placeholder="Search by Code" className="form-control"
+                                onKeyDown={(e) => {
+                                    if (e.key === "Enter") {
+                                        setFilter({
+                                            ...filter,
+                                            code: e.target.value,
+                                            page: 1
+                                        });
+                                    }
+                                }}
+                            />
+                        </div>
+
+                        <div className="col-lg-3">
+                            <select className="p-2 rounded w-100" onChange={(e) => {
+                                if (e.target.value === "default") {
+                                    setFilter({
+                                        ...filter,
+                                        roomTypeId: null
+                                    });
+                                }
+                                else {
+                                    setFilter({
+                                        ...filter,
+                                        roomTypeId: e.target.value,
+                                        page: 1,
+                                    });
+                                }
+                            }}>
+                                <option value="default" className="text-secondary">--- Choose State ---</option>
+                                {
+                                    roomStates.map(item =>
+                                        <option key={item.id} value={item.id}>{item.name}</option>
+                                    )
+                                }
+                            </select>
+                        </div>
+
+                        <div className="col-lg-3">
+                            <select className="p-2 rounded w-100" onChange={(e) => {
+                                if (e.target.value === "default") {
+                                    setFilter({
+                                        ...filter,
+                                        categoryId: null
+                                    });
+                                }
+                                else {
+                                    setFilter({
+                                        ...filter,
+                                        categoryId: e.target.value,
+                                        page: 1,
+                                    });
+                                }
+                            }}>
+                                <option value="default" className="text-secondary">--- Choose Categogy ---</option>
+                                {
+                                    categories.map(item =>
+                                        <option key={item.id} value={item.id}>{item.name}</option>
+                                    )
+                                }
+                            </select>
+                        </div>
+                        
+                        
+                    </div>
                     <div className="overflow-auto mb-4">
                         <table id="table" className="table table-hover text-center">
                             <thead>
@@ -134,9 +265,8 @@ function RoomGetAll() {
                             </tbody>
                         </table>
                     </div>
-
                     <Pagiation
-                        page={roomData.page}
+                        page={filter.page}
                         total_pages={roomData.total_pages}
                         previousPage={peviousPage}
                         nextPage={nextPage}
