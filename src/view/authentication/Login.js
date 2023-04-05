@@ -265,7 +265,7 @@ function Login() {
                             setLoginStyle(4);
                           }}
                         >
-                          Forget password?
+                          Forgot password?
                         </Link>
                       </span>
                     </div>
