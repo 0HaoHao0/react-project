@@ -161,10 +161,15 @@ function RoomUpdate() {
 		setTimeout(() => {
 			let value = e.query;
 			if(value) {
-				let item = { id: 0, name: value }
+				let item = { id: 0, name: value.trim() }
 				let filtered = allCategories.filter(x => x.name.toLowerCase().includes(value.trim().toLowerCase()));
 				if (filtered.length) {
-					setFilteredCategories([item, ...filtered]);
+					if(filtered.find(x => x.name === item.name)) {
+						setFilteredCategories([...filtered]);
+					}
+					else {
+						setFilteredCategories([item, ...filtered]);
+					}
 				}
 				else {
 					setFilteredCategories([item, ...allCategories]);
