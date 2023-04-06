@@ -19,23 +19,23 @@ function ContactFilter({ filter, setFilter }) {
 
     return (
         <>
-            <div className="row g-0">
+            <div className="row">
                 <div className="col-12 form-group d-flex align-items-center gap-2">
                     <input
                         className="form-control"
                         type="search"
                         placeholder="Search by id, name, phone..."
                         ref={searchControl}
+                        onKeyDown={(e) => {
+                            if(e.key === "Enter") {
+                                setFilter({
+                                    ...filter,
+                                    keyword: searchControl.current.value,
+                                });
+                            }
+                        }}
                     />
-                    <button className="btn btn-primary" onClick={(e) => {
-                        console.log(searchControl.current.value);
-                        setFilter({
-                            ...filter,
-                            keyword: searchControl.current.value,
-                        });
-                    }}>
-                        Search
-                    </button>
+                    
                     <button className="btn btn-danger" onClick={(e) => {
                         searchControl.current.value = null;
                         setFilter({
@@ -46,7 +46,7 @@ function ContactFilter({ filter, setFilter }) {
                         Clear
                     </button>
                 </div>
-                <div className="col-lg-2 form-group d-flex align-items-center justify-content-between g-2 my-2">
+                <div className="col-lg-2 form-group d-flex align-items-center justify-content-between gap-2 my-2">
                     <select className="form-select" id="filter-contact-state" onChange={handleStateChange} defaultValue={filter.state} ref={selectStates}>
                         <option value={-1}>- Select State -</option>
                         {
@@ -60,13 +60,6 @@ function ContactFilter({ filter, setFilter }) {
                             ))
                         }
                     </select>
-                    <button className="btn btn-success" onClick={(e) => {
-                        selectStates.current.value = -1;
-                        setFilter({
-                            ...filter,
-                            state: null,
-                        });
-                    }}>All</button>
                 </div>
                 <div className="col-lg-5 form-group d-flex align-items-center justify-content-between gap-2">
                     <label htmlFor="filter-contact-from">From:</label>
@@ -82,12 +75,6 @@ function ContactFilter({ filter, setFilter }) {
                             });
                         }}
                     />
-                    <button className="btn btn-success" onClick={(e) => {
-                        setFilter({
-                            ...filter,
-                            from: new Date().toISOString().slice(0, 10)
-                        });
-                    }}>Today</button>
                 </div>
                 <div className="col-lg-5 form-group d-flex align-items-center justify-content-between gap-2">
                     <label htmlFor="filter-contact-to">To:</label>
@@ -103,13 +90,6 @@ function ContactFilter({ filter, setFilter }) {
                             });
                         }}
                     />
-
-                    <button className="btn btn-success" onClick={(e) => {
-                        setFilter({
-                            ...filter,
-                            to: new Date().toISOString().slice(0, 10)
-                        });
-                    }}>Today</button>
                 </div>
             </div>
         </>
