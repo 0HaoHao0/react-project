@@ -259,14 +259,16 @@ function ServiceGetAll() {
                                         <td>{value.serviceName}</td>
                                         <td>{value.serviceCode}</td>
                                         <td>{value.price}</td>
-                                        <td >{
+                                        <td>
+                                        {
                                             value.isPublic
                                                 ?
                                                 <button className="btn btn-success" key={'public'} type="button" onClick={() => handleState(value.id, value.isPublic)}><i className="fa-solid fa-lock-open"></i></button>
                                                 :
                                                 <button className="btn btn-danger" key={'block'} type="button" onClick={() => handleState(value.id, value.isPublic)}><i className="fa-solid fa-lock"></i></button>
 
-                                        }</td>
+                                        }
+                                        </td>
                                         <td>
                                             <Link
                                                 to="detail"

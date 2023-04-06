@@ -27,11 +27,6 @@ function DeviceUpdate() {
     //Handle Image
     const [imageFileUrl, setImageFileUrl] = useState(null)
 
-
-
-
-
-
     useEffect(() => {
         const load = async () => {
             const resRoom = await getRoom();

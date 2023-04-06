@@ -8,48 +8,64 @@ import Pagiation from "../../../components/admin/Pagination";
 //Datatable Modules
 import "datatables.net-dt/js/dataTables.dataTables.min.mjs";
 import "datatables.net-dt/css/jquery.dataTables.min.css";
-import $ from "jquery";
 import { Link } from "react-router-dom";
 import { useEffect } from "react";
+import Swal from "sweetalert2";
 
 function DeviceGetAll() {
 
     const [deviceData, setDeviceData] = useState();
 
-    const currentPage = deviceData ? deviceData.page : null;
-    const totalPage = deviceData ? deviceData.total_pages : null;
+    const currentPage = deviceData ? deviceData.page : 1;
+    const totalPage = deviceData ? deviceData.total_pages : 0;
 
-    const loadData = async (page) => {
-        const res = await getAllDevice(page);
+    const [filter, setFilter] = useState({
+        page: currentPage,
+        pageSize: 10,
 
-        setDeviceData(res.data);
+        keyword: null,
 
-        $('#table').DataTable({
-            destroy: true,
-            retrieve: true,
-            paging: false,
-            ordering: false,
-        });
-    };
-
-
+    });
 
     useEffect(() => {
-        $('#table').DataTable().destroy();
+
+        const loadData = async () => {
+
+            Swal.fire({
+                icon: "info",
+                title: "Waiting to get data...",
+            });
+            Swal.showLoading();
+            const res = await getAllDevice({ params: filter });
+            if(res.status === 200) {
+                setDeviceData(res.data);
+            }
+            else {
+                toast.error("Cannot get device data...");
+            }
+            Swal.close();
+        };
 
         loadData();
 
-        return () => {
-
-        }
-    }, []);
+    }, [filter]);
 
     // Pagination
-    const peviousPage = () => {
-        loadData(currentPage - 1);
+    const peviousPage = (e) => {
+        if (filter.page - 1 > 0) {
+            setFilter({
+                ...filter,
+                page: filter.page - 1
+            })
+        }
     }
     const nextPage = (e) => {
-        loadData(currentPage + 1);
+        if (filter.page + 1 <= totalPage) {
+            setFilter({
+                ...filter,
+                page: filter.page + 1
+            })
+        }
     }
     const enterPage = (e) => {
         if (e.keyCode === 13) {
@@ -61,7 +77,10 @@ function DeviceGetAll() {
                     toast.error("Max Page is " + totalPage)
                 }
                 else {
-                    loadData(e.target.value);
+                    setFilter({
+                        ...filter,
+                        page: e.target.value
+                    });
                     e.target.value = "";
                     e.target.blur();
                 }
@@ -92,23 +111,37 @@ function DeviceGetAll() {
                     <div className="row g-0">
                         <div className="col-6">
                             <h1>Device Management</h1>
-
                         </div>
                         <div className="col-6 d-flex align-items-center justify-content-center">
                             <Link to='create' className="btn  btn-success">Create</Link>
-
                         </div>
                     </div>
                     <hr />
+                    <form className="d-flex justify-content-end gap-2">
+                        <div className="mb-3 w-25">
+                            <input type="text" placeholder="Search by id, name, value, code..." className="form-control w-fit"
+                                onKeyDown={(e) => {
+                                    if (e.key === "Enter") {
+                                        setFilter({
+                                            ...filter,
+                                            keyword: e.target.value,
+                                            page: 1,
+                                        });
+                                    }
+                                }}
+                            />
+                        </div>
+                        
+                    </form>
                     <div className="overflow-auto mb-4">
-                        <table id="table" className="table table-hover">
+                        <table id="table" className="table table-hover text-center">
                             <thead>
                                 <tr className="table-dark">
-
                                     <th>Device Id</th>
                                     <th>Device Name</th>
                                     <th>Device Value</th>
                                     <th>Room Code</th>
+                                    <th>Active</th>
                                     <th>More</th>
                                 </tr>
                             </thead>
@@ -119,6 +152,7 @@ function DeviceGetAll() {
                                         <td>{value.deviceName}</td>
                                         <td>{value.deviceValue}</td>
                                         <td>{value.room.roomCode}</td>
+                                        <td>{value.status.toString()}</td>
                                         <td>
                                             <Link
                                                 to="detail"
@@ -135,7 +169,7 @@ function DeviceGetAll() {
                     </div>
 
                     <Pagiation
-                        page={deviceData.page}
+                        page={filter.page}
                         total_pages={deviceData.total_pages}
                         previousPage={peviousPage}
                         nextPage={nextPage}

@@ -1,19 +1,18 @@
 import axios from "axios";
 
-export const getAllDevice = async (page) => {
+export const getAllDevice = async ({ params }) => {
     let data;
     await axios({
         method: 'get',
         url: '/api/Device/GetAll',
-        params: {
-            page: page
-        },
+        params: params,
     }).then((response) => {
         data = response;
     }).catch((error) => {
         // handle error
         console.log(error);
-    })
+        data = error.response;
+    });
 
     return data;
 }
@@ -25,9 +24,8 @@ export const getDevice = async () => {
     }).then((response) => {
         data = response;
     }).catch((error) => {
-        // handle error
-        console.log(error);
-    })
+        data = error.response;
+    });
 
     return data;
 }
@@ -79,6 +77,22 @@ export const updateDevice = async (fromData) => {
         // handle error
         console.log(error);
     })
+
+    return data;
+}
+
+export const getDeviceDetail = async ({ id }) => {
+    let data;
+    await axios({
+        method: 'GET',
+        url: `/api/Device/Get/${id}`,
+    })
+    .then(res => {
+        data = res;
+    })
+    .catch(err => {
+        data = err.response;
+    });
 
     return data;
 }
