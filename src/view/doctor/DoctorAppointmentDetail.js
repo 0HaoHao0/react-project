@@ -1,11 +1,13 @@
 import file from '../../assets/file/HospitalDocument.docx'
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import { addDocument, deleteDocument, getAppointment, updateAppointmentState } from "../../services/doctor/DoctorApi";
 import ImageSegmentationResults from '../technician/ImageSegmentationResults';
+import { useRef } from 'react';
+import { useCallback } from 'react';
 
 
 function UpdateState({ currentState, handleChangeState }) {
@@ -61,11 +63,18 @@ function UploadFile({ handleFile, handleTitle }) {
 
 
 function DoctorAppointmentDetail() {
+    const render = useRef(false)
+
     const { id } = useParams();
+    const navigate = useNavigate();
+
     const [appointmentInfo, setAppointmentInfo] = useState();
     const [loading, setLoading] = useState(0);
     const MySwal = withReactContent(Swal)
 
+    const errorNavigate = useCallback(() => {
+        navigate("/doctor/appointment-queue");
+    }, [navigate])
 
 
 
@@ -79,21 +88,25 @@ function DoctorAppointmentDetail() {
             const res = await getAppointment(id);
             if (res.status === 200) {
                 setAppointmentInfo(res.data)
+
             }
             else if (res.status < 500) {
                 toast.error(res.data);
+                errorNavigate()
             }
             else {
                 toast.error("The system is busy!");
             }
             Swal.close()
         }
-        loadData()
+        if (render.current === true) {
+            loadData()
+        }
 
         return () => {
-
+            render.current = true
         }
-    }, [id, loading])
+    }, [id, loading, errorNavigate])
 
     const handleUpdateState = (currentState) => {
         let state;
@@ -229,11 +242,11 @@ function DoctorAppointmentDetail() {
                                 <label htmlFor="id">Id:</label>
                                 <input id="id" className="form-control" type="text" name="id" placeholder={appointmentInfo.id} disabled />
                                 <label htmlFor="timeCreated">Created:</label>
-                                <input id="timeCreated" className="form-control" type="text" name="timeCreated" 
-                                placeholder={new Date(appointmentInfo.timeCreated).toLocaleString()} disabled />
+                                <input id="timeCreated" className="form-control" type="text" name="timeCreated"
+                                    placeholder={new Date(appointmentInfo.timeCreated).toLocaleString()} disabled />
                                 <label htmlFor="lastTimeModified">Last Modified: </label>
                                 <input id="lastTimeModified" className="form-control" type="text" name="lastTimeModified"
-                                placeholder={appointmentInfo.lastTimeModified && new Date(appointmentInfo.lastTimeModified).toLocaleString()} disabled />
+                                    placeholder={appointmentInfo.lastTimeModified && new Date(appointmentInfo.lastTimeModified).toLocaleString()} disabled />
                             </div>
                         </div>
 
@@ -266,14 +279,14 @@ function DoctorAppointmentDetail() {
                                     (
                                         <table className='table border sha-sm dow table-hover my-2 text-dark'>
                                             <thead className='table-dark'>
-                                            <tr>
-                                                <th scope="col">ID</th>
-                                                <th scope="col">Uploader</th>
-                                                <th scope="col">Title</th>
-                                                <th scope="col">File</th>
-                                                <th scope="col">Upload At</th>
-                                                <th scope="col">Action</th>
-                                            </tr>
+                                                <tr>
+                                                    <th scope="col">ID</th>
+                                                    <th scope="col">Uploader</th>
+                                                    <th scope="col">Title</th>
+                                                    <th scope="col">File</th>
+                                                    <th scope="col">Upload At</th>
+                                                    <th scope="col">Action</th>
+                                                </tr>
                                             </thead>
                                             <tbody>
                                                 {appointmentInfo.documents.map((value, index) =>
@@ -308,7 +321,7 @@ function DoctorAppointmentDetail() {
                                     <span className="text-secondary mx-2">No file uploaded.</span>}
                             </div>
                         </div>
-                        
+
                         <div className="col-12">
                             <div className="form-group">
                                 <label htmlFor="content">Content:</label>
@@ -367,11 +380,11 @@ function DoctorAppointmentDetail() {
                         <div className="col">
                             <div className="form-group">
                                 <label htmlFor="service-name">User Name:</label>
-                                <input id="service-name" className="form-control mb-2 bg-white" type="text" name="service-name" 
-                                placeholder={appointmentInfo.doctor.baseUser.userName} disabled />
+                                <input id="service-name" className="form-control mb-2 bg-white" type="text" name="service-name"
+                                    placeholder={appointmentInfo.doctor.baseUser.userName} disabled />
                                 <label htmlFor="service-code">Full Name:</label>
-                                <input id="service-code" className="form-control mb-2 bg-white" type="text" name="service-code" 
-                                placeholder={appointmentInfo.doctor.baseUser.fullName} disabled />
+                                <input id="service-code" className="form-control mb-2 bg-white" type="text" name="service-code"
+                                    placeholder={appointmentInfo.doctor.baseUser.fullName} disabled />
                             </div>
                         </div>
 

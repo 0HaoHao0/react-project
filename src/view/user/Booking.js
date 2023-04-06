@@ -57,7 +57,7 @@ function Booking() {
             }
         }
 
-        if (appointment && appointment.Date && appointment.Slot) {
+        if (appointment && appointment.Date && appointment.Slot !== '') {
             loadFreeDoctor();
         }
         else {
@@ -119,14 +119,14 @@ function Booking() {
 
 
     const handleSubmit = async () => {
-        if (!appointment.Date || !appointment.Slot || !appointmentOther.Content) {
+        if (!appointment.Date || appointment.Slot === '' || !appointmentOther.Content) {
             toast.error('Please finish all require input !')
         }
 
         else {
             let formData = new FormData();
             formData.append("PatientId", user.userInfo.id);
-            if(appointmentOther.Doctor) formData.append("DoctorId", appointmentOther.Doctor);
+            if (appointmentOther.Doctor) formData.append("DoctorId", appointmentOther.Doctor);
             formData.append("ServiceId", state.id);
             formData.append('Slot', appointment.Slot)
             formData.append('Date', appointment.Date)
@@ -189,7 +189,7 @@ function Booking() {
                                     e.preventDefault();
                                 }}
                                 min={moment().add(1, 'days').format("YYYY-MM-DD")}
-                                max={moment().endOf('week').format("YYYY-MM-DD")} />
+                                max={moment().day(12).format("YYYY-MM-DD")} />
                         </div>
 
                         <div className="form-group">

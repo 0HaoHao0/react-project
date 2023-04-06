@@ -125,7 +125,7 @@ export const feedbackAppointment = async (id, feedback) => {
 	await axios({
 		method: "Post",
 		url: `/api/FeedBack/Create`,
-		body: {
+		data: {
 			appointmentId: id,
 			ratingPoint: feedback.ratingPoint,
 			content: feedback.content
