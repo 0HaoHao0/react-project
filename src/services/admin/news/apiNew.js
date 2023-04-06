@@ -1,13 +1,11 @@
 import axios from "axios";
 
-export const getAllNews = async (page) => {
+export const getAllNews = async ({ params }) => {
     let data;
     await axios({
         method: 'get',
         url: '/api/News/GetAll',
-        params: {
-            page: page
-        },
+        params: params
     }).then((response) => {
         data = response;
     }).catch((error) => {
