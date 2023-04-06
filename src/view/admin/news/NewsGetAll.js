@@ -10,6 +10,7 @@ import "datatables.net-dt/css/jquery.dataTables.min.css";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { getAllNews } from "../../../services/admin/news/apiNew";
+import Swal from "sweetalert2";
 
 function NewsGetAll() {
     const [newsData, setNewsData] = useState();
@@ -32,6 +33,12 @@ function NewsGetAll() {
     useEffect(() => {
 
         const loadData = async () => {
+
+            Swal.fire({
+                icon: "info",
+                title: "Waiting to get data...",
+            });
+            Swal.showLoading();
             let res = await getAllNews({ params: filter });
             if(res.status === 200) {
                 setNewsData(res.data);
@@ -39,7 +46,7 @@ function NewsGetAll() {
             else {
                 toast.error("Cannot load data!");
             }
-            
+            Swal.close();
         };
 
         loadData();

@@ -113,10 +113,18 @@ function DeviceUpdate() {
                         fromData.append("ServiceIdList", 0)
                     }
 
+                    Swal.fire({
+                        title: "Loading...",
+                        html: "Please wait a moment"
+                    })
+                    Swal.showLoading();
                     const res = await updateDevice(fromData);
                     if (res.status === 200) {
                         toast.success("Update Device Success")
                         navigate('/admin/device')
+                    }
+                    else if(res.status < 500) {
+                        toast.error(res.data);
                     }
                     else {
                         toast.error("Update Device Fail !")

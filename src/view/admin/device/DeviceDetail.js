@@ -82,7 +82,7 @@ function DeviceDetail() {
                             <input type="number" className="form-control" id="deviceValue" value={deviceInfo.deviceValue} readOnly></input>
                         </div>
                         <div className="mb-3">
-                            <label htmlFor="status" className="form-label">Status</label>
+                            <label htmlFor="status" className="form-label">Active</label>
                             <input className="form-control" id="status" value={deviceInfo.status} readOnly></input>
                         </div>
                     </div>
