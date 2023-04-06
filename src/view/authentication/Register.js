@@ -274,7 +274,9 @@ function Register() {
     }
     else if (res.status < 500)
     {
-      toast.error(res.data);
+      console.log(res.data);
+      let msg = res.data.errors.join("\n");
+      toast.error(msg);
     }
     else {
       toast.error("Something went wrong !!")
@@ -435,8 +437,8 @@ function Register() {
                       )}
                     </div>
                     {/* Phone number */}
-                    <div className=" mx-2">
-                      <label htmlFor="email">Phone Number</label>
+                    <div className="ms-2 me-4">
+                      <label htmlFor="registerPhoneNumber">Phone Number</label>
                       <PhoneInput
                         placeholder="Enter phone number"
                         id="registerPhoneNumber"
@@ -555,7 +557,7 @@ function Register() {
                         />
                         <div className="input-group-append">
                           <span className="input-group-text">
-                            <i className="fa fa-envelope"></i>
+                            <i className="fa fa-envelope icon-email mt-2"></i>
                           </span>
                         </div>
                       </div>
@@ -568,7 +570,7 @@ function Register() {
                         Please provide a valid email address.
                       </div>
                     </div>
-                    <div className="">
+                    <div className="mt-3">
                       <input
                         type="submit"
                         className="btn btn-primary w-25"
@@ -577,7 +579,7 @@ function Register() {
                       />
                       <input
                         type="submit"
-                        className="btn btn-primary w-25 ml-3"
+                        className="btn btn-primary w-25 regis-resend"
                         value="Resend"
                         onClick={(e) => handleSendCodeToEmail(e)}
                       />
