@@ -8,7 +8,6 @@ import Pagiation from "../../../components/admin/Pagination";
 //Datatable Modules
 import "datatables.net-dt/js/dataTables.dataTables.min.mjs";
 import "datatables.net-dt/css/jquery.dataTables.min.css";
-import $ from "jquery";
 import { Link } from "react-router-dom";
 import { useEffect } from "react";
 import Swal from "sweetalert2";
@@ -16,36 +15,47 @@ import Swal from "sweetalert2";
 function ServiceGetAll() {
 
     const [serviceData, setServiceData] = useState();
-
     const [isReset, setIsReset] = useState(1);
 
+    const currentPage = serviceData ? serviceData.page : 1;
+    const totalPage = serviceData ? serviceData.total_pages : 0;
 
-    const currentPage = serviceData ? serviceData.page : null;
-    const totalPage = serviceData ? serviceData.total_pages : null;
+    const [filter, setFilter] = useState({
+        page: currentPage,
+        pageSize: 10,
 
-    const loadData = async (page) => {
-        const res = await getAllService(page);
+        code: null,
+        name: null,
+        minPrice: null,
+        maxPrice: null
 
-        setServiceData(res.data);
-
-        $('#table').DataTable({
-            destroy: true,
-            retrieve: true,
-            paging: false,
-            ordering: false,
-        });
-    };
-
-
+    });
 
     useEffect(() => {
+
+        const loadData = async () => {
+
+            Swal.fire({
+                icon: "info",
+                title: "Waiting for response..."
+            });
+            Swal.showLoading();
+            const res = await getAllService({ params: filter });
+            if(res.status === 200) {
+                setServiceData(res.data);
+            }
+            else {
+                toast.error("Something wrong!");
+            }
+            Swal.close();
+        };
 
         loadData();
 
         return () => {
 
         }
-    }, [isReset]);
+    }, [isReset, filter]);
 
     const handleState = (id, isPublic) => {
         if (isPublic) {
@@ -109,11 +119,21 @@ function ServiceGetAll() {
     }
 
     // Pagination
-    const peviousPage = () => {
-        loadData(currentPage - 1);
+    const peviousPage = (e) => {
+        if (filter.page - 1 > 0) {
+            setFilter({
+                ...filter,
+                page: filter.page - 1
+            })
+        }
     }
     const nextPage = (e) => {
-        loadData(currentPage + 1);
+        if (filter.page + 1 <= totalPage) {
+            setFilter({
+                ...filter,
+                page: filter.page + 1
+            })
+        }
     }
     const enterPage = (e) => {
         if (e.keyCode === 13) {
@@ -125,7 +145,10 @@ function ServiceGetAll() {
                     toast.error("Max Page is " + totalPage)
                 }
                 else {
-                    loadData(e.target.value);
+                    setFilter({
+                        ...filter,
+                        page: e.target.value
+                    });
                     e.target.value = "";
                     e.target.blur();
                 }
@@ -157,14 +180,66 @@ function ServiceGetAll() {
                     <div className="row g-0">
                         <div className="col-6">
                             <h1>Service Management</h1>
-
                         </div>
                         <div className="col-6 d-flex align-items-center justify-content-center">
                             <Link to='create' className="btn  btn-success">Create</Link>
-
                         </div>
                     </div>
                     <hr />
+                    <form className="d-flex justify-content-end gap-2">
+                        <div className="mb-3 w-25">
+                            <input type="text" placeholder="Search by Code" className="form-control w-fit"
+                                onKeyDown={(e) => {
+                                    if (e.key === "Enter") {
+                                        setFilter({
+                                            ...filter,
+                                            code: e.target.value,
+                                            page: 1,
+                                        });
+                                    }
+                                }}
+                            />
+                        </div>
+                        <div className="mb-3 w-25">
+                            <input type="text" placeholder="Search by Name" className="form-control w-fit"
+                                onKeyDown={(e) => {
+                                    if (e.key === "Enter") {
+                                        setFilter({
+                                            ...filter,
+                                            name: e.target.value,
+                                            page: 1,
+                                        });
+                                    }
+                                }}
+                            />
+                        </div>
+                        <div className="mb-3">
+                            <input className="form-control" type="number" min={0} max={2147483647} placeholder="Min Price"
+                                onKeyDown={(e) => {
+                                    if (e.key === "Enter") {
+                                        setFilter({
+                                            ...filter,
+                                            minPrice: e.target.value,
+                                            page: 1,
+                                        });
+                                    }
+                                }}
+                            />
+                        </div>
+                        <div className="mb-3">
+                            <input className="form-control" type="number" min={0} max={2147483647} placeholder="Max Price"
+                                onKeyDown={(e) => {
+                                    if (e.key === "Enter") {
+                                        setFilter({
+                                            ...filter,
+                                            maxPrice: e.target.value,
+                                            page: 1,
+                                        });
+                                    }
+                                }}
+                            />
+                        </div>
+                    </form>
                     <div className="overflow-auto mb-4">
                         <table id="table" className="table table-hover">
                             <thead>
@@ -184,14 +259,16 @@ function ServiceGetAll() {
                                         <td>{value.serviceName}</td>
                                         <td>{value.serviceCode}</td>
                                         <td>{value.price}</td>
-                                        <td >{
+                                        <td>
+                                        {
                                             value.isPublic
                                                 ?
-                                                <button className="btn btn-success" key={'public'} type="button" onClick={() => handleState(value.id, value.isPublic)}><i class="fa-solid fa-lock-open"></i></button>
+                                                <button className="btn btn-success" key={'public'} type="button" onClick={() => handleState(value.id, value.isPublic)}><i className="fa-solid fa-lock-open"></i></button>
                                                 :
-                                                <button className="btn btn-danger" key={'block'} type="button" onClick={() => handleState(value.id, value.isPublic)}><i class="fa-solid fa-lock"></i></button>
+                                                <button className="btn btn-danger" key={'block'} type="button" onClick={() => handleState(value.id, value.isPublic)}><i className="fa-solid fa-lock"></i></button>
 
-                                        }</td>
+                                        }
+                                        </td>
                                         <td>
                                             <Link
                                                 to="detail"

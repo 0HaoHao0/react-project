@@ -9,7 +9,7 @@ function News() {
                 <h1 className='text-center'>{state.title}</h1>
                 <div className='row justify-content-center'>
                     <div className='col-auto '>
-                        <h6>Tag:
+                        <h6>Related Services:
                             {
                                 state.services
                                     ?

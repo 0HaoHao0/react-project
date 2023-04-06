@@ -10,10 +10,12 @@ function Home() {
 
     const [news, setNews] = useState();
 
-
     const loadNews = async () => {
 
-        const res = await getAllNews()
+        const res = await getAllNews({ params: {
+            page: 1,
+            pageSize: 10
+        }})
 
         if (res.status === 200) {
             setNews(res.data.data)
@@ -25,7 +27,6 @@ function Home() {
 
     useEffect(() => {
         loadNews()
-
         return () => {
 
         }
