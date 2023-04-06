@@ -6,47 +6,67 @@ import Pagiation from "../../../components/admin/Pagination";
 //Datatable Modules
 import "datatables.net-dt/js/dataTables.dataTables.min.mjs";
 import "datatables.net-dt/css/jquery.dataTables.min.css";
-import $ from "jquery";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { getAllNews } from "../../../services/receptionist/apiReceptionistNews";
+import Swal from "sweetalert2";
 
 function ReceptionistNews() {
     const [newsData, setNewsData] = useState();
 
+    const currentPage = newsData ? newsData.page : 1;
+    const totalPage = newsData ? newsData.total_pages : 0;
 
-    const currentPage = newsData ? newsData.page : null;
-    const totalPage = newsData ? newsData.total_pages : null;
+    const [filter, setFilter] = useState({
+        page: currentPage,
+        pageSize: 10,
 
-    const loadData = async (page) => {
-        const res = await getAllNews(page);
+        creator: null,
+        title: null,
+        startAt: null,
+        endAt: null,
 
-        setNewsData(res.data);
-
-        $('#table').DataTable({
-            destroy: true,
-            retrieve: true,
-            paging: false,
-        });
-    };
-
-
+    });
 
     useEffect(() => {
 
+        const loadData = async () => {
+
+            Swal.fire({
+                icon: "info",
+                title: "Waiting to get data...",
+            });
+            Swal.showLoading();
+            let res = await getAllNews({ params: filter });
+            if(res.status === 200) {
+                setNewsData(res.data);
+            }
+            else {
+                toast.error("Cannot load data!");
+            }
+            Swal.close();
+        };
+
         loadData();
-
-        return () => {
-
-        }
-    }, []);
+        
+    }, [filter]);
 
     // Pagination
-    const peviousPage = () => {
-        loadData(currentPage - 1);
+    const peviousPage = (e) => {
+        if (filter.page - 1 > 0) {
+            setFilter({
+                ...filter,
+                page: filter.page - 1
+            })
+        }
     }
     const nextPage = (e) => {
-        loadData(currentPage + 1);
+        if (filter.page + 1 <= totalPage) {
+            setFilter({
+                ...filter,
+                page: filter.page + 1
+            })
+        }
     }
     const enterPage = (e) => {
         if (e.keyCode === 13) {
@@ -58,7 +78,10 @@ function ReceptionistNews() {
                     toast.error("Max Page is " + totalPage)
                 }
                 else {
-                    loadData(e.target.value);
+                    setFilter({
+                        ...filter,
+                        page: e.target.value
+                    });
                     e.target.value = "";
                     e.target.blur();
                 }
@@ -101,13 +124,43 @@ function ReceptionistNews() {
                         </div>
                     </div>
                     <hr />
+                    <form className="d-flex justify-content-end gap-2">
+                        <div className="mb-3 w-25">
+                            <input type="text" placeholder="Search by Title" className="form-control w-fit"
+                                onKeyDown={(e) => {
+                                    if (e.key === "Enter") {
+                                        setFilter({
+                                            ...filter,
+                                            title: e.target.value,
+                                            page: 1,
+                                        });
+                                    }
+                                }}
+                            />
+                        </div>
+                        <div className="mb-3 w-25">
+                            <input type="text" placeholder="Search by Creator" className="form-control w-fit"
+                                onKeyDown={(e) => {
+                                    if (e.key === "Enter") {
+                                        setFilter({
+                                            ...filter,
+                                            creator: e.target.value,
+                                            page: 1,
+                                        });
+                                    }
+                                }}
+                            />
+                        </div>
+                        
+                    </form>
                     <div className="overflow-auto mb-4">
                         <table id="table" className="table table-hover">
-                            <thead>
+                        <thead>
                                 <tr className="table-dark">
                                     <th>Id</th>
                                     <th>Title</th>
-                                    <th>Createtor</th>
+                                    <th>Creator</th>
+                                    <th>Created</th>
                                     <th>More</th>
                                 </tr>
                             </thead>
@@ -117,6 +170,7 @@ function ReceptionistNews() {
                                         <td>{value.id}</td>
                                         <td>{value.title}</td>
                                         <td>{value.creator}</td>
+                                        <td>{new Date(value.timeCreated).toLocaleString()}</td>
                                         <td>
                                             <Link
                                                 to="detail"
@@ -133,7 +187,7 @@ function ReceptionistNews() {
                     </div>
 
                     <Pagiation
-                        page={newsData.page}
+                        page={filter.page}
                         total_pages={newsData.total_pages}
                         previousPage={peviousPage}
                         nextPage={nextPage}

@@ -10,18 +10,12 @@ export const getContactStates = () => {
     return data;
 }
 
-export const getAllContact = async (filter) => {
+export const getAllContact = async ({params}) => {
     let data;
     await axios({
         method: 'get',
         url: '/api/Contact/GetAll',
-        params: {
-            page: filter.page,
-            state: filter.state,
-            from: filter.from,
-            to: filter.to,
-            keyword: filter.keyword,
-        },
+        params: params,
     }).then((response) => {
         data = response;
     }).catch((error) => {
