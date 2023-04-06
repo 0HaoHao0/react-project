@@ -94,6 +94,9 @@ function DeviceCreate() {
                 toast.success("Create Device Success")
                 navigate('/admin/device')
             }
+            else if(res.status < 500) {
+                toast.error(res.data);
+            }
             else {
                 toast.error("Create Device Fail !")
             }

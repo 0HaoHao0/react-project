@@ -28,8 +28,6 @@ function Booking() {
 
     const [dislayDoctor, setDisplayDoctor] = useState(false);
 
-
-
     const loadData = async () => {
         const res = await getSlots();
         setSlots(res.data);
@@ -37,7 +35,6 @@ function Booking() {
 
     useEffect(() => {
         loadData();
-
         return () => {
         }
     }, [])
@@ -142,6 +139,9 @@ function Booking() {
             Swal.close()
             if (res.status === 200) {
                 navigate('/user/appointment')
+            }
+            else if(res.status < 500) {
+                toast.error(res.data || res.errors);
             }
             else {
                 toast.error('Something was wrong, Please contact to Admin !!!')
