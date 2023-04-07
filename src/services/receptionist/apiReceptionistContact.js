@@ -5,13 +5,7 @@ export const getAllContact = async (filter) => {
     await axios({
         method: 'get',
         url: '/api/Contact/GetAll',
-        params: {
-            page: filter.page,
-            state: filter.state,
-            from: filter.from,
-            to: filter.to,
-            keyword: filter.keyword,
-        },
+        params: filter,
     }).then((response) => {
         data = response;
     }).catch((error) => {

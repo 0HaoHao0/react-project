@@ -8,6 +8,12 @@ import { toast } from "react-toastify";
 
 import ImageViewer from "../extensions/ImageViewer";
 import "../extensions/ImageViewer.scss";
+import axios from "axios";
+import Cookies from "universal-cookie";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+
+import { deleteUser } from "../../redux/features/userSlide";
 
 function Expert() {
 
@@ -175,6 +181,17 @@ function Expert() {
         });
     }
 
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const handleLogout = () => {
+        axios.defaults.headers.common['Authorization'] = "";
+        localStorage.clear();
+        const cookie = new Cookies();
+        cookie.remove('_to');
+        dispatch(deleteUser())
+        navigate('/login');
+    }
+
     return (
         <>
             {
@@ -201,6 +218,7 @@ function Expert() {
                 <div className="container-fluid">
                     <div className="py-4 border-bottom">
                         <h1 className="text-primary text-center">Mechine Learning Model Management</h1>
+                        <button className="btn btn-danger" onClick={handleLogout}>Logout</button>
                     </div>
                     <div className="row">
                         <div className="col-md-6">
@@ -336,7 +354,7 @@ function Expert() {
                                             {
                                                 imageResultSet ?
                                                     imageResultSet.map((item, index) => (
-                                                        <img key={index} className="img-fill" src={item.image}
+                                                        <img key={index} className="img-fill" src={"http://127.0.0.1:8000" + item.image}
                                                             alt={item.title} onClick={() => showImageViewer(imageResultSet, index)} />
                                                     )) :
                                                     <img className="img-fill" src="https://fakeimg.pl/350x200/?text=Result&font=lobster" alt="example" />

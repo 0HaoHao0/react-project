@@ -5,32 +5,41 @@ import Pagiation from "../../../components/admin/Pagination";
 //Datatable Modules
 import "datatables.net-dt/js/dataTables.dataTables.min.mjs";
 import "datatables.net-dt/css/jquery.dataTables.min.css";
-import $ from "jquery";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 import { getAllContact } from "../../../services/receptionist/apiReceptionistContact";
+import Swal from "sweetalert2";
+import ContactFilter from "../../admin/contact/ContactFilter";
 
 function ReceptionistContact() {
     const [contactData, setContactData] = useState();
 
-    const currentPage = contactData ? contactData.page : null;
-    const totalPage = contactData ? contactData.total_pages : null;
+    const currentPage = contactData ? contactData.page : 1;
+    const totalPage = contactData ? contactData.total_pages : 0;
     console.log(
         currentPage
     );
 
     const [filter, setFilter] = useState({
+        page: currentPage,
+        pageSize: 10,
+
         from: null,
         to: null,
         state: null,
         keyword: null,
-        page: null,
     });
 
 
     useEffect(() => {
 
         const loadData = async (filter) => {
+
+            Swal.fire({
+                icon: "info",
+                title: "Waiting to get data...",
+            });
+            Swal.showLoading();
             const res = await getAllContact(
                 filter
             );
@@ -41,12 +50,7 @@ function ReceptionistContact() {
             else {
                 toast.error("Something went wrong!");
             }
-
-            $('#table').DataTable({
-                destroy: true,
-                retrieve: true,
-                paging: false,
-            });
+            Swal.close();
 
         }
 
@@ -57,17 +61,20 @@ function ReceptionistContact() {
 
     // Pagination
     const peviousPage = (e) => {
-        setFilter((peviousPage) => ({
-            ...peviousPage,
-            page: currentPage - 1
-        }));
+        if (filter.page - 1 > 0) {
+            setFilter({
+                ...filter,
+                page: filter.page - 1
+            })
+        }
     }
-
     const nextPage = (e) => {
-        setFilter((peviousPage) => ({
-            ...peviousPage,
-            page: currentPage + 1
-        }));
+        if (filter.page + 1 <= totalPage) {
+            setFilter({
+                ...filter,
+                page: filter.page + 1
+            })
+        }
     }
     const enterPage = (e) => {
         if (e.keyCode === 13) {
@@ -79,11 +86,10 @@ function ReceptionistContact() {
                     toast.error("Max Page is " + totalPage)
                 }
                 else {
-                    const page = e.target.value
-                    setFilter((peviousPage) => ({
-                        ...peviousPage,
-                        page: page,
-                    }));
+                    setFilter({
+                        ...filter,
+                        page: e.target.value
+                    });
                     e.target.value = "";
                     e.target.blur();
                 }
@@ -102,8 +108,8 @@ function ReceptionistContact() {
                 ?
 
                 <>
+                    <ContactFilter filter={filter} setFilter={setFilter} />
                     <div className="overflow-auto mb-4">
-
                         <table id="table" className="table table-hover" >
                             <thead>
                                 <tr className="table-dark">
