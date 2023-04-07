@@ -34,6 +34,24 @@ export const getService = async () => {
 }
 
 
+export const getServicesRating = async () => {
+    let data;
+    await axios({
+        method: 'get',
+        url: '/api/FeedBack/GetRankServices',
+
+    }).then((response) => {
+        data = response;
+    }).catch((error) => {
+        // handle error
+        data = error.response;
+
+    })
+
+    return data;
+}
+
+
 export const createService = async (fromData) => {
     let data;
     await axios({

@@ -1,28 +1,86 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { getAllService } from '../../services/admin/service/apiService';
+import { getAllService, getServicesRating } from '../../services/admin/service/apiService';
 import './Service.scss'
 import { useRef } from 'react';
+import { toast } from 'react-toastify';
 function Service() {
+    const render = useRef(false);
+
     const [services, setServices] = useState()
+
+    const [serviceRating, setServiceRating] = useState()
+
+    const [searchByName, setSearchByName] = useState()
 
     const ref = useRef(null);
 
-    const loadServices = async () => {
-        const res = await getAllService(-1);
-        if (res.status === 200) {
-            setServices(res.data)
+    let debounce;
+
+
+    const loadData = async () => {
+        const resService = await getAllService(-1);
+        const resServiceRating = await getServicesRating();
+
+        if (resService.status === 200) {
+            setServices(resService.data)
         }
+        else {
+            toast.error("Can not load services, please try again or contact to admin !!!")
+        }
+
+        if (resServiceRating.status === 200) {
+            setServiceRating(resServiceRating.data)
+        }
+        else {
+            toast.error("Can not load services rating, please try again or contact to admin !!!")
+        }
+
     }
 
+
     useEffect(() => {
-        loadServices();
+
+        if (render.current === true) {
+            loadData();
+        }
 
         return () => {
-
+            render.current = true
         }
     }, [])
 
+
+    const handleSearch = (e) => {
+        clearTimeout(debounce);
+
+        debounce = setTimeout(() => {
+            setSearchByName(e.target.value);
+        }, 1000);
+    }
+
+    const displayRating = (id) => {
+        let point;
+        serviceRating.forEach(element => {
+            if (element.serviceInfo.id === id) {
+                point = element.averagePoint
+            }
+        });
+        return point
+    }
+
+    const displayTopService = () => {
+        let top = [];
+        serviceRating.slice(0, 2).forEach(element => {
+            services.data.forEach(service => {
+                if (service.id === element.serviceInfo.id) {
+                    top.push(service)
+                }
+            });
+        });
+        console.log(top);
+        return top;
+    }
 
     return (<>
         <div className="service">
@@ -53,14 +111,22 @@ function Service() {
                             <button className="btn btn-primary " type="button">See More</button>
                         </div>
                         <div className='row row-cols-sm-2 g-5 '>
-                            {services && services.data.slice(0, 2).map((service, index) =>
+                            {services && displayTopService().map((service, index) =>
                                 <div className='col ' key={service.id}>
-                                    <div className="card shadow  h-100 " >
-                                        <img className="card-img-top" src={service.imageURL} alt="..." />
-                                        <div className="card-body d-flex flex-column justify-content-between">
+                                    <div className="card shadow  h-100" >
+                                        <img className="card-img-top w-100" style={{ height: '250px' }} src={service.imageURL} alt="..." />
+                                        <div className="card-body row g-2">
                                             <h5 className="card-title fw-bold  my-3"> {service.serviceName}</h5>
-                                            <Link to={'/services/info'} state={service} className='btn btn-primary mb-2'>Detail <i className="fa-solid fa-circle-info"></i></Link>
-                                            <Link to={`/user/booking`} state={service} className='btn btn-warning '>Book Now <i className="fa-solid fa-calendar-days"></i></Link>
+                                            <div className='col-lg-6 col-sm-12 border rounded-3   d-flex flex-column justify-content-center align-items-center'>
+                                                <span>Rating Point</span>
+
+                                                <span className='text-primary'>{displayRating(service.id)} / 5  <i className="fa fa-star fs-5x " ></i></span>
+                                            </div>
+                                            <div className='col-lg-6 col-sm-12  d-flex flex-column justify-content-between'>
+                                                <Link to={'/services/info'} state={service} className='btn btn-primary mb-2'>Detail <i className="fa-solid fa-circle-info"></i></Link>
+                                                <Link to={`/user/booking`} state={service} className='btn btn-warning '>Book Now <i className="fa-solid fa-calendar-days"></i></Link>
+                                            </div>
+
                                         </div>
                                     </div>
                                 </div>
@@ -94,18 +160,13 @@ function Service() {
                     <div className="alert alert-light d-inline-flex flex-lg-row flex-column   align-items-center justify-content-between" role="alert">
                         <h1 className="alert-heading none   text-nowrap w-100">Our Services</h1>
                         <div className="input-group ">
-                            <select className="form-select" aria-label="Default select example">
-                                <option  >All</option>
-                                <option value="1">One</option>
-                                <option value="2">Two</option>
-                                <option value="3">Three</option>
-                            </select>
+
                             <input
                                 type="text"
                                 className="form-control w-50"
                                 placeholder="Search by Service Name"
-                            // value={searchTerm}
-                            // onChange={handleInputChange}
+
+                                onChange={handleSearch}
                             />
                             <button className="btn btn-primary ">
                                 <i className="fa fa-search"></i>
@@ -113,20 +174,61 @@ function Service() {
                         </div>
                     </div>
                 </div>
-                <div className="container" >
+                <div className="px-5" >
                     <div className='services-box row  overflow-auto border rounded-3  ' >
-                        {services && services.data.map((service, index) =>
-                            <div className='col-lg-4 col-md-12 d-flex align-items-center justify-content-center p-5' key={service.id}>
-                                <div className="card shadow  h-100 " style={{ width: '15rem' }} >
-                                    <img className="card-img-top" src={service.imageURL} alt="..." />
-                                    <div className="card-body d-flex flex-column justify-content-between">
-                                        <h5 className="card-title fw-bold  my-3"> {service.serviceName}</h5>
-                                        <Link to={'/services/info'} state={service} className='btn btn-primary mb-2'>Detail <i className="fa-solid fa-circle-info"></i></Link>
-                                        <Link to={`/user/booking`} state={service} className='btn btn-warning'>Book Now <i className="fa-solid fa-calendar-days"></i></Link>
-                                    </div>
-                                </div>
-                            </div>
-                        )}
+                        {
+
+                            services && (searchByName ?
+                                <>
+                                    {
+                                        services.data.filter(service => service.serviceName.toLowerCase().includes(searchByName.toLowerCase())).map((service, index) =>
+                                            <div className='col-lg-4 col-md-12 d-flex align-items-center justify-content-center p-5' key={service.id}>
+                                                <div className="card shadow  h-100 " style={{ width: '18rem' }} >
+                                                    <img className="card-img-top w-100" style={{ height: '250px' }} src={service.imageURL} alt="..." />
+                                                    <div className="card-body row g-2">
+                                                        <h5 className="card-title fw-bold  my-3"> {service.serviceName}</h5>
+                                                        <div className='col-lg-6 col-sm-12 border rounded-3   d-flex flex-column justify-content-center align-items-center'>
+                                                            <span>Rating Point</span>
+
+                                                            <span className='text-primary'>{displayRating(service.id)} / 5  <i className="fa fa-star fs-5x " ></i></span>
+                                                        </div>
+                                                        <div className='col-lg-6 col-sm-12  d-flex flex-column justify-content-between'>
+                                                            <Link to={'/services/info'} state={service} className='btn btn-primary mb-2'>Detail <i className="fa-solid fa-circle-info"></i></Link>
+                                                            <Link to={`/user/booking`} state={service} className='btn btn-warning '>Book Now <i className="fa-solid fa-calendar-days"></i></Link>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>)
+
+                                    }
+
+                                </>
+                                :
+                                <>
+                                    {services.data.map((service, index) =>
+                                        <div className='col-lg-4 col-md-12 d-flex align-items-center justify-content-center p-5' key={service.id}>
+                                            <div className="card shadow  h-100 " style={{ width: '18rem' }} >
+                                                <img className="card-img-top w-100" style={{ height: '250px' }} src={service.imageURL} alt="..." />
+                                                <div className="card-body row g-2">
+                                                    <h5 className="card-title fw-bold  my-3"> {service.serviceName}</h5>
+                                                    <div className='col-lg-6 col-sm-12 border rounded-3   d-flex flex-column justify-content-center align-items-center'>
+                                                        <span>Rating Point</span>
+
+                                                        <span className='text-primary'>{displayRating(service.id)} / 5  <i className="fa fa-star fs-5x " ></i></span>
+                                                    </div>
+                                                    <div className='col-lg-6 col-sm-12  d-flex flex-column justify-content-between'>
+                                                        <Link to={'/services/info'} state={service} className='btn btn-primary mb-2'>Detail <i className="fa-solid fa-circle-info"></i></Link>
+                                                        <Link to={`/user/booking`} state={service} className='btn btn-warning '>Book Now <i className="fa-solid fa-calendar-days"></i></Link>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    )}
+                                </>)
+                        }
                     </div>
                 </div>
 
