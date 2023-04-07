@@ -128,6 +128,11 @@ const seenAsync = ({ chatboxId, succeed }) => {
 function ReceptionistChat() {
 
     const [userList, setUserList] = useState([]);
+    const [filteredUserList, setFilteredUserList] = useState({
+        take: 10,
+        skip: 0,
+        userName: null,
+    });
     const [messageList, setMessageList] = useState([]);
     const { patientId } = useParams();
     const [currentConversation, setCurrentConversation] = useState(null);
@@ -140,49 +145,71 @@ function ReceptionistChat() {
             take: 20,
             text: "",
         });
-        fetchUserList((res) => {
-            if (res.status === 200) {
-                setUserList(res.data);
-                if (patientId) {
-                    let conv = res.data.find(item => item.user.id === patientId);
-                    if(conv != null) {
-                        setCurrentConversation(conv);
-
-                        if(conv.seen === false) {
-                            seenAsync({ chatboxId: conv.id, succeed: () => reloadUserList() });
+        fetchUserList({
+            params: filteredUserList,
+            callback: (res) => {
+                if (res.status === 200) {
+                    setUserList(res.data);
+                    if (patientId) {
+                        let conv = res.data.find(item => item.user.id === patientId);
+                        if(conv != null) {
+                            setCurrentConversation(conv);
+    
+                            if(conv.seen === false) {
+                                seenAsync({ chatboxId: conv.id, succeed: () => {
+                                    fetchUserList({
+                                        params: filteredUserList,
+                                        callback: (res) => {
+                                            if (res.status === 200) {
+                                                console.log(res.data);
+                                                setUserList(res.data);
+                                            }
+                                            else if (res.status < 500) {
+                                                toast.error(res.data);
+                                            }
+                                            else {
+                                                toast.error("System is busy!");
+                                            }
+                                        }
+                                    });
+                                }});
+                            }
                         }
                     }
+                    else {
+                        let conv = res.data.length ? res.data[0] : null;
+                        if(conv != null) navigate("/receptionist/chat/" + conv.user.id);
+                    }
+                }
+                else if (res.status < 500) {
+                    toast.error(res.data);
                 }
                 else {
-                    let conv = res.data.length ? res.data[0] : null;
-                    if(conv != null) navigate("/receptionist/chat/" + conv.user.id);
+                    toast.error("System is busy!");
                 }
-            }
-            else if (res.status < 500) {
-                toast.error(res.data);
-            }
-            else {
-                toast.error("System is busy!");
             }
         });
     }
 
     const reloadUserList = () => {
-        fetchUserList((res) => {
-            if (res.status === 200) {
-                console.log(res.data);
-                setUserList(res.data);
-            }
-            else if (res.status < 500) {
-                toast.error(res.data);
-            }
-            else {
-                toast.error("System is busy!");
+        fetchUserList({
+            params: filteredUserList,
+            callback: (res) => {
+                if (res.status === 200) {
+                    console.log(res.data);
+                    setUserList(res.data);
+                }
+                else if (res.status < 500) {
+                    toast.error(res.data);
+                }
+                else {
+                    toast.error("System is busy!");
+                }
             }
         });
     }
 
-    useEffect(initUserList, [patientId, navigate]);
+    useEffect(initUserList, [patientId, navigate, filteredUserList]);
 
     const [isLoadingMessages, setIsLoadingMessages] = useState(false);
     const [filtered, setFiltered] = useState({
@@ -315,11 +342,41 @@ function ReceptionistChat() {
                     }));
                     markSeenChatBox({
                         chatboxId: currentConversation.id,
-                        callback: () => reloadUserList()
+                        callback: () => {
+                            fetchUserList({
+                                params: filteredUserList,
+                                callback: (res) => {
+                                    if (res.status === 200) {
+                                        console.log(res.data);
+                                        setUserList(res.data);
+                                    }
+                                    else if (res.status < 500) {
+                                        toast.error(res.data);
+                                    }
+                                    else {
+                                        toast.error("System is busy!");
+                                    }
+                                }
+                            });
+                        }
                     });
                 }
                 else { 
-                    reloadUserList();
+                    fetchUserList({
+                        params: filteredUserList,
+                        callback: (res) => {
+                            if (res.status === 200) {
+                                console.log(res.data);
+                                setUserList(res.data);
+                            }
+                            else if (res.status < 500) {
+                                toast.error(res.data);
+                            }
+                            else {
+                                toast.error("System is busy!");
+                            }
+                        }
+                    });
                 }
                     
             }
@@ -355,7 +412,7 @@ function ReceptionistChat() {
             }
         }
 
-    }, [receptionInfo, patientId, messageList, currentConversation]);
+    }, [receptionInfo, patientId, messageList, currentConversation, filteredUserList]);
 
     const scroller = useRef(null);
     const scrollToEnd = () => {
@@ -452,7 +509,16 @@ function ReceptionistChat() {
                     <div className="row h-100">
                         <div className="col-lg-3 p-2 h-100 d-flex flex-column overflow-auto">
                             <div className="user-list-container">
-                                <input className="form-control mb-2" type="text" name="search" placeholder="Search..." />
+                                <input className="form-control mb-2" type="text" name="search" placeholder="Search..."
+                                    onKeyDown={(e) => {
+                                        if(e.key === "Enter") {
+                                            setFilteredUserList({
+                                                ...filteredUserList,
+                                                userName: e.target.value
+                                            })
+                                        }
+                                    }}
+                                />
                                 <div className="user-list-box">
                                     {
                                         userList.map(item => (
