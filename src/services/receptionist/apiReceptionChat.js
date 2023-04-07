@@ -19,10 +19,11 @@ const callAPI = ({method, endpoint, params=null, data=null, formData=false, call
     });
 }
 
-export const fetchUserList = (callback = (res) => console.log(res)) => {
+export const fetchUserList = ({ params, callback }) => {
     callAPI({
         method: "GET",
         endpoint: "/api/Messages/ListUsersChatBox",
+        params: params,
         callback: callback
     });
 }
