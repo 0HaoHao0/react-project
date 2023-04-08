@@ -354,7 +354,7 @@ function Expert() {
                                             {
                                                 imageResultSet ?
                                                     imageResultSet.map((item, index) => (
-                                                        <img key={index} className="img-fill" src={"http://127.0.0.1:8000" + item.image}
+                                                        <img key={index} className="img-fill" src={item.image.startsWith("http") ? item.image : "http://127.0.0.1:8000" + item.image}
                                                             alt={item.title} onClick={() => showImageViewer(imageResultSet, index)} />
                                                     )) :
                                                     <img className="img-fill" src="https://fakeimg.pl/350x200/?text=Result&font=lobster" alt="example" />
