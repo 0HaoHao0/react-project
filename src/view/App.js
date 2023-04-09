@@ -36,23 +36,23 @@ function App() {
 	axios.defaults.headers.common["Authorization"] = localStorage.getItem("app_token");
 
 	const user = useSelector((state) => state.user); // user return {} or { userInfo: {...} }
-	const forceConfirmEmail = (user.userInfo && (user.userInfo.emailConfirmed === false)) && user.userInfo.role === "Patient";
-
+	const userCanConfirm = user.userInfo && (user.userInfo.emailConfirmed === false);
+	
 	const navigate = useNavigate();
-
+	
 	useEffect(() => {
-
+		const forceConfirmEmail = userCanConfirm && user.userInfo.role === "Patient";
 		if (forceConfirmEmail && window.location.href.endsWith("email-confirm") === false) {
 			navigate("/email-confirm");
 		}
 
-	}, [forceConfirmEmail, navigate]);
+	}, [user, userCanConfirm, navigate]);
 
 	return (
 		<>
 			<Routes>
 				{
-					forceConfirmEmail &&
+					userCanConfirm &&
 					<Route path="/email-confirm" element={<EmailConfirm />}></Route>
 				}
 
