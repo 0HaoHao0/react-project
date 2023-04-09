@@ -33,6 +33,26 @@ export const getService = async () => {
     return data;
 }
 
+export const getServiceById = async (id) => {
+    let data;
+    await axios({
+        method: 'get',
+        url: `/api/Service/Get/${id}`,
+        params: {
+            id: id
+        }
+
+    }).then((response) => {
+        data = response;
+    }).catch((error) => {
+        // handle error
+        data = error.response;
+
+    })
+
+    return data;
+}
+
 
 export const getServicesRating = async () => {
     let data;

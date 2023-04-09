@@ -10,7 +10,6 @@ import "datatables.net-dt/js/dataTables.dataTables.min.mjs";
 import "datatables.net-dt/css/jquery.dataTables.min.css";
 import { Link } from "react-router-dom";
 import { useEffect } from "react";
-import Swal from "sweetalert2";
 
 function DeviceGetAll() {
 
@@ -31,19 +30,15 @@ function DeviceGetAll() {
 
         const loadData = async () => {
 
-            Swal.fire({
-                icon: "info",
-                title: "Waiting to get data...",
-            });
-            Swal.showLoading();
+
             const res = await getAllDevice({ params: filter });
-            if(res.status === 200) {
+            if (res.status === 200) {
                 setDeviceData(res.data);
             }
             else {
                 toast.error("Cannot get device data...");
             }
-            Swal.close();
+
         };
 
         loadData();
@@ -131,7 +126,7 @@ function DeviceGetAll() {
                                 }}
                             />
                         </div>
-                        
+
                     </form>
                     <div className="overflow-auto mb-4">
                         <table id="table" className="table table-hover text-center">

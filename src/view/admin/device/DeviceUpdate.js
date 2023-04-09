@@ -119,11 +119,12 @@ function DeviceUpdate() {
                     })
                     Swal.showLoading();
                     const res = await updateDevice(fromData);
+                    Swal.close()
                     if (res.status === 200) {
                         toast.success("Update Device Success")
                         navigate('/admin/device')
                     }
-                    else if(res.status < 500) {
+                    else if (res.status < 500) {
                         toast.error(res.data);
                     }
                     else {

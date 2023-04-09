@@ -24,7 +24,6 @@ import { Link } from "react-router-dom";
 
 
 function Profile() {
-  const render = useRef(false)
 
   const [userInfo, setUserInfo] = useState()
 
@@ -43,12 +42,9 @@ function Profile() {
       }
     };
 
-    if (render.current === true) {
-      getData();
-    }
+    getData();
 
     return () => {
-      render.current = true;
     }
   }, [])
 
@@ -648,7 +644,6 @@ function MedicalRecord(props) {
 }
 
 function Certificate(props) {
-  const load = useRef(false);
   const { userInfo } = props;
 
   const [userData, setUserData] = useState();
@@ -676,11 +671,8 @@ function Certificate(props) {
       }
 
     }
-    if (load.current === true) {
-      loadData();
-    }
+    loadData();
     return () => {
-      load.current = true
     }
   }, [userInfo.id])
 
@@ -790,7 +782,6 @@ function Certificate(props) {
 }
 
 function AppointmentHistory(props) {
-  const load = useRef(false)
   const { userInfo } = props
 
   const [appointments, setAppointments] = useState()
@@ -838,12 +829,9 @@ function AppointmentHistory(props) {
       }
     }
 
-    if (load.current === true) {
-      loadAppointment()
-    }
+    loadAppointment()
 
     return () => {
-      load.current = true;
     }
   }, [filter])
 

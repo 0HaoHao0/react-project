@@ -104,7 +104,7 @@ function AdminRouter() {
               {/* Service */}
               <Route path="/service" element={<ServiceGetAll />}></Route>
               <Route path="/service/create" element={<ServiceCreate />}></Route>
-              <Route path="/service/detail" element={<ServiceDetail />}></Route>
+              <Route path="/service/detail/:id" element={<ServiceDetail />}></Route>
               <Route path="/service/update" element={<ServiceUpdate />}></Route>
               {/* Device */}
               <Route path="/device" element={<DeviceGetAll />}></Route>

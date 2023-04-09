@@ -112,9 +112,7 @@ function Aboutus() {
                 The projects that we include the technologies we use are:
                 Reactjs, ASP.Net Core Api, MicroServices Automatpter.
               </p>
-              <a href="." className="btn btn-light px-5 rounded-pill shadow-sm">
-                Learn More
-              </a>
+
             </div>
             <div className="col-md-6 px-5 mx-auto order-1 order-lg-2">
               <img
@@ -142,9 +140,7 @@ function Aboutus() {
                 Wisdom tooth pain. Wisdom teeth are misaligned. Brace. Sparse
                 braces. Teeth braces. Braces.
               </p>
-              <a href="." className="btn btn-light px-5 rounded-pill shadow-sm">
-                Learn More
-              </a>
+
             </div>
           </div>
         </div>
@@ -188,7 +184,6 @@ function Aboutus() {
                           <div className="info-area">
                             <h4>BackEnd</h4>
                             <p>Huỳnh Tấn Phúc</p>
-                            <a href=".">Learn More</a>
                           </div>
                         </div>
                         <div className="single-box text-center mx-2 w-100">
@@ -202,7 +197,6 @@ function Aboutus() {
                             <p>Đặng Đỗ Hữu Bằng</p>
                           </div>
                           <div className="info-area">
-                            <a href=".">Learn More</a>
                           </div>
                         </div>
                         <div className="single-box text-center mx-2 w-100">
@@ -216,7 +210,6 @@ function Aboutus() {
                           <div className="info-area">
                             <h4>FrontEnd</h4>
                             <p>Trần Văn Hảo</p>
-                            <a href=".">Learn More</a>
                           </div>
                         </div>
                         <div className="single-box  text-center mx-2 w-100">
@@ -230,7 +223,6 @@ function Aboutus() {
                           <div className="info-area">
                             <h4>FrontEnd</h4>
                             <p>Lý Tuấn Đạt</p>
-                            <a href=".">Learn More</a>
                           </div>
                         </div>
                         <div className="single-box text-center mx-2 w-100">
@@ -243,9 +235,7 @@ function Aboutus() {
                             <h4>Tester</h4>
                             <p>Nguyễn Khánh Duy</p>
                           </div>
-                          <div className="info-area">
-                            <a href=".">Learn More</a>
-                          </div>
+
                         </div>
                       </div>
                     </div>

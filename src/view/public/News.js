@@ -7,7 +7,7 @@ function News() {
         <div className="news p-5">
             <div className='row py-5'>
                 <h1 className='text-center'>{state.title}</h1>
-                <div className='row justify-content-center'>
+                <div className='row justify-content-center align-items-center'>
                     <div className='col-auto '>
                         <h6>Related Services:
                             {
@@ -36,7 +36,7 @@ function News() {
                     </div>
                 </div>
                 <div className='row my-5'>
-                    <div className="ckeditor ">
+                    <div className="ckeditor border p-5 rounded-3">
                         <div className="ql-editor" dangerouslySetInnerHTML={{ __html: state.content }}></div>
 
                     </div>
