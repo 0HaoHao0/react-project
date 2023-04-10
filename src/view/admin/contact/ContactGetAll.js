@@ -11,9 +11,11 @@ import "datatables.net-dt/css/jquery.dataTables.min.css"
 import DataLoading from "../../../components/admin/DataLoading";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
+import Swal from "sweetalert2";
 
 function ContactGetAll() {
-    const render = useRef()
+    const rendered = useRef(false);
+
     const [contactData, setContactData] = useState();
 
     const currentPage = contactData ? contactData.page : 1;
@@ -33,7 +35,13 @@ function ContactGetAll() {
     useEffect(() => {
 
         const loadData = async () => {
-
+            if (rendered.current) {
+                Swal.fire({
+                    icon: "info",
+                    title: "Waiting for response..."
+                });
+                Swal.showLoading();
+            }
 
             const res = await getAllContact({ params: filter });
 
@@ -41,18 +49,20 @@ function ContactGetAll() {
                 setContactData(res.data);
             }
             else {
-                toast.error("Cannot load data, Please try again!");
+                toast.error("Something was wrong, Please try again !!!");
             }
+            if (rendered.current) {
+                Swal.close();
+            }
+        }
 
-        }
-        if (render.current === true) {
-            loadData();
-        }
+        loadData();
 
 
         return () => {
-            render.current = true;
+            rendered.current = true
         }
+
     }, [filter]);
 
     // Pagination

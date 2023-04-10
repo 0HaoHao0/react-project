@@ -20,7 +20,7 @@ function PatientDetail() {
                 setPatientInfo(res.data);
             }
             else {
-                toast.error("Cannot get patientInfo. System is busy!");
+                toast.error("Some went wrong !!!");
             }
         }
 

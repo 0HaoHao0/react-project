@@ -49,7 +49,7 @@ function DoctorGetAll() {
             if (res.status === 200) {
                 setDoctorData(res.data);
             } else {
-                toast.error("System is busy!");
+                toast.error("Something went wrong !!!");
             }
 
             if (rendered.current) {

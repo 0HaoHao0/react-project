@@ -15,12 +15,12 @@ function DoctorDetail() {
         const doEffect = async () => {
             let res = await getDoctorInfo(state.id);
 
-            if(res.status === 200) {
+            if (res.status === 200) {
                 console.log(res.data);
                 setDoctorInfo(res.data);
             }
             else {
-                toast.error("Cannot get patientInfo. System is busy!");
+                toast.error("Something went wrong !!!");
             }
         }
 

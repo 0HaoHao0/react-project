@@ -53,7 +53,7 @@ function UserGetAll() {
             if (res.status === 200) {
                 setUserData(res.data);
             } else {
-                toast.error("System is busy!");
+                toast.error("Something went wrong !!!");
             }
 
             if (rendered.current) {

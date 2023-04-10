@@ -11,18 +11,18 @@ function UpdateState({ currentState, handleChangeState }) {
     const [stateList, setStateList] = useState([]);
 
     useEffect(() => {
-        
+
         const setAppointmentStateList = async () => {
             let res = await getAppointmentStates();
-            if(res.status === 200) {
+            if (res.status === 200) {
                 console.log(res.data);
                 setStateList(res.data);
             }
             else {
-                toast.error("Something wrong!");
+                toast.error("Something went wrong!");
             }
         }
-        if(stateList.length === 0) {
+        if (stateList.length === 0) {
             setAppointmentStateList();
         }
 
@@ -49,7 +49,7 @@ function UpdateState({ currentState, handleChangeState }) {
     );
 }
 
-function AdminAppointmentDetail() {
+function AppointmentDetail() {
 
     const { id } = useParams();
     const [appointmentInfo, setAppointmentInfo] = useState();
@@ -67,7 +67,7 @@ function AdminAppointmentDetail() {
             if (res.status === 200) {
                 setAppointmentInfo(res.data)
             }
-            else if(res.status < 500) {
+            else if (res.status < 500) {
                 toast.error(res.data);
             }
             else {
@@ -105,7 +105,7 @@ function AdminAppointmentDetail() {
                     toast.success("Update succeeded!");
                     setLoading(loading + 1);
                 }
-                else if(res.status < 500) {
+                else if (res.status < 500) {
                     toast.error(res.data);
                 }
                 else {
@@ -128,11 +128,11 @@ function AdminAppointmentDetail() {
                 showConfirmButton: true,
                 showCancelButton: true
             })
-            .then(ans => {
-                if(ans.isConfirmed) {
-                    doConfirmed();
-                }
-            })
+                .then(ans => {
+                    if (ans.isConfirmed) {
+                        doConfirmed();
+                    }
+                })
         }
 
         showRemoveQuestion(async () => {
@@ -143,7 +143,7 @@ function AdminAppointmentDetail() {
             });
             Swal.showLoading();
             let res = await removeDocument(id);
-            if(res.status === 200) {
+            if (res.status === 200) {
                 toast.success(res.data);
 
                 let _tempAppInfo = appointmentInfo;
@@ -152,7 +152,7 @@ function AdminAppointmentDetail() {
                     ..._tempAppInfo
                 });
             }
-            else if(res.status < 500) {
+            else if (res.status < 500) {
                 toast.error(res.data);
             }
             else {
@@ -163,7 +163,7 @@ function AdminAppointmentDetail() {
         });
     }
 
-    return ( 
+    return (
         <div className="doctor-appointment-detail p-5">
             <h1>Appointment Detail</h1>
             <hr />
@@ -179,11 +179,11 @@ function AdminAppointmentDetail() {
                                 <label htmlFor="id">Id:</label>
                                 <input id="id" className="form-control" type="text" name="id" placeholder={appointmentInfo.id} disabled />
                                 <label htmlFor="timeCreated">Created:</label>
-                                <input id="timeCreated" className="form-control" type="text" name="timeCreated" 
-                                placeholder={new Date(appointmentInfo.timeCreated).toLocaleString()} disabled />
+                                <input id="timeCreated" className="form-control" type="text" name="timeCreated"
+                                    placeholder={new Date(appointmentInfo.timeCreated).toLocaleString()} disabled />
                                 <label htmlFor="lastTimeModified">Last Modified: </label>
                                 <input id="lastTimeModified" className="form-control" type="text" name="lastTimeModified"
-                                placeholder={appointmentInfo.lastTimeModified && new Date(appointmentInfo.lastTimeModified).toLocaleString()} disabled />
+                                    placeholder={appointmentInfo.lastTimeModified && new Date(appointmentInfo.lastTimeModified).toLocaleString()} disabled />
                             </div>
                         </div>
                         <div className="col ">
@@ -314,11 +314,11 @@ function AdminAppointmentDetail() {
                         <div className="col">
                             <div className="form-group">
                                 <label htmlFor="service-name">User Name:</label>
-                                <input id="service-name" className="form-control mb-2 bg-white" type="text" name="service-name" 
-                                placeholder={appointmentInfo.doctor.baseUser.userName} disabled />
+                                <input id="service-name" className="form-control mb-2 bg-white" type="text" name="service-name"
+                                    placeholder={appointmentInfo.doctor.baseUser.userName} disabled />
                                 <label htmlFor="service-code">Full Name:</label>
-                                <input id="service-code" className="form-control mb-2 bg-white" type="text" name="service-code" 
-                                placeholder={appointmentInfo.doctor.baseUser.fullName} disabled />
+                                <input id="service-code" className="form-control mb-2 bg-white" type="text" name="service-code"
+                                    placeholder={appointmentInfo.doctor.baseUser.fullName} disabled />
                             </div>
                         </div>
 
@@ -329,4 +329,4 @@ function AdminAppointmentDetail() {
     );
 }
 
-export default AdminAppointmentDetail;
+export default AppointmentDetail;

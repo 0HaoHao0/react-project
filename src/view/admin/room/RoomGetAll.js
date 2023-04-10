@@ -10,10 +10,10 @@ import "datatables.net-dt/js/dataTables.dataTables.min.mjs";
 import "datatables.net-dt/css/jquery.dataTables.min.css";
 import { Link } from "react-router-dom";
 import { useEffect } from "react";
+import Swal from "sweetalert2";
 
 function RoomGetAll() {
-    const render = useRef(false);
-
+    const rendered = useRef(false);
     const [roomData, setRoomData] = useState();
     const currentPage = roomData ? roomData.page : 1;
     const totalPage = roomData ? roomData.total_pages : 0;
@@ -34,9 +34,15 @@ function RoomGetAll() {
 
     useEffect(() => {
 
-
-
         const loadData = async () => {
+            if (rendered.current) {
+                Swal.fire({
+                    icon: "info",
+                    title: "Waiting for response..."
+                });
+                Swal.showLoading();
+            }
+
             const res = await getAllRoom({
                 params: filter
             });
@@ -45,16 +51,17 @@ function RoomGetAll() {
                 setRoomData(res.data);
             }
             else {
-                toast.error("Cannot get room data, Please try again!");
+                toast.error("Something went wrong, Please try again !!!");
+            }
+            if (rendered.current) {
+                Swal.close();
             }
         };
 
-        if (render.current === true) {
-            loadData();
-        }
+        loadData();
 
         return () => {
-            render.current = true;
+            rendered.current = true
         }
     }, [filter]);
 
@@ -74,18 +81,14 @@ function RoomGetAll() {
                     toast.error(res.data);
                 }
                 else {
-                    toast.error("Somedata wrong!");
+                    toast.error("Something went wrong !!!");
                 }
             });
         }
 
-        if (render.current === true) {
-            loadRoomStates();
-        }
+        loadRoomStates();
 
-        return () => {
-            render.current = true;
-        }
+
     }, [])
 
 
@@ -240,7 +243,7 @@ function RoomGetAll() {
 
                     </div>
                     <div className="overflow-auto mb-4">
-                        <table id="table" className="table table-hover text-center">
+                        <table id="table" className="table table-hover ">
                             <thead>
                                 <tr className="table-dark">
                                     <th>Id</th>

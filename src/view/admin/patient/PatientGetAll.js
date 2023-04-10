@@ -46,7 +46,7 @@ function PatientGetAll() {
 			if (res.status === 200) {
 				setPatientData(res.data);
 			} else {
-				toast.error("System is busy!");
+				toast.error("Something went wrong!");
 			}
 			if (rendered.current) {
 				Swal.close();

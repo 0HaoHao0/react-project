@@ -13,7 +13,8 @@ import { getAllNews } from "../../../services/admin/news/apiNew";
 import Swal from "sweetalert2";
 
 function NewsGetAll() {
-    const render = useRef(false);
+    const rendered = useRef(false)
+
     const [newsData, setNewsData] = useState();
 
 
@@ -34,24 +35,29 @@ function NewsGetAll() {
     useEffect(() => {
 
         const loadData = async () => {
-
+            if (rendered.current) {
+                Swal.fire({
+                    icon: "info",
+                    title: "Waiting for response..."
+                });
+                Swal.showLoading();
+            }
 
             let res = await getAllNews({ params: filter });
             if (res.status === 200) {
                 setNewsData(res.data);
             }
             else {
-                toast.error("Cannot load data, Plese try again ! ");
+                toast.error("Something went wrong, Plese try again ! ");
             }
-            Swal.close();
+            if (rendered.current) {
+                Swal.close();
+            }
         };
 
-        if (render.current === true) {
-            loadData();
-        }
-
+        loadData();
         return () => {
-            render.current = true;
+            rendered.current = true
         }
 
     }, [filter]);

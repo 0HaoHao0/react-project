@@ -10,38 +10,51 @@ import "datatables.net-dt/js/dataTables.dataTables.min.mjs";
 import "datatables.net-dt/css/jquery.dataTables.min.css";
 import { Link } from "react-router-dom";
 import { useEffect } from "react";
+import { useRef } from "react";
+import Swal from "sweetalert2";
 
 function DeviceGetAll() {
-
+    const rendered = useRef(false);
     const [deviceData, setDeviceData] = useState();
-
     const currentPage = deviceData ? deviceData.page : 1;
     const totalPage = deviceData ? deviceData.total_pages : 0;
 
     const [filter, setFilter] = useState({
         page: currentPage,
         pageSize: 10,
-
         keyword: null,
-
     });
 
     useEffect(() => {
 
         const loadData = async () => {
-
+            if (rendered.current) {
+                Swal.fire({
+                    icon: "info",
+                    title: "Waiting for response..."
+                });
+                Swal.showLoading();
+            }
 
             const res = await getAllDevice({ params: filter });
             if (res.status === 200) {
                 setDeviceData(res.data);
             }
             else {
-                toast.error("Cannot get device data...");
+                toast.error("Something went wrong !!!");
+            }
+            if (rendered.current) {
+                Swal.close();
             }
 
         };
 
         loadData();
+
+
+        return () => {
+            rendered.current = true
+        }
 
     }, [filter]);
 
@@ -129,7 +142,7 @@ function DeviceGetAll() {
 
                     </form>
                     <div className="overflow-auto mb-4">
-                        <table id="table" className="table table-hover text-center">
+                        <table id="table" className="table table-hover ">
                             <thead>
                                 <tr className="table-dark">
                                     <th>Device Id</th>

@@ -3,11 +3,10 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
 import { deleteService, getServiceById } from "../../../services/admin/service/apiService";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 
 
 function ServiceDetail() {
-    const render = useRef(false);
     let { id } = useParams();
     const [service, setService] = useState()
     const navigate = useNavigate()
@@ -24,16 +23,13 @@ function ServiceDetail() {
                 toast.error(res.data);
             }
             else {
-                toast.error("Something went wrong, please contact to Admin !")
+                toast.error("Something went wrong !!!")
             }
         }
 
-        if (render.current === true) {
-            loadData();
-        }
+        loadData();
 
         return () => {
-            render.current = true
         }
     }, [id])
 

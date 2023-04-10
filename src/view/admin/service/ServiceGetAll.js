@@ -11,8 +11,10 @@ import "datatables.net-dt/css/jquery.dataTables.min.css";
 import { Link } from "react-router-dom";
 import { useEffect } from "react";
 import Swal from "sweetalert2";
+import { useRef } from "react";
 
 function ServiceGetAll() {
+    const rendered = useRef(false)
 
     const [serviceData, setServiceData] = useState();
     const [isReset, setIsReset] = useState(1);
@@ -35,7 +37,13 @@ function ServiceGetAll() {
 
         const loadData = async () => {
 
-
+            if (rendered.current) {
+                Swal.fire({
+                    icon: "info",
+                    title: "Waiting for response..."
+                });
+                Swal.showLoading();
+            }
             const res = await getAllService({ params: filter });
             if (res.status === 200) {
                 setServiceData(res.data);
@@ -43,14 +51,18 @@ function ServiceGetAll() {
             else {
                 toast.error("Something wrong!");
             }
+            if (rendered.current) {
+                Swal.close();
+            }
 
         };
 
         loadData();
 
         return () => {
-
+            rendered.current = true
         }
+
     }, [isReset, filter]);
 
     const handleState = (id, isPublic) => {
