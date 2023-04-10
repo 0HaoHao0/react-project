@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { getAllUser, lock, unlock } from "../../../services/admin/user/apiUser";
 
 import DataLoading from "../../../components/admin/DataLoading";
@@ -10,9 +10,13 @@ import "datatables.net-dt/css/jquery.dataTables.min.css";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
+import moment from "moment";
 function UserGetAll() {
+    const rendered = useRef(false)
     const [userData, setUserData] = useState();
     const [isReset, setIsReset] = useState(1);
+
+
 
     const currentPage = userData ? userData.page : 1;
     const totalPage = userData ? userData.total_pages : 0;
@@ -31,30 +35,44 @@ function UserGetAll() {
 
     useEffect(() => {
 
-        Swal.fire({
-            icon: "info",
-            title: "Waiting for response..."
-        });
-        Swal.showLoading();
+
         const loadData = async () => {
+            if (rendered.current) {
+                Swal.fire({
+                    icon: "info",
+                    title: "Waiting for response..."
+                });
+                Swal.showLoading();
+            }
+
+
             let res = await getAllUser({
                 params: filter
             });
-    
-            if(res.status === 200) {
+
+            if (res.status === 200) {
                 setUserData(res.data);
             } else {
                 toast.error("System is busy!");
             }
-            Swal.close();
+
+            if (rendered.current) {
+                Swal.close();
+            }
         }
 
-        loadData();
+        loadData()
+
+        return () => {
+            rendered.current = true
+        }
+
 
     }, [filter, isReset]);
 
     //handle
     const handleAccess = (isLock, id) => {
+        let min = moment().add(1, 'day').format().split('T')[0]
         if (isLock === false) {
             Swal.fire({
                 title: 'Lock Information',
@@ -66,7 +84,7 @@ function UserGetAll() {
                     '</div>' +
                     '<div class="mb-3">' +
                     '<label for="expired" class="form-label">Expired</label>' +
-                    '<input type="date" class="form-control" id="expired">' +
+                    `<input type="date" class="form-control" min='${min}'  id="expired">` +
                     '</div>' +
                     '</div>',
                 showCancelButton: true,
@@ -86,7 +104,7 @@ function UserGetAll() {
                     });
                     Swal.showLoading();
                     const res = await lock(reason, expired, id);
-                    if(res.status === 200) {
+                    if (res.status === 200) {
                         toast.success(res.data);
                         setIsReset(isReset + 1);
                     }
@@ -115,7 +133,7 @@ function UserGetAll() {
                     });
                     Swal.showLoading();
                     const res = await unlock(id);
-                    if(res.status === 200) {
+                    if (res.status === 200) {
                         toast.success(res.data)
                         setIsReset(isReset - 1);
                     }
@@ -123,7 +141,7 @@ function UserGetAll() {
                         toast.error("System is busy!");
                     }
                     Swal.close();
-                    
+
                 }
             })
         }
@@ -137,7 +155,7 @@ function UserGetAll() {
         });
     }
     const nextPage = (e) => {
-        if(filter.page + 1 <= totalPage) {
+        if (filter.page + 1 <= totalPage) {
             setFilter({
                 ...filter,
                 page: filter.page + 1
@@ -187,9 +205,9 @@ function UserGetAll() {
                         <hr />
                         <div className="filter row mb-4">
                             <div className="col-lg-3">
-                                <input type="text" placeholder="Search by UserName" className="form-control" 
+                                <input type="text" placeholder="Search by UserName" className="form-control"
                                     onKeyDown={(e) => {
-                                        if(e.key === "Enter") {
+                                        if (e.key === "Enter") {
                                             setFilter({
                                                 ...filter,
                                                 userName: e.target.value,
@@ -200,9 +218,9 @@ function UserGetAll() {
                                 />
                             </div>
                             <div className="col-lg-3">
-                                <input type="text" placeholder="Search by Email" className="form-control" 
+                                <input type="text" placeholder="Search by Email" className="form-control"
                                     onKeyDown={(e) => {
-                                        if(e.key === "Enter") {
+                                        if (e.key === "Enter") {
                                             setFilter({
                                                 ...filter,
                                                 email: e.target.value,
@@ -213,9 +231,9 @@ function UserGetAll() {
                                 />
                             </div>
                             <div className="col-lg-3">
-                                <input type="text" placeholder="Search by PhoneNumber" className="form-control" 
+                                <input type="text" placeholder="Search by PhoneNumber" className="form-control"
                                     onKeyDown={(e) => {
-                                        if(e.key === "Enter") {
+                                        if (e.key === "Enter") {
                                             setFilter({
                                                 ...filter,
                                                 phoneNumber: e.target.value,
@@ -269,7 +287,7 @@ function UserGetAll() {
                                         </div>
                                     </div>
                                     <div className="col-lg-6">
-                                    <div className="d-flex gap-2">
+                                        <div className="d-flex gap-2">
                                             <strong>Lock</strong>
                                         </div>
                                         <div className="d-flex gap-2">
@@ -308,7 +326,7 @@ function UserGetAll() {
                                             />
                                             <label htmlFor="filterLocked">Both</label>
                                         </div>
-                                        
+
                                     </div>
                                 </div>
                             </div>
@@ -337,13 +355,13 @@ function UserGetAll() {
                                             <td>{value.phoneNumber}</td>
                                             <td>{value.role}</td>
                                             <td>{value.emailConfirmed ?
-                                                    <div className="btn btn-success">
-                                                        <i className="fa-solid fa-check"></i>
-                                                    </div>
+                                                <div className="btn btn-success">
+                                                    <i className="fa-solid fa-check"></i>
+                                                </div>
                                                 :
-                                                    <div className="btn btn-outline-danger disabled">
-                                                        <i className="fa-solid fa-x"></i>
-                                                    </div>
+                                                <div className="btn btn-outline-danger disabled">
+                                                    <i className="fa-solid fa-x"></i>
+                                                </div>
                                             }</td>
                                             <td>{value.isLock
                                                 ?

@@ -11,8 +11,10 @@ import "datatables.net-dt/css/jquery.dataTables.min.css";
 import { Link } from "react-router-dom";
 import { useEffect } from "react";
 import Swal from "sweetalert2";
+import { useRef } from "react";
 
 function DoctorGetAll() {
+    const rendered = useRef(false)
 
     const [doctorData, setDoctorData] = useState();
 
@@ -31,12 +33,15 @@ function DoctorGetAll() {
 
     useEffect(() => {
 
-        Swal.fire({
-            icon: "info",
-            title: "Waiting for response..."
-        });
-        Swal.showLoading();
+
         const loadData = async () => {
+            if (rendered.current) {
+                Swal.fire({
+                    icon: "info",
+                    title: "Waiting for response..."
+                });
+                Swal.showLoading();
+            }
             let res = await getAllDoctor({
                 params: filter
             });
@@ -46,11 +51,17 @@ function DoctorGetAll() {
             } else {
                 toast.error("System is busy!");
             }
-            Swal.close();
+
+            if (rendered.current) {
+                Swal.close();
+            }
         }
 
         loadData();
 
+        return () => {
+            rendered.current = true
+        }
     }, [filter]);
 
 
@@ -151,10 +162,10 @@ function DoctorGetAll() {
                                 }}
                             />
                         </div>
-                        
+
                     </div>
                     <div className="overflow-auto mb-4">
-                        <table id="table" className="table table-hover text-center">
+                        <table id="table" className="table table-hover ">
                             <thead>
                                 <tr className="table-dark">
                                     <th>UserName</th>

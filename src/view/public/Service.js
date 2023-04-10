@@ -5,7 +5,11 @@ import './Service.scss'
 import { useRef } from 'react';
 import { toast } from 'react-toastify';
 import Swal from 'sweetalert2';
+import { useSelector } from 'react-redux';
 function Service() {
+    const user = useSelector((state) => state.user.userInfo);
+
+    console.log(user);
 
     const [services, setServices] = useState()
 
@@ -127,7 +131,7 @@ function Service() {
                                             </div>
                                             <div className='col-lg-6 col-sm-12  d-flex flex-column justify-content-between'>
                                                 <Link to={'/services/info'} state={service} className='btn btn-primary mb-2'>Detail <i className="fa-solid fa-circle-info"></i></Link>
-                                                <Link to={`/user/booking`} state={service} className='btn btn-warning '>Book Now <i className="fa-solid fa-calendar-days"></i></Link>
+                                                <Link to={`${user ? '/user/booking' : '/login'}`} state={service} className='btn btn-warning '>Book Now <i className="fa-solid fa-calendar-days"></i></Link>
                                             </div>
 
                                         </div>
@@ -197,7 +201,7 @@ function Service() {
                                                         </div>
                                                         <div className='col-lg-6 col-sm-12  d-flex flex-column justify-content-between'>
                                                             <Link to={'/services/info'} state={service} className='btn btn-primary mb-2'>Detail <i className="fa-solid fa-circle-info"></i></Link>
-                                                            <Link to={`/user/booking`} state={service} className='btn btn-warning '>Book Now <i className="fa-solid fa-calendar-days"></i></Link>
+                                                            <Link to={`${user ? '/user/booking' : '/login'}`} state={service} className='btn btn-warning '>Book Now <i className="fa-solid fa-calendar-days"></i></Link>
                                                         </div>
 
                                                     </div>
@@ -222,7 +226,7 @@ function Service() {
                                                     </div>
                                                     <div className='col-lg-6 col-sm-12  d-flex flex-column justify-content-between'>
                                                         <Link to={'/services/info'} state={service} className='btn btn-primary mb-2'>Detail <i className="fa-solid fa-circle-info"></i></Link>
-                                                        <Link to={`/user/booking`} state={service} className='btn btn-warning '>Book Now <i className="fa-solid fa-calendar-days"></i></Link>
+                                                        <Link to={`${user ? '/user/booking' : '/login'}`} state={service} className='btn btn-warning '>Book Now <i className="fa-solid fa-calendar-days"></i></Link>
                                                     </div>
 
                                                 </div>
