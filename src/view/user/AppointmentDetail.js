@@ -120,14 +120,10 @@ function AppointmentDetail() {
                 Swal.close();
 
                 if (res.status === 200) {
-                    console.log(res.data);
-
                     toast.success('Update successful')
                 } else if (res.status < 500) {
-                    Swal.fire({
-                        icon: "error",
-                        html: res.data[0].description,
-                    });
+                    toast.error(res.data);
+
                 } else {
                     Swal.fire({
                         icon: "error",

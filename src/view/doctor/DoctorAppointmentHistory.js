@@ -10,8 +10,12 @@ import $ from "jquery";
 import { Link } from "react-router-dom";
 import { getAllAppointment } from "../../services/doctor/DoctorApi";
 import { useSelector } from "react-redux";
+import { useRef } from "react";
+import Swal from "sweetalert2";
 
 function DoctorAppointmentHistory() {
+    const rendered = useRef(false);
+
     const [appointmentData, setAppointmentData] = useState();
     const user = useSelector((state) => state.user);
 
@@ -31,6 +35,13 @@ function DoctorAppointmentHistory() {
     useEffect(() => {
         const loadData = async () => {
 
+            if (rendered.current) {
+                Swal.fire({
+                    icon: "info",
+                    title: "Waiting for response..."
+                });
+                Swal.showLoading();
+            }
 
             const res = await getAllAppointment(filter);
 
@@ -41,12 +52,15 @@ function DoctorAppointmentHistory() {
                 retrieve: true,
                 paging: false,
             });
-
+            if (rendered.current) {
+                Swal.close();
+            }
         };
 
         loadData();
 
         return () => {
+            rendered.current = true
         }
     }, [filter]);
 
