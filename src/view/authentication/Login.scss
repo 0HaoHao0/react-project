@@ -89,9 +89,15 @@
 
     .input-field {
         display: flex;
-        flex-direction: column;
+        flex-direction: row;
         position: relative;
         padding: 0 10px 0 10px;
+    }
+
+    .login-show{
+        position: absolute;
+        margin-left: 20em;
+        margin-top: 1em;
     }
 
     .input {
@@ -101,7 +107,7 @@
         border: none;
         border-bottom: 1px solid rgba(0, 0, 0, 0.2);
         outline: none;
-        margin-bottom: 20px;
+        margin-bottom: 17px;
         color: #40414a;
     }
 
@@ -119,7 +125,7 @@
     }
 
     .input-field .input:valid~label {
-        top: -10px;
+        top: -5px;
         font-size: 13px;
         color: #5d5076;
     }
@@ -193,7 +199,8 @@
     .error {
         font-size: 16px;
         color: red;
-        margin-bottom: 5px;
+        margin-left: 0.7em;
+
     }
 
     .mouse {

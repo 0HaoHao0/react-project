@@ -30,6 +30,7 @@ function Login() {
   const [userName, setUserName] = useState("");
   const [password, setPassWord] = useState("");
   const [dataError, setDataError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   const [forgotpasswordWaiting, setForgotpasswordWaiting] = useState(0);
   const handleForgotpasswordWaiting = () => {
@@ -221,13 +222,13 @@ function Login() {
                         required
                       />
                       <label htmlFor="username">Username</label>
+                      </div>
                       {dataError.userName && (
                         <span className="error">{dataError.userName}</span>
                       )}
-                    </div>
                     <div className="input-field col-md-12 col-sm-12">
                       <input
-                        type="password"
+                        type={showPassword ? 'text' : 'password'}
                         className="input"
                         id="password"
                         required
@@ -236,16 +237,18 @@ function Login() {
                         onChange={(e) => {
                           setPassWord(e.target.value);
                         }}
-                      />
+                        />
+                        <small className="login-show"
+                onClick={() => setShowPassword(!showPassword)}>{showPassword ? <i className='fa fa-eye'></i> : <i className='fa fa-eye-slash'></i>}</small>
                       <label htmlFor="password">Password</label>
+                      </div>
                       {dataError.password && (
                         <span className="error">{dataError.password}</span>
                       )}
-                    </div>
                     <div className="input-field mx-5">
                       <input
                         type="submit"
-                        className="submit"
+                        className="submit w-100"
                         value="Sign In"
                         onClick={() => {
                           loginNormal();
