@@ -32,7 +32,7 @@ function App() {
 		dispatch(deleteUser());
 	}
 
-	axios.defaults.baseURL = "https://localhost:44355/";
+	axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 	axios.defaults.headers.common["Authorization"] = localStorage.getItem("app_token");
 
 	const user = useSelector((state) => state.user); // user return {} or { userInfo: {...} }
