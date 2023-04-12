@@ -13,32 +13,35 @@ function RoomUpdate() {
     const { id } = useParams();
     const [roomData, setRoomData] = useState({
         roomCode: state?.roomCode,
-		description: state?.description,
-		roomType: state?.roomType?.id,
-		category: state?.roomCategory?.name,
+        description: state?.description,
+        roomType: state?.roomType?.id,
+        category: state?.roomCategory?.name,
     });
 
-	const [roomType, setRoomType] = useState([]);
-	const [dataError, setDataError] = useState({});
-	const [isTouched, setIsTouched] = useState(false);
+    const [roomType, setRoomType] = useState([]);
+    const [dataError, setDataError] = useState({});
+    const [isTouched, setIsTouched] = useState(false);
 
     useEffect(() => {
 
         const loadData = async () => {
-            getRoomDetail({ id: id, callback: (res) => {
-                if(res.status === 200) {
-                    setRoomData({
-                        roomCode: res.data.roomCode,
-                        description: res.data.description,
-                        roomType: res.data.roomType?.id,
-                        category: res.data.roomCategory?.name,
-                    });
+            getRoomDetail({
+                id: id, callback: (res) => {
+                    if (res.status === 200) {
+                        setRoomData({
+                            roomCode: res.data.roomCode,
+                            description: res.data.description,
+                            roomType: res.data.roomType?.id,
+                            category: res.data.roomCategory?.name,
+                        });
+                    }
                 }
-            }});
+            });
         }
 
+        loadData();
+
         return () => {
-            loadData();
         }
 
     }, [id]);
@@ -46,16 +49,16 @@ function RoomUpdate() {
 
     useEffect(() => {
 
-		const loadRoomTypes = async () => {
-			const res = await getRoomTypes();
-			if(res.status === 200) {
-				setRoomType(res.data);
-			}
-		};
+        const loadRoomTypes = async () => {
+            const res = await getRoomTypes();
+            if (res.status === 200) {
+                setRoomType(res.data);
+            }
+        };
 
-		loadRoomTypes();
+        loadRoomTypes();
 
-	}, []);
+    }, []);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -76,8 +79,8 @@ function RoomUpdate() {
 
     const handleCreateRoom = async () => {
         if (!roomData.roomCode || (roomData.roomType !== 0 && roomData.roomType !== 1) || !roomData.description || !roomData.category) {
-			toast.error("Please Fill In All Input !");
-		}
+            toast.error("Please Fill In All Input !");
+        }
         else {
             Swal.fire({
                 title: 'Are You Sure ?',
@@ -104,11 +107,11 @@ function RoomUpdate() {
                         toast.success("Update Room Success");
                         navigate(`/admin/room`);
                     }
-                    else if(res.status < 500) {
+                    else if (res.status < 500) {
                         toast.error(res.data);
                     }
                     else {
-                        toast.error("Something wrong");
+                        toast.error("Something went wrong");
                     }
 
                     Swal.close();
@@ -144,101 +147,101 @@ function RoomUpdate() {
     }
 
     // Room Category setup
-	const [allCategories, setAllCategories] = useState([]);
-	const [filteredCategories, setFilteredCategories] = useState([]);
-	const [selectedText, setSelectedText] = useState(roomData.category);
+    const [allCategories, setAllCategories] = useState([]);
+    const [filteredCategories, setFilteredCategories] = useState([]);
+    const [selectedText, setSelectedText] = useState(roomData.category);
 
-	useEffect(() => {
-		getRoomCategories(res => {
-			if (res.status === 200) {
-				setAllCategories(res.data);
-			}
-		});
-	}, []);
+    useEffect(() => {
+        getRoomCategories(res => {
+            if (res.status === 200) {
+                setAllCategories(res.data);
+            }
+        });
+    }, []);
 
-	const search = (e) => {
+    const search = (e) => {
 
-		setTimeout(() => {
-			let value = e.query;
-			if(value) {
-				let item = { id: 0, name: value.trim() }
-				let filtered = allCategories.filter(x => x.name.toLowerCase().includes(value.trim().toLowerCase()));
-				if (filtered.length) {
-					if(filtered.find(x => x.name === item.name)) {
-						setFilteredCategories([...filtered]);
-					}
-					else {
-						setFilteredCategories([item, ...filtered]);
-					}
-				}
-				else {
-					setFilteredCategories([item, ...allCategories]);
-				}
-			}
-			else {
-				setFilteredCategories([...allCategories]);
-			}
-		}, 250);
+        setTimeout(() => {
+            let value = e.query;
+            if (value) {
+                let item = { id: 0, name: value.trim() }
+                let filtered = allCategories.filter(x => x.name.toLowerCase().includes(value.trim().toLowerCase()));
+                if (filtered.length) {
+                    if (filtered.find(x => x.name === item.name)) {
+                        setFilteredCategories([...filtered]);
+                    }
+                    else {
+                        setFilteredCategories([item, ...filtered]);
+                    }
+                }
+                else {
+                    setFilteredCategories([item, ...allCategories]);
+                }
+            }
+            else {
+                setFilteredCategories([...allCategories]);
+            }
+        }, 250);
 
-	}
+    }
 
-	const categoryTemplate = (item) => {
+    const categoryTemplate = (item) => {
 
-		return (
-			<div className="d-flex align-items-center justify-content-between gap-1">
-				<span>{item.name}</span>
-				{
-					item.id === 0 ? (
-						<span className="badge bg-primary">new</span>
-					) : (
-						<button className="btn btn-danger btn-sm" onClick={() => handleRemoveCategory(item.id)}>
-							<i className="fa fa-times"></i>
-						</button>
-					)
-				}
-			</div>
-		)
-	}
+        return (
+            <div className="d-flex align-items-center justify-content-between gap-1">
+                <span>{item.name}</span>
+                {
+                    item.id === 0 ? (
+                        <span className="badge bg-primary">new</span>
+                    ) : (
+                        <button className="btn btn-danger btn-sm" onClick={() => handleRemoveCategory(item.id)}>
+                            <i className="fa fa-times"></i>
+                        </button>
+                    )
+                }
+            </div>
+        )
+    }
 
-	const handleChangeCategory = (e) => {
-		setSelectedText(e.value);
-	}
+    const handleChangeCategory = (e) => {
+        setSelectedText(e.value);
+    }
 
-	const handleSelectCategory = (e) => {
-		setRoomData({
-			...roomData,
-			category: e.value.name
-		});
-	}
+    const handleSelectCategory = (e) => {
+        setRoomData({
+            ...roomData,
+            category: e.value.name
+        });
+    }
 
-	const handleRemoveCategory = (id) => {
+    const handleRemoveCategory = (id) => {
 
-		Swal.fire({
-			icon: "warning",
-			title: "Confirm Delete Room Category?",
-			showConfirmButton: true,
-			showCancelButton: true
-		})
-		.then(async ans => {
-			if(ans.isConfirmed) {
+        Swal.fire({
+            icon: "warning",
+            title: "Confirm Delete Room Category?",
+            showConfirmButton: true,
+            showCancelButton: true
+        })
+            .then(async ans => {
+                if (ans.isConfirmed) {
 
-				let res = await deleteRoomCategory(id);
-				if(res.status === 200) {
-					toast.success(res.data);
-					setAllCategories(prev => prev.filter(item => item.id !== id));
-				}
-				else {
-					Swal.fire({
-						icon: "warning",
-						title: "Cannot delete directly!",
-						text: "Some data used this object. You need to update them before.",
-						showConfirmButton: true
-					});
-				}
-			}
-		})
+                    let res = await deleteRoomCategory(id);
+                    if (res.status === 200) {
+                        toast.success(res.data);
+                        setAllCategories(prev => prev.filter(item => item.id !== id));
+                    }
+                    else {
+                        Swal.fire({
+                            icon: "warning",
+                            title: "Cannot delete directly!",
+                            text: "Some data used this object. You need to update them before.",
+                            showConfirmButton: true
+                        });
+                    }
+                }
+            })
 
-	}
+    }
 
     return (<>
         <div className="room-update p-5">
@@ -271,25 +274,25 @@ function RoomUpdate() {
                         {dataError.roomType ? <div class="invalid-feedback">{dataError.roomType}</div> : null}
 
                         <>
-							<label htmlFor="roomCategory" className="form-label mt-2">Room Category: </label>
-							<div className="room-category">
-								<AutoComplete field="name"
-									value={selectedText}
-									suggestions={filteredCategories}
-									completeMethod={search}
-									placeholder="Select a category"
-									dropdown
-									onChange={handleChangeCategory}
-									onSelect={handleSelectCategory}
-									itemTemplate={categoryTemplate}
-								/>
-							</div>
-							{dataError.category
-							? <div className="invalid-feedback">
-								{dataError.category}
-							</div>
-							: null}
-						</>
+                            <label htmlFor="roomCategory" className="form-label mt-2">Room Category: </label>
+                            <div className="room-category">
+                                <AutoComplete field="name"
+                                    value={selectedText}
+                                    suggestions={filteredCategories}
+                                    completeMethod={search}
+                                    placeholder="Select a category"
+                                    dropdown
+                                    onChange={handleChangeCategory}
+                                    onSelect={handleSelectCategory}
+                                    itemTemplate={categoryTemplate}
+                                />
+                            </div>
+                            {dataError.category
+                                ? <div className="invalid-feedback">
+                                    {dataError.category}
+                                </div>
+                                : null}
+                        </>
 
                     </div>
                     <div className="col-lg-6 col-sm-12 mb-3">

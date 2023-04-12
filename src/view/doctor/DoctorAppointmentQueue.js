@@ -62,7 +62,7 @@ function DoctorAppointmentQueue() {
             Swal.close()
 
             if (res.status !== 200) {
-                toast.error("Something was wrong, please try again!")
+                toast.error("Something was wrong, please try again !!!")
             }
 
             const updatedAppointments = res.data.data.map((appointment) => {

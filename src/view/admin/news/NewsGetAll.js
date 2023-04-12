@@ -1,5 +1,5 @@
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import DataLoading from "../../../components/admin/DataLoading";
 import Pagiation from "../../../components/admin/Pagination";
@@ -13,6 +13,8 @@ import { getAllNews } from "../../../services/admin/news/apiNew";
 import Swal from "sweetalert2";
 
 function NewsGetAll() {
+    const rendered = useRef(false)
+
     const [newsData, setNewsData] = useState();
 
 
@@ -33,24 +35,31 @@ function NewsGetAll() {
     useEffect(() => {
 
         const loadData = async () => {
+            if (rendered.current) {
+                Swal.fire({
+                    icon: "info",
+                    title: "Waiting for response..."
+                });
+                Swal.showLoading();
+            }
 
-            Swal.fire({
-                icon: "info",
-                title: "Waiting to get data...",
-            });
-            Swal.showLoading();
             let res = await getAllNews({ params: filter });
-            if(res.status === 200) {
+            if (res.status === 200) {
                 setNewsData(res.data);
             }
             else {
-                toast.error("Cannot load data!");
+                toast.error("Something went wrong, Plese try again ! ");
             }
-            Swal.close();
+            if (rendered.current) {
+                Swal.close();
+            }
         };
 
         loadData();
-        
+        return () => {
+            rendered.current = true
+        }
+
     }, [filter]);
 
     // Pagination
@@ -149,7 +158,7 @@ function NewsGetAll() {
                                 }}
                             />
                         </div>
-                        
+
                     </form>
                     <div className="overflow-auto mb-4">
                         <table id="table" className="table table-hover">

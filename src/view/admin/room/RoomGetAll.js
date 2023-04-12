@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { getAllRoom, getRoomCategories, getRoomTypes } from "../../../services/admin/room/apiRoom";
 
@@ -13,7 +13,7 @@ import { useEffect } from "react";
 import Swal from "sweetalert2";
 
 function RoomGetAll() {
-
+    const rendered = useRef(false);
     const [roomData, setRoomData] = useState();
     const currentPage = roomData ? roomData.page : 1;
     const totalPage = roomData ? roomData.total_pages : 0;
@@ -33,58 +33,67 @@ function RoomGetAll() {
     const [roomStates, setRoomStates] = useState([]);
 
     useEffect(() => {
-        const loadData = async () => {
 
-            Swal.fire({
-                icon: "info",
-                title: "Waiting for load data..."
-            });
-            Swal.showLoading();
+        const loadData = async () => {
+            if (rendered.current) {
+                Swal.fire({
+                    icon: "info",
+                    title: "Waiting for response..."
+                });
+                Swal.showLoading();
+            }
+
             const res = await getAllRoom({
                 params: filter
             });
 
-            if(res.status === 200) {
+            if (res.status === 200) {
                 setRoomData(res.data);
             }
             else {
-                toast.error("Cannot get room data!");
+                toast.error("Something went wrong, Please try again !!!");
             }
-            Swal.close();
+            if (rendered.current) {
+                Swal.close();
+            }
         };
 
         loadData();
 
+        return () => {
+            rendered.current = true
+        }
     }, [filter]);
 
     useEffect(() => {
-
-        getRoomCategories(res => {
-            if(res.status === 200) {
-                setCategories(res.data);
-            }
-            else if(res.status < 500) {
-                toast.error(res.data);
-            }
-            else {
-                toast.error("Somedata wrong!");
-            }
-        });
-
-    }, []);
-
-    useEffect(() => {
-
         const loadRoomStates = async () => {
             let res = await getRoomTypes();
-            if(res.status === 200) {
+            if (res.status === 200) {
                 setRoomStates(res.data);
             }
+
+
+            getRoomCategories(res => {
+                if (res.status === 200) {
+                    setCategories(res.data);
+                }
+                else if (res.status < 500) {
+                    toast.error(res.data);
+                }
+                else {
+                    toast.error("Something went wrong !!!");
+                }
+            });
         }
 
         loadRoomStates();
 
-    }, []);
+
+    }, [])
+
+
+
+
 
     // Pagination
     const peviousPage = (e) => {
@@ -154,7 +163,7 @@ function RoomGetAll() {
                     </div>
                     <hr />
                     <div className="filter mb-4 row justify-content-end">
-                        <div className="col-lg-3">
+                        <div className="col-lg-3 mb-2">
                             <input type="number" placeholder="Search by Id" className="form-control"
                                 onKeyDown={(e) => {
                                     if (e.key === "Enter") {
@@ -167,7 +176,7 @@ function RoomGetAll() {
                                 }}
                             />
                         </div>
-                        <div className="col-lg-3">
+                        <div className="col-lg-3 mb-2">
                             <input type="text" placeholder="Search by Code" className="form-control"
                                 onKeyDown={(e) => {
                                     if (e.key === "Enter") {
@@ -181,7 +190,7 @@ function RoomGetAll() {
                             />
                         </div>
 
-                        <div className="col-lg-3">
+                        <div className="col-lg-3 mb-2">
                             <select className="p-2 rounded w-100" onChange={(e) => {
                                 if (e.target.value === "default") {
                                     setFilter({
@@ -206,7 +215,7 @@ function RoomGetAll() {
                             </select>
                         </div>
 
-                        <div className="col-lg-3">
+                        <div className="col-lg-3 mb-2">
                             <select className="p-2 rounded w-100" onChange={(e) => {
                                 if (e.target.value === "default") {
                                     setFilter({
@@ -230,11 +239,11 @@ function RoomGetAll() {
                                 }
                             </select>
                         </div>
-                        
-                        
+
+
                     </div>
                     <div className="overflow-auto mb-4">
-                        <table id="table" className="table table-hover text-center">
+                        <table id="table" className="table table-hover ">
                             <thead>
                                 <tr className="table-dark">
                                     <th>Id</th>

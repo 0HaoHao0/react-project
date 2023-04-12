@@ -4,8 +4,12 @@ import { getAllService, getServicesRating } from '../../services/admin/service/a
 import './Service.scss'
 import { useRef } from 'react';
 import { toast } from 'react-toastify';
+import Swal from 'sweetalert2';
+import { useSelector } from 'react-redux';
 function Service() {
-    const render = useRef(false);
+    const user = useSelector((state) => state.user.userInfo);
+
+    console.log(user);
 
     const [services, setServices] = useState()
 
@@ -19,8 +23,14 @@ function Service() {
 
 
     const loadData = async () => {
+        Swal.fire({
+            title: "Loading...",
+            html: "Please wait a moment"
+        })
+        Swal.showLoading()
         const resService = await getAllService(-1);
         const resServiceRating = await getServicesRating();
+        Swal.close()
 
         if (resService.status === 200) {
             setServices(resService.data)
@@ -41,12 +51,10 @@ function Service() {
 
     useEffect(() => {
 
-        if (render.current === true) {
-            loadData();
-        }
+        loadData();
+
 
         return () => {
-            render.current = true
         }
     }, [])
 
@@ -56,7 +64,7 @@ function Service() {
 
         debounce = setTimeout(() => {
             setSearchByName(e.target.value);
-        }, 1000);
+        }, 500);
     }
 
     const displayRating = (id) => {
@@ -78,7 +86,6 @@ function Service() {
                 }
             });
         });
-        console.log(top);
         return top;
     }
 
@@ -108,7 +115,7 @@ function Service() {
                             <h3 className='m-0'>
                                 Top Services
                             </h3>
-                            <button className="btn btn-primary " type="button">See More</button>
+                            <button className="btn btn-primary " onClick={() => { ref.current?.scrollIntoView({ behavior: 'smooth', block: 'start', top: '-20px' }); }} type="button">See More</button>
                         </div>
                         <div className='row row-cols-sm-2 g-5 '>
                             {services && displayTopService().map((service, index) =>
@@ -124,7 +131,7 @@ function Service() {
                                             </div>
                                             <div className='col-lg-6 col-sm-12  d-flex flex-column justify-content-between'>
                                                 <Link to={'/services/info'} state={service} className='btn btn-primary mb-2'>Detail <i className="fa-solid fa-circle-info"></i></Link>
-                                                <Link to={`/user/booking`} state={service} className='btn btn-warning '>Book Now <i className="fa-solid fa-calendar-days"></i></Link>
+                                                <Link to={`${user ? '/user/booking' : '/login'}`} state={service} className='btn btn-warning '>Book Now <i className="fa-solid fa-calendar-days"></i></Link>
                                             </div>
 
                                         </div>
@@ -194,7 +201,7 @@ function Service() {
                                                         </div>
                                                         <div className='col-lg-6 col-sm-12  d-flex flex-column justify-content-between'>
                                                             <Link to={'/services/info'} state={service} className='btn btn-primary mb-2'>Detail <i className="fa-solid fa-circle-info"></i></Link>
-                                                            <Link to={`/user/booking`} state={service} className='btn btn-warning '>Book Now <i className="fa-solid fa-calendar-days"></i></Link>
+                                                            <Link to={`${user ? '/user/booking' : '/login'}`} state={service} className='btn btn-warning '>Book Now <i className="fa-solid fa-calendar-days"></i></Link>
                                                         </div>
 
                                                     </div>
@@ -219,7 +226,7 @@ function Service() {
                                                     </div>
                                                     <div className='col-lg-6 col-sm-12  d-flex flex-column justify-content-between'>
                                                         <Link to={'/services/info'} state={service} className='btn btn-primary mb-2'>Detail <i className="fa-solid fa-circle-info"></i></Link>
-                                                        <Link to={`/user/booking`} state={service} className='btn btn-warning '>Book Now <i className="fa-solid fa-calendar-days"></i></Link>
+                                                        <Link to={`${user ? '/user/booking' : '/login'}`} state={service} className='btn btn-warning '>Book Now <i className="fa-solid fa-calendar-days"></i></Link>
                                                     </div>
 
                                                 </div>
@@ -289,7 +296,7 @@ function Service() {
                     </h6>
                     <br />
                     <div className="d-grid gap-2 d-md-flex justify-content-md-start mb-4 mb-lg-3">
-                        <button type="button" className="btn btn-primary btn-lg px-4 me-md-2 fw-bold">Contact Us</button>
+                        <Link to={'/contact'} className="btn btn-primary btn-lg px-4 me-md-2 fw-bold">Contact Us</Link>
                     </div>
                 </div>
                 <div className="col-lg-4 offset-lg-1 p-0 overflow-hidden shadow">

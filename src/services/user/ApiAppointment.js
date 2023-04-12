@@ -19,12 +19,27 @@ export const createAppointment = async (fromData) => {
     return data;
 }
 
-export const getAllAppointment = async ({params}) => {
+export const getAllAppointment = async ({ params }) => {
     let data;
     await axios({
         method: 'get',
         url: '/api/Appointment/GetAll',
         params: params
+    }).then((response) => {
+        data = response;
+    }).catch((error) => {
+        // handle error
+        data = error.response;
+    })
+
+    return data;
+}
+
+export const getServiceById = async (id) => {
+    let data;
+    await axios({
+        method: 'get',
+        url: `/api/Service/Get/${id}`,
     }).then((response) => {
         data = response;
     }).catch((error) => {

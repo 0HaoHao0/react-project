@@ -1,6 +1,7 @@
 import { Route, Routes, useNavigate } from "react-router";
 import AdminSidebar from "../components/admin/AdminSidebar";
 import AppointmentGetAll from "../view/admin/appointment/AppointmentGetAll";
+import AppointmentDetail from "../view/admin/appointment/AppointmentDetail";
 import ContactDetail from "../view/admin/contact/ContactDetail";
 import ContactGetAll from "../view/admin/contact/ContactGetAll";
 import DeviceCreate from "../view/admin/device/DeviceCreate";
@@ -38,7 +39,6 @@ import "primereact/resources/primereact.min.css";
 
 //icons
 import "primeicons/primeicons.css";
-import AdminAppointmentDetail from "../view/admin/appointment/AdminAppointmentDetail";
 
 
 function AdminRouter() {
@@ -99,12 +99,12 @@ function AdminRouter() {
               <Route path="/doctor/detail" element={<DoctorDetail />}></Route>
               {/* Appointment */}
               <Route path="/appointment" element={<AppointmentGetAll />}></Route>
-              <Route path="/appointment/:id/detail" element={<AdminAppointmentDetail />}></Route>
+              <Route path="/appointment/:id/detail" element={<AppointmentDetail />}></Route>
 
               {/* Service */}
               <Route path="/service" element={<ServiceGetAll />}></Route>
               <Route path="/service/create" element={<ServiceCreate />}></Route>
-              <Route path="/service/detail" element={<ServiceDetail />}></Route>
+              <Route path="/service/detail/:id" element={<ServiceDetail />}></Route>
               <Route path="/service/update" element={<ServiceUpdate />}></Route>
               {/* Device */}
               <Route path="/device" element={<DeviceGetAll />}></Route>

@@ -11,8 +11,10 @@ import "datatables.net-dt/css/jquery.dataTables.min.css";
 import { Link } from "react-router-dom";
 import { useEffect } from "react";
 import Swal from "sweetalert2";
+import { useRef } from "react";
 
 function ServiceGetAll() {
+    const rendered = useRef(false)
 
     const [serviceData, setServiceData] = useState();
     const [isReset, setIsReset] = useState(1);
@@ -35,26 +37,32 @@ function ServiceGetAll() {
 
         const loadData = async () => {
 
-            Swal.fire({
-                icon: "info",
-                title: "Waiting for response..."
-            });
-            Swal.showLoading();
+            if (rendered.current) {
+                Swal.fire({
+                    icon: "info",
+                    title: "Waiting for response..."
+                });
+                Swal.showLoading();
+            }
             const res = await getAllService({ params: filter });
-            if(res.status === 200) {
+            if (res.status === 200) {
                 setServiceData(res.data);
             }
             else {
                 toast.error("Something wrong!");
             }
-            Swal.close();
+            if (rendered.current) {
+                Swal.close();
+            }
+
         };
 
         loadData();
 
         return () => {
-
+            rendered.current = true
         }
+
     }, [isReset, filter]);
 
     const handleState = (id, isPublic) => {
@@ -260,19 +268,19 @@ function ServiceGetAll() {
                                         <td>{value.serviceCode}</td>
                                         <td>{value.price}</td>
                                         <td>
-                                        {
-                                            value.isPublic
-                                                ?
-                                                <button className="btn btn-success" key={'public'} type="button" onClick={() => handleState(value.id, value.isPublic)}><i className="fa-solid fa-lock-open"></i></button>
-                                                :
-                                                <button className="btn btn-danger" key={'block'} type="button" onClick={() => handleState(value.id, value.isPublic)}><i className="fa-solid fa-lock"></i></button>
+                                            {
+                                                value.isPublic
+                                                    ?
+                                                    <button className="btn btn-success" key={'public'} type="button" onClick={() => handleState(value.id, value.isPublic)}><i className="fa-solid fa-lock-open"></i></button>
+                                                    :
+                                                    <button className="btn btn-danger" key={'block'} type="button" onClick={() => handleState(value.id, value.isPublic)}><i className="fa-solid fa-lock"></i></button>
 
-                                        }
+                                            }
                                         </td>
                                         <td>
                                             <Link
-                                                to="detail"
-                                                state={value}
+                                                to={`detail/${value.id}`}
+
                                                 className="btn btn-success"
                                             >
                                                 <i className="fa-solid fa-circle-info"></i>

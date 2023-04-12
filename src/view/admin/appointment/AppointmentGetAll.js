@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { toast } from "react-toastify";
 
 import DataLoading from "../../../components/admin/DataLoading";
@@ -14,6 +14,7 @@ import Swal from "sweetalert2";
 import { getAppointmentStates } from "../../../services/receptionist/apiReceptionistAppointment";
 
 function AppointmentGetAll() {
+    const rendered = useRef(false);
 
     const [appointmentData, setAppointmentData] = useState();
     const currentPage = appointmentData ? appointmentData.page : 1;
@@ -46,12 +47,14 @@ function AppointmentGetAll() {
 
     useEffect(() => {
 
-        Swal.fire({
-            icon: "info",
-            title: "Waiting for response..."
-        });
-        Swal.showLoading();
         const loadData = async () => {
+            if (rendered.current) {
+                Swal.fire({
+                    icon: "info",
+                    title: "Waiting for response..."
+                });
+                Swal.showLoading();
+            }
             let res = await getAllAppointment({
                 params: filter
             });
@@ -60,12 +63,18 @@ function AppointmentGetAll() {
                 console.log(res.data);
                 setAppointmentData(res.data);
             } else {
-                toast.error("System is busy!");
+                toast.error("Something went wrong !!!");
             }
-            Swal.close();
+            if (rendered.current) {
+                Swal.close();
+            }
         }
 
         loadData();
+
+        return () => {
+            rendered.current = true
+        }
 
     }, [filter]);
 
@@ -177,7 +186,7 @@ function AppointmentGetAll() {
                         </div>
                     </form>
                     <div className="overflow-auto mb-4">
-                        <table id="table" className="table table-hover text-center">
+                        <table id="table" className="table table-hover ">
                             <thead>
                                 <tr className="table-dark">
                                     <th>UserName</th>

@@ -7,13 +7,13 @@ import Contact from "../view/public/Contact";
 
 import Home from "../view/public/Home";
 import News from "../view/public/News";
-import Service from "../view/user/Service";
-import ServiceInfo from "../view/user/ServiceInfo";
+import Service from "../view/public/Service";
+import ServiceInfo from "../view/public/ServiceInfo";
 
 function PublicRouter() {
   return (
     <>
-      <Header/>
+      <Header />
       <Routes>
         <Route path="*" element={<Home />}></Route>
         <Route path="contact" element={<Contact />}></Route>
@@ -22,7 +22,7 @@ function PublicRouter() {
         <Route path='services' element={<Service />}></Route>
         <Route path='services/info' element={<ServiceInfo />}></Route>
       </Routes>
-      <Footer/>
+      <Footer />
     </>
   );
 }

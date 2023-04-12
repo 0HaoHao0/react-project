@@ -15,6 +15,8 @@ import { TabMenu } from 'primereact/tabmenu';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { Tag } from 'primereact/tag';
+import { Dropdown } from 'primereact/dropdown';
+
 
 import Swal from "sweetalert2";
 import { useRef } from "react";
@@ -24,7 +26,6 @@ import { Link } from "react-router-dom";
 
 
 function Profile() {
-  const render = useRef(false)
 
   const [userInfo, setUserInfo] = useState()
 
@@ -43,12 +44,9 @@ function Profile() {
       }
     };
 
-    if (render.current === true) {
-      getData();
-    }
+    getData();
 
     return () => {
-      render.current = true;
     }
   }, [])
 
@@ -637,7 +635,7 @@ function MedicalRecord(props) {
           </div>
           <div className="form-group w-50">
             <label htmlFor="lastTimeModified">Last Time Modified: </label>
-            <input id="lastTimeModified" className="form-control" type="text" name="lastTimeModified" placeholder={userData.medicalRecordFile.lastTimeModified.split("T")[0]} />
+            <input id="lastTimeModified" className="form-control" type="text" name="lastTimeModified" placeholder={userData.medicalRecordFile.lastTimeModified ? userData.medicalRecordFile.lastTimeModified.split("T")[0] : null} />
           </div>
         </>
         }
@@ -648,7 +646,6 @@ function MedicalRecord(props) {
 }
 
 function Certificate(props) {
-  const load = useRef(false);
   const { userInfo } = props;
 
   const [userData, setUserData] = useState();
@@ -676,11 +673,8 @@ function Certificate(props) {
       }
 
     }
-    if (load.current === true) {
-      loadData();
-    }
+    loadData();
     return () => {
-      load.current = true
     }
   }, [userInfo.id])
 
@@ -790,31 +784,34 @@ function Certificate(props) {
 }
 
 function AppointmentHistory(props) {
-  const load = useRef(false)
   const { userInfo } = props
 
   const [appointments, setAppointments] = useState()
-  const [filter, setFilter] = useState({
+  const [filter] = useState({
     id: userInfo.id
   })
 
   const getSeverity = (status) => {
     switch (status) {
       case 'Complete':
-        return 'danger';
+        return 'success';
 
       case 'NotYet':
-        return 'success';
+        return 'warning';
 
       case 'Accept':
         return 'info';
 
       case 'Cancel':
-        return 'warning';
+        return 'danger';
+
       default:
-        return 'default';
+        return 'primary';
     }
   };
+
+  const [statuses] = useState(['Complete', 'NotYet', 'Accept', 'Cancel']);
+
 
   useEffect(() => {
 
@@ -832,26 +829,42 @@ function AppointmentHistory(props) {
         setAppointments(res.data)
       }
       else if (res.status < 500) {
+
         toast.error(res.data);
       } else {
-        toast.error("Something was wrong, please contact to admin !!!");
+        toast.error("Something went wrong, please contact to admin !!!");
       }
     }
 
-    if (load.current === true) {
-      loadAppointment()
-    }
+    loadAppointment()
 
     return () => {
-      load.current = true;
     }
   }, [filter])
 
   const dateBodyTemplate = (rowData) => {
     return rowData.date.split("T")[0];
   };
+
   const statusBodyTemplate = (rowData) => {
     return <Tag value={rowData.state} severity={getSeverity(rowData.state)} />;
+  };
+
+  const infoBodyTemplate = (rowData) => {
+    return <>
+      <Link to={`/user/appointmentdetail/${rowData.id}`} className="btn btn-success">Info</Link>
+    </>;
+  };
+
+  const statusItemTemplate = (option) => {
+    return <Tag value={option} severity={getSeverity(option)} />;
+  };
+
+
+  const statusRowFilterTemplate = (options) => {
+    return (
+      <Dropdown value={options.value} options={statuses} onChange={(e) => options.filterApplyCallback(e.value)} itemTemplate={statusItemTemplate} placeholder="Select One" className="p-column-filter" showClear style={{ minWidth: '12rem' }} />
+    );
   };
 
   return (
@@ -860,16 +873,16 @@ function AppointmentHistory(props) {
         Appointment History
       </div>
       {appointments ?
-        <DataTable value={appointments.data} filter selectionMode="single" paginator rows={10} rowsPerPageOptions={[10, 25]} tableStyle={{ minWidth: '50rem' }}
+        <DataTable value={appointments.data} selectionMode="single" paginator rows={10} rowsPerPageOptions={[10, 25]} tableStyle={{ minWidth: '50rem' }}
           paginatorTemplate="RowsPerPageDropdown FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"
           currentPageReportTemplate="{first} to {last} of {totalRecords}">
-
           <Column field="service.serviceName" header="Service Name" style={{ width: '25%' }}></Column>
           <Column field="doctor.baseUser.fullName" header="Doctor" style={{ width: '25%' }}></Column>
-          <Column field="state" header="State" body={statusBodyTemplate} style={{ width: '25%' }}></Column>
+          <Column field="state" header="State" body={statusBodyTemplate} style={{ width: '25%' }}
+            showFilterMatchModes={false} filter filterElement={statusRowFilterTemplate}></Column>
           <Column field="date" header="Date" body={dateBodyTemplate} style={{ width: '25%' }}></Column>
           <Column field="time" header="Time" style={{ width: '25%' }}></Column>
-
+          <Column header="More" body={infoBodyTemplate} ></Column>
         </DataTable>
         :
         null
@@ -879,59 +892,49 @@ function AppointmentHistory(props) {
   );
 }
 
+function EmailValidate({ userInfo }) {
+  return (
+    <div className="w-100 text-center mt-5">
+      <div> <Link to={'/email-confirm'} className="btn btn-primary">Validate</Link></div>
+    </div>
+  )
+}
+
 function ProfileBody(props) {
   const { userInfo } = props;
 
-  const [activeIndex, setActiveIndex] = useState({ index: 0, label: "Change Password" })
+  const [activeIndex, setActiveIndex] = useState(0);
 
   //Tab menu items
   const createItems = (userInfo) => {
-    const items = [
-      { label: 'Change Password', icon: 'pi pi-fw pi-key' },
-    ];
+    const items = [];
 
     if (userInfo && userInfo.role === 'Patient') {
-      items.push({ label: 'Medical Record', icon: 'pi pi-fw pi-file' });
-      items.push({ label: 'Appointment History', icon: 'pi pi-fw pi-star' });
+      items.push({ label: 'Medical Record', icon: 'pi pi-fw pi-file', component: <MedicalRecord userInfo={userInfo}></MedicalRecord> });
+      items.push({ label: 'Appointment History', icon: 'pi pi-fw pi-star', component: <AppointmentHistory userInfo={userInfo}></AppointmentHistory> });
     }
     else if (userInfo && userInfo.role === 'Doctor') {
-      items.push({ label: 'Certificate', icon: 'pi pi-fw pi-file' });
+      items.push({ label: 'Certificate', icon: 'pi pi-fw pi-file', component: <Certificate userInfo={userInfo}></Certificate> });
     }
 
     if (userInfo && userInfo.emailConfirmed === false) {
-      items.push({ label: 'Email Validate', icon: 'pi pi-fw pi-pencil' });
+      items.push({ label: 'Email Validate', icon: 'pi pi-fw pi-pencil', component: <EmailValidate userInfo={userInfo}></EmailValidate> });
     }
-
+    items.push({ label: 'Change Password', icon: 'pi pi-fw pi-key', component: <ChangePassword userInfo={userInfo} ></ChangePassword> })
     return items;
   }
 
   const items = createItems(userInfo);
 
-
-
   return (
     <>
       <div className="row mb-5">
         <div >
-          <TabMenu model={items} activeIndex={activeIndex.index} onTabChange={(e) => setActiveIndex((preveState) => ({
-            ...preveState,
-            label: e.value.label,
-            index: e.index,
-          }))} />
+          <TabMenu model={items} activeIndex={activeIndex} onTabChange={(e) => setActiveIndex(e.index)} />
         </div>
 
-        {activeIndex.label === "Change Password" && <ChangePassword userInfo={userInfo} ></ChangePassword>}
-
-        {activeIndex.label === "Medical Record" && <MedicalRecord userInfo={userInfo}></MedicalRecord>}
-
-        {activeIndex.label === "Appointment History" && <AppointmentHistory userInfo={userInfo}></AppointmentHistory>}
-
-        {activeIndex.label === "Certificate" && <Certificate userInfo={userInfo}></Certificate>}
-
-        {activeIndex.label === "Email Validate" &&
-          <div className="w-100 text-center mt-5">
-            <div> <Link to={'/email-confirm'} className="btn btn-primary">Validate</Link></div>
-          </div>
+        {
+          items[activeIndex].component
         }
 
 

@@ -57,7 +57,7 @@ function UserDetail() {
                         toast.success("Update Successful!");
                     }
                     else {
-                        toast.error("Something was wrong, please contact to Admin !!!")
+                        toast.error("Something was wrong !!!")
                     }
                     Swal.close();
                 }

@@ -3,6 +3,7 @@ import { useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
 import { getPatientInfo, updateMedicalRecord } from "../../../services/admin/patient/apiPatient";
+import file from '../../../assets/file/MedicalRecordsReleaseForm.docx'
 
 function PatientDetail() {
     let { state } = useLocation();
@@ -14,12 +15,12 @@ function PatientDetail() {
         const doEffect = async () => {
             let res = await getPatientInfo(state.id);
 
-            if(res.status === 200) {
+            if (res.status === 200) {
                 console.log(res.data);
                 setPatientInfo(res.data);
             }
             else {
-                toast.error("Cannot get patientInfo. System is busy!");
+                toast.error("Some went wrong !!!");
             }
         }
 
@@ -27,8 +28,8 @@ function PatientDetail() {
 
     }, [state]);
 
-    
-    
+
+
     const [changeView, setChangeView] = useState(0)
     //Convert Date
     const convertDate = (obj) => {
@@ -43,7 +44,7 @@ function PatientDetail() {
     const handleUpdate = () => {
         Swal.fire({
             title: "Select a file",
-            html: '<label htmlFor="DocumentFile" className="">Document File: </label> <span className="mx-2"> <a href={file} download>Sample</a></span>' +
+            html: `<label htmlFor="DocumentFile" className="">Document File: </label> <span className="mx-2"> <a href=${file} download>Sample</a></span>` +
                 '<input type="file" id="custom-file" class="form-control ">',
             showCancelButton: true,
             confirmButtonText: "Confirm",

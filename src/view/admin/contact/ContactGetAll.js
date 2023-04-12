@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useState } from "react";
 import Pagiation from "../../../components/admin/Pagination";
 import { getAllContact } from "../../../services/admin/contact/apiContact";
@@ -14,6 +14,8 @@ import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 
 function ContactGetAll() {
+    const rendered = useRef(false);
+
     const [contactData, setContactData] = useState();
 
     const currentPage = contactData ? contactData.page : 1;
@@ -33,25 +35,33 @@ function ContactGetAll() {
     useEffect(() => {
 
         const loadData = async () => {
+            if (rendered.current) {
+                Swal.fire({
+                    icon: "info",
+                    title: "Waiting for response..."
+                });
+                Swal.showLoading();
+            }
 
-            Swal.fire({
-                icon: "info",
-                title: "Waiting to get data...",
-            });
-            Swal.showLoading();
             const res = await getAllContact({ params: filter });
 
             if (res.status === 200) {
                 setContactData(res.data);
             }
             else {
-                toast.error("Something went wrong!");
+                toast.error("Something was wrong, Please try again !!!");
             }
-            Swal.close();
-
+            if (rendered.current) {
+                Swal.close();
+            }
         }
 
         loadData();
+
+
+        return () => {
+            rendered.current = true
+        }
 
     }, [filter]);
 

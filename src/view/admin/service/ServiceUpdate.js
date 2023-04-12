@@ -46,7 +46,9 @@ function ServiceUpdate() {
             }))
 
         }
+
         load();
+
     }, [state])
 
     //Handle

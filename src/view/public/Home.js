@@ -12,10 +12,12 @@ function Home() {
 
     const loadNews = async () => {
 
-        const res = await getAllNews({ params: {
-            page: 1,
-            pageSize: 10
-        }})
+        const res = await getAllNews({
+            params: {
+                page: 1,
+                pageSize: 10
+            }
+        })
 
         if (res.status === 200) {
             setNews(res.data.data)
@@ -37,7 +39,7 @@ function Home() {
         <div className='home'>
             {/* Slide show */}
             <div className='header-show'>
-                <div className='d-flex align-items-center vh-100 vw-100'>
+                <div className='d-flex align-items-center vh-100 '>
                     <div className='px-5'>
                         <div className='text-box p-5'>
 
@@ -81,13 +83,15 @@ function Home() {
                     </div>
                     <div className="col-lg-6 col-sm-12">
                         <h1 className='fw-bold text-start'>News:</h1>
-                        <div className='border rounded-2 shadow-sm p-2'>
+                        <div>
                             {news ?
                                 <>
                                     <div>
-                                        {news.slice(-10).reverse().map((value, index) =>
-                                            <div key={index}>
-                                                <i className="fa-solid fa-cloud"></i> <Link to={'/news'} state={value} >{value.title}</Link>
+                                        {news.slice(-5).reverse().map((value, index) =>
+                                            <div key={index} className='border rounded-2 shadow-sm p-2 mb-1'>
+                                                <p className='mx-2 mb-0 fw-bold'>{value.publishDate.split("T")[0]}</p>
+                                                <i className="fa-solid fa-cloud mx-2">:</i>
+                                                <Link className='text-decoration-none' to={'/news'} state={value} >{value.title}</Link>
                                             </div>
                                         )}
                                     </div>
@@ -194,7 +198,7 @@ function Home() {
                     </h6>
                     <br />
                     <div className="d-grid gap-2 d-md-flex justify-content-md-start mb-4 mb-lg-3">
-                        <button type="button" className="btn btn-primary btn-lg px-4 me-md-2 fw-bold">Contact Us</button>
+                        <Link to={'contact'} className="btn btn-primary btn-lg px-4 me-md-2 fw-bold">Contact Us</Link>
                     </div>
                 </div>
                 <div className="col-lg-4 offset-lg-1 p-0 overflow-hidden shadow">

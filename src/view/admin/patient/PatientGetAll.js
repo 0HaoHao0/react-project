@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { getAllPatient } from "../../../services/admin/patient/apiPatient";
 
 import DataLoading from "../../../components/admin/DataLoading";
@@ -11,6 +11,8 @@ import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
 function PatientGetAll() {
+	const rendered = useRef(false)
+
 	const [patientData, setPatientData] = useState();
 
 	const currentPage = patientData ? patientData.page : 1;
@@ -28,12 +30,15 @@ function PatientGetAll() {
 
 	useEffect(() => {
 
-		Swal.fire({
-			icon: "info",
-			title: "Waiting for response..."
-		});
-		Swal.showLoading();
+
 		const loadData = async () => {
+			if (rendered.current) {
+				Swal.fire({
+					icon: "info",
+					title: "Waiting for response..."
+				});
+				Swal.showLoading();
+			}
 			let res = await getAllPatient({
 				params: filter
 			});
@@ -41,12 +46,18 @@ function PatientGetAll() {
 			if (res.status === 200) {
 				setPatientData(res.data);
 			} else {
-				toast.error("System is busy!");
+				toast.error("Something went wrong!");
 			}
-			Swal.close();
+			if (rendered.current) {
+				Swal.close();
+			}
 		}
 
 		loadData();
+
+		return () => {
+			rendered.current = true
+		}
 
 	}, [filter]);
 
