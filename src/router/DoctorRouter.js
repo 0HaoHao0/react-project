@@ -14,10 +14,14 @@ import "primereact/resources/primereact.min.css";
 
 //icons
 import "primeicons/primeicons.css";
+import { getUserInfo } from "../services/authorization/apILogin";
+import { toast } from "react-toastify";
+import { useEffect, useState } from "react";
+import Pusher from 'pusher-js';
 
 
 function DoctorRouter() {
-    const navigate = useNavigate()
+    const navigate = useNavigate();
 
     const items = [
         {
@@ -40,6 +44,57 @@ function DoctorRouter() {
 
     ];
 
+    const [bindedPusher, setBindedPusher] = useState(false);
+
+    useEffect(() => {
+
+        // Hàm chạy ngầm ko cần thông báo.
+        const fetchUserInfo = async () => {
+            let res = await getUserInfo();
+            if(res.status === 200) {
+                return res.data;
+            }
+            toast.warning("Cannot enable realtime engine! Press F5 to refresh!");
+            return null;
+        }
+
+        let pusherChanel = null;
+
+        const bindGlobalHandler = (action, data) => {
+            if (action === "AppointmentUpdate") {
+                let message = data;
+                toast.warning(message);
+            }
+        }
+
+        const addPusherListener = async () => {
+            let userInfo = await fetchUserInfo();
+            if(userInfo) {
+                
+                pusherChanel = userInfo.pusherChannel ? (
+                    new Pusher('a5612d1b04f944b457a3', 
+                    {
+                        cluster: 'ap1',
+                        encrypted: true,
+                    }).subscribe(userInfo.pusherChannel)) : null;
+        
+                if (pusherChanel) {
+                    pusherChanel.bind_global(bindGlobalHandler);
+                }
+
+            }
+        }
+
+        if(!bindedPusher) addPusherListener();
+
+        return () => {
+            if (bindedPusher) {
+                pusherChanel.unbind_global(bindGlobalHandler);
+                setBindedPusher(false);
+            }
+        }
+    }, [navigate, bindedPusher]);
+
     return (
         <div className="row g-0 flex-nowrap   px-2">
             <div style={{ position: 'absolute', top: '5px', right: '15px' }}>
@@ -54,7 +109,6 @@ function DoctorRouter() {
                         <Route path="/appointment-queue" element={<DoctorAppointmentQueue />}></Route>
                         <Route path="/appointment-history" element={<DoctorAppointmentHistory />}></Route>
                         <Route path="/appointment-detail/:id" element={<DoctorAppointmentDetail />}></Route>
-
                     </Routes>
                 </div>
             </div>
