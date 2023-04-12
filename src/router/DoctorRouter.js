@@ -80,6 +80,7 @@ function DoctorRouter() {
         
                 if (pusherChanel) {
                     pusherChanel.bind_global(bindGlobalHandler);
+                    setBindedPusher(true);
                 }
 
             }
@@ -88,7 +89,7 @@ function DoctorRouter() {
         if(!bindedPusher) addPusherListener();
 
         return () => {
-            if (bindedPusher) {
+            if (pusherChanel && bindedPusher) {
                 pusherChanel.unbind_global(bindGlobalHandler);
                 setBindedPusher(false);
             }
