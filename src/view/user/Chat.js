@@ -143,7 +143,7 @@ function Chat() {
                     }, 2000);
                 }
                 else {
-                    toast.error("System is busy!");
+                    toast.error("Something wrong!");
                 }
                 setIsInitLoadingMessages(false);
             }
@@ -230,7 +230,7 @@ function Chat() {
                         }, 2000);
                     }
                     else {
-                        toast.error("System is busy!");
+                        toast.error("Something wrong!");
                     }
                     setLoadMoreDelay(3);
                     setIsLoadMoreMessages(false);

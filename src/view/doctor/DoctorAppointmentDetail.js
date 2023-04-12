@@ -6,7 +6,6 @@ import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import { addDocument, deleteDocument, getAppointment, updateAppointmentState } from "../../services/doctor/DoctorApi";
 import ImageSegmentationResults from '../technician/ImageSegmentationResults';
-import { useRef } from 'react';
 import { useCallback } from 'react';
 
 
@@ -63,8 +62,6 @@ function UploadFile({ handleFile, handleTitle }) {
 
 
 function DoctorAppointmentDetail() {
-    const render = useRef(false)
-
     const { id } = useParams();
     const navigate = useNavigate();
 
@@ -95,17 +92,13 @@ function DoctorAppointmentDetail() {
                 errorNavigate()
             }
             else {
-                toast.error("The system is busy!");
+                toast.error("Something wrong!");
             }
             Swal.close()
         }
-        if (render.current === true) {
-            loadData()
-        }
+        loadData()
 
-        return () => {
-            render.current = true
-        }
+
     }, [id, loading, errorNavigate])
 
     const handleUpdateState = (currentState) => {
@@ -137,7 +130,7 @@ function DoctorAppointmentDetail() {
                     toast.error(res.data);
                 }
                 else {
-                    toast.error("The system is busy!");
+                    toast.error("Something wrong!");
                 }
                 MySwal.close()
             } else if (result.isDismissed) {
@@ -185,7 +178,7 @@ function DoctorAppointmentDetail() {
                     toast.error(res.data);
                 }
                 else {
-                    toast.error("The system is busy!");
+                    toast.error("Something wrong!");
                 }
                 MySwal.close()
             } else if (result.isDismissed) {
@@ -218,7 +211,7 @@ function DoctorAppointmentDetail() {
                     toast.error(res.data);
                 }
                 else {
-                    toast.error("The system is busy!");
+                    toast.error("Something wrong!");
                 }
                 MySwal.close()
             } else if (result.isDismissed) {

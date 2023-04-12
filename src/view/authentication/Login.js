@@ -189,7 +189,7 @@ function Login() {
       Swal.fire({
         icon: "error",
         title: "Failed!",
-        text: "System is busy!",
+        text: "Something wrong!",
       });
     }
   };
