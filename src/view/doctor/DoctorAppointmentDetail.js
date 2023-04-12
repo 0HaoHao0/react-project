@@ -92,7 +92,7 @@ function DoctorAppointmentDetail() {
                 errorNavigate()
             }
             else {
-                toast.error("The system is busy!");
+                toast.error("Something wrong!");
             }
             Swal.close()
         }
@@ -130,7 +130,7 @@ function DoctorAppointmentDetail() {
                     toast.error(res.data);
                 }
                 else {
-                    toast.error("The system is busy!");
+                    toast.error("Something wrong!");
                 }
                 MySwal.close()
             } else if (result.isDismissed) {
@@ -178,7 +178,7 @@ function DoctorAppointmentDetail() {
                     toast.error(res.data);
                 }
                 else {
-                    toast.error("The system is busy!");
+                    toast.error("Something wrong!");
                 }
                 MySwal.close()
             } else if (result.isDismissed) {
@@ -211,7 +211,7 @@ function DoctorAppointmentDetail() {
                     toast.error(res.data);
                 }
                 else {
-                    toast.error("The system is busy!");
+                    toast.error("Something wrong!");
                 }
                 MySwal.close()
             } else if (result.isDismissed) {

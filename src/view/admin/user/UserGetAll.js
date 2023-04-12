@@ -109,7 +109,7 @@ function UserGetAll() {
                         setIsReset(isReset + 1);
                     }
                     else {
-                        toast.error("System is busy!");
+                        toast.error("Something wrong!");
                     }
                     Swal.close();
                 }
@@ -138,7 +138,7 @@ function UserGetAll() {
                         setIsReset(isReset - 1);
                     }
                     else {
-                        toast.error("System is busy!");
+                        toast.error("Something wrong!");
                     }
                     Swal.close();
 

@@ -94,7 +94,7 @@ function ReceptionistAppointmentQueue() {
 
             }
             else {
-                toast.error('Server is busy !')
+                toast.error('Something wrong !')
             }
         }
 
