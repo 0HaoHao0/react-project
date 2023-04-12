@@ -499,7 +499,7 @@ function ChangePassword(props) {
 
 
 function MedicalRecord(props) {
-  const load = useRef(false);
+
   const { userInfo } = props;
 
   const [userData, setUserData] = useState();
@@ -527,12 +527,9 @@ function MedicalRecord(props) {
       }
 
     }
-    if (load.current === true) {
-      loadData();
-    }
-    return () => {
-      load.current = true
-    }
+    
+    loadData();
+
   }, [userInfo.id])
 
 
