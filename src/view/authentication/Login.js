@@ -236,6 +236,11 @@ function Login() {
                         onChange={(e) => {
                           setPassWord(e.target.value);
                         }}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter') {
+                            loginNormal();
+                          }
+                        }}
                       />
                       <label htmlFor="password">Password</label>
                       {dataError.password && (
