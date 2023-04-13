@@ -16,9 +16,6 @@ function ReceptionistContact() {
 
     const currentPage = contactData ? contactData.page : 1;
     const totalPage = contactData ? contactData.total_pages : 0;
-    console.log(
-        currentPage
-    );
 
     const [filter, setFilter] = useState({
         page: currentPage,
@@ -47,8 +44,11 @@ function ReceptionistContact() {
             if (res.status === 200) {
                 setContactData(res.data);
             }
+            else if (res.status < 500) {
+                toast.error(res.data);
+            }
             else {
-                toast.error("Something went wrong!");
+                toast.error('Something went wrong, Please try again !!!');
             }
             Swal.close();
 

@@ -31,8 +31,14 @@ function ReceptionistAppointmentQueue() {
 
         const doEffect = async () => {
             let res = await getAppointmentStates();
-            if(res.status === 200) {
+            if (res.status === 200) {
                 setAppointmentStateList(res.data);
+            }
+            else if (res.status < 500) {
+                toast.error(res.data);
+            }
+            else {
+                toast.error("Something went wrong, please try again !!!")
             }
         }
 
@@ -93,8 +99,11 @@ function ReceptionistAppointmentQueue() {
 
 
             }
+            else if (res.status < 500) {
+                toast.error(res.data);
+            }
             else {
-                toast.error('Server is busy !')
+                toast.error("Something went wrong, please try again !!!")
             }
         }
 
@@ -163,7 +172,7 @@ function ReceptionistAppointmentQueue() {
                                 <label className="form-label" id="my-addon">Phone Number: </label>
                                 <input className="form-control" type="text" placeholder="Search by PhoneNumber"
                                     onKeyDown={(e) => {
-                                        if(e.key === "Enter") {
+                                        if (e.key === "Enter") {
                                             setFillter({
                                                 ...fillter,
                                                 phoneNumber: e.target.value
@@ -176,7 +185,7 @@ function ReceptionistAppointmentQueue() {
                                 <label className="form-label" id="my-addon">Patient User Name: </label>
                                 <input className="form-control" type="text" placeholder="Search by UserName"
                                     onKeyDown={(e) => {
-                                        if(e.key === "Enter") {
+                                        if (e.key === "Enter") {
                                             setFillter({
                                                 ...fillter,
                                                 userName: e.target.value
@@ -190,7 +199,7 @@ function ReceptionistAppointmentQueue() {
                                 <select className="text-secondary form-control">
                                     <option>Choose State</option>
                                     {
-                                        appointmentStateList.map(item => 
+                                        appointmentStateList.map(item =>
                                             <option key={item.id} value={item.id}>{item.name}</option>
                                         )
                                     }

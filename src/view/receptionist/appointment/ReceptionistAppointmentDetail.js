@@ -58,11 +58,11 @@ function ReceptionistAppointmentDetail() {
             if (res.status === 200) {
                 setAppointmentInfo(res.data)
             }
-            else if(res.status < 500) {
+            else if (res.status < 500) {
                 toast.error(res.data);
             }
             else {
-                toast.error('Something was wrong!');
+                toast.error('Something went wrong, Please try again !!!');
             }
             Swal.close()
         }
@@ -98,7 +98,7 @@ function ReceptionistAppointmentDetail() {
                 if (res.status === 200) {
                     setLoading(loading + 1);
                 }
-                else if(res.status < 500) {
+                else if (res.status < 500) {
                     toast.error(res.data);
                 }
                 else {
@@ -112,7 +112,7 @@ function ReceptionistAppointmentDetail() {
     }
 
 
-    
+
 
     const handleRemoveDocument = async (id) => {
 
@@ -124,11 +124,11 @@ function ReceptionistAppointmentDetail() {
                 showConfirmButton: true,
                 showCancelButton: true
             })
-            .then(ans => {
-                if(ans.isConfirmed) {
-                    doConfirmed();
-                }
-            })
+                .then(ans => {
+                    if (ans.isConfirmed) {
+                        doConfirmed();
+                    }
+                })
         }
 
         showRemoveQuestion(async () => {
@@ -139,7 +139,7 @@ function ReceptionistAppointmentDetail() {
             });
             Swal.showLoading();
             let res = await removeDocument(id);
-            if(res.status === 200) {
+            if (res.status === 200) {
                 toast.success(res.data);
 
                 let _tempAppInfo = appointmentInfo;
@@ -148,7 +148,7 @@ function ReceptionistAppointmentDetail() {
                     ..._tempAppInfo
                 });
             }
-            else if(res.status < 500) {
+            else if (res.status < 500) {
                 toast.error(res.data);
             }
             else {
@@ -176,11 +176,11 @@ function ReceptionistAppointmentDetail() {
                                 <label htmlFor="id">Id:</label>
                                 <input id="id" className="form-control" type="text" name="id" placeholder={appointmentInfo.id} disabled />
                                 <label htmlFor="timeCreated">Created:</label>
-                                <input id="timeCreated" className="form-control" type="text" name="timeCreated" 
-                                placeholder={new Date(appointmentInfo.timeCreated).toLocaleString()} disabled />
+                                <input id="timeCreated" className="form-control" type="text" name="timeCreated"
+                                    placeholder={new Date(appointmentInfo.timeCreated).toLocaleString()} disabled />
                                 <label htmlFor="lastTimeModified">Last Modified: </label>
                                 <input id="lastTimeModified" className="form-control" type="text" name="lastTimeModified"
-                                placeholder={appointmentInfo.lastTimeModified && new Date(appointmentInfo.lastTimeModified).toLocaleString()} disabled />
+                                    placeholder={appointmentInfo.lastTimeModified && new Date(appointmentInfo.lastTimeModified).toLocaleString()} disabled />
                             </div>
                         </div>
                         <div className="col ">
@@ -310,11 +310,11 @@ function ReceptionistAppointmentDetail() {
                         <div className="col">
                             <div className="form-group">
                                 <label htmlFor="service-name">User Name:</label>
-                                <input id="service-name" className="form-control mb-2 bg-white" type="text" name="service-name" 
-                                placeholder={appointmentInfo.doctor.baseUser.userName} disabled />
+                                <input id="service-name" className="form-control mb-2 bg-white" type="text" name="service-name"
+                                    placeholder={appointmentInfo.doctor.baseUser.userName} disabled />
                                 <label htmlFor="service-code">Full Name:</label>
-                                <input id="service-code" className="form-control mb-2 bg-white" type="text" name="service-code" 
-                                placeholder={appointmentInfo.doctor.baseUser.fullName} disabled />
+                                <input id="service-code" className="form-control mb-2 bg-white" type="text" name="service-code"
+                                    placeholder={appointmentInfo.doctor.baseUser.fullName} disabled />
                             </div>
                         </div>
 

@@ -33,7 +33,7 @@ function ReceptionistPatient() {
             }
         }
         else {
-            toast.error('Server is busy !')
+            toast.error('Something went wrong, Please try again !')
         }
 
 

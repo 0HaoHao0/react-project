@@ -38,17 +38,20 @@ function ReceptionistNews() {
             });
             Swal.showLoading();
             let res = await getAllNews({ params: filter });
-            if(res.status === 200) {
+            if (res.status === 200) {
                 setNewsData(res.data);
             }
+            else if (res.status < 500) {
+                toast.error(res.data);
+            }
             else {
-                toast.error("Cannot load data!");
+                toast.error('Something went wrong, Please try again !!!');
             }
             Swal.close();
         };
 
         loadData();
-        
+
     }, [filter]);
 
     // Pagination
@@ -151,11 +154,11 @@ function ReceptionistNews() {
                                 }}
                             />
                         </div>
-                        
+
                     </form>
                     <div className="overflow-auto mb-4">
                         <table id="table" className="table table-hover">
-                        <thead>
+                            <thead>
                                 <tr className="table-dark">
                                     <th>Id</th>
                                     <th>Title</th>

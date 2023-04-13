@@ -32,15 +32,21 @@ function ReceptionistAppointmentHistory() {
 
         const doEffect = async () => {
             let res = await getAppointmentStates();
-            if(res.status === 200) {
+            if (res.status === 200) {
                 setAppointmentStateList(res.data);
+            }
+            else if (res.status < 500) {
+                toast.error(res.data);
+            }
+            else {
+                toast.error("Something went wrong, please try again !!!")
             }
         }
 
         doEffect();
 
     }, []);
-    
+
     useEffect(() => {
         const loadData = async () => {
 
@@ -51,14 +57,14 @@ function ReceptionistAppointmentHistory() {
             });
             Swal.showLoading();
             const res = await getAllAppointment(filter);
-            if(res.status === 200) {
+            if (res.status === 200) {
                 setAppointmentData(res.data);
             }
-            else if(res.status < 500) {
+            else if (res.status < 500) {
                 toast.error(res.data);
             }
             else {
-                toast.error("System is busy!");
+                toast.error("Something went wrong, please try again !!!")
             }
             Swal.close();
         };
@@ -78,7 +84,7 @@ function ReceptionistAppointmentHistory() {
         }));
     }
     const nextPage = (e) => {
-        if(filter.page + 1 <= totalPage) {
+        if (filter.page + 1 <= totalPage) {
             setFilter((peviousPage) => ({
                 ...peviousPage,
                 page: peviousPage.page + 1
@@ -124,9 +130,9 @@ function ReceptionistAppointmentHistory() {
                     <div className="mb-4">
                         <form className="d-flex justify-content-end gap-2">
                             <div className="mb-3 w-25">
-                                <input type="text" placeholder="Search by UserName" className="form-control w-fit" 
+                                <input type="text" placeholder="Search by UserName" className="form-control w-fit"
                                     onKeyDown={(e) => {
-                                        if(e.key === "Enter") {
+                                        if (e.key === "Enter") {
                                             setFilter({
                                                 ...filter,
                                                 userName: e.target.value,
@@ -137,9 +143,9 @@ function ReceptionistAppointmentHistory() {
                                 />
                             </div>
                             <div className="mb-3 w-25">
-                                <input type="text" placeholder="Search by PhoneNumber" className="form-control w-fit" 
+                                <input type="text" placeholder="Search by PhoneNumber" className="form-control w-fit"
                                     onKeyDown={(e) => {
-                                        if(e.key === "Enter") {
+                                        if (e.key === "Enter") {
                                             setFilter({
                                                 ...filter,
                                                 phoneNumber: e.target.value,
@@ -151,7 +157,7 @@ function ReceptionistAppointmentHistory() {
                             </div>
                             <div className="mb-3">
                                 <select className="p-2 rounded" onChange={(e) => {
-                                    if(e.target.value === "default") {
+                                    if (e.target.value === "default") {
                                         setFilter({
                                             ...filter,
                                             state: null
@@ -166,7 +172,7 @@ function ReceptionistAppointmentHistory() {
                                 }}>
                                     <option value="default">Choose State</option>
                                     {
-                                        appointmentStateList.map(item => 
+                                        appointmentStateList.map(item =>
                                             <option key={item.id} value={item.id}>{item.name}</option>
                                         )
                                     }

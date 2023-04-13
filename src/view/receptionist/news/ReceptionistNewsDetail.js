@@ -33,7 +33,7 @@ function ReceptionistNewsDetail() {
                     navigate("/receptionist/news");
                 }
                 else {
-                    toast.error("Something was wrong, please contact to admin !");
+                    toast.error("Something was wrong, please try again !!!");
                 }
 
             } else {

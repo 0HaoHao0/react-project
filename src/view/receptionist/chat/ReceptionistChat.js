@@ -14,16 +14,15 @@ const ChatListItem = ({ item }) => {
     const [hasNewMessage, setHasNewMessage] = useState(!item.seen);
 
     useEffect(() => {
-        console.log("hihi!");
         setHasNewMessage(!item.seen);
     }, [item.seen]);
 
     const handleChatListItemClicked = () => {
-        if(hasNewMessage) {
+        if (hasNewMessage) {
             markSeenChatBox({
                 chatboxId: item.id,
                 callback: (res) => {
-                    if(res.status === 200) {
+                    if (res.status === 200) {
                         setHasNewMessage(false);
                     }
                 }
@@ -35,7 +34,7 @@ const ChatListItem = ({ item }) => {
         <Link to={`/receptionist/chat/${item.user.id}`}
             onClick={handleChatListItemClicked}
             className="user-chatbox text-decoration-none">
-            <div className={"card px-2 d-flex flex-row align-items-center mb-2" + (item.seen ? null : " fw-bold") + (patientId === item.user.id ? " bg-info text-white" : null)}>
+            <div className={"card px-2 d-flex flex-row align-items-center mb-2" + (item.seen ? null : " fw-bold") + (patientId === item.user.id ? " bg-chat-list text-white" : null)}>
                 <img className="avatar card-img-top border border-1 border-primary rounded-circle" src={item.user.imageURL} alt="avatar" />
                 <div className="card-body">
                     <div className='row'>
@@ -118,7 +117,7 @@ const seenAsync = ({ chatboxId, succeed }) => {
     markSeenChatBox({
         chatboxId: chatboxId,
         callback: (res) => {
-            if(res.status === 200) {
+            if (res.status === 200) {
                 succeed();
             }
         }
@@ -137,7 +136,7 @@ function ReceptionistChat() {
     const { patientId } = useParams();
     const [currentConversation, setCurrentConversation] = useState(null);
     const navigate = useNavigate();
-    
+
     const initUserList = () => {
         setMessageList([]);
         setFiltered({
@@ -152,33 +151,35 @@ function ReceptionistChat() {
                     setUserList(res.data);
                     if (patientId) {
                         let conv = res.data.find(item => item.user.id === patientId);
-                        if(conv != null) {
+                        if (conv != null) {
                             setCurrentConversation(conv);
-    
-                            if(conv.seen === false) {
-                                seenAsync({ chatboxId: conv.id, succeed: () => {
-                                    fetchUserList({
-                                        params: filteredUserList,
-                                        callback: (res) => {
-                                            if (res.status === 200) {
-                                                console.log(res.data);
-                                                setUserList(res.data);
+
+                            if (conv.seen === false) {
+                                seenAsync({
+                                    chatboxId: conv.id, succeed: () => {
+                                        fetchUserList({
+                                            params: filteredUserList,
+                                            callback: (res) => {
+                                                if (res.status === 200) {
+                                                    console.log(res.data);
+                                                    setUserList(res.data);
+                                                }
+                                                else if (res.status < 500) {
+                                                    toast.error(res.data);
+                                                }
+                                                else {
+                                                    toast.error("System is busy!");
+                                                }
                                             }
-                                            else if (res.status < 500) {
-                                                toast.error(res.data);
-                                            }
-                                            else {
-                                                toast.error("System is busy!");
-                                            }
-                                        }
-                                    });
-                                }});
+                                        });
+                                    }
+                                });
                             }
                         }
                     }
                     else {
                         let conv = res.data.length ? res.data[0] : null;
-                        if(conv != null) navigate("/receptionist/chat/" + conv.user.id);
+                        if (conv != null) navigate("/receptionist/chat/" + conv.user.id);
                     }
                 }
                 else if (res.status < 500) {
@@ -223,7 +224,7 @@ function ReceptionistChat() {
     useEffect(() => {
 
         if (currentConversation) {
-            
+
             console.log("Fetch messages of conversation...");
             setTotal(0);
             setIsLoadingMessages(true);
@@ -263,7 +264,7 @@ function ReceptionistChat() {
             });
         }
         else {
-            
+
         }
 
     }, [currentConversation]);
@@ -361,7 +362,7 @@ function ReceptionistChat() {
                         }
                     });
                 }
-                else { 
+                else {
                     fetchUserList({
                         params: filteredUserList,
                         callback: (res) => {
@@ -378,10 +379,10 @@ function ReceptionistChat() {
                         }
                     });
                 }
-                    
+
             }
 
-            if(action === "Chat-RemoveMessage") {
+            if (action === "Chat-RemoveMessage") {
                 let message = JSON.parse(data);
                 console.log("Removed: ", message);
 
@@ -397,7 +398,7 @@ function ReceptionistChat() {
 
                 let messages = messageList.map(item => item.id === message.id ? formattedMessage : item);
                 setMessageList(messages);
-                
+
             }
         }
 
@@ -426,10 +427,10 @@ function ReceptionistChat() {
 
     const [initScroll, setInitScroll] = useState(false);
     useEffect(() => {
-        if((scroller.current.scrollTop + scroller.current.offsetHeight) / scroller.current.scrollHeight > 0.9) {
+        if ((scroller.current.scrollTop + scroller.current.offsetHeight) / scroller.current.scrollHeight > 0.9) {
             scrollToEnd();
         }
-        else if(!initScroll) {
+        else if (!initScroll) {
             scrollToEnd();
             setInitScroll(true);
         }
@@ -445,25 +446,25 @@ function ReceptionistChat() {
 
     useEffect(() => {
 
-        if(loadMoreDelay > 0 && !startedCountDown) {
+        if (loadMoreDelay > 0 && !startedCountDown) {
             let _i = setInterval(() => {
                 setLoadMoreDelay(prev => prev - 1);
             }, 1000);
             setStartCountDown(true);
             setDelayCountDownInterval(_i);
         }
-        else if(loadMoreDelay === 0) {
-            if(delayCountDownInterval) clearInterval(delayCountDownInterval);
+        else if (loadMoreDelay === 0) {
+            if (delayCountDownInterval) clearInterval(delayCountDownInterval);
             setDelayCountDownInterval(null);
             setStartCountDown(false);
         }
     }, [loadMoreDelay, delayCountDownInterval, startedCountDown]);
-    
+
     const handleOnScroll = (e) => {
-        if(e.target.scrollTop === 0 && !isLoadingMessages && loadMoreDelay === 0 && filtered.skip < total) {
+        if (e.target.scrollTop === 0 && !isLoadingMessages && loadMoreDelay === 0 && filtered.skip < total) {
 
             setIsLoadingMessages(true);
-            
+
             let nextFiltered = {
                 take: filtered.take,
                 skip: filtered.skip + filtered.take,
@@ -473,7 +474,7 @@ function ReceptionistChat() {
                 patientId: currentConversation.user.id,
                 params: nextFiltered,
                 callback: (res) => {
-                    if(res.status === 200) {
+                    if (res.status === 200) {
                         let messages = res.data.data.reverse();
                         let formattedMessages = messages.map((item, idx) => ({
                             id: item.id,
@@ -511,7 +512,7 @@ function ReceptionistChat() {
                             <div className="user-list-container">
                                 <input className="form-control mb-2" type="text" name="search" placeholder="Search..."
                                     onKeyDown={(e) => {
-                                        if(e.key === "Enter") {
+                                        if (e.key === "Enter") {
                                             setFilteredUserList({
                                                 ...filteredUserList,
                                                 userName: e.target.value
