@@ -237,6 +237,11 @@ function Login() {
                         onChange={(e) => {
                           setPassWord(e.target.value);
                         }}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter') {
+                            loginNormal();
+                          }
+                        }}
                         />
                         <small className="login-show"
                 onClick={() => setShowPassword(!showPassword)}>{showPassword ? <i className='fa fa-eye'></i> : <i className='fa fa-eye-slash'></i>}</small>
