@@ -153,7 +153,7 @@ function Login() {
 
       switch (userInfo.role) {
         case "Administrator":
-          navigate("/admin");
+          navigate("/admin/user");
           return;
         case "Expert":
           navigate("/expert");
