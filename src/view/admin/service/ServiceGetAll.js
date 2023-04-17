@@ -266,7 +266,7 @@ function ServiceGetAll() {
                                         <td>{value.id}</td>
                                         <td>{value.serviceName}</td>
                                         <td>{value.serviceCode}</td>
-                                        <td>{value.price}</td>
+                                        <td>{value.price} (VND)</td>
                                         <td>
                                             {
                                                 value.isPublic

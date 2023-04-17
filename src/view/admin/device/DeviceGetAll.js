@@ -158,7 +158,7 @@ function DeviceGetAll() {
                                     <tr key={value.id}>
                                         <td>{value.id}</td>
                                         <td>{value.deviceName}</td>
-                                        <td>{value.deviceValue}</td>
+                                        <td>{value.deviceValue}(VND)</td>
                                         <td>{value.room.roomCode}</td>
                                         <td>{value.status.toString()}</td>
                                         <td>
