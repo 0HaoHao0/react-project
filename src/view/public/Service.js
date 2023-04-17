@@ -9,83 +9,59 @@ import { useSelector } from 'react-redux';
 function Service() {
     const user = useSelector((state) => state.user.userInfo);
 
-    console.log(user);
-
-    const [services, setServices] = useState()
-
-    const [serviceRating, setServiceRating] = useState()
-
-    const [searchByName, setSearchByName] = useState()
+    const [services, setServices] = useState();
+    const [serviceRating, setServiceRating] = useState();
+    const [searchByName, setSearchByName] = useState();
 
     const ref = useRef(null);
-
     let debounce;
 
-
-    const loadData = async () => {
-        Swal.fire({
-            title: "Loading...",
-            html: "Please wait a moment"
-        })
-        Swal.showLoading()
-        const resService = await getAllService(-1);
-        const resServiceRating = await getServicesRating();
-        Swal.close()
-
-        if (resService.status === 200) {
-            setServices(resService.data)
-        }
-        else {
-            toast.error("Can not load services, please try again or contact to admin !!!")
-        }
-
-        if (resServiceRating.status === 200) {
-            setServiceRating(resServiceRating.data)
-        }
-        else {
-            toast.error("Can not load services rating, please try again or contact to admin !!!")
-        }
-
-    }
-
-
     useEffect(() => {
-
-        loadData();
-
-
-        return () => {
+        const loadData = async () => {
+            Swal.fire({
+                title: "Loading...",
+                html: "Please wait a moment"
+            });
+            Swal.showLoading();
+            const resService = await getAllService({ params: {
+                page: -1,
+                pageSize: 10,
+            }});
+            const resServiceRating = await getServicesRating();
+            Swal.close();
+    
+            if (resService.status === 200) {
+                setServices(resService.data);
+            }
+            else {
+                toast.error("Can not load services, please try again or contact to admin !!!")
+            }
+    
+            if (resServiceRating.status === 200) {
+                setServiceRating(resServiceRating.data);
+            }
+            else {
+                toast.error("Can not load services rating, please try again or contact to admin !!!")
+            }
+    
         }
-    }, [])
-
+        loadData();
+    }, []);
 
     const handleSearch = (e) => {
         clearTimeout(debounce);
-
         debounce = setTimeout(() => {
             setSearchByName(e.target.value);
         }, 500);
     }
 
     const displayRating = (id) => {
-        let point;
-        serviceRating.forEach(element => {
-            if (element.serviceInfo.id === id) {
-                point = element.averagePoint
-            }
-        });
-        return point
+        let rating = serviceRating.find(x => x.serviceInfo.id === id);
+        return rating ? rating.averagePoint : "*";
     }
 
     const displayTopService = () => {
-        let top = [];
-        serviceRating.slice(0, 2).forEach(element => {
-            services.data.forEach(service => {
-                if (service.id === element.serviceInfo.id) {
-                    top.push(service)
-                }
-            });
-        });
+        let top = serviceRating.slice(0, 2).map(item => item.serviceInfo);
         return top;
     }
 

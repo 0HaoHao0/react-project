@@ -35,7 +35,7 @@ function ReceptionistAppointmentQueue() {
         const doEffect = async () => {
             let res = await getAppointmentStates();
             if(res.status === 200) {
-                setAppointmentStateList(res.data);
+                setAppointmentStateList(res.data.slice(0, 3));
             }
         }
 
@@ -242,7 +242,14 @@ function ReceptionistAppointmentQueue() {
                             </div>
                             <div className="mb-2">
                                 <label className="form-label" id="">Filter by State:</label>
-                                <select className="text-secondary form-control">
+                                <select className="text-secondary form-control" onChange={(e) => {
+                                    if(e.target.value !== "Choose State") {
+                                        setFillter({
+                                            ...fillter,
+                                            state: e.target.value
+                                        });
+                                    }
+                                }}>
                                     <option>Choose State</option>
                                     {
                                         appointmentStateList.map(item => 
