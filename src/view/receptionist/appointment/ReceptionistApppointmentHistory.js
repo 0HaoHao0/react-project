@@ -58,7 +58,7 @@ function ReceptionistAppointmentHistory() {
                 toast.error(res.data);
             }
             else {
-                toast.error("System is busy!");
+                toast.error("Something wrong!");
             }
             Swal.close();
         };

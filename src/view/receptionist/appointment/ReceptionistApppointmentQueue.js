@@ -7,6 +7,9 @@ import Swal from "sweetalert2";
 import { getAllAppointment, getAppointmentStates } from "../../../services/receptionist/apiReceptionistAppointment";
 import { useNavigate } from "react-router-dom";
 
+import { getUserInfo } from "../../../services/authorization/apILogin";
+import Pusher from 'pusher-js';
+
 
 function ReceptionistAppointmentQueue() {
     const navigate = useNavigate()
@@ -94,7 +97,7 @@ function ReceptionistAppointmentQueue() {
 
             }
             else {
-                toast.error('Server is busy !')
+                toast.error('Something wrong !')
             }
         }
 
@@ -105,6 +108,58 @@ function ReceptionistAppointmentQueue() {
         }
     }, [fillter])
 
+
+    const [bindedPusher, setBindedPusher] = useState(false);
+
+    useEffect(() => {
+
+        // Hàm chạy ngầm ko cần thông báo.
+        const fetchUserInfo = async () => {
+            let res = await getUserInfo();
+            if(res.status === 200) {
+                return res.data;
+            }
+            toast.warning("Cannot enable realtime engine! Press F5 to refresh!");
+            return null;
+        }
+
+        let pusherChanel = null;
+
+        const bindGlobalHandler = (action, data) => {
+            if (action === "AppointmentUpdate") {
+                let message = data;
+                toast.warning(message);
+            }
+        }
+
+        const addPusherListener = async () => {
+            let userInfo = await fetchUserInfo();
+            if(userInfo) {
+                
+                pusherChanel = userInfo.pusherChannel ? (
+                    new Pusher('a5612d1b04f944b457a3', 
+                    {
+                        cluster: 'ap1',
+                        encrypted: true,
+                    }).subscribe(userInfo.pusherChannel)) : null;
+        
+                if (pusherChanel) {
+                    pusherChanel.bind_global(bindGlobalHandler);
+                    setBindedPusher(true);
+                }
+
+            }
+        }
+
+        if(!bindedPusher) addPusherListener();
+
+        return () => {
+            if (pusherChanel && bindedPusher) {
+                pusherChanel.unbind_global(bindGlobalHandler);
+                setBindedPusher(false);
+            }
+        }
+    }, [navigate, bindedPusher]);
 
     return (<>
         <div className="receptionist-appointment-queue  p-5">

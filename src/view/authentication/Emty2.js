@@ -21,7 +21,7 @@ function Profile() {
             } else if (res.status < 500) {
                 toast.error(res.data);
             } else {
-                toast.error("Server is busy !!!");
+                toast.error("Something wrong !!!");
             }
         };
 
