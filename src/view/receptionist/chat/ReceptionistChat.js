@@ -171,9 +171,21 @@ function ReceptionistChat() {
                                                     toast.error("System is busy!");
                                                 }
                                             }
+<<<<<<< HEAD
                                         });
                                     }
                                 });
+=======
+                                            else if (res.status < 500) {
+                                                toast.error(res.data);
+                                            }
+                                            else {
+                                                toast.error("Something wrong!");
+                                            }
+                                        }
+                                    });
+                                }});
+>>>>>>> d3c8f7ca7ca277d3a39e657371d85d436858e39f
                             }
                         }
                     }
@@ -186,7 +198,7 @@ function ReceptionistChat() {
                     toast.error(res.data);
                 }
                 else {
-                    toast.error("System is busy!");
+                    toast.error("Something wrong!");
                 }
             }
         });
@@ -204,7 +216,7 @@ function ReceptionistChat() {
                     toast.error(res.data);
                 }
                 else {
-                    toast.error("System is busy!");
+                    toast.error("Something wrong!");
                 }
             }
         });
@@ -257,7 +269,7 @@ function ReceptionistChat() {
                         }, 2000);
                     }
                     else {
-                        toast.error("System is busy!");
+                        toast.error("Something wrong!");
                     }
                     setIsLoadingMessages(false);
                 }
@@ -355,7 +367,7 @@ function ReceptionistChat() {
                                         toast.error(res.data);
                                     }
                                     else {
-                                        toast.error("System is busy!");
+                                        toast.error("Something wrong!");
                                     }
                                 }
                             });
@@ -374,7 +386,7 @@ function ReceptionistChat() {
                                 toast.error(res.data);
                             }
                             else {
-                                toast.error("System is busy!");
+                                toast.error("Something wrong!");
                             }
                         }
                     });
@@ -492,7 +504,7 @@ function ReceptionistChat() {
                         setFiltered(nextFiltered);
                     }
                     else {
-                        toast.error("System is busy!");
+                        toast.error("Something wrong!");
                     }
                     setLoadMoreDelay(3);
                     setIsLoadingMessages(false);

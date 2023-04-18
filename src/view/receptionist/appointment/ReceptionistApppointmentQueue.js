@@ -7,6 +7,9 @@ import Swal from "sweetalert2";
 import { getAllAppointment, getAppointmentStates } from "../../../services/receptionist/apiReceptionistAppointment";
 import { useNavigate } from "react-router-dom";
 
+import { getUserInfo } from "../../../services/authorization/apILogin";
+import Pusher from 'pusher-js';
+
 
 function ReceptionistAppointmentQueue() {
     const navigate = useNavigate()
@@ -31,8 +34,13 @@ function ReceptionistAppointmentQueue() {
 
         const doEffect = async () => {
             let res = await getAppointmentStates();
+<<<<<<< HEAD
             if (res.status === 200) {
                 setAppointmentStateList(res.data);
+=======
+            if(res.status === 200) {
+                setAppointmentStateList(res.data.slice(0, 3));
+>>>>>>> d3c8f7ca7ca277d3a39e657371d85d436858e39f
             }
             else if (res.status < 500) {
                 toast.error(res.data);
@@ -103,7 +111,11 @@ function ReceptionistAppointmentQueue() {
                 toast.error(res.data);
             }
             else {
+<<<<<<< HEAD
                 toast.error("Something went wrong, please try again !!!")
+=======
+                toast.error('Something wrong !')
+>>>>>>> d3c8f7ca7ca277d3a39e657371d85d436858e39f
             }
         }
 
@@ -114,6 +126,58 @@ function ReceptionistAppointmentQueue() {
         }
     }, [fillter])
 
+
+    const [bindedPusher, setBindedPusher] = useState(false);
+
+    useEffect(() => {
+
+        // Hàm chạy ngầm ko cần thông báo.
+        const fetchUserInfo = async () => {
+            let res = await getUserInfo();
+            if(res.status === 200) {
+                return res.data;
+            }
+            toast.warning("Cannot enable realtime engine! Press F5 to refresh!");
+            return null;
+        }
+
+        let pusherChanel = null;
+
+        const bindGlobalHandler = (action, data) => {
+            if (action === "AppointmentUpdate") {
+                let message = data;
+                toast.warning(message);
+            }
+        }
+
+        const addPusherListener = async () => {
+            let userInfo = await fetchUserInfo();
+            if(userInfo) {
+                
+                pusherChanel = userInfo.pusherChannel ? (
+                    new Pusher('a5612d1b04f944b457a3', 
+                    {
+                        cluster: 'ap1',
+                        encrypted: true,
+                    }).subscribe(userInfo.pusherChannel)) : null;
+        
+                if (pusherChanel) {
+                    pusherChanel.bind_global(bindGlobalHandler);
+                    setBindedPusher(true);
+                }
+
+            }
+        }
+
+        if(!bindedPusher) addPusherListener();
+
+        return () => {
+            if (pusherChanel && bindedPusher) {
+                pusherChanel.unbind_global(bindGlobalHandler);
+                setBindedPusher(false);
+            }
+        }
+    }, [navigate, bindedPusher]);
 
     return (<>
         <div className="receptionist-appointment-queue  p-5">
@@ -196,7 +260,14 @@ function ReceptionistAppointmentQueue() {
                             </div>
                             <div className="mb-2">
                                 <label className="form-label" id="">Filter by State:</label>
-                                <select className="text-secondary form-control">
+                                <select className="text-secondary form-control" onChange={(e) => {
+                                    if(e.target.value !== "Choose State") {
+                                        setFillter({
+                                            ...fillter,
+                                            state: e.target.value
+                                        });
+                                    }
+                                }}>
                                     <option>Choose State</option>
                                     {
                                         appointmentStateList.map(item =>

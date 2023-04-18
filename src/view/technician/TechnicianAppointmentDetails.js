@@ -30,7 +30,7 @@ function TechnicianAppointmentDetails() {
                     toast.error(res.data);
                 }
                 else {
-                    toast.error("The system is busy!");
+                    toast.error("Something wrong!");
                 }
 
                 Swal.close();
@@ -85,7 +85,7 @@ function TechnicianAppointmentDetails() {
                     toast.error(res.data);
                 }
                 else {
-                    toast.error("The system is busy!");
+                    toast.error("Something wrong!");
                 }
 
                 setIsChangingState(false);
@@ -116,7 +116,7 @@ function TechnicianAppointmentDetails() {
                     toast.error(res.data);
                 }
                 else {
-                    toast.error("The system is busy!");
+                    toast.error("Something wrong!");
                 }
 
                 setIsUploadingImage(false);

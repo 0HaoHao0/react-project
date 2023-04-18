@@ -33,7 +33,11 @@ function ReceptionistPatient() {
             }
         }
         else {
+<<<<<<< HEAD
             toast.error('Something went wrong, Please try again !')
+=======
+            toast.error('Something wrong !')
+>>>>>>> d3c8f7ca7ca277d3a39e657371d85d436858e39f
         }
 
 

@@ -33,7 +33,7 @@ export function ImageSegmentationResults({ appointmentId, showLoading, canDelete
                     toast.error(res.data);
                 }
                 else {
-                    toast.error("The system is busy!");
+                    toast.error("Something wrong!");
                 }
                 if (showLoading) Swal.close();
             }
@@ -75,7 +75,7 @@ export function ImageSegmentationResults({ appointmentId, showLoading, canDelete
                     toast.error(res.data);
                 }
                 else {
-                    toast.error("The system is busy!");
+                    toast.error("Something wrong!");
                 }
                 Swal.close();
             }

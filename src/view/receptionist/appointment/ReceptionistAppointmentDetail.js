@@ -305,7 +305,7 @@ function ReceptionistAppointmentDetail() {
                     </h2>
                     <div className="row g-0 py-4">
                         <div className="col d-flex justify-content-center align-items-center">
-                            <img className="w-50 rounded border" src={appointmentInfo.service.imageURL} alt="..." />
+                            <img className="w-50 rounded border" src={appointmentInfo.doctor.baseUser.imageURL} alt="..." />
                         </div>
                         <div className="col">
                             <div className="form-group">

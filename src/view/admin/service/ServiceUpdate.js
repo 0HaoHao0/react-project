@@ -137,8 +137,11 @@ function ServiceUpdate() {
                         toast.success("Update Service Success")
                         navigate('/admin/service')
                     }
+                    else if(res.status < 500) {
+                        toast.error(res.data || "Something wrong!");
+                    }
                     else {
-                        toast.error("Update Service Fail !")
+                        toast.error("Something wrong!");
                     }
                 } else {
                     // Xử lý khi người dùng bấm Cancel

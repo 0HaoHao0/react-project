@@ -92,7 +92,7 @@ function DoctorAppointmentDetail() {
                 errorNavigate()
             }
             else {
-                toast.error("The system is busy!");
+                toast.error("Something wrong!");
             }
             Swal.close()
         }
@@ -130,7 +130,7 @@ function DoctorAppointmentDetail() {
                     toast.error(res.data);
                 }
                 else {
-                    toast.error("The system is busy!");
+                    toast.error("Something wrong!");
                 }
                 MySwal.close()
             } else if (result.isDismissed) {
@@ -178,7 +178,7 @@ function DoctorAppointmentDetail() {
                     toast.error(res.data);
                 }
                 else {
-                    toast.error("The system is busy!");
+                    toast.error("Something wrong!");
                 }
                 MySwal.close()
             } else if (result.isDismissed) {
@@ -211,7 +211,7 @@ function DoctorAppointmentDetail() {
                     toast.error(res.data);
                 }
                 else {
-                    toast.error("The system is busy!");
+                    toast.error("Something wrong!");
                 }
                 MySwal.close()
             } else if (result.isDismissed) {
@@ -368,7 +368,7 @@ function DoctorAppointmentDetail() {
                     {/* Doctor */}
                     <div className="row g-0 py-4">
                         <div className="col d-flex justify-content-center align-items-center">
-                            <img className="w-50 rounded border" src={appointmentInfo.service.imageURL} alt="..." />
+                            <img className="w-50 rounded border" src={appointmentInfo.doctor.baseUser.imageURL} alt="..." />
                         </div>
                         <div className="col">
                             <div className="form-group">

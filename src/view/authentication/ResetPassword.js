@@ -81,7 +81,7 @@ function ResetPassword() {
         toast.error(res.data);
       }
       else {
-        toast.error("System is busy!");
+        toast.error("Something wrong!");
       }
     }
   };

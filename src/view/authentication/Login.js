@@ -153,13 +153,13 @@ function Login() {
 
       switch (userInfo.role) {
         case "Administrator":
-          navigate("/admin");
+          navigate("/admin/user");
           return;
         case "Expert":
           navigate("/expert");
           return;
         case "Receptionist":
-          navigate("/receptionist");
+          navigate("/receptionist/appointment-queue");
           return;
         case "Doctor":
           navigate("/doctor/appointment-queue");
@@ -189,7 +189,7 @@ function Login() {
       Swal.fire({
         icon: "error",
         title: "Failed!",
-        text: "System is busy!",
+        text: "Something wrong!",
       });
     }
   };
@@ -235,6 +235,11 @@ function Login() {
                         onBlur={validatePassWord}
                         onChange={(e) => {
                           setPassWord(e.target.value);
+                        }}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter') {
+                            loginNormal();
+                          }
                         }}
                       />
                       <label htmlFor="password">Password</label>
