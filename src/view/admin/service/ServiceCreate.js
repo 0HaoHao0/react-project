@@ -92,10 +92,13 @@ function ServiceCreate() {
 
             if (res.status === 200) {
                 toast.success("Create Service Success")
-                navigate('/admin/service')
+                navigate('/admin/service');
+            }
+            else if(res.status < 500) {
+                toast.error(res.data || "Something wrong!");
             }
             else {
-                toast.error("Create Service Fail !")
+                toast.error("Something wrong!");
             }
         }
     }

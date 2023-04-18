@@ -159,7 +159,7 @@ function Login() {
           navigate("/expert");
           return;
         case "Receptionist":
-          navigate("/receptionist");
+          navigate("/receptionist/appointment-queue");
           return;
         case "Doctor":
           navigate("/doctor/appointment-queue");
