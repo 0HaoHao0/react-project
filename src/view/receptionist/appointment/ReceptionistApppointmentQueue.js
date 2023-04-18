@@ -34,13 +34,8 @@ function ReceptionistAppointmentQueue() {
 
         const doEffect = async () => {
             let res = await getAppointmentStates();
-<<<<<<< HEAD
             if (res.status === 200) {
-                setAppointmentStateList(res.data);
-=======
-            if(res.status === 200) {
                 setAppointmentStateList(res.data.slice(0, 3));
->>>>>>> d3c8f7ca7ca277d3a39e657371d85d436858e39f
             }
             else if (res.status < 500) {
                 toast.error(res.data);
@@ -111,11 +106,7 @@ function ReceptionistAppointmentQueue() {
                 toast.error(res.data);
             }
             else {
-<<<<<<< HEAD
                 toast.error("Something went wrong, please try again !!!")
-=======
-                toast.error('Something wrong !')
->>>>>>> d3c8f7ca7ca277d3a39e657371d85d436858e39f
             }
         }
 
@@ -134,7 +125,7 @@ function ReceptionistAppointmentQueue() {
         // Hàm chạy ngầm ko cần thông báo.
         const fetchUserInfo = async () => {
             let res = await getUserInfo();
-            if(res.status === 200) {
+            if (res.status === 200) {
                 return res.data;
             }
             toast.warning("Cannot enable realtime engine! Press F5 to refresh!");
@@ -152,15 +143,15 @@ function ReceptionistAppointmentQueue() {
 
         const addPusherListener = async () => {
             let userInfo = await fetchUserInfo();
-            if(userInfo) {
-                
+            if (userInfo) {
+
                 pusherChanel = userInfo.pusherChannel ? (
-                    new Pusher('a5612d1b04f944b457a3', 
-                    {
-                        cluster: 'ap1',
-                        encrypted: true,
-                    }).subscribe(userInfo.pusherChannel)) : null;
-        
+                    new Pusher('a5612d1b04f944b457a3',
+                        {
+                            cluster: 'ap1',
+                            encrypted: true,
+                        }).subscribe(userInfo.pusherChannel)) : null;
+
                 if (pusherChanel) {
                     pusherChanel.bind_global(bindGlobalHandler);
                     setBindedPusher(true);
@@ -169,7 +160,7 @@ function ReceptionistAppointmentQueue() {
             }
         }
 
-        if(!bindedPusher) addPusherListener();
+        if (!bindedPusher) addPusherListener();
 
         return () => {
             if (pusherChanel && bindedPusher) {
@@ -261,7 +252,7 @@ function ReceptionistAppointmentQueue() {
                             <div className="mb-2">
                                 <label className="form-label" id="">Filter by State:</label>
                                 <select className="text-secondary form-control" onChange={(e) => {
-                                    if(e.target.value !== "Choose State") {
+                                    if (e.target.value !== "Choose State") {
                                         setFillter({
                                             ...fillter,
                                             state: e.target.value
