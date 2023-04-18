@@ -6,8 +6,8 @@ import ListRequestResult from "./ListRequestResult";
 import Swal from "sweetalert2";
 import { toast } from "react-toastify";
 
-import ImageViewer from "../extensions/ImageViewer";
-import "../extensions/ImageViewer.scss";
+import ImageViewer from "../../components/public/ImageViewer";
+import "../../components/public/ImageViewer.scss";
 import axios from "axios";
 import Cookies from "universal-cookie";
 import { useDispatch } from "react-redux";
@@ -195,7 +195,7 @@ function Expert() {
     return (
         <>
             {
-                imageViewer.isShow && 
+                imageViewer.isShow &&
                 <ImageViewer images={imageViewer.data} initSelected={imageViewer.selected} onBlur={() => {
                     setImageViewer({
                         ...imageViewer,
@@ -293,7 +293,7 @@ function Expert() {
                                         </div>
                                     )
                                 }
-                            </div>  
+                            </div>
                         </div>
 
                         <div className="col-md-6">

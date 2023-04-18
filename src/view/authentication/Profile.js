@@ -51,7 +51,7 @@ function Profile() {
   }, [])
 
   return (<>
-    <div className="profile my-5 pt-5 ">
+    <div className="profile my-5  ">
       <div className="container-fluid" >
         <div className=" border shadow-sm">
           {userInfo ?

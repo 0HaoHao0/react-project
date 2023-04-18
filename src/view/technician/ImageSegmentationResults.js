@@ -2,16 +2,16 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
 import { deleteImageSegmentationResultAPI, getImageSegmentationResultAPIs } from "../../services/technician/apiTechnician";
-import { ImageViewer } from "../extensions/ImageViewer";
+import { ImageViewer } from "../../components/public/ImageViewer";
 
-export function ImageSegmentationResults({ appointmentId, showLoading, canDelete=true}) {
+export function ImageSegmentationResults({ appointmentId, showLoading, canDelete = true }) {
 
     const [segmentResults, setSegmentResults] = useState([]);
 
     useEffect(() => {
 
         console.log("loading results...");
-        if(showLoading) {
+        if (showLoading) {
             Swal.fire({
                 icon: "info",
                 title: "Waiting for response..."
@@ -25,24 +25,24 @@ export function ImageSegmentationResults({ appointmentId, showLoading, canDelete
             },
 
             callback: (res) => {
-                if(res.status === 200) {
+                if (res.status === 200) {
                     console.log(res.data);
                     setSegmentResults(res.data);
                 }
-                else if(res.status < 500) {
+                else if (res.status < 500) {
                     toast.error(res.data);
                 }
                 else {
                     toast.error("The system is busy!");
                 }
-                if(showLoading) Swal.close();
+                if (showLoading) Swal.close();
             }
         });
 
     }, [appointmentId, showLoading]);
 
     const removeImageSegmentationResult = async (resultId) => {
-        
+
         console.log(resultId);
         let isConfirmed = true;
         await Swal.fire({
@@ -51,11 +51,11 @@ export function ImageSegmentationResults({ appointmentId, showLoading, canDelete
             showCancelButton: true,
             showConfirmButton: true
         })
-        .then(res => {
-            isConfirmed = res.isConfirmed;
-        });
-        
-        if(!isConfirmed) return;
+            .then(res => {
+                isConfirmed = res.isConfirmed;
+            });
+
+        if (!isConfirmed) return;
 
         Swal.fire({
             icon: "info",
@@ -65,13 +65,13 @@ export function ImageSegmentationResults({ appointmentId, showLoading, canDelete
         deleteImageSegmentationResultAPI({
             resultId: resultId,
             callback: (res) => {
-                if(res.status === 200) {
+                if (res.status === 200) {
 
                     let removedList = segmentResults.filter(x => x.id !== resultId);
                     console.log(removedList);
                     setSegmentResults(removedList);
                 }
-                else if(res.status < 500) {
+                else if (res.status < 500) {
                     toast.error(res.data);
                 }
                 else {
@@ -88,7 +88,7 @@ export function ImageSegmentationResults({ appointmentId, showLoading, canDelete
         selected: null
     });
 
-    const showImageViewer = (result, idx=0) => {
+    const showImageViewer = (result, idx = 0) => {
 
         let originalImage = {
             url: result.inputImageURL,
@@ -97,7 +97,7 @@ export function ImageSegmentationResults({ appointmentId, showLoading, canDelete
 
         setImageViewer({
             isShow: true,
-            data: [ originalImage, ...result.imageResultSet.map(image => ({ url: image.imageURL, title: image.title }))],
+            data: [originalImage, ...result.imageResultSet.map(image => ({ url: image.imageURL, title: image.title }))],
             selected: idx
         });
     }
@@ -110,10 +110,10 @@ export function ImageSegmentationResults({ appointmentId, showLoading, canDelete
                         ...imageViewer,
                         isShow: false,
                     });
-                }}/>
+                }} />
             }
             {
-                (segmentResults.length > 0) && 
+                (segmentResults.length > 0) &&
                 <div className="card mb-3">
                     <div className="card-header bg-light">
                         <h2>Segmentation Results</h2>
@@ -127,12 +127,12 @@ export function ImageSegmentationResults({ appointmentId, showLoading, canDelete
                                     <p className="col-md-6"><strong>Model Name:</strong> {result.modelName}</p>
                                     <p className="col-md-6"><strong>Teeth Count:</strong> {result.teethCount}</p>
                                     <p className="col-12 text-end py-2 border-bottom">
-                                    {
-                                        canDelete && 
-                                        <button className="btn btn-danger w-100" onClick={(e) => removeImageSegmentationResult(result.id)}>
-                                            <i className="fa fa-trash" aria-hidden="true"></i>
-                                        </button>
-                                    }
+                                        {
+                                            canDelete &&
+                                            <button className="btn btn-danger w-100" onClick={(e) => removeImageSegmentationResult(result.id)}>
+                                                <i className="fa fa-trash" aria-hidden="true"></i>
+                                            </button>
+                                        }
                                     </p>
                                 </div>
                                 <div className="row">
@@ -145,10 +145,10 @@ export function ImageSegmentationResults({ appointmentId, showLoading, canDelete
                                         </div>
                                     </div>
                                     {
-                                        result.imageResultSet.map((image, idx) => 
+                                        result.imageResultSet.map((image, idx) =>
                                             <div key={image.id} className="col-lg-3 col-md-6">
                                                 <div className="h-100 d-flex flex-column">
-                                                    <h6><strong>Type:</strong> { image.title }</h6>
+                                                    <h6><strong>Type:</strong> {image.title}</h6>
                                                     <div className="mt-auto">
                                                         <img src={image.imageURL} alt={image.title} className="img-cover" onClick={() => showImageViewer(result, idx + 1)} />
                                                     </div>
@@ -159,8 +159,8 @@ export function ImageSegmentationResults({ appointmentId, showLoading, canDelete
                                 </div>
                                 {
                                     segmentResults.length > 1 ?
-                                    <hr />
-                                    : null
+                                        <hr />
+                                        : null
                                 }
                             </div>
                         ))}

@@ -9,8 +9,6 @@ import { useSelector } from 'react-redux';
 function Service() {
     const user = useSelector((state) => state.user.userInfo);
 
-    console.log(user);
-
     const [services, setServices] = useState()
 
     const [serviceRating, setServiceRating] = useState()
